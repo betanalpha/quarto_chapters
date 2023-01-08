@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Betancourt">
+
+<title>Probability Theory on Finite Spaces</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="probability_on_finite_spaces_files/libs/clipboard/clipboard.min.js"></script>
+<script src="probability_on_finite_spaces_files/libs/quarto-html/quarto.js"></script>
+<script src="probability_on_finite_spaces_files/libs/quarto-html/popper.min.js"></script>
+<script src="probability_on_finite_spaces_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="probability_on_finite_spaces_files/libs/quarto-html/anchor.min.js"></script>
+<link href="probability_on_finite_spaces_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="probability_on_finite_spaces_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="probability_on_finite_spaces_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="probability_on_finite_spaces_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="probability_on_finite_spaces_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#finite-spaces" id="toc-finite-spaces" class="nav-link active" data-scroll-target="#finite-spaces"><span class="toc-section-number">1</span>  Finite Spaces</a>
+  <ul class="collapse">
+  <li><a href="#subsets" id="toc-subsets" class="nav-link" data-scroll-target="#subsets"><span class="toc-section-number">1.1</span>  Subsets</a></li>
+  <li><a href="#subset-operations" id="toc-subset-operations" class="nav-link" data-scroll-target="#subset-operations"><span class="toc-section-number">1.2</span>  Subset Operations</a></li>
+  </ul></li>
+  <li><a href="#measure-and-probability-over-elements" id="toc-measure-and-probability-over-elements" class="nav-link" data-scroll-target="#measure-and-probability-over-elements"><span class="toc-section-number">2</span>  Measure and Probability Over Elements</a></li>
+  <li><a href="#measure-and-probability-over-subsets" id="toc-measure-and-probability-over-subsets" class="nav-link" data-scroll-target="#measure-and-probability-over-subsets"><span class="toc-section-number">3</span>  Measure and Probability Over Subsets</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="toc-section-number">4</span>  Acknowledgements</a></li>
+  <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Probability Theory on Finite Spaces</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Michael Betancourt </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Despite its infamous reputation the foundations of probability theory are quite straightforward. Much of the mathematical difficulty arises only when we implement probability theory on elaborate spaces like the real numbers, and most of the philosophical difficultly arises only when trying to assign an interpretation to the mathematics. In this chapter I try to avoid this baggage by introducing the basics of abstract probability theory on the simplest, nontrivial space: a collection of a finite number of elements.</p>
+<section id="finite-spaces" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Finite Spaces</h1>
+<p>A <strong>finite space</strong> is a set containing a finite number of distinct elements, <span class="math display">
+X = \{x_1, ..., x_N\}.
+</span> The numerical index here allows us to differentiate the between the <span class="math inline">N</span> individual elements but it does not necessarily imply that the elements have any natural ordering to them. For example the space <span class="math display">
+X = \{x_1, x_2, x_3, x_4, x_5\}
+</span> contains five, generally unordered elements (<a href="#fig-ambient_space">Figure&nbsp;1</a>). If the elements are endowed with a natural ordering, and the ordering is relevant, then we say that the space is an <strong>ordered space</strong>.</p>
+<div id="fig-ambient_space" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/ambient_space/ambient_space.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: A finite space is a set containing of a finite number of elements.</figcaption><p></p>
+</figure>
+</div>
+<p>In practical applications of probability theory the abstract elements <span class="math inline">x_{n}</span> will model meaningful objects, but in this chapter I will avoid any particular interpretation and instead focus on the mathematical concepts. That said when <span class="math inline">X</span> is intended to capture <em>all</em> of the objects of interest in a given application I will refer to it as the <strong>ambient space</strong>.</p>
+<p>Once we’ve defined an ambient space we have various ways of organizing its individual elements and manipulating those organizations.</p>
+<section id="subsets" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="subsets"><span class="header-section-number">1.1</span> Subsets</h2>
+<p>A <strong>subset</strong> of <span class="math inline">X</span> is any collection of elements in <span class="math inline">X</span>. For example <span class="math inline">\mathsf{x} = \{x_1, x_3, x_4\}</span> is a subset of <span class="math inline">X = \{x_1, x_2, x_3, x_4, x_5\}</span> (<a href="#fig-subset">Figure&nbsp;2</a>). Importantly there is no notion of multiplicity in the concept of a subset, just membership: a subset can include an element <span class="math inline">x_{n}</span> but it cannot include it multiple times.</p>
+<div id="fig-subset" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/subset/subset.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: A subset <span class="math inline">\mathsf{x} \subset X</span> is any collection of elements from the ambient space <span class="math inline">X</span>.</figcaption><p></p>
+</figure>
+</div>
+<p>If <span class="math inline">\mathsf{x}</span> is a subset of the ambient space <span class="math inline">X</span> then we write <span class="math inline">\mathsf{x} \subset X</span>. When <span class="math inline">\mathsf{x}</span> might contain all of the elements of <span class="math inline">X</span>, in which case <span class="math inline">\mathsf{x} = X</span>, then we write <span class="math inline">\mathsf{x} \subseteq X</span>.</p>
+<p>Subsets are <em>recursive</em> objects. Selecting some elements from a subset yields a new subset. For example the collection <span class="math inline">\mathsf{x}' = \{x_3, x_4\}</span> is both a subset of the previously introduced subset, <span class="math display">
+\mathsf{x}' \subset \{x_1, x_3, x_4\}
+</span>, and the full ambient space, <span class="math inline">\mathsf{x}' \subset X</span>. More formally a subset <span class="math inline">\mathsf{x}'</span> if a subset of another subset <span class="math inline">\mathsf{x}</span> if all of the elements in <span class="math inline">\mathsf{x}'</span> are also in <span class="math inline">\mathsf{x}</span>.</p>
+<p>Regardless of how many elements a finite space <span class="math inline">X</span> contains three special subsets are always well-defined. The <strong>empty set</strong> <span class="math inline">\emptyset = \{\}</span> contains no elements at all. On the other hand the entire space itself can be considered a subset containing all of the elements. A subset containing a single element is denoted <span class="math inline">\{ x_{n} \}</span> and referred to as an <strong>atomic set</strong>.</p>
+<p>There are <span class="math display">
+{N \choose n} = \frac{ N! }{ n! (N - n)!}
+</span> ways to select <span class="math inline">n</span> elements from a finite space of <span class="math inline">N</span> total elements, and hence <span class="math inline">{N \choose n}</span> total subsets of size <span class="math inline">n</span>. For example there is only one subset that contains no elements, <span class="math display">
+{N \choose 0} = \frac{ N! }{ 0! (N - 0)!} = \frac{ N! }{ N! } = 1,
+</span> which is just the empty set. Similarly there is only one subset that contains all of the elements, <span class="math display">
+{N \choose N} = \frac{ N! }{ N! (N - N)!} = \frac{ N! }{ N! } = 1,
+</span> which is just the full space itself. On the other hand there are <span class="math display">
+{N \choose 1} = \frac{ N! }{ 1! (N - 1)!} = N
+</span> distinct atomics sets that contain a single element, one for each element in <span class="math inline">X</span>.</p>
+<p>Counting all of the subsets of all possible sizes gives <span class="math display">
+\sum_{n = 0}^{N} {N \choose n} = 2^{N}
+</span> possible subsets that we can construct from a finite space with <span class="math inline">N</span> elements. In other words the collection of all subsets is itself a finite space with <span class="math inline">2^{N}</span> elements. We refer to this set as the <strong>power set of <span class="math inline">X</span></strong> and denote it <span class="math inline">2^{X}</span>.</p>
+<p>When the ambient space, and all hence all of the possible elements that any subset might contain, is fixed the prefix “sub” is sometimes dropped, with all subsets simply referred to as sets. For example collections of elements might be denoted “sets” when one takes the ambient space for granted and “subsets” when one wants to explicitly acknowledge the context of the ambient space, but the precise terminology can vary strongly from context to context.</p>
+</section>
+<section id="subset-operations" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="subset-operations"><span class="header-section-number">1.2</span> Subset Operations</h2>
+<p>We can always construct subsets element by element, but we can also construct them by manipulating existing subsets.</p>
+<p>For example given a subset <span class="math inline">\mathsf{x} \subset X</span> we can construct its <strong>complement</strong> by collecting all of the elements in <span class="math inline">X</span> that are not already in <span class="math inline">\mathsf{x}</span>. The atomic set <span class="math inline">\mathsf{x} = \{ x_{3} \}</span> contains the lone element <span class="math inline">x_3</span> and its complement contains the remaining elements (<a href="#fig-complement">Figure&nbsp;3</a>) <span class="math display">
+\mathsf{x}^{c} = \{ x_{1}, x_{2}, x_{4}, x_{5} \}.
+</span> Moreover the complement of the empty set is the entire space, <span class="math inline">\emptyset^{c} = X</span>, and the complement of the full space is the empty set, <span class="math inline">X^{c} = \emptyset</span>.</p>
+<div id="fig-complement" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/complement/complement.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: The complement of a subset <span class="math inline">\mathsf{x}</span> is the subset <span class="math inline">\mathsf{x}^{c}</span> consisting of all elements in the ambient space that are not in <span class="math inline">\mathsf{x}</span>.</figcaption><p></p>
+</figure>
+</div>
+<p>More formally the construction of complementary subsets defines a <em>unary</em> function that takes in a subset as input and outputs the complementary subset, <span class="math display">\begin{alignat*}{6}
+\cdot^c :\; &amp; 2^X &amp; &amp;\rightarrow&amp; \; &amp; 2^X &amp;
+\\
+&amp; \mathsf{x} &amp; &amp;\mapsto&amp; &amp; \mathsf{x}^{c} &amp;.
+\end{alignat*}</span> The top line of this notation denotes the input space and output space of the operation, here both the power set, while the bottom line denotes the action on a particular input, here a subset mapped into its complement. For example applying the complement operator to the subset <span class="math inline">\mathsf{x} = \{ x_{2}, x_{5} \}</span> gives <span class="math display">
+\mathsf{x}^{c} = \{ x_{2}, x_{5} \}^{c} = \{ x_{1}, x_{3}, x_{4} \}.
+</span></p>
+<p>We can also construct subsets from multiple subsets. Consider, for example, two subsets <span class="math inline">\mathsf{x}_1 = \{ x_{1}, x_{4} \}</span> and <span class="math inline">\mathsf{x}_2 = \{ x_{1}, x_{5} \}</span> (<a href="#fig-subsets">Figure&nbsp;4</a>). The collection of all elements that are contained in <em>either</em> subset is itself a subset, as is the collection of all elements that are contained only in <em>both</em> subsets. These are referred to as the <strong>union</strong>, <span class="math inline">\mathsf{x}_1 \cap \mathsf{x}_2</span>, and <strong>intersection</strong>, <span class="math inline">\mathsf{x}_1 \cup \mathsf{x}_2</span>, respectively (<a href="#fig-ui">Figure&nbsp;5</a>). For example <span class="math display">
+\{ x_1, x_3, x_5 \} \cup \{ x_2, x_3 \} = \{ x_1, x_2, x_3, x_5 \}
+</span> and <span class="math display">
+\{ x_1, x_3, x_5 \} \cap \{ x_2, x_3 \} = \{ x_3 \}.
+</span></p>
+<div id="fig-subsets" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/overlapping_subsets/overlapping_subsets.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: We can manipulate two subsets into a new subset in various ways.</figcaption><p></p>
+</figure>
+</div>
+<div id="fig-ui" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/overlapping_subsets_ui/overlapping_subsets_ui.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: The union of two subsets, <span class="math inline">\mathsf{x}_1 \cup \mathsf{x}_2</span>, is a subset containing all of the elements in either input subset. On the other hand the intersection of two subsets, <span class="math inline">\mathsf{x}_1 \cap \mathsf{x}_2</span>, is a subset containing just the elements that occur in both input subsets.</figcaption><p></p>
+</figure>
+</div>
+<p>Two subsets are <strong>disjoint</strong> if they don’t share any elements; in this case their intersection is the empty set, <span class="math display">
+\mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset.
+</span> The union and intersection of a subset with itself returns that subset, <span class="math display">
+\mathsf{x} \cup \mathsf{x} = \mathsf{x} \cap \mathsf{x} = \mathsf{x}.
+</span> Because the empty set does not contain any elements its union with any subset returns back that subset, <span class="math display">
+\mathsf{x} \cup \emptyset = \emptyset \cup \mathsf{x} = \mathsf{x},
+</span> and its intersection with any subset returns the empty set, <span class="math display">
+\mathsf{x} \cap \emptyset = \emptyset \cap \mathsf{x} = \emptyset.
+</span> Similarly the union of any subset with the full space returns the full space, <span class="math display">
+\mathsf{x} \cup X = X \cup \mathsf{x} = X,
+</span> and the intersection of any subset with the full space returns back the subset, <span class="math display">
+\mathsf{x} \cap X = X \cap \mathsf{x} = \mathsf{x}.
+</span></p>
+<p>Because they require two inputs the union and intersection define <em>binary</em> functions that consume <em>two</em> input subsets and return a single output subset, <span class="math display">\begin{alignat*}{6}
+\cdot \cup \cdot :\; &amp; 2^{X} \times 2^{X}&amp; &amp;\rightarrow&amp; \; &amp; 2^{X} &amp;
+\\
+&amp; \mathsf{x}_1, \mathsf{x}_{2} &amp; &amp;\mapsto&amp; &amp; \mathsf{x}_1 \cup \mathsf{x}_2 &amp;
+\end{alignat*}</span> and <span class="math display">\begin{alignat*}{6}
+\cdot \cap \cdot :\; &amp; 2^{X} \times 2^{X}&amp; &amp;\rightarrow&amp; \; &amp; 2^{X} &amp;
+\\
+&amp; \mathsf{x}_1, \mathsf{x}_{2} &amp; &amp;\mapsto&amp; &amp; \mathsf{x}_1 \cap \mathsf{x}_2 &amp;.
+\end{alignat*}</span> Here <span class="math inline">2^{X} \times 2^{X}</span> denotes the space consisting of all <em>pairs</em> of subsets.</p>
+</section>
+</section>
+<section id="measure-and-probability-over-elements" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Measure and Probability Over Elements</h1>
+<p>Measure theory, and its special case of probability theory, is often burdened with intricate if not mysterious interpretations. From a mathematical perspective, however, measure theory simply concerns the consistent <strong>allocation</strong> of some abstract quantity across the ambient space.</p>
+<p>Consider a <em>reservoir</em> of some real-valued, positive, and <em>conserved</em> quantity, <span class="math inline">M \in \mathbb{R}^{+}</span> (<a href="#fig-reservoir">Figure&nbsp;6</a>). Because <span class="math inline">M</span> is conserved any amount <span class="math inline">m_{n}</span> that is allocated to the element <span class="math inline">x_{n} \in X</span> has to be <em>depleted</em> from the reservoir. That said in general the total content in the reservoir <span class="math inline">M</span> can be infinite.</p>
+<div id="fig-reservoir" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/allocations/0/0.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: Measure theory concerns the allocation of some real-valued and positive quantity <span class="math inline">M</span> over the individual elements of the ambient space.</figcaption><p></p>
+</figure>
+</div>
+<p>To make the mathematics as useful as possible we will avoid endowing <span class="math inline">M</span> with any particular meaning for the time being. Instead interpretations will arise only when we <em>apply</em> measure theory to model particular systems.</p>
+<p>An <em>exhaustive</em> allocation of <span class="math inline">M</span> across the ambient spaces ensures that the reservoir is completely emptied. In another words all of <span class="math inline">M</span> has to be allocated to the elements <span class="math inline">x_{n} \in X</span>.</p>
+<p>For example consider the ambient space <span class="math inline">X = \{x_1, x_2, x_3, x_4, x_5 \}</span>. If we allocate <span class="math inline">m_{1}</span> to <span class="math inline">x_{1}</span> then that leaves <span class="math inline">M - m_{1}</span> remaining to allocate to the other four elements (<a href="#fig-allocationa">Figure&nbsp;7 (a)</a>). Allocating <span class="math inline">m_{2}</span> to <span class="math inline">x_{2}</span> depletes the reservoir a bit more (<a href="#fig-allocationb">Figure&nbsp;7 (b)</a>). At the end we have to allocate all <span class="math display">
+M - m_{1} - m_{2} - m_{3} - m_{4}
+</span> that remains to <span class="math inline">x_{5}</span> (<a href="#fig-allocatione">Figure&nbsp;7 (e)</a>).</p>
+<div id="fig-allocation" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-allocationa" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/allocations/1/1.png" class="img-fluid figure-img" data-ref-parent="fig-allocation"></p>
+<p></p><figcaption class="figure-caption">(a)</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-allocationb" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/allocations/2/2.png" class="img-fluid figure-img" data-ref-parent="fig-allocation"></p>
+<p></p><figcaption class="figure-caption">(b)</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-allocationc" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/allocations/3/3.png" class="img-fluid figure-img" data-ref-parent="fig-allocation"></p>
+<p></p><figcaption class="figure-caption">(c)</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-allocationd" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/allocations/4/4.png" class="img-fluid figure-img" data-ref-parent="fig-allocation"></p>
+<p></p><figcaption class="figure-caption">(d)</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-allocatione" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/allocations/5/5.png" class="img-fluid figure-img" data-ref-parent="fig-allocation"></p>
+<p></p><figcaption class="figure-caption">(e)</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p>&nbsp;</p>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7: Because the total quantity <span class="math inline">M</span> is conserved every allocation <span class="math inline">m_{n}</span> to an element <span class="math inline">x_{n} \in X</span> depletes the amount available for the allocation to the remaining elements. An exhaustive allocation leaves nothing left in the initial reservoir after each element has received its allocation.</figcaption><p></p>
+</figure>
+</div>
+<p>A <strong>measure</strong> is any consistent allocation of the quantity <span class="math inline">M</span> to the elements of an ambient space. Mathematically any measure over a finite space can be characterized by <span class="math inline">N</span> real numbers (<a href="#fig-measure">Figure&nbsp;8</a>) <span class="math display">
+\mu = \{ m_{1}, \ldots, m_{N} \}
+</span> that satisfy <span class="math display">
+0 \le m_{n}
+</span> and <span class="math display">
+\sum_{n = 1}^{N} m_{n} = M.
+</span> Recall that <span class="math inline">M</span> can be infinite.</p>
+<div id="fig-measure" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/measure/measure.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;8: A measure <span class="math inline">\mu</span> over the finite space <span class="math inline">X</span> is any consistent allocation of <span class="math inline">M</span> to the elements <span class="math inline">x_{n} \in X</span>. Every measure can be characterized by <span class="math inline">N</span> real numbers <span class="math inline">m_{n}</span> that sum to <span class="math inline">M</span>, or equivalently a function that maps each <span class="math inline">x_{n}</span> to <span class="math inline">m_{n}</span>.</figcaption><p></p>
+</figure>
+</div>
+<p>The larger <span class="math inline">m_{n}</span> the more of <span class="math inline">M</span> is allocated to the element <span class="math inline">x_{n}</span>. Following this terminology we will also refer to <span class="math inline">M</span> as the <strong>total measure</strong> and <span class="math inline">m_{n}</span> as the <strong>measure allocated to <span class="math inline">x_{n}</span></strong>.</p>
+<p>The allocation <span class="math inline">\{ x_{n}, m_{n} \}</span> defined by a measure <span class="math inline">\mu</span> can also be organized into a function that maps each element to its associated allocation, <span class="math display">\begin{alignat*}{6}
+\mu :\; &amp; X &amp; &amp;\rightarrow&amp; \; &amp; \mathbb{R}^{+} &amp;
+\\
+&amp; x_{n} &amp; &amp;\mapsto&amp; &amp; m_{n} = \mu(x_{n}) &amp;.
+\end{alignat*}</span> A nice conceptual benefit of this function perspective is that instead of thinking about the global allocation <span class="math inline">m_1, \ldots, m_N</span> all at once we can reason about only local allocations by evaluating <span class="math inline">\mu</span> at a single input <span class="math inline">m_{n} = \mu(x_{n})</span> one at a time.</p>
+<p>Now there are an infinite number of ways to allocate a total measure to the elements of a finite space, and hence an infinite number of measures. I will denote the space of all possible measures over <span class="math inline">X</span> as <span class="math inline">\mathcal{M}(X)</span>.</p>
+<p>Within this space there a few notable examples. For example a <strong>singular measure</strong> allocates the total measure <span class="math inline">M</span> to a single element, leaving the rest with nothing (<a href="#fig-types_of_measurea">Figure&nbsp;9 (a)</a>). On the other hand a <strong>uniform measure</strong> allocates the same measure <span class="math inline">M / N</span> to each element (<a href="#fig-types_of_measureb">Figure&nbsp;9 (b)</a>). On finite spaces there are <span class="math inline">N</span> distinct singular measures, one for each distinct element, and a single unique uniform measure.</p>
+<div id="fig-types_of_measure" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-types_of_measurea" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/singular_measure/singular_measure.png" class="img-fluid figure-img" data-ref-parent="fig-types_of_measure"></p>
+<p></p><figcaption class="figure-caption">(a)</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-types_of_measureb" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/uniform_measure/uniform_measure.png" class="img-fluid figure-img" data-ref-parent="fig-types_of_measure"></p>
+<p></p><figcaption class="figure-caption">(b)</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;9: A singular measure (a) allocates the total measure to a single element while the uniform measure (b) spreads the total measure to each element evenly.</figcaption><p></p>
+</figure>
+</div>
+<p>Perhaps the most important class of measures, however, are measures where the total measure is finite, <span class="math inline">M &lt; \infty</span>. Appropriately enough we refer to these measures as <strong>finite measures</strong>.</p>
+<p>What makes finite measures so special is that we can always reframe the allocation they define into a <em>relative</em> one. Instead of considering the absolute measure allocated to each element <span class="math inline">m_{n}</span> we can consider the <em>proportion</em> of the total measure allocated to each element, (<a href="#fig-proportional">Figure&nbsp;10</a>) <span class="math display">
+p_{n} = m_{n} / M.
+</span> By construction proportions are confined to the unit interval <span class="math inline">[0, 1]</span>. As with any quantity taking values in <span class="math inline">[0, 1]</span> we can represent proportions equally well with decimals, for example <span class="math inline">p_{n} = 0.2</span>, and percentages, <span class="math inline">p_{n} = 20\%</span>.</p>
+<div id="fig-proportional" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/proportional_measure/proportional_measure.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10: Every finite measure can be characterized by a proportional allocation.</figcaption><p></p>
+</figure>
+</div>
+<p>In other words a proportional measure defines the function (<a href="#fig-probability">Figure&nbsp;11</a>) <span class="math display">\begin{alignat*}{6}
+\pi :\; &amp; X &amp; &amp;\rightarrow&amp; \; &amp; [0, 1] &amp;
+\\
+&amp; x_{n} &amp; &amp;\mapsto&amp; &amp; p_{n} = \pi(x_{n}) &amp;
+\end{alignat*}</span> with <span class="math display">
+0 \le p_{n} \le 1
+</span> and <span class="math display">
+\sum_{n = 1}^{N} p_{n} = 1.
+</span> A collection of variables <span class="math inline">\{ p_{1}, \ldots, p_{N} \}</span> satisfying these properties is also referred to as a <strong>simplex</strong>.</p>
+<div id="fig-probability" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/probability_distribution/probability_distribution.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;11: A proportional allocation is also known as a probability distribution.</figcaption><p></p>
+</figure>
+</div>
+<p>More importantly a proportional measure <span class="math inline">\pi</span> is also known as a <strong>probability distribution</strong> with the proportional allocations <span class="math inline">p_{n}</span> denoted <strong>probabilities</strong>. In other words while the term “probability” is often encumbered with all kinds of interpretational and philosophical baggage its mathematical structure is really quite straightforward. On a finite space a probability is just the proportion of some finite quantity that is allocated to an individual element.</p>
+<p>The philosophical tension arises only when we try to assign some meaning to that quantity. This isn’t a question of mathematics but rather <em>applying</em> mathematics to model a system of interest. We’ll come back to the many different systems that can be consistently modeled with probability theory, and hence the interpretations of probability itself, in Chapter 4.</p>
+<p>While we’re on the topic of terminological issues the word “distribution” is not without its own problems. In mathematics the term “distribution” is heavily overloaded and can be used to refer to a variety of related but distinct concepts. One way to avoid confusion is to always refer to proportional measures as “probability distributions” and never just “distributions” alone.</p>
+</section>
+<section id="measure-and-probability-over-subsets" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Measure and Probability Over Subsets</h1>
+<p>On finite spaces any allocation, absolute or proportional, over the individual elements <span class="math inline">x \in X</span> also defines an allocation over entire subsets <span class="math inline">\mathsf{x} \in 2^{X}</span>. The measure allocated to a subset is just the sum of the measures allocated to the elements in that subset. For example the measure allocated to <span class="math inline">\mathsf{x} = \{ x_{1}, x_{2}, x_{4} \}</span> is <span class="math inline">m_{1} + m_{2} + m_{4}</span> (<a href="#fig-subset_measure">Figure&nbsp;12</a>).</p>
+<div id="fig-subset_measure" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/subset_measure/subset_measure.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;12: On a finite space an allocation over individual elements also defines an allocation over subsets.</figcaption><p></p>
+</figure>
+</div>
+<p>In other words a measure over individual elements <span class="math inline">\mu : X \rightarrow \mathbb{R}^{+}</span> is equivalent to a measure over subsets <span class="math inline">\mu : 2^{X} \rightarrow \mathbb{R}^{+}</span>. Similarly a probability distribution over individual elements <span class="math inline">\pi : X \rightarrow [0, 1]</span> is equivalent to a probability distribution over subsets <span class="math inline">\pi : 2^{X} \rightarrow [0, 1]</span>. Note that we have made the cardinal sin of <em>overloading</em> our notation so that <span class="math inline">\mu</span> refers to both types of measures, and the only way to differentiate them is through their inputs; <span class="math inline">\mu(x)</span> is the point-wise measure allocated to <span class="math inline">x \in X</span> and <span class="math inline">\mu( \mathsf{x} )</span> is the subset-wise measure allocated to <span class="math inline">\mathsf{x} \in 2^X</span>.</p>
+<p>By construction any subset measure and probability distribution satisfy a wealth of useful properties. For example for any measure <span class="math display">
+\mu( \emptyset ) = 0
+</span> and <span class="math display">
+\mu( X ) = \sum_{n = 1}^{N} \mu(x_{n}) = M,
+</span> while for any probability distribution we have <span class="math inline">\pi( \emptyset ) = 0</span> and <span class="math inline">\pi( X ) = 1</span>.</p>
+<p>Even better the subset allocations play well with the subset operations. Consider for example the two disjoint subsets <span class="math inline">\mathsf{x}_{1} = \{ x_{1}, x_{3} \}</span> and <span class="math inline">\mathsf{x}_{2} = \{ x_{2}, x_{5} \}</span>. Because the two subsets are disjoint their union combines all of their elements, <span class="math display">
+\mathsf{x}_{1} \cup \mathsf{x}_{2} =
+\{ x_{1}, x_{2}, x_{3}, x_{5} \}
+</span> and <span class="math display">\begin{align*}
+\mu ( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
+&amp;=
+\mu ( \{ x_{1}, x_{2}, x_{3}, x_{5} \} )
+\\
+&amp;=
+m_{1} + m_{2} + m_{3} + m_{5}
+\\
+&amp;=
+( m_{1} + m_{3} ) + ( m_{2} + m_{5} )
+\\
+&amp;=
+\mu( \mathsf{x}_{1} ) + \mu( \mathsf{x}_{2} ).
+\end{align*}</span></p>
+<p>More generally for any collection of subsets <span class="math display">
+\mathsf{x}_{1}, \ldots, \mathsf{x}_{K}
+</span> that are mutually disjoint, <span class="math display">
+\mathsf{x}_{k} \cap \mathsf{x}_{k'} = \emptyset
+</span> for <span class="math inline">k \ne k'</span>, we have <span class="math display">
+\mu ( \cup_{k = 1}^{K} \mathsf{x}_{k} )
+=
+\sum_{k = 1}^{K} \mu ( \mathsf{x}_{k} ).
+</span> In other words if we can decompose a subset into a disjoint collection of smaller subsets then we can decompose the measure allocated to that initial subset into measures allocated to the component subsets. This consistency property is known as <strong>additivity</strong>.</p>
+<p>A subset <span class="math inline">\mathsf{x}</span> and its complement <span class="math inline">\mathsf{x}^{c}</span> always disjoint, <span class="math inline">\mathsf{x} \cap \mathsf{x}^{c} = \emptyset</span>. At the same time their union covers the entire space, <span class="math inline">\mathsf{x} \cup \mathsf{x}^{c} = X</span>. Consequently additivity implies that <span class="math display">\begin{align*}
+M
+&amp;=
+\mu (X)
+\\
+&amp;=
+\mu ( \mathsf{x} \cup \mathsf{x}^{c} )
+\\
+&amp;= \mu ( \mathsf{x} ) + \mu ( \mathsf{x}^{c} ),
+\end{align*}</span> or <span class="math display">
+\mu ( \mathsf{x}^{c} ) = M - \mu ( \mathsf{x} ).
+</span> In words that the measure allocated to the complement of a subset is the total measure less the measure allocated to that subset. For probability distributions this becomes even cleaner, <span class="math display">
+\pi ( \mathsf{x}^{c} ) = 1 - \pi ( \mathsf{x} ).
+</span></p>
+<p>When two subsets overlap we have to take into consideration that the sum of their measures <span class="math inline">\mu ( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )</span> double counts the allocations to any elements shared between them. For example if <span class="math inline">\mathsf{x}_{1} = \{ x_{1}, x_{4} \}</span> and <span class="math inline">\mathsf{x}_{2} = \{ x_{1}, x_{5} \}</span> then <span class="math display">\begin{align*}
+\mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
+&amp;=
+\mu( \{ x_{1}, x_{4}, x_{5} \} )
+\\
+&amp;=
+m_{1} + m_{4} + m_{5}.
+\end{align*}</span> but <span class="math display">\begin{align*}
+\mu( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )
+&amp;=
+(m_{1} + m_{4} ) + ( m_{1} + m_{5} )
+\\
+&amp;=
+m_{1} + m_{1} + m_{4} + m_{5}
+\\
+&amp;=
+m_{1} + \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} ).
+\end{align*}</span></p>
+<p>The elements that is double counted here, however, is just the lone element in the intersection of the two subsets. Consequently the excess measure allocated to the union is given by (<a href="#fig-overlapping_subsets_measures">Figure&nbsp;13</a>) <span class="math display">
+m_{1} = \mu( \{ x_{1} \} ) = \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} ).
+</span> and we can write <span class="math display">
+\mu( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )
+=
+  \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} )
++ \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} ).
+</span> This relationship is quite general and holds for <em>any</em> two subsets regardless of their overlap.</p>
+<div id="fig-overlapping_subsets_measures" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/overlapping_subsets_measures/overlapping_subsets_measures.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;13: When two subsets overlap the measure allocated to each doubles the measure allocated to any overlapping elements, here <span class="math inline">x_{1}</span>, but the measure allocated to their union does not. This results in an important relationship between the measures allocated to the two subsets, the measure allocated to their union, and the measure allocated to their intersection.</figcaption><p></p>
+</figure>
+</div>
+<p>Because of these subset properties we can build up a given measure in many different ways, each of which can useful in different circumstances. This provides extremely convenient flexibility when trying to apply measure theory and probability theory in practice.</p>
+<p>For example we can always specify a measure <em>globally</em> by specifying the individual allocations at the same time (<a href="#fig-all_at_once">Figure&nbsp;14</a>). Alternatively we can specify the allocation <em>locally</em> by considering each element one at a time (<a href="#fig-one_at_a_time">Figure&nbsp;15</a>). At each iteration we can take only from the measure allocated to the remaining elements, which corresponds to the “reservoir”.</p>
+<div id="fig-all_at_once" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/decompositions/all_at_once/all_at_once.png" class="img-fluid figure-img" style="width:33.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;14: Measures can be constructed by specifying the individual element allocations all at once.</figcaption><p></p>
+</figure>
+</div>
+<div id="fig-one_at_a_time" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/decompositions/one_at_a_time/one_at_a_time.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;15: At the same time measures can be constructed by specifying the individual element allocations one by one.</figcaption><p></p>
+</figure>
+</div>
+<p>Critically we do not always need to start with individual allocations. Instead we can always start by allocating the total measure to disjoint subsets and then iteratively <em>refining</em> that allocation to smaller and smaller subsets until we reach the individual elements (<a href="#fig-refinement">Figure&nbsp;16</a>).</p>
+<div id="fig-refinement" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/decompositions/refinement/refinement.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;16: Finally measures can be constructed by allocating the total measure to disjoint subsets and then iteratively refining that allocation to smaller and smaller subsets.</figcaption><p></p>
+</figure>
+</div>
+<p>In addition to providing this construction flexibility the subset definition of a measure <span class="math inline">\mu : 2^{X} \rightarrow \mathbb{R}^{+}</span> is also critical for generalizing measure theory beyond finite spaces. Specifically it becomes <em>necessary</em> when trying to consistently define measures on more mathematically complicated spaces like the real line. This will be the topic of Chapter 3.</p>
+</section>
+<section id="acknowledgements" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Acknowledgements</h1>
+<p>A very special thanks to everyone supporting me on Patreon: Aapeli Nevala, Adam Bartonicek, Adam Fleischhacker, Adan, Adriano Yoshino, Alan Chang, Alessandro Varacca, Alexander Bartik, Alexander Noll, Alexander Rosteck, Anders Valind, Andrea Serafino, Andrew Mascioli, Andrew Rouillard, Andrew Vigotsky, Angie_Hyunji Moon, Ara Winter, asif zubair, Austin Rochford, Austin Rochford, Avraham Adler, Ben Matthews, Ben Swallow, Brynjolfur Gauti Jónsson, Cameron Smith, Canaan Breiss, Cat Shark, Charles Naylor, Chase Dwelle, Chris Zawora, Christopher Mehrvarzi, Chuck Carlson, Colin Carroll, Colin McAuliffe, Cruz, Damien Mannion, Damon Bayer, dan mackinlay, Dan Muck, Dan W Joyce, Dan Waxman, Dan Weitzenfeld, Daniel, Daniel Edward Marthaler, Daniel Rowe, Darshan Pandit, Darthmaluus , David Burdelski, David Galley, David Humeau, David Wurtz, dilsher singh dhillon, Doug Rivers, Dr.&nbsp;Jobo, Dr.&nbsp;Omri Har Shemesh, Ed Cashin, Ed Henry, Edgar Merkle, edith darin, Eric LaMotte, Erik Banek, Ero Carrera, Eugene O’Friel, Evan Cater, Fabio Pereira, Fabio Zottele, Felipe González, Fergus Chadwick, Finn Lindgren, Florian Wellmann, Francesco Corona, Geoff Rollins, George Ho, Granville Matheson, Greg Sutcliffe, Guido Biele, Hamed Bastan-Hagh, Haonan Zhu, Hector Munoz, Henri Wallen, Hugo Botha, Huib Meulenbelt, Håkan Johansson, Ian Costley, Ian Koller, idontgetoutmuch, Ignacio Vera, Ilaria Prosdocimi, Isaac S, Isaac Vock, J, J Michael Burgess, Jair Andrade, James Hodgson, James McInerney, James Wade, Janek Berger, Jason Martin, Jason Pekos, Jeff Burnett, Jeff Dotson, Jeff Helzner, Jeffrey Burnett, Jeffrey Erlich, Jesse Wolfhagen, Jessica Graves, Joe Wagner, John Flournoy, Jon , Jonathan H. Morgan, Jonathan St-onge, Jonathon Vallejo, Joran Jongerling, Joseph Despres, Josh Weinstock, Joshua Duncan, Joshua Griffith, Josué Mendoza, JU, Justin Bois, Karim Naguib, Karim Osman, Keith O’Rourke, Kejia Shi, Kevin Foley, Kristian Gårdhus Wichmann, Kádár András, lizzie , LOU ODETTE, Luiz Pessoa, Marc Dotson, Marc Trunjer Kusk Nielsen, Marcel Lüthi, Marek Kwiatkowski, Mark Donoghoe, Mark Worrall, Markus P., Martin Modrák, Matt Moores, Matthew, Matthew Kay, Matthieu LEROY, Maurits van der Meer, Merlin Noel Heidemanns, Michael Colaresi, Michael DeWitt, Michael Dillon, Michael Lerner, Mick Cooney, Márton Vaitkus, N Sanders, Name, Nathaniel Burbank, Nic Fishman, Nicholas Clark, Nicholas Cowie, Nick S, Nicolas Frisby, Octavio Medina, Ole Rogeberg, Oliver Crook, Olivier Ma, Pablo León Villagrá, Palwasha Khan, Patrick Kelley, Patrick Boehnke, Pau Pereira Batlle, Peter Smits, Pieter van den Berg , ptr, Putra Manggala, Ramiro Barrantes Reynolds, Ravin Kumar, Raúl Peralta Lozada, Riccardo Fusaroli, Richard Nerland, Robert Frost, Robert Goldman, Robert kohn, Robert Mitchell V, Robin Taylor, Rong Lu, Ross McCullough, Ryan Grossman, Rémi , S Hong, Sam Levy, Scott Block, Scott Brown, Sean Pinkney, Sean Wilson, Serena, Seth Axen, shira, Simon Duane, Simon Lilburn, Srivatsa Srinath, sssz, Stan_user, Stefan, Stephanie Fitzgerald, Stephen Lienhard, Steve Bertolani, Stone Chen, Sus, Susan Holmes, Svilup, Sören Berg, Tagir Akhmetshin, Tao Ye, Tate Tunstall, Tatsuo Okubo, Teresa Ortiz, Thiago de Paula Oliveira, Thomas Lees, Thomas Vladeck, Tiago Cabaço, Tim Radtke, Tom McEwen, Tomáš Frýda, Tony Wuersch, Virginia Fisher, Vitaly Druker, Vladimir Markov, Wil Yegelwel, Will Farr, Will Kurt, Will Tudor-Evans, woejozney, yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.</p>
+</section>
+<section id="license" class="level1 unnumbered">
+<h1 class="unnumbered">License</h1>
+<p>The text and figures in this chapter are copyrighted by Michael Betancourt and licensed under the CC BY-NC 4.0 license:</p>
+<p>https://creativecommons.org/licenses/by-nc/4.0/</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
