@@ -656,6 +656,10 @@ Zhengchen Cai.
 
 # License {-}
 
+A repository containing all of the files used to generate this chapter is
+available on [GitHub](
+https://github.com/betanalpha/quarto_chapters/tree/main/probability_on_finite_spaces).
+
 The text and figures in this chapter are copyrighted by Michael Betancourt
 and licensed under the CC BY-NC 4.0 license:
 
