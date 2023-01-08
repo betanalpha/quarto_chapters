@@ -274,3 +274,10 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+
+# Quarto Detritus
+*_files
+*_cache
+
+# Mac Detritus
+*.DS_Store
