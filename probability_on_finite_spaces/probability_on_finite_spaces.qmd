@@ -12,7 +12,7 @@ format:
     theme:
       - lux
       - custom.scss
-    standalone: true
+    embed-resources: true
     code-overflow: wrap
     linkcolor: "#B97C7C"
   pdf:
