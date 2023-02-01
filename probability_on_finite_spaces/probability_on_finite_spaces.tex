@@ -149,7 +149,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, frame hidden, enhanced, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, borderline west={3pt}{0pt}{shadecolor}, sharp corners, breakable, enhanced, boxrule=0pt, frame hidden]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -205,8 +205,12 @@ its individual elements and manipulating those organizations.
 \hypertarget{subsets}{%
 \subsection{Subsets}\label{subsets}}
 
-A \textbf{subset} of \(X\) is any collection of elements in \(X\). For
-example \(\mathsf{x} = \{x_1, x_3, x_4\}\) is a subset of
+A \textbf{subset} of \(X\) is any collection of elements in \(X\). To
+avoid any ambiguity I will exclusively use lowercase roman letters \(x\)
+to denote a variable point in the ambient space \(X\) and lowercase san
+serif letters \(\mathsf{x}\) to denote a variable subset.
+
+For example \(\mathsf{x} = \{x_1, x_3, x_4\}\) is a subset of
 \(X = \{x_1, x_2, x_3, x_4, x_5\}\) (Figure~\ref{fig-subset}).
 Importantly there is no notion of multiplicity in the concept of a
 subset, just membership: a subset can include an element \(x_{n}\) but
@@ -228,14 +232,15 @@ If \(\mathsf{x}\) is a subset of the ambient space \(X\) then we write
 elements of \(X\), in which case \(\mathsf{x} = X\), then we write
 \(\mathsf{x} \subseteq X\).
 
-Subsets are \emph{recursive} objects. Selecting some elements from a
-subset yields a new subset. For example the collection
-\(\mathsf{x}' = \{x_3, x_4\}\) is both a subset of the previously
-introduced subset, \[
-\mathsf{x}' \subset \{x_1, x_3, x_4\}
-\], and the full ambient space, \(\mathsf{x}' \subset X\). More formally
-a subset \(\mathsf{x}'\) if a subset of another subset \(\mathsf{x}\) if
-all of the elements in \(\mathsf{x}'\) are also in \(\mathsf{x}\).
+Subsets are \emph{recursive} objects. Selecting any elements from a
+subset yields a new subset. For example the collection \(\{x_3, x_4\}\)
+is both a subset of the previously introduced subset, \[
+\{ x_3, x_4 \} \subset \{ x_1, x_3, x_4 \},
+\] and the full ambient space, \[
+\{ x_3, x_4 \} \subset X.
+\] More formally a subset \(\mathsf{x}'\) is a subset of another subset
+\(\mathsf{x}\) if and only if all of the elements in \(\mathsf{x}'\) are
+also in \(\mathsf{x}\).
 
 Regardless of how many elements a finite space \(X\) contains three
 special subsets are always well-defined. The \textbf{empty set}
@@ -316,18 +321,29 @@ subset \(\mathsf{x} = \{ x_{2}, x_{5} \}\) gives \[
 \mathsf{x}^{c} = \{ x_{2}, x_{5} \}^{c} = \{ x_{1}, x_{3}, x_{4} \}.
 \]
 
-We can also construct subsets from multiple subsets. Consider, for
+We can also construct subsets from more than one subsets. Consider, for
 example, two subsets \(\mathsf{x}_1 = \{ x_{1}, x_{4} \}\) and
 \(\mathsf{x}_2 = \{ x_{1}, x_{5} \}\) (Figure~\ref{fig-subsets}). The
 collection of all elements that are contained in \emph{either} subset is
-itself a subset, as is the collection of all elements that are contained
-only in \emph{both} subsets. These are referred to as the
-\textbf{union}, \(\mathsf{x}_1 \cap \mathsf{x}_2\), and
-\textbf{intersection}, \(\mathsf{x}_1 \cup \mathsf{x}_2\), respectively
-(Figure~\ref{fig-ui}). For example \[
-\{ x_1, x_3, x_5 \} \cup \{ x_2, x_3 \} = \{ x_1, x_2, x_3, x_5 \}
+itself a subset, \[
+\{ x_1, x_4, x_5 \} \subset X,
+\] as is the collection of all elements that are contained only in
+\emph{both} subsets, \[
+\{ x_1 \} \subset X.
+\] These derived subsets are referred to as the \textbf{union}, \[
+\mathsf{x}_1 \cup \mathsf{x}_2
+= \{ x_1, x_4 \} \cup \{ x_1, x_5 \}
+= \{ x_1, x_4, x_5 \},
+\] and \textbf{intersection}, \[
+\mathsf{x}_1 \cap \mathsf{x}_2
+= \{ x_1, x_4 \} \cup \{ x_1, x_5 \}
+= \{ x_1 \},
+\] respectively (Figure~\ref{fig-ui}). Note that the union and
+intersection are both symmetric in the sense that either order of the
+input subsets results in the same output subset, \[
+\mathsf{x}_1 \cup \mathsf{x}_2 = \mathsf{x}_2 \cup \mathsf{x}_1
 \] and \[
-\{ x_1, x_3, x_5 \} \cap \{ x_2, x_3 \} = \{ x_3 \}.
+\mathsf{x}_1 \cap \mathsf{x}_2 = \mathsf{x}_2 \cap \mathsf{x}_1.
 \]
 
 \begin{figure}
@@ -397,12 +413,19 @@ mathematical perspective, however, measure theory simply concerns the
 consistent \textbf{allocation} of some abstract quantity across the
 ambient space.
 
-Consider a \emph{reservoir} of some real-valued, positive, and
-\emph{conserved} quantity, \(M \in \mathbb{R}^{+}\)
+Consider a \emph{reservoir} of some positive, continuous, and
+\emph{conserved} quantity, \(M \in [0, \infty]\)
 (Figure~\ref{fig-reservoir}). Because \(M\) is conserved any amount
 \(m_{n}\) that is allocated to the element \(x_{n} \in X\) has to be
-\emph{depleted} from the reservoir. That said in general the total
-content in the reservoir \(M\) can be infinite.
+\emph{depleted} from the reservoir, leaving less to be allocated to the
+remaining elements.
+
+We have to be careful if the total content of the reservoir \(M\) is
+infinite. In this case we can allocate an infinite amount from the
+reservoir while still having an infinite quantify left. At the same time
+allocating an infinite amount can depleting the reservoir completely or
+even leave any finite quantity. Infinity is, at the very least, an
+awkward concept.
 
 \begin{figure}
 
@@ -548,7 +571,7 @@ finite space can be characterized by \(N\) real numbers
 0 \le m_{n}
 \] and \[
 \sum_{n = 1}^{N} m_{n} = M.
-\] Recall that \(M\) can be infinite.
+\]
 
 \begin{figure}
 
@@ -569,10 +592,16 @@ The larger \(m_{n}\) the more of \(M\) is allocated to the element
 \textbf{total measure} and \(m_{n}\) as the \textbf{measure allocated to
 \(x_{n}\)}.
 
+If the total measure in infinite, \(M = \infty\), then at least one of
+the elements in \(X\) \emph{has} to receive an infinite allocation. We
+can also consistently allocate infinite measure to multiple elements, or
+even all of the elements, at the same time. Infinite measures can be
+very generous in their allocations.
+
 The allocation \(\{ x_{n}, m_{n} \}\) defined by a measure \(\mu\) can
 also be organized into a function that maps each element to its
 associated allocation, \begin{alignat*}{6}
-\mu :\; & X & &\rightarrow& \; & \mathbb{R}^{+} &
+\mu :\; & X & &\rightarrow& \; & [0, \infty] &
 \\
 & x_{n} & &\mapsto& & m_{n} = \mu(x_{n}) &.
 \end{alignat*} A nice conceptual benefit of this function perspective is
@@ -728,16 +757,19 @@ individual elements also defines an allocation over subsets.}
 \end{figure}
 
 In other words a measure over individual elements
-\(\mu : X \rightarrow \mathbb{R}^{+}\) is equivalent to a measure over
-subsets \(\mu : 2^{X} \rightarrow \mathbb{R}^{+}\). Similarly a
-probability distribution over individual elements
-\(\pi : X \rightarrow [0, 1]\) is equivalent to a probability
-distribution over subsets \(\pi : 2^{X} \rightarrow [0, 1]\). Note that
-we have made the cardinal sin of \emph{overloading} our notation so that
-\(\mu\) refers to both types of measures, and the only way to
-differentiate them is through their inputs; \(\mu(x)\) is the point-wise
-measure allocated to \(x \in X\) and \(\mu( \mathsf{x} )\) is the
-subset-wise measure allocated to \(\mathsf{x} \in 2^X\).
+\(\mu : X \rightarrow [0, \infty]\) is equivalent to a measure over
+subsets \(\mu : 2^{X} \rightarrow [0, \infty]\). Similarly a probability
+distribution over individual elements \(\pi : X \rightarrow [0, 1]\) is
+equivalent to a probability distribution over subsets
+\(\pi : 2^{X} \rightarrow [0, 1]\).
+
+Note that we have made the cardinal sin of \emph{overloading} our
+notation so that \(\mu\) refers to both types of measures, and the only
+way to differentiate them is through their inputs; \(\mu(x)\) is the
+point-wise measure allocated to \(x \in X\) and \(\mu( \mathsf{x} )\) is
+the subset-wise measure allocated to \(\mathsf{x} \in 2^X\). Maintaining
+different typographical conventions for points and subsets is critical
+to avoid any confusion when overloading notation like this.
 
 By construction any subset measure and probability distribution satisfy
 a wealth of useful properties. For example for any measure \[
@@ -752,9 +784,13 @@ Consider for example the two disjoint subsets
 \(\mathsf{x}_{1} = \{ x_{1}, x_{3} \}\) and
 \(\mathsf{x}_{2} = \{ x_{2}, x_{5} \}\). Because the two subsets are
 disjoint their union combines all of their elements, \[
-\mathsf{x}_{1} \cup \mathsf{x}_{2} =
-\{ x_{1}, x_{2}, x_{3}, x_{5} \}
-\] and \begin{align*}
+\mathsf{x}_{1} \cup \mathsf{x}_{2}
+=
+\{ x_{1}, x_{3} \} \cup \{ x_{2}, x_{5} \}
+=
+\{ x_{1}, x_{2}, x_{3}, x_{5} \},
+\] and the measure of the union is just the sum of the measures of the
+input subsets, \begin{align*}
 \mu ( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
 &=
 \mu ( \{ x_{1}, x_{2}, x_{3}, x_{5} \} )
@@ -777,11 +813,10 @@ More generally for any collection of subsets \[
 \mu ( \cup_{k = 1}^{K} \mathsf{x}_{k} )
 =
 \sum_{k = 1}^{K} \mu ( \mathsf{x}_{k} ).
-\] In other words if we can decompose a subset into a disjoint
-collection of smaller subsets then we can decompose the measure
-allocated to that initial subset into measures allocated to the
-component subsets. This consistency property is known as
-\textbf{additivity}.
+\] In words if we can decompose a subset into a disjoint collection of
+smaller subsets then we can decompose the measure allocated to that
+initial subset into measures allocated to the component subsets. This
+consistency property is known as \textbf{additivity}.
 
 A subset \(\mathsf{x}\) and its complement \(\mathsf{x}^{c}\) always
 disjoint, \(\mathsf{x} \cap \mathsf{x}^{c} = \emptyset\). At the same
@@ -808,7 +843,13 @@ When two subsets overlap we have to take into consideration that the sum
 of their measures \(\mu ( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )\)
 double counts the allocations to any elements shared between them. For
 example if \(\mathsf{x}_{1} = \{ x_{1}, x_{4} \}\) and
-\(\mathsf{x}_{2} = \{ x_{1}, x_{5} \}\) then \begin{align*}
+\(\mathsf{x}_{2} = \{ x_{1}, x_{5} \}\) then \[
+\mathsf{x}_{1} \cup \mathsf{x}_{2}
+=
+\{ x_{1}, x_{4} \} \cup \{ x_{1}, x_{5} \}
+=
+\{ x_{1}, x_{4}, x_{5} \}
+\] and \begin{align*}
 \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
 &=
 \mu( \{ x_{1}, x_{4}, x_{5} \} )
@@ -831,7 +872,7 @@ The elements that is double counted here, however, is just the lone
 element in the intersection of the two subsets. Consequently the excess
 measure allocated to the union is given by
 (Figure~\ref{fig-overlapping_subsets_measures}) \[
-m_{1} = \mu( \{ x_{1} \} ) = \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} ).
+m_{1} = \mu( \{ x_{1} \} ) = \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} )
 \] and we can write \[
 \mu( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )
 =
@@ -910,14 +951,16 @@ refining that allocation to smaller and smaller subsets.}
 \end{figure}
 
 In addition to providing this construction flexibility the subset
-definition of a measure \(\mu : 2^{X} \rightarrow \mathbb{R}^{+}\) is
-also critical for generalizing measure theory beyond finite spaces.
+definition of a measure \(\mu : 2^{X} \rightarrow [0, \infty]\) is also
+critical for generalizing measure theory beyond finite spaces.
 Specifically it becomes \emph{necessary} when trying to consistently
 define measures on more mathematically complicated spaces like the real
 line. This will be the topic of Chapter 3.
 
 \hypertarget{acknowledgements}{%
 \section{Acknowledgements}\label{acknowledgements}}
+
+I thank Simon Duane and Edgar Merkle for helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Aapeli
 Nevala, Adam Bartonicek, Adam Fleischhacker, Adan, Adriano Yoshino, Alan
