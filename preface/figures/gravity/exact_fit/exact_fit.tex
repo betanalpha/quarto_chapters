@@ -1,0 +1,64 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{darkteal}{RGB}{29, 79, 79}
+\definecolor{darkolive}{RGB}{97, 123, 45}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function h(\x) {
+    return 1.3 - 0.25 * \x - 0.5 * 9.806 * \x * \x;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1.0]
+  
+  \fill[white] (-4.25, -3) rectangle (4.25, 2.75);
+
+  \draw [->, >=stealth, line width=1.25] (-3.00, -2.015) -- +(0, 4);
+  \draw [->, >=stealth, line width=1.25] (-3.015, -2.00) -- +(6.25, 0);
+  
+  \begin{scope}
+    \clip (-3, -2) rectangle (3, 2);
+      
+   \foreach \h/\v/\g [count=\n] in {1.227/0.283/11.489} {
+      \pgfmathsetmacro{\prop}{(100/ 26) * (30 - \n)};
+      \colorlet{custom}{dark!\prop!white};
+      \draw[domain={0:0.75}, smooth, samples=50, line width=1.5, variable=\t, color=custom] 
+        plot ({9 * \t - 3}, { 2 * (\h + \v * \t - 0.5 * \g * \t * \t) - 2});
+    }
+  \end{scope}
+  
+  \pgfmathsetmacro{\h}{1.227}
+  \pgfmathsetmacro{\v}{0.283}
+  \pgfmathsetmacro{\g}{11.489}
+  \foreach \t in {0.0, 0.05, ..., 0.45} {
+    \fill[white] ({9 * \t - 3}, { 2 * (\h + \v * \t - 0.5 * \g * \t * \t) - 2 }) circle (0.075);
+    \fill[black] ({9 * \t - 3}, { 2 * (\h + \v * \t - 0.5 * \g * \t * \t) - 2 }) circle (0.050);
+  }
+  
+  \node[rotate=90] at (-3.5, 0) { Height (m) };
+  \node at (0, -2.5)  { Time (s) };
+  
+\end{tikzpicture}
+
+\end{document}  
