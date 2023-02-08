@@ -1,5 +1,8 @@
 # Applied Probabilistic Modeling
-## Part 1: Probability Theory For Scientists and Engineers
+
+Preface
+
+## Part 1: Probability Theory (For Scientists and Engineers)
 
 Chapter 1: Probability Distribution On Finite Spaces
 
