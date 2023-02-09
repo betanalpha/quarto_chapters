@@ -65,7 +65,7 @@ to exactly predict the outcome of each measurement (@fig-realistic-data).
 model.](figures/gravity/data/data){width=50% #fig-realistic-data}
 
 Without precise predictability we cannot exclude most models outright; just
-about every model will perfectly reproductive a given observation with a
+about every model will perfectly reproduce a given observation with a
 sufficiently convenient fluctuation in the measurement.  Even if we can restrict
 consideration to _typical_ fluctuations many different gravitational models will
 be consistent with the observed data (@fig-consistent-configs).
@@ -98,8 +98,8 @@ figures/scientific_method/nominal/nominal){width=75% #fig-scientific-method-nomi
 While the basic steps of this procedure might appear straightforward, the
 complexity of scientific inquiry is hidden in the details of their
 implementation.  In particular when trying to implement the "Analyze Data" step
-we have to confront the fundamental limitations measurements and determine how
-to quantify our inferential uncertainty.  Formally quantifying inferential
+we have to confront the fundamental limitations in measurements and determine
+how to quantify our inferential uncertainty.  Formally quantifying inferential
 uncertainty is exactly the goal of **statistical inference**.
 
 To realize the "Analyze Data" step, and hence the scientific method as a whole,
@@ -136,7 +136,7 @@ and any observed data.
 
 Although Bayesian inference is conceptually elegant its practical implementation
 is far from trivial.  In order to implement a successful Bayesian analysis we
-need be proficient with not only building models but also critiquing their
+need to be proficient with not only building models but also critiquing their
 adequacy in a particular application and accurately quantify their consistency
 with observed data.  This books considers not only the conceptual foundations of
 Bayesian inference but also these implementation challenges so that by its
@@ -407,7 +407,7 @@ models capable to gleaming precise insights from data.
 
 With that conceptual foundation established Part III considers particular
 modeling techniques that can be useful as modular building blocks for developing
-these bespoke models.  Each chapter focuses on not only the assumptions inherit
+these bespoke models.  Each chapter focuses on not only the assumptions inherent
 to a given technique and how to validate those assumptions but also on efficient
 implementations.  Many of the chapters will consider popular estimation
 techniques from the modeling perspective we need to rigorously integrate them
@@ -419,9 +419,11 @@ eternal opportunity to learn new techniques, expanding our modeling toolkit and
 the sophistication of bespoke models that we can employ in practice.  This book
 will hopefully prepare you for that never-ending, but never-boring journey.
 
-<!--
 # Acknowledgements
 
+I thank Ero Carrera for helpful comments.
+
+<!--
 Many people to thank for giving me the opportunity to not only learn this
 material myself but also share it with you.
 -->

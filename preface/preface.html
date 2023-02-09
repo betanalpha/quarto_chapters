@@ -2575,6 +2575,7 @@ vertical-align: -.125em;
   <li><a href="#why-this-book-is-so-long" id="toc-why-this-book-is-so-long" class="nav-link" data-scroll-target="#why-this-book-is-so-long"><span class="toc-section-number">1.3</span>  Why This Book Is So Long</a></li>
   </ul></li>
   <li><a href="#outline" id="toc-outline" class="nav-link" data-scroll-target="#outline"><span class="toc-section-number">2</span>  Outline</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="toc-section-number">3</span>  Acknowledgements</a></li>
   <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
   </ul>
 </nav>
@@ -2642,7 +2643,7 @@ vertical-align: -.125em;
 <p></p><figcaption class="figure-caption">Figure 2: Realistic measurements are unpredictable, at best scattering around the true model.</figcaption><p></p>
 </figure>
 </div>
-<p>Without precise predictability we cannot exclude most models outright; just about every model will perfectly reproductive a given observation with a sufficiently convenient fluctuation in the measurement. Even if we can restrict consideration to <em>typical</em> fluctuations many different gravitational models will be consistent with the observed data (<a href="#fig-consistent-configs">Figure 3</a>).</p>
+<p>Without precise predictability we cannot exclude most models outright; just about every model will perfectly reproduce a given observation with a sufficiently convenient fluctuation in the measurement. Even if we can restrict consideration to <em>typical</em> fluctuations many different gravitational models will be consistent with the observed data (<a href="#fig-consistent-configs">Figure 3</a>).</p>
 <div id="fig-consistent-configs" class="quarto-layout-panel">
 <figure class="figure">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -2674,7 +2675,7 @@ vertical-align: -.125em;
 <p></p><figcaption class="figure-caption">Figure 4: The scientific method reduces the process of learning from experiment and observation into a sequence of basic steps, including one where we have to draw inferences from observed data.</figcaption><p></p>
 </figure>
 </div>
-<p>While the basic steps of this procedure might appear straightforward, the complexity of scientific inquiry is hidden in the details of their implementation. In particular when trying to implement the “Analyze Data” step we have to confront the fundamental limitations measurements and determine how to quantify our inferential uncertainty. Formally quantifying inferential uncertainty is exactly the goal of <strong>statistical inference</strong>.</p>
+<p>While the basic steps of this procedure might appear straightforward, the complexity of scientific inquiry is hidden in the details of their implementation. In particular when trying to implement the “Analyze Data” step we have to confront the fundamental limitations in measurements and determine how to quantify our inferential uncertainty. Formally quantifying inferential uncertainty is exactly the goal of <strong>statistical inference</strong>.</p>
 <p>To realize the “Analyze Data” step, and hence the scientific method as a whole, we have to encode our knowledge into mathematical models, identify how consistent those models are with a given observation, and then verify that the consistent models adequately reproduce the structure of that observation (<a href="#fig-scientific-method-box">Figure 5</a>). As George Box noted we cannot do rigorous science without rigorous statistical modeling and inference <span class="citation" data-cites="Box:1976">(<a href="#ref-Box:1976" role="doc-biblioref">Box 1976</a>)</span>.</p>
 <div id="fig-scientific-method-box" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -2706,7 +2707,7 @@ vertical-align: -.125em;
 <p></p><figcaption class="figure-caption">Figure 6: Bayesian inference uses probability theory to quantify which models (a) how a priori consistent models are with any available domain expertise and then (b) how a posteriori consistent they are with both the available domain expertise and any observed data.</figcaption><p></p>
 </figure>
 </div>
-<p>Although Bayesian inference is conceptually elegant its practical implementation is far from trivial. In order to implement a successful Bayesian analysis we need be proficient with not only building models but also critiquing their adequacy in a particular application and accurately quantify their consistency with observed data. This books considers not only the conceptual foundations of Bayesian inference but also these implementation challenges so that by its conclusion you will be prepared to build the <em>bespoke</em> analysis unique to your particular application.</p>
+<p>Although Bayesian inference is conceptually elegant its practical implementation is far from trivial. In order to implement a successful Bayesian analysis we need to be proficient with not only building models but also critiquing their adequacy in a particular application and accurately quantify their consistency with observed data. This books considers not only the conceptual foundations of Bayesian inference but also these implementation challenges so that by its conclusion you will be prepared to build the <em>bespoke</em> analysis unique to your particular application.</p>
 <section id="the-pedagogical-approach-of-this-book" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> The Pedagogical Approach Of This Book</h1>
 <p>To execute such an ambitious goal as painlessly as possible we need a careful <em>pedagogical</em> strategy. What is the best way to learn how to robustly implement Bayesian analyses?</p>
@@ -2862,11 +2863,13 @@ vertical-align: -.125em;
 <p>With all of that said let’s look at the pedagogical progression of this book in a bit more detail. The book it organized into three parts: the first focuses on applied probability theory, the second on the general principles of probabilistic modeling and statistical inference, and the third on particular modeling techniques.</p>
 <p>In Part I we will learn the mathematical properties of probability distributions, the operations that we can use to manipulate probability distributions, and some of the most useful methods for approximately implementing those operations in practice. The first few chapters will necessarily be a bit abstract until we can properly set up those implementations but your patience will be rewarded. Overall these chapter will go into much more detail about probability theory than most introductions to Bayesian inference, although that that detail will focus on conceptual understanding and practical insights rather than technical formalities and proofs.</p>
 <p>A thorough understanding of applied probability theory sets the stage for Part II where we will use probability distributions to quantify unpredictable measurements in theory, approximately model the processes which give rise to measurements in practice, and quantify our uncertainty about how consistent various approximations are with the outcome of a specific measurement. In particular we will focus on techniques to translate our understanding of a system and measurements that interrogate that system into bespoke probabilistic models capable to gleaming precise insights from data.</p>
-<p>With that conceptual foundation established Part III considers particular modeling techniques that can be useful as modular building blocks for developing these bespoke models. Each chapter focuses on not only the assumptions inherit to a given technique and how to validate those assumptions but also on efficient implementations. Many of the chapters will consider popular estimation techniques from the modeling perspective we need to rigorously integrate them into Bayesian analyses.</p>
+<p>With that conceptual foundation established Part III considers particular modeling techniques that can be useful as modular building blocks for developing these bespoke models. Each chapter focuses on not only the assumptions inherent to a given technique and how to validate those assumptions but also on efficient implementations. Many of the chapters will consider popular estimation techniques from the modeling perspective we need to rigorously integrate them into Bayesian analyses.</p>
 <p>Although Part III introduces many modeling techniques it is by no means exhaustive. One of the exciting aspects of probabilistic modeling is an eternal opportunity to learn new techniques, expanding our modeling toolkit and the sophistication of bespoke models that we can employ in practice. This book will hopefully prepare you for that never-ending, but never-boring journey.</p>
+</section>
+<section id="acknowledgements" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Acknowledgements</h1>
+<p>I thank Ero Carrera for helpful comments.</p>
 <!--
-# Acknowledgements
-
 Many people to thank for giving me the opportunity to not only learn this
 material myself but also share it with you.
 -->

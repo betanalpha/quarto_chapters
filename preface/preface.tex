@@ -172,7 +172,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, breakable, sharp corners, boxrule=0pt, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, interior hidden, sharp corners, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -252,10 +252,10 @@ unpredictable, at best scattering around the true model.}
 \end{figure}
 
 Without precise predictability we cannot exclude most models outright;
-just about every model will perfectly reproductive a given observation
-with a sufficiently convenient fluctuation in the measurement. Even if
-we can restrict consideration to \emph{typical} fluctuations many
-different gravitational models will be consistent with the observed data
+just about every model will perfectly reproduce a given observation with
+a sufficiently convenient fluctuation in the measurement. Even if we can
+restrict consideration to \emph{typical} fluctuations many different
+gravitational models will be consistent with the observed data
 (Figure~\ref{fig-consistent-configs}).
 
 \begin{figure}
@@ -323,9 +323,9 @@ from observed data.}
 While the basic steps of this procedure might appear straightforward,
 the complexity of scientific inquiry is hidden in the details of their
 implementation. In particular when trying to implement the ``Analyze
-Data'' step we have to confront the fundamental limitations measurements
-and determine how to quantify our inferential uncertainty. Formally
-quantifying inferential uncertainty is exactly the goal of
+Data'' step we have to confront the fundamental limitations in
+measurements and determine how to quantify our inferential uncertainty.
+Formally quantifying inferential uncertainty is exactly the goal of
 \textbf{statistical inference}.
 
 To realize the ``Analyze Data'' step, and hence the scientific method as
@@ -401,7 +401,7 @@ observed data.}
 
 Although Bayesian inference is conceptually elegant its practical
 implementation is far from trivial. In order to implement a successful
-Bayesian analysis we need be proficient with not only building models
+Bayesian analysis we need to be proficient with not only building models
 but also critiquing their adequacy in a particular application and
 accurately quantify their consistency with observed data. This books
 considers not only the conceptual foundations of Bayesian inference but
@@ -861,7 +861,7 @@ to gleaming precise insights from data.
 With that conceptual foundation established Part III considers
 particular modeling techniques that can be useful as modular building
 blocks for developing these bespoke models. Each chapter focuses on not
-only the assumptions inherit to a given technique and how to validate
+only the assumptions inherent to a given technique and how to validate
 those assumptions but also on efficient implementations. Many of the
 chapters will consider popular estimation techniques from the modeling
 perspective we need to rigorously integrate them into Bayesian analyses.
@@ -872,6 +872,11 @@ eternal opportunity to learn new techniques, expanding our modeling
 toolkit and the sophistication of bespoke models that we can employ in
 practice. This book will hopefully prepare you for that never-ending,
 but never-boring journey.
+
+\hypertarget{acknowledgements}{%
+\section{Acknowledgements}\label{acknowledgements}}
+
+I thank Ero Carrera for helpful comments.
 
 \hypertarget{license}{%
 \section*{License}\label{license}}
