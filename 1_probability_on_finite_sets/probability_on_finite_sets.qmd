@@ -1,0 +1,737 @@
+---
+title: "Probability Theory on Finite Sets"
+author: "Michael Betancourt"
+date: "January 2023"
+date-format: "MMMM YYYY"
+toc: true
+number-sections: true
+highlight: pygments
+format:
+  html:
+    html-math-method: katex
+    theme:
+      - lux
+      - custom.scss
+    embed-resources: true
+    code-overflow: wrap
+    linkcolor: "#B97C7C"
+  pdf:
+    keep-tex: true
+    fig-width: 5.5
+    fig-height: 5.5
+    code-overflow: wrap
+    monofontoptions:
+      - Scale=0.5
+    #include-in-header:
+    #  - preamble.tex
+knitr:
+  opts_chunk:
+    comment: ''
+  opts_knit:
+    global.par: TRUE
+format-links: false
+---
+
+Despite its infamous reputation the foundations of probability theory are quite
+straightforward.  Much of the mathematical difficulty arises only when we
+implement probability theory on elaborate sets like the real numbers, and most
+of the philosophical difficultly arises only when trying to assign an
+interpretation to the mathematics.   In this chapter I try to avoid this baggage
+by introducing the basics of abstract probability theory on the simplest,
+nontrivial set: a collection of a finite number of elements.
+
+# Finite Sets
+
+A **finite set** contains a finite number of distinct elements,
+$$
+X = \{x_1, ..., x_N\}.
+$$
+The numerical index here allows us to differentiate the between the $N$
+individual elements but it does not necessarily imply that the elements have any
+particular ordering to them.  To avoid any assumption of ordering I'll use the
+five element set (@fig-ambient_set)
+$$
+X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
+$$
+for demonstration.
+
+![A finite set contains a finite number of elements.  This particular set
+contains five elements.](
+figures/ambient_set/ambient_set){width=50% #fig-ambient_set}
+
+In practical applications of probability theory the abstract elements $x_{n}$
+will model meaningful objects, but in this chapter I will avoid any particular
+interpretation and instead focus on the mathematical concepts.  That said when
+$X$ is intended to capture _all_ of the objects of interest in a given
+application I will refer to it as the **ambient set**.
+
+Once we've defined an ambient set we have various ways of organizing its
+individual elements and manipulating those organizations.
+
+## Subsets
+
+A **subset** of $X$ is any collection of elements in $X$.  To avoid any
+ambiguity I will exclusively use lowercase roman letters $x$ to denote a
+variable element in the ambient set $X$ and lowercase san serif letters
+$\mathsf{x}$ to denote a variable subset.
+
+For example $\mathsf{x} = \{\Box, \diamondsuit, \heartsuit\}$ is a subset of
+$X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}$ (@fig-subset).
+Importantly there is no notion of multiplicity in the concept of a subset, just
+membership: a subset can include an element $x_{n}$ but it cannot include it
+multiple times.
+
+![A subset $\mathsf{x} \subset X$ is any collection of elements from the
+ambient set $X$.  Here $\mathsf{x} = \{\Box, \diamondsuit, \heartsuit\}$
+contains just three of the five elements in
+$X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}$.](
+figures/subset/subset){width=50% #fig-subset}
+
+If $\mathsf{x}$ is a subset of the ambient set $X$ then we write
+$\mathsf{x} \subset X$.  When $\mathsf{x}$ might contain all of the elements of
+$X$, in which case $\mathsf{x} = X$, then we write $\mathsf{x} \subseteq X$.
+
+Subsets are _recursive_ objects.  Selecting any elements from a subset yields a
+new subset.  For example the collection $\{\diamondsuit, \heartsuit\}$ is a
+subset of both the previously introduced subset,
+$$
+\{ \diamondsuit, \heartsuit \} \subset \{ \Box, \diamondsuit, \heartsuit \},
+$$
+and the full ambient set,
+$$
+\{ \diamondsuit, \heartsuit \} \subset X.
+$$
+More formally a subset $\mathsf{x}'$ is a subset of another subset $\mathsf{x}$
+if and only if all of the elements in $\mathsf{x}'$ are also in $\mathsf{x}$.
+
+Regardless of how many elements a finite set $X$ contains three special
+subsets are always well-defined.  The **empty set** $\emptyset = \{\}$ contains
+no elements at all.  On the other hand the entire set itself can be considered
+a subset containing all of the elements.  A subset containing a single element
+is denoted $\{ x_{n} \}$ and referred to as an **atomic set**.
+
+There are
+$$
+{N \choose n} = \frac{ N! }{ n! (N - n)!}
+$$
+ways to select $n$ elements from a finite set of $N$ total elements, and hence
+${N \choose n}$ total subsets of size $n$.  For example there is only one subset
+that contains no elements,
+$$
+{N \choose 0} = \frac{ N! }{ 0! (N - 0)!} = \frac{ N! }{ N! } = 1,
+$$
+which is just the empty set.  Similarly there is only one subset that contains
+all of the elements,
+$$
+{N \choose N} = \frac{ N! }{ N! (N - N)!} = \frac{ N! }{ N! } = 1,
+$$
+which is just the full set itself.  On the other hand there are
+$$
+{N \choose 1} = \frac{ N! }{ 1! (N - 1)!} = N
+$$
+distinct atomics sets that contain a single element, one for each element in
+$X$.
+
+Counting all of the subsets of all possible sizes gives
+$$
+\sum_{n = 0}^{N} {N \choose n} = 2^{N}
+$$
+possible subsets that we can construct from a finite set with $N$ elements.
+In other words the collection of all subsets is itself a finite set with
+$2^{N}$ elements.  We refer to this set as the **power set** of $X$ and denote
+it $2^{X}$.
+
+When the ambient set, and all hence all of the possible elements that any
+subset might contain, is fixed the prefix "sub" is sometimes dropped, with all
+subsets simply referred to as sets.  For example collections of elements might
+be denoted "sets" when one takes the ambient set for granted and "subsets"
+when one wants to explicitly acknowledge the context of the ambient set.
+Precise terminology, however, can vary strongly between disciplines and even
+individuals.
+
+## Subset Operations
+
+We can always construct subsets element by element, but we can also construct
+them by manipulating existing subsets.
+
+For example given a subset $\mathsf{x} \subset X$ we can construct its
+**complement** by collecting all of the elements in $X$ that are not already in
+$\mathsf{x}$.  The atomic set $\mathsf{x} = \{ \diamondsuit \}$ contains the
+lone element $\diamondsuit$ and its complement contains the remaining elements
+(@fig-complement)
+$$
+\mathsf{x}^{c} = \{ \Box, \clubsuit, \heartsuit, \spadesuit \}.
+$$
+By construction the complement of the empty set is the entire set,
+$\emptyset^{c} = X$, and the complement of the full set is the empty set,
+$X^{c} = \emptyset$.
+
+![The complement of a subset $\mathsf{x}$ is the subset $\mathsf{x}^{c}$
+consisting of all elements in the ambient set that are not in $\mathsf{x}$.](
+figures/complement/complement){width=75% #fig-complement}
+
+More formally the construction of complementary subsets defines a _unary_
+function that takes in a subset as input and outputs the complementary subset,
+\begin{alignat*}{6}
+\cdot^c :\; & 2^X & &\rightarrow& \; & 2^X &
+\\
+& \mathsf{x} & &\mapsto& & \mathsf{x}^{c} &.
+\end{alignat*}
+The top line of this notation denotes the collection of all possible inputs and
+outputs, here both the power set, while the bottom line denotes the action on
+a particular input, here a subset mapped into its complement.  For example
+applying the complement operator to the subset
+$\mathsf{x} = \{ \clubsuit, \spadesuit \}$
+gives
+$$
+\mathsf{x}^{c}
+= \{ \clubsuit, \spadesuit \}^{c}
+= \{ \Box, \diamondsuit, \heartsuit \}.
+$$
+
+We can also construct subsets from more than one subsets.  Consider, for
+example, two subsets $\mathsf{x}_1 = \{ \Box, \heartsuit \}$ and
+$\mathsf{x}_2 = \{ \Box, \spadesuit \}$ (@fig-subsets).  The collection of all
+elements that are contained in _either_ subset is itself a subset,
+$$
+\{ \Box, \heartsuit, \spadesuit \} \subset X,
+$$
+as is the collection of all elements that are contained only in _both_ subsets,
+$$
+\{ \Box \} \subset X.
+$$
+These derived subsets are referred to as the **union**,
+$$
+\mathsf{x}_1 \cup \mathsf{x}_2
+= \{ \Box, \heartsuit \} \cup \{ \Box, \spadesuit \}
+= \{ \Box, \heartsuit, \spadesuit \},
+$$
+and **intersection**,
+$$
+\mathsf{x}_1 \cap \mathsf{x}_2
+= \{ \Box, \heartsuit \} \cup \{ \Box, \spadesuit \}
+= \{ \Box \},
+$$
+respectively (@fig-ui).  Note that the union and intersection are both symmetric
+in the sense that either order of the input subsets results in the same output
+subset,
+$$
+\mathsf{x}_1 \cup \mathsf{x}_2 = \mathsf{x}_2 \cup \mathsf{x}_1
+$$
+and
+$$
+\mathsf{x}_1 \cap \mathsf{x}_2 = \mathsf{x}_2 \cap \mathsf{x}_1.
+$$
+
+![We can manipulate two subsets into a new subset in various ways.](
+figures/overlapping_subsets/overlapping_subsets){width=75% #fig-subsets}
+
+![The union of two subsets, $\mathsf{x}_1 \cup \mathsf{x}_2$, is a subset
+containing all of the elements in either input subset.  On the other hand the
+intersection of two subsets, $\mathsf{x}_1 \cap \mathsf{x}_2$, is a subset
+containing just the elements that occur in both input subsets.](
+figures/overlapping_subsets_ui/overlapping_subsets_ui){width=75% #fig-ui}
+
+Two subsets are **disjoint** if they don't share any elements; in this case
+their intersection is the empty set,
+$$
+\mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset.
+$$
+The union and intersection of a subset with itself returns that subset,
+$$
+\mathsf{x} \cup \mathsf{x} = \mathsf{x} \cap \mathsf{x} = \mathsf{x}.
+$$
+Because the empty set does not contain any elements its union with any subset
+returns back that subset,
+$$
+\mathsf{x} \cup \emptyset = \emptyset \cup \mathsf{x} = \mathsf{x},
+$$
+and its intersection with any subset returns the empty set,
+$$
+\mathsf{x} \cap \emptyset = \emptyset \cap \mathsf{x} = \emptyset.
+$$
+Similarly the union of any subset with the full set returns the full set,
+$$
+\mathsf{x} \cup X = X \cup \mathsf{x} = X,
+$$
+and the intersection of any subset with the full set returns back the subset,
+$$
+\mathsf{x} \cap X = X \cap \mathsf{x} = \mathsf{x}.
+$$
+
+Because they require two inputs the union and intersection define _binary_
+functions that consume _two_ input subsets and return a single output subset,
+\begin{alignat*}{6}
+\cdot \cup \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
+\\
+& \mathsf{x}_1, \mathsf{x}_{2} & &\mapsto& & \mathsf{x}_1 \cup \mathsf{x}_2 &
+\end{alignat*}
+and
+\begin{alignat*}{6}
+\cdot \cap \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
+\\
+& \mathsf{x}_1, \mathsf{x}_{2} & &\mapsto& & \mathsf{x}_1 \cap \mathsf{x}_2 &.
+\end{alignat*}
+Here $2^{X} \times 2^{X}$ denotes the collection of all _pairs_ of subsets.
+
+# Measure and Probability Over Elements
+
+Measure theory, and its special case of probability theory, is often burdened
+with intricate if not mysterious interpretations.  From a mathematical
+perspective, however, measure theory simply concerns the consistent
+**allocation** of some abstract quantity across the ambient set.
+
+Consider a _reservoir_ of some positive, continuous, and _conserved_ quantity,
+$M \in [0, \infty]$ (@fig-reservoir).  Because $M$ is conserved any amount
+$m_{n}$ that is allocated to the element $x_{n} \in X$ has to be _depleted_ from
+the reservoir, leaving less to be allocated to the remaining elements.
+
+We have to be careful if the total content of the reservoir $M$ is infinite.
+In this case we can allocate an infinite amount from the reservoir while still
+having an infinite quantify left.  At the same time allocating an infinite
+amount can depleting the reservoir completely or even leave any finite quantity.
+Infinity is, at the very least, mathematically awkward.
+
+![Measure theory concerns the allocation of some continuous and positive
+quantity $M$ over the individual elements of the ambient set.](
+figures/allocations/0/0){width=50% #fig-reservoir}
+
+To make the mathematics as useful as possible we will avoid endowing $M$ with
+any particular meaning for the time being.  Instead interpretations will arise
+only when we use these allocations to _model_ meaningful systems.
+
+An _exhaustive_ allocation of $M$ across the ambient set ensures that the
+reservoir is completely emptied.  In another words all of $M$ has to be
+allocated to the elements $x_{n} \in X$.
+
+For example consider our demonstrative ambient set
+$X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit \}$.  If we
+allocate $m_\Box$ to $\Box$ then that leaves $M - m_\Box$ remaining to allocate
+to the other four elements (@fig-allocationa).  Allocating $m_\clubsuit$ to
+$\clubsuit$ depletes the reservoir a bit more (@fig-allocationb).  At the end we
+have to allocate all
+$$
+M - m_{\Box} - m_{\clubsuit} - m_{\diamondsuit} - m_{\heartsuit}
+$$
+that remains to $\spadesuit$ to completely empty the reservoir
+(@fig-allocatione).
+
+::: {#fig-allocation layout="[ [45, 45], [45, 45], [-22.5, 45, -22.5]]"}
+![](figures/allocations/1/1){#fig-allocationa}
+
+![](figures/allocations/2/2){#fig-allocationb}
+
+![](figures/allocations/3/3){#fig-allocationc}
+
+![](figures/allocations/4/4){#fig-allocationd}
+
+![](figures/allocations/5/5){#fig-allocatione}
+
+Because the total quantity $M$ is conserved every allocation $m_{n}$ to an
+element $x_{n} \in X$ depletes the amount available for the allocation to the
+remaining elements.  An exhaustive allocation leaves nothing left in the
+initial reservoir after each element has received its allocation.
+:::
+
+A **measure** is any consistent allocation of the quantity $M$ to the elements
+of an ambient set.  Mathematically any measure over a finite set can be
+characterized by $N$ numbers (@fig-measure)
+$$
+\mu = \{ m_{1}, \ldots, m_{N} \}
+$$
+that satisfy
+$$
+0 \le m_{n}
+$$
+and
+$$
+\sum_{n = 1}^{N} m_{n} = M.
+$$
+For example any measure over the five-element set
+$X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}$ is specified by
+any five positive numbers
+$\{ m_\Box, m_\clubsuit, m_\diamondsuit, m_\heartsuit, m_\spadesuit \}$
+satisfying
+$$
+m_\Box + m_\clubsuit + m_\diamondsuit + m_\heartsuit + m_\spadesuit = M.
+$$
+
+![A measure $\mu$ over the finite set $X$ is any consistent allocation of
+$M$ to the elements $x_{n} \in X$.  Every measure can be characterized by
+$N$ numbers $m_{n}$ that sum to $M$, or equivalently a function that maps each
+element $x_{n}$ to its allocated measure $m_{n}$.](
+figures/measure/measure){width=50% #fig-measure}
+
+The larger $m_{n}$ the more of $M$ is allocated to the element $x_{n}$.
+Following this terminology we will also refer to $M$ as the **total measure**
+and $m_{n}$ as the **measure allocated to $x_{n}$**.
+
+If the total measure in infinite, $M = \infty$, then at least one of the
+elements in $X$ _has_ to receive an infinite allocation in order to empty the
+reservior.  We can also consistently allocate infinite measure to multiple
+elements, or even all of the elements, at the same time.  Infinite measures can
+be very generous in their allocations.
+
+The allocation $\{ x_{n}, m_{n} \}$ defined by a measure $\mu$ can also be
+organized into a function that maps each element to its associated allocation,
+\begin{alignat*}{6}
+\mu :\; & X & &\rightarrow& \; & [0, \infty] &
+\\
+& x_{n} & &\mapsto& & m_{n} = \mu(x_{n}) &.
+\end{alignat*}
+A nice conceptual benefit of this functional perspective is that instead of
+thinking about the global allocation $m_1, \ldots, m_N$ all at once we can
+isolate local allocations by evaluating $\mu$ at only a single input
+$m_{n} = \mu(x_{n})$.
+
+In general there are an infinite number of ways to allocate a total measure to
+the elements of a finite set, and hence an infinite number of measures that we
+can define over that set.  I will denote the set of all possible measures over
+$X$ as $\mathcal{M}(X)$.
+
+Within this set there a few notable examples.  For example a
+**singular measure** allocates the total measure $M$ to a single element,
+leaving the rest with nothing (@fig-types_of_measurea).  On the other hand a
+**uniform measure** allocates the same measure $M / N$ to each element
+(@fig-types_of_measureb).  On finite sets there are $N$ distinct singular
+measures, one for each distinct element, and a single unique uniform measure.
+
+::: {#fig-types_of_measure layout="[ [45, 45] ]"}
+![](figures/singular_measure/singular_measure){#fig-types_of_measurea}
+
+![](figures/uniform_measure/uniform_measure){#fig-types_of_measureb}
+
+A singular measure (a) allocates the total measure to a single element while
+the uniform measure (b) spreads the total measure to each element evenly.
+:::
+
+Perhaps the most important class of measures, however, are measures where the
+total measure is finite, $M < \infty$.  Appropriately enough we refer to these
+as **finite measures**.
+
+What makes finite measures so special is that we can always reframe the
+allocation they define into a _relative_ one.  Instead of considering the
+absolute measure allocated to each element $m_{n}$ we can consider the
+_proportion_ of the total measure allocated to each element, (@fig-proportional)
+$$
+p_{n} = m_{n} / M.
+$$
+By construction proportions are confined to the unit interval $[0, 1]$.  As with
+any quantity taking values in $[0, 1]$ we can represent proportions equally well
+with decimals, for example $p_{n} = 0.2$, and percentages, $p_{n} = 20\%$.
+
+![Every finite measure can be characterized by a proportional allocation.](
+figures/proportional_measure/proportional_measure){width=50% #fig-proportional}
+
+In other words a proportional measure defines the function (@fig-probability)
+\begin{alignat*}{6}
+\pi :\; & X & &\rightarrow& \; & [0, 1] &
+\\
+& x_{n} & &\mapsto& & p_{n} = \pi(x_{n}) &
+\end{alignat*}
+with
+$$
+0 \le p_{n} \le 1
+$$
+and
+$$
+\sum_{n = 1}^{N} p_{n} = 1.
+$$
+A collection of variables $\{ p_{1}, \ldots, p_{N} \}$ satisfying these
+properties is referred to as a **simplex**.
+
+![A proportional allocation is also known as a probability distribution.](
+figures/probability_distribution/probability_distribution){
+width=50% #fig-probability}
+
+More importantly a proportional measure $\pi$ is also known as a
+**probability distribution** with the proportional allocations $p_{n}$ denoted
+**probabilities**.  While the term "probability" is often encumbered with all
+kinds of interpretational and philosophical baggage its mathematical structure
+is really quite straightforward: on a finite set a probability is just the
+proportion of some finite quantity that is allocated to an individual element!
+
+Philosophical tension arises only when we try to assign some meaning to these
+proportional allocations.  This isn't a question of mathematics but rather
+_applying_ mathematics to model a system of interest.  We'll come back to the
+many different systems that can be consistently modeled with probability theory,
+and hence the many different interpretations of probability itself, in
+Chapter 5.
+
+While we're on the topic of terminological issues the word "distribution" is not
+without its own problems.  In mathematics the term "distribution" is heavily
+overloaded and can be used to refer to a variety of related but formally
+distinct concepts.  One way to avoid confusion is to always refer to
+proportional measures as "probability distributions" and never just
+"distributions" alone.
+
+# Measure and Probability Over Subsets
+
+On finite sets any allocation, absolute or proportional, over the individual
+elements $x \in X$ also defines an allocation over entire subsets
+$\mathsf{x} \in 2^{X}$.  The measure allocated to a subset is just the sum of
+the measures allocated to the elements in that subset.  For example the measure
+allocated to $\mathsf{x} = \{ \Box, \clubsuit, \heartsuit \}$ is
+$m_{\Box} + m_{\clubsuit} + m_{\heartsuit}$ (@fig-subset_measure).
+
+![On a finite set an allocation over individual elements also defines an
+allocation over any subset.](
+figures/subset_measure/subset_measure){width=50% #fig-subset_measure}
+
+In other words a measure over individual elements
+$\mu : X \rightarrow [0, \infty]$ implicitly defines a measure over subsets
+$\mu : 2^{X} \rightarrow [0, \infty]$.  Similarly a probability distribution
+over individual elements $\pi : X \rightarrow [0, 1]$ implicitly defines a
+probability distribution over subsets $\pi : 2^{X} \rightarrow [0, 1]$.
+
+Note that we have made the cardinal sin of _overloading_ our notation so that
+$\mu$ refers to both types of measures, and the only way to differentiate them
+is through their different inputs; $\mu(x)$ denotes the element-wise measure
+allocated to $x \in X$ and $\mu( \mathsf{x} )$ denotes the subset-wise measure
+allocated to $\mathsf{x} \in 2^X$.  Maintaining different typographical
+conventions for elements and subsets is critical to avoid any confusion when
+overloading notation like this.
+
+By construction any subset measure and probability distribution satisfy a wealth
+of useful properties.  For example for any measure
+$$
+\mu( \emptyset ) = 0
+$$
+and
+$$
+\mu( X ) = \sum_{n = 1}^{N} \mu(x_{n}) = M,
+$$
+while for any probability distribution we have $\pi( \emptyset ) = 0$ and
+$\pi( X ) = 1$.
+
+Even better the subset allocations play well with the subset operations.
+Consider for example the two disjoint subsets
+$\mathsf{x}_{1} = \{ \Box, \diamondsuit \}$ and
+$\mathsf{x}_{2} = \{ \clubsuit, \spadesuit \}$.  Because the two subsets are
+disjoint their union simply combines all of their elements,
+$$
+\mathsf{x}_{1} \cup \mathsf{x}_{2}
+=
+\{ \Box, \diamondsuit \} \cup \{ \clubsuit, \spadesuit \}
+=
+\{ \Box, \clubsuit, \diamondsuit, \spadesuit \},
+$$
+and the measure of that union is just the sum of the measures of the input
+subsets,
+\begin{align*}
+\mu ( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
+&=
+\mu ( \{ \Box, \clubsuit, \diamondsuit, \spadesuit \} )
+\\
+&=
+m_{\Box} + m_{\clubsuit} + m_{\diamondsuit} + m_{\spadesuit}
+\\
+&=
+( m_{\Box} + m_{\diamondsuit} ) + ( m_{\clubsuit} + m_{\spadesuit} )
+\\
+&=
+\mu( \mathsf{x}_{1} ) + \mu( \mathsf{x}_{2} ).
+\end{align*}
+
+More generally for any collection of subsets
+$$
+\mathsf{x}_{1}, \ldots, \mathsf{x}_{K}
+$$
+that are mutually disjoint,
+$$
+\mathsf{x}_{k} \cap \mathsf{x}_{k'} = \emptyset
+$$
+for $k \ne k'$, we have
+$$
+\mu ( \cup_{k = 1}^{K} \mathsf{x}_{k} )
+=
+\sum_{k = 1}^{K} \mu ( \mathsf{x}_{k} ).
+$$
+In words if we can decompose a subset into a disjoint collection of smaller
+subsets then we can also decompose the measure allocated to that initial subset
+into measures allocated to the component subsets.  This consistency property is
+known as **additivity**.
+
+A subset $\mathsf{x}$ and its complement $\mathsf{x}^{c}$ always disjoint,
+$\mathsf{x} \cap \mathsf{x}^{c} = \emptyset$.  At the same time their union
+covers the entire set, $\mathsf{x} \cup \mathsf{x}^{c} = X$.  Consequently
+additivity implies that
+\begin{align*}
+M
+&=
+\mu (X)
+\\
+&=
+\mu ( \mathsf{x} \cup \mathsf{x}^{c} )
+\\
+&= \mu ( \mathsf{x} ) + \mu ( \mathsf{x}^{c} ),
+\end{align*}
+or
+$$
+\mu ( \mathsf{x}^{c} ) = M - \mu ( \mathsf{x} ).
+$$
+In words the measure allocated to the complement of a subset is the total
+measure less the measure allocated to that subset.  For probability
+distributions this becomes even cleaner,
+$$
+\pi ( \mathsf{x}^{c} ) = 1 - \pi ( \mathsf{x} ).
+$$
+
+When two subsets overlap we have to take into consideration that the sum of
+their measures $\mu ( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )$ double counts
+the allocations to any elements shared between them.  For example if
+$\mathsf{x}_{1} = \{ \Box, \heartsuit \}$ and
+$\mathsf{x}_{2} = \{ \Box, \spadesuit \}$ then the union includes the
+overlapping element $\Box$ only once,
+$$
+\mathsf{x}_{1} \cup \mathsf{x}_{2}
+=
+\{ \Box, \heartsuit \} \cup \{ \Box, \spadesuit \}
+=
+\{ \Box, \heartsuit, \spadesuit \}.
+$$
+Consequently
+\begin{align*}
+\mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
+&=
+\mu( \{ \Box, \heartsuit, \spadesuit \} )
+\\
+&=
+m_{\Box} + m_{\heartsuit} + m_{\spadesuit}.
+\end{align*}
+Adding the measures allocated to the two subsets individually, however, gives
+\begin{align*}
+\mu( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )
+&=
+(m_{\Box} + m_{\heartsuit} ) + ( m_{\Box} + m_{\spadesuit} )
+\\
+&=
+m_{\Box} + m_{\Box} + m_{\heartsuit} + m_{\spadesuit}
+\\
+&=
+m_{\Box} + \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} ).
+\end{align*}
+
+The element that is double counted here, however, is exactly the lone element in
+the intersection of the two subsets (@fig-overlapping_subsets_measures),
+$$
+m_{\Box} = \mu( \{ \Box \} ) = \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} ).
+$$
+In other words we can write
+$$
+\mu( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )
+=
+  \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} )
++ \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} ).
+$$
+This relationship is quite general and holds for _any_ two subsets regardless
+of their overlap.
+
+![When two subsets overlap the measure allocated to each double counts the
+measure allocated to any overlapping elements, here $\Box$, but the measure
+allocated to their union does not.  This results in an important relationship
+between the measures allocated to the two subsets, the measure allocated to
+their union, and the measure allocated to their intersection.](
+figures/overlapping_subsets_measures/overlapping_subsets_measures){
+width=75% #fig-overlapping_subsets_measures}
+
+These subset properties allow us to build up a given measure in many different
+ways, each of which can useful in different circumstances.  This provides
+convenient flexibility when trying to apply measure theory and probability
+theory in practice.
+
+For example we can always specify a measure _globally_ by specifying the
+individual allocations at the same time (@fig-all_at_once).  Alternatively we
+can specify the allocation _locally_ by allocating measure to each element one
+at a time (@fig-one_at_a_time).
+
+![Measures can be constructed by specifying the individual element allocations
+all at once.](
+figures/decompositions/all_at_once/all_at_once){
+width=33% #fig-all_at_once}
+
+![At the same time measures can be constructed by specifying the individual
+element allocations one by one.](
+figures/decompositions/one_at_a_time/one_at_a_time){
+width=100% #fig-one_at_a_time}
+
+Critically we do not always need to start with individual allocations.  Instead
+we can always start by allocating the total measure to disjoint subsets and then
+iteratively _refining_ that allocation to smaller and smaller subsets until we
+reach the individual elements (@fig-refinement).
+
+![Measures can also be constructed by allocating the total measure to disjoint
+subsets and then iteratively refining that allocation to smaller and smaller
+subsets.](
+figures/decompositions/refinement/refinement){
+width=100% #fig-refinement}
+
+In addition to providing flexible constructions the subset definition of a
+measure $\mu : 2^{X} \rightarrow [0, \infty]$ is also critical for generalizing
+measure theory beyond finite sets.  Specifically it becomes _necessary_ when
+trying to consistently define measures on more mathematically complicated sets
+like the real line.  This will be the topic of Chapter 4.
+
+# Acknowledgements
+
+I thank Simon Duane and Edgar Merkle for helpful comments.
+
+A very special thanks to everyone supporting me on Patreon: Aapeli Nevala,
+Adam Bartonicek, Adam Fleischhacker, Adan, Adriano Yoshino, Alan Chang,
+Alessandro Varacca, Alexander Bartik, Alexander Noll, Alexander Rosteck,
+Anders Valind, Andrea Serafino, Andrew Mascioli, Andrew Rouillard,
+Andrew Vigotsky, Angie_Hyunji Moon, Ara Winter, asif zubair, Austin Rochford,
+Austin Rochford, Avraham Adler, Ben Matthews, Ben Swallow,
+Brynjolfur Gauti Jónsson, Cameron Smith, Canaan Breiss, Cat Shark,
+Charles Naylor, Chase Dwelle, Chris Zawora, Christopher Mehrvarzi,
+Chuck Carlson, Colin Carroll, Colin McAuliffe, Cruz, Damien Mannion,
+Damon Bayer, dan mackinlay, Dan Muck, Dan W Joyce, Dan Waxman,
+Dan Weitzenfeld, Daniel, Daniel Edward Marthaler, Daniel Rowe, Darshan Pandit,
+Darthmaluus , David Burdelski, David Galley, David Humeau, David Wurtz,
+dilsher singh dhillon, Doug Rivers, Dr. Jobo, Dr. Omri Har Shemesh, Ed Cashin,
+Ed Henry, Edgar Merkle, edith darin, Eric LaMotte, Erik Banek, Ero Carrera,
+Eugene O'Friel, Evan Cater, Fabio Pereira, Fabio Zottele, Felipe González,
+Fergus Chadwick, Finn Lindgren, Florian Wellmann, Francesco Corona,
+Geoff Rollins, George Ho, Granville Matheson, Greg Sutcliffe, Guido Biele,
+Hamed Bastan-Hagh, Haonan Zhu, Hector Munoz, Henri Wallen, Hugo Botha,
+Huib Meulenbelt, Håkan Johansson, Ian Costley, Ian Koller, idontgetoutmuch,
+Ignacio Vera, Ilaria Prosdocimi, Isaac S, Isaac Vock, J, J Michael Burgess,
+Jair Andrade, James Hodgson, James McInerney, James Wade, Janek Berger,
+Jason Martin, Jason Pekos, Jeff Burnett, Jeff Dotson, Jeff Helzner,
+Jeffrey Burnett, Jeffrey Erlich, Jesse Wolfhagen, Jessica Graves, Joe Wagner,
+John Flournoy, Jon , Jonathan H. Morgan, Jonathan St-onge, Jonathon Vallejo,
+Joran Jongerling, Joseph Despres, Josh Weinstock, Joshua Duncan,
+Joshua Griffith, Josué Mendoza, JU, Justin Bois, Karim Naguib, Karim Osman,
+Keith O'Rourke, Kejia Shi, Kevin Foley, Kristian Gårdhus Wichmann, Kádár András,
+lizzie , LOU ODETTE, Luiz Pessoa, Marc Dotson, Marc Trunjer Kusk Nielsen,
+Marcel Lüthi, Marek Kwiatkowski, Mark Donoghoe, Mark Worrall, Markus P.,
+Martin Modrák, Matt Moores, Matthew, Matthew Kay, Matthieu LEROY,
+Maurits van der Meer, Merlin Noel Heidemanns, Michael Colaresi, Michael DeWitt,
+Michael Dillon, Michael Lerner, Mick Cooney, Márton Vaitkus, N Sanders, Name,
+Nathaniel Burbank, Nic Fishman, Nicholas Clark, Nicholas Cowie, Nick S,
+Nicolas Frisby, Octavio Medina, Ole Rogeberg, Oliver Crook, Olivier Ma,
+Pablo León Villagrá, Palwasha Khan, Patrick  Kelley, Patrick Boehnke,
+Pau Pereira Batlle, Peter Smits, Pieter van den Berg , ptr, Putra Manggala,
+Ramiro Barrantes Reynolds, Ravin Kumar, Raúl Peralta Lozada, Riccardo Fusaroli,
+Richard Nerland, Robert Frost, Robert Goldman, Robert kohn, Robert Mitchell V,
+Robin Taylor, Rong Lu, Ross McCullough, Ryan Grossman, Rémi , S Hong, Sam Levy,
+Scott Block, Scott Brown, Sean Pinkney, Sean Wilson, Serena, Seth Axen, shira,
+Simon Duane, Simon Lilburn, Srivatsa Srinath, sssz, Stan_user, Stefan,
+Stephanie Fitzgerald, Stephen Lienhard, Steve Bertolani, Stone Chen, Sus,
+Susan Holmes, Svilup, Sören Berg, Tagir Akhmetshin, Tao Ye, Tate Tunstall,
+Tatsuo Okubo, Teresa Ortiz, Thiago  de Paula Oliveira, Thomas Lees,
+Thomas Vladeck, Tiago Cabaço, Tim Radtke, Tom McEwen, Tomáš Frýda, Tony Wuersch,
+Virginia Fisher, Vitaly Druker, Vladimir Markov, Wil Yegelwel, Will Farr,
+Will Kurt, Will Tudor-Evans, woejozney, yolhaj , yureq , Zach A, Zad Rafi, and
+Zhengchen Cai.
+
+# License {-}
+
+A repository containing all of the files used to generate this chapter is
+available on [GitHub](
+https://github.com/betanalpha/quarto_chapters/tree/main/probability_on_finite_sets).
+
+The text and figures in this chapter are copyrighted by Michael Betancourt
+and licensed under the CC BY-NC 4.0 license:
+
+https://creativecommons.org/licenses/by-nc/4.0/
