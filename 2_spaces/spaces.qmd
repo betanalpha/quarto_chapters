@@ -1,0 +1,2151 @@
+---
+title: "Spaces"
+author: "Michael Betancourt"
+date: "April 2023"
+date-format: "MMMM YYYY"
+toc: true
+number-sections: true
+highlight: pygments
+bibliography: spaces.bib
+format:
+  html:
+    html-math-method: katex
+    theme:
+      - lux
+      - custom.scss
+    embed-resources: true
+    code-overflow: wrap
+    linkcolor: "#B97C7C"
+  pdf:
+    keep-tex: true
+    fig-width: 5.5
+    fig-height: 5.5
+    code-overflow: wrap
+    monofontoptions:
+      - Scale=0.5
+format-links: false
+---
+
+In
+[Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html)
+I introduced probability theory on finite sets; this simple setting allowed us
+to focus on the basic concepts without too much mathematical distraction.
+Unfortunately finite sets have only limited use in practical applications.
+Instead these applications typically require probability theory on not only more
+sophisticated sets but also sets that are equipped with additional structure.
+These combinations of sets and structure are also known as _spaces_.
+
+In this chapter we will discuss the basic conceptual features of general spaces
+before reviewing some of prototypical spaces that are particularly common in
+practical applications.  This presentation will include not only the properties
+of sets with an arbitrary number of elements but also a survey of some of the
+most fundamental structures that we can endow onto those sets.
+
+# Spaces
+
+In both more applied and more pure mathematics the term "space" is omnipresent
+but subject to ambiguous and sometimes inconsistent interpretation.  Some, for
+example, use the term to refer to any set of interest while some reserve it for
+sets endowed with additional mathematical _structure_.  Still others use the
+term to denote sets endowed with not just any structure but particular, and
+often only implied, structure.  Consequently we have to be careful when seeing
+the term to make sure we understand the exact intent of the author.
+
+Throughout this book I will use the term **space** to describe _any_ set
+equipped with _any_ structure.  When the particular structure is relevant I will
+be careful to specify exactly what structure has been endowed to the set.  In
+this section we will review the properties shared by all sets and then some of
+the most common structures that we can introduce to enhance a set with
+additional complexity.
+
+## Sets
+
+A finite set is a collection of a finite number of abstract **elements**.  More
+generally a **set** is a collection of an _arbitrary_ number of elements.  The
+elements that compromise a set are also referred to as **points**, although this
+is often used only when the set is part of a space.
+
+In general a set can contain not only a finite number of elements but also an
+_infinite_ number of elements.  An infinite set whose elements can be indexed by
+integers is referred as a **countably infinite set**.  Finite and countably
+infinite sets are together denoted **countable sets**.  When a set contains so
+many elements that they cannot be indexed by the integers then we refer to it as
+an **uncountably infinite set** or simply an **uncountable set**.  If we want to
+imply additional structure then we might also say **countable space** and
+**uncountable space**.
+
+To work with a set in practice we will need to be able to reference the elements
+it contains and organize those elements into subsets.
+
+### Variables
+
+Working with sets that contain more than a few elements is easier when we can
+refer to an abstract element without explicitly enumerating _all_ of the
+elements.  A **variable element**, or simply **variable**, is a symbol that can
+represent _any_ element in a given set.  In this book I maintain a convention
+where capital letters refer to sets and the corresponding lower case letters
+refer to variables.  For example $x$ denotes a variable taking values in the
+set $X$ or, more compactly, $x \in X$.
+
+To represent multiple, possibly distinct elements of a set we need to employ
+multiple variables.  For example we might use ticks so that $x, x', x'' \in X$
+all denote distinct variables that can correspond to common or different
+elements in $X$.  We can also use integer indices to distinguish between these
+variables when helpful; in this case $x_{1}, x_{2}, x_{3} \in X$ would denote
+three distinct variables that can correspond to common or different values in
+$X$.  At the same time non-numerical labels such as $x_{a}, x_{b}, x_{c} \in X$
+or even $x_{\text{input}}, x_{\text{output}} \in X$ can be more useful in some
+circumstances.
+
+When two variables $x_{1}$ and $x_{2}$ represent the _same_ element we say that
+they are _equal_.  We can specify equality by writing $x_{1} = x_{2}$.
+
+In many circumstances we will need to distinguish between variables that refer
+to _arbitrary_ elements and variables that refer to _particular_ but unspecified
+elements.  Following the computer science canon I will refer to these as
+**unbound variables** and **bound variables**, respectively.  To distinguish
+between the two I will decorate bound variables with a tilde; in words $x$
+denotes any element of the space $X$ while $\tilde{x}$ denotes a fixed but
+unspecified element.
+
+### Subsets
+
+As with finite spaces any selection of elements from a general set defines a
+**subset**.  Subsets equipped with similar structure as the full set are also
+referred to as **subspaces**.
+
+Selecting elements from a subset $\mathsf{x} \subset X$ defines another subset
+$\mathsf{x}' \subset X$.  If $\mathsf{x}$ contains all of the elements of
+$\mathsf{x}'$ and more then we write $\mathsf{x}' \subset \mathsf{x}$; if it
+might contain only the elements in $\mathsf{x}'$ then we write
+$\mathsf{x}' \subseteq \mathsf{x}$.  In the latter case we can also say that
+$\mathsf{x}'$ is _smaller_ than $\mathsf{x}$.
+
+Following the treatment of finite spaces in the previous chapter I will refer to
+the collection of all subsets that can be selected from a set $X$ as the
+corresponding **power set** and denote it $2^X$.  In general the power set
+$2^X$ will contain more elements than the originating set $X$; the power sets
+derived from uncountable sets are so massive that they are typically
+contaminated with all kinds of _misbehaving_ subsets.  We'll see one consequence
+of this contamination in the next chapter.
+
+When a set contains only a small number of elements we can readily define each
+subset by _explicitly_ specifying the elements it contains.  For larger sets
+this quickly becomes impractical, if not outright impossible.  In these cases
+subsets are more easily defined _implicitly_ as the elements satisfying a
+certain condition.  These implicit definitions are neatly encapsulated in the
+**set-builder notation**,
+$$
+\mathsf{x} = \{ x \in X \mid \text{ condition(x) } \}
+$$
+which we can read as "the elements of $X$ such that the element-wise condition
+is satisfied".
+
+For example if the function $f : X \rightarrow \mathbb{R}$ assigns to each
+element $x$ a value $f(x)$ then we could define a subset as the collection of
+elements that are assigned the particular value $0$.  In set-builder notation
+this would become
+$$
+\mathsf{x} = \{ x \in X \mid f(x) = 0 \}.
+$$
+
+The power set derived from any set always contains the **empty set** consisting
+of no elements, **atomic sets** or **singleton sets** each consisting of a
+single element, and a **full set** consisting of the entire set (@fig-subsets).
+Most subsets, however, contain an intermediate number of elements.  One of the
+key features of uncountable spaces is that most subsets also contain an
+uncountable number of elements, but still only an infinitesimal proportion of
+the total set.  To visually represent subsets containing an uncountable number
+of elements I will used filled shapes to contrast against individual points.
+
+::: {#fig-subsets layout="[ [-5, 45, 45, -5], [-5, 45, 45, -5]]"}
+![](figures/sets/examples/empty/empty){#fig-empty}
+
+![](figures/sets/examples/atomic/atomic){#fig-atomic}
+
+![](figures/sets/examples/general/general){#fig-general}
+
+![](figures/sets/examples/full/full){#fig-full}
+
+On a general set we can construct (a) an empty set containing no elements, (b)
+atomic sets containing only a single element, and even (d) a full set
+containing all elements in the set.  (c) Most subsets are more intermediate,
+containing multiple elements but not all of them.  Here filled shapes represent
+a potentially uncountable number of individual elements.
+:::
+
+All of the set operations we introduced for finite sets generalize to any set.
+For example for any set $X$ with power set $2^{X}$ we can define a unary
+operation that maps each subset into a **complementary** subset consisting of
+every other element (@fig-unary),
+\begin{alignat*}{6}
+\cdot^c :\; & 2^X & &\rightarrow& \; & 2^X &
+\\
+& \mathsf{x} & &\mapsto& & \mathsf{x}^{c} &.
+\end{alignat*}
+
+::: {#fig-unary layout="[ [-5, 45, 45, -5] ]"}
+![](figures/sets/unary_set_operations/input/input){#fig-unary-input}
+
+![](figures/sets/unary_set_operations/complement/complement){#fig-complement}
+
+Every (a) subset defines a (b) complement subset consisting of all elements in
+the set that are not contained in that initial subset.
+:::
+
+For any set the complement of the empty set is the full set and vice versa,
+\begin{align*}
+\emptyset^{c} &= X
+\\
+X^{c} &= \emptyset.
+\end{align*}
+
+The binary union and and intersection operations also generalize to general sets
+(@fig-binary).  A **union** of two input subsets is the subset containing all of
+the elements contained in _either_ input subset,
+\begin{alignat*}{6}
+\cdot \cup \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
+\\
+& \mathsf{x}_1, \mathsf{x}_{2} & &\mapsto& & \mathsf{x}_1 \cup \mathsf{x}_2 &,
+\end{alignat*}
+and the **intersection** is the subset containing all of the elements in _both_
+input subsets,
+\begin{alignat*}{6}
+\cdot \cap \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
+\\
+& \mathsf{x}_1, \mathsf{x}_{2} & &\mapsto& & \mathsf{x}_1 \cap \mathsf{x}_2 &,
+\end{alignat*}
+**Venn diagrams** visualize unions and intersections as overlapping shapes.
+
+::: {#fig-binary layout="[ [-5, 90, -5], [-5, 45, 45, -5]]"}
+![](figures/sets/binary_set_operations/inputs/inputs){#fig-binary-inputs}
+
+![](figures/sets/binary_set_operations/union/union){#fig-binary-union}
+
+![](figures/sets/binary_set_operations/intersection/intersection){#fig-binary-intersection}
+
+The union and intersection operations transform two input subsets into a single
+output subset.  (a) A union consists of all elements in either input subset
+while (b) an intersection consists of all elements in both input subsets.
+:::
+
+Two subsets are said to be **disjoint** when they don't overlap and hence don't
+share any elements.  More formally two subsets are disjoint when their
+intersection is the empty set,
+$$
+\mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset.
+$$
+
+All of the properties of these binary operatations that we discussed for finite
+sets also generalize to arbitrary sets.  For example the union and intersection
+of a subset with itself always returns that subset,
+$$
+\mathsf{x} \cup \mathsf{x} = \mathsf{x} \cap \mathsf{x} = \mathsf{x}.
+$$
+Similarly the union of the empty set with any subset returns back that subset,
+$$
+\mathsf{x} \cup \emptyset = \emptyset \cup \mathsf{x} = \mathsf{x},
+$$
+and intersection of the empty set with any subset returns back the empty set,
+$$
+\mathsf{x} \cap \emptyset = \emptyset \cap \mathsf{x} = \emptyset.
+$$
+The union of any subset with the full set returns the full set,
+$$
+\mathsf{x} \cup X = X \cup \mathsf{x} = X,
+$$
+and the intersection of any subset with the full set returns back the subset,
+$$
+\mathsf{x} \cap X = X \cap \mathsf{x} = \mathsf{x}.
+$$
+
+The union and intersection operations also interact nicely with the complement
+operation.  For example by construction the union of a subset and its complement
+is the full set,
+$$
+\mathsf{x} \cup \mathsf{x}^{c} = X.
+$$
+On the other hand the two subsets share no elements so their intersection is
+empty,
+$$
+\mathsf{x} \cap \mathsf{x}^{c} = \emptyset.
+$$
+Consequently a subset and its complement are always disjoint.
+
+## Structures { #sec:structures }
+
+A collection of elements alone is only so interesting mathematically and only so
+useful in practice.  The sets of theoretical and practical interest are equipped
+with additional **structures** that endow them with more rigidity and
+interpretability.
+
+Earlier I defined a space as any a set equipped with any structure.  When that
+structure is explicit we often denote the space by specifying the underlying set
+and the additional structure together.  For example if we denote the set $X$ and
+the structure $\mathfrak{s}$ then we would denote the space $(X, \mathfrak{s})$.
+Unfortunately these additional structures are often implicit and taken for
+granted.  In this case $X$ is, frustratingly, typically used to denote both the
+underlying set _and_ the resulting space.
+
+In this section we will review just a few of the structures that play important
+roles in practical applications.  Specifically we will focus on the structures
+that define the most common spaces that arise in mathematical modeling.  We
+will introduce probabilistic structures until the next chapter.
+
+### Orderings
+
+One way to enhance a set is to distinguish a special organization of its
+elements.
+
+An **strict ordering** or **complete ordering** establishes a particular
+sequential arrangement of the elements in a set.  Mathematically we can encode
+an ordering as local relations between elements, writing $x_{1} < x_{2}$ if the
+element $x_{1}$ appears earlier in the ordering than $x_{2}$.  We also say that
+$x_{1}$ is _smaller_ than $x_{2}$, and $x_{2}$ is _larger_ than $x_{1}$, if
+$x_{1} < x_{2}$.  The ordering relation can also be interpreted as a binary
+operation that takes two elements as inputs and returns true if the first input
+element appears earlier in the ordering than the second input element and false
+otherwise.
+
+A consistent ordering of the elements in a set strongly constrains the behavior
+of these relations.  For example if $x_{1} < x_{2}$ and $x_{2} < x_{3}$ then we
+must have $x_{1} < x_{3}$.  This property is formally known as **transitivity**
+of the individual relations.
+
+A **partial ordering** defines a less rigid arrangement of a set that doesn't
+allows multiple elements to be indistinguishable; in other words multiple
+elements can occupy the same position along the sequential arrangement at the
+same time.  To represent a partial ordering we use the relation $\le$ and write
+$x_{1} \le x_{2}$ if the element appears earlier in the order
+_or at the same place in the order as_ $x_{2}$.  This partial ordering relation
+is not only transitive -- if $x_{1} \le x_{2}$ and $x_{2} \le x_{3}$ then
+$x_{1} \le x_{3}$ -- but also allows us to compare any element to itself --
+$x_{1} \le x_{1}$.  This latter property is formally known as **reflexivity**.
+
+Intuitively we can interpret a strict ordering as a geometric arrangement of the
+elements along a one-dimensional line.  Partial orderings are more general and
+can often be interpreted as a geometrical arrangement of the elements along a
+higher-dimensional plane.  Critically neither geometric interpretation relies
+on any notion of distance between the elements; any arrangement still leaves the
+individual elements quite fluid.
+
+A set equipped with a particular ordering is referred to as an _ordered space_.
+Likewise a set equipped with a particular partial ordering is referred to as
+a _partially-ordered space_.
+
+### Algebras
+
+The term **algebra** is introduced so early in our mathematical education that
+it can be especially easy to take for granted.  Typically it refers to equipping
+a set with one or more _binary operations_ that manipulate any two input
+elements into a single output element.  Some algebraic structures also introduce
+_unary operations_ that transform a single input element into a single output
+element.
+
+Just about every possible algebraic structure has been studied and categorized
+by mathematicians.  Unfortunately the resulting spaces are, with one exception,
+not referred to as "algebraic spaces".  In most cases they are not even referred
+to as "spaces"!  Instead each algebraic structure is given a special name, such
+as "magma" and "group" and "field", that is not obviously related to the others.
+
+Because of this barrage of terminology it can be difficult to compare and
+contrast various algebraic structures.  Fortunately understanding them all is
+absolutely not necessary for this book.  For those readers who are interested in
+digger a little bit deeper into the technical vocabulary Wikipedia provides two
+nice reviews
+[here](https://en.wikipedia.org/wiki/Algebraic_structure#Common_algebraic_structures)
+and
+[here](https://en.wikipedia.org/wiki/Outline_of_algebraic_structures#Types_of_algebraic_structures).
+
+In this section we will consider only a few particularly common algebraic
+structures.
+
+#### Single Algebraic Operation
+
+A common convention when working with a single, binary algebraic operation is to
+denote that operation as
+\begin{alignat*}{6}
+\cdot :\; & X \times X& &\rightarrow& \; & X &
+\\
+& x_{1}, x_{2} & &\mapsto& & x_{1} \cdot x_{2} &,
+\end{alignat*}
+where $x_{1}$ denotes the first input element and $x_{2}$ denotes the second
+input element and $x_{1} \cdot x_{2}$ denotes the output element.  When working
+with multiple algebraic operations at the same time we will have to use multiple
+symbols to denote each operation.
+
+Binary algebraic operations are characterized by a few key properties.  For
+example a binary operation that is symmetric with respect to the input elements,
+$$
+x_{1} \cdot x_{2} = x_{2} \cdot x_{1},
+$$
+is referred to as a **commutative** operation.
+
+A binary operation can be applied to more than two input elements by chaining
+multiple evaluations.  For example we can apply a binary operation to the three
+elements $x_{1}$, $x_{2}$, and $x_{3}$ by first taking $x_{1}$ as $x_{2}$ inputs
+and then taking the resulting output as an input along with $x_{3}$,
+$$
+(x_{1} \cdot x_{2}) \cdot x_{3}.
+$$
+Alternatively we can first take $x_{2}$ and $x_{3}$ as inputs and then take
+$x_{1}$ and the resulting output as inputs,
+$$
+x_{1} \cdot (x_{2} \cdot x_{3}).
+$$
+In general these two groupings will yield _different_ outputs.  Operations that
+always give the same output for both groupings are referred to as
+**associative** operations.
+
+Some binary operations also distinguish special elements.  For example inputting
+a particular element might reduce the operation to carrying forward the other
+input element to the output no matter what it might be.  More formally a binary
+operation might admit an element $x_{\text{Id}}$ such that
+$$
+x \cdot x_{\text{Id}} = x_{\text{Id}} \cdot x = x.
+$$
+for all $x \in X$.  In this case $x_{\text{Id}}$ is denoted a **unit element**
+or **identity element** and the binary operation itself is referred to as a
+**unital** operation.
+
+Similarly an operation might allow a particular element to determine the output
+no matter what the other input element is.  Formally there might exist an
+element $x_{\text{Null}}$ such that
+$$
+x \cdot x_{\text{Null}} = x_{\text{Null}} \cdot x = x_{\text{Null}}
+$$
+for all $x \in X$.  If so then $x_{\text{Null}}$ can be denoted an
+**absorbing element**, **null element**, or **zero element** with the binary
+operation sometimes referred to as a **null** operation.
+
+The existence of an identity element can also induce a special pairing between
+the other elements in the set.  In particular some elements $x \in X$ might be
+paired with another element $x^{-1} \in X$ such that the binary operation
+returns the identity element,
+$$
+x \cdot x^{-1} = x^{-1} \cdot x = x_{\text{Id}}.
+$$
+If so then we say that $x^{-1}$ is the **inverse element** of $x$.  By
+construction $x$ is also the inverse element of $x^{-1}$.  By construction the
+identity element is always its own inverse element.  Conversely, because null
+elements cannot result in an identity element output, they will never have
+inverse elements.
+
+Perhaps the most prominent binary algebraic operation is **addition** over the
+integers and real numbers.  Addition is commutative, associative, and unital
+with the identity element $x_{\text{Id}} = 0$.  Every element $x$ also features
+a unique additive inverse element known as its **negation** and written as $-x$.
+A corresponding **subtraction** operation can be defined as addition by additive
+inverses,
+$$
+x_{1} - x_{2} \equiv x_{1} + (x_{2})^{-1} = x_{1} + (-x_{2}).
+$$
+
+A natural complement to addition is **multiplication**.  Multiplication is
+commutative, associative, and unital with the identity element
+$x_{\text{Id}} = 1$.  It is also null with the absorbing element
+$x_{\text{Null}} = 0$.
+
+When working with the integers no element admits a multiplicative inverse except
+for the identity element.  On the other hand every real number $x$ except for
+$x_{\text{Null}} = 0$ features a multiplicative inverse element known as its
+**reciprocal** and written as $1 /x$.  We can define a **division** operation as
+multiplication by multiplicative inverses,
+$$
+x_{1} / x_{2} \equiv x_{1} \cdot (x_{2})^{-1} = x_{1} \cdot \frac{1}{x_{2}}.
+$$
+Because $x_{\text{Null}} = 0$ doesn't have a multiplicative inverse, however, we
+cannot divide by zero.
+
+#### Multiple Algebraic Operations
+
+If one algebraic operation is good then two should be better, right?  Multiple
+algebraic operations that are _compatible_ with each other define particularly
+rich algebraic structures.
+
+In the context of two binary algebraic operation a common convention is to write
+the first operator as
+\begin{alignat*}{6}
++ :\; & X \times X& &\rightarrow& \; & X &
+\\
+& x_{1}, x_{2} & &\mapsto& & x_{1} + x_{2} &
+\end{alignat*}
+and the second as
+\begin{alignat*}{6}
+\cdot :\; & X \times X& &\rightarrow& \; & X &
+\\
+& x_{1}, x_{2} & &\mapsto& & x_{1} \cdot x_{2} &
+\end{alignat*}
+in analogy with addition and multiplication.  This notation might be used even
+if the operators do not actually correspond to the usual addition and
+multiplication operations.
+
+The binary operation $\cdot$ is said to **distribute** across the binary
+operation $+$ if
+$$
+x_3 \cdot (x_1 + x_2) = (x_3 \cdot x_1) + (x_3 \cdot x_2).
+$$
+Note that this property is asymmetric -- it does _not_ imply that $+$
+distributes across $\cdot$,
+$$
+x_3 + (x_1 \cdot x_2) \ne (x_3 + x_1) \cdot (x_3 + x_2).
+$$
+A common example of compatible algebraic operations is addition and
+multiplication over the integer and real numbers where multiplication
+distributes across addition.  An algebraic structure compromised of these two
+compatible operations is also known as **arithmetic**.
+
+One of the most infamous algebraic structures considers a slightly different
+combination of operations.  Instead of a binary operator that takes two elements
+as inputs we can define a binary operator that takes as inputs one element and
+one real number,
+\begin{alignat*}{6}
+\cdot :\; & \mathbb{R} \times X& &\rightarrow& \; & X &
+\\
+& \alpha, x & &\mapsto& & \alpha \cdot x &.
+\end{alignat*}
+This is sometimes referred to as a **scalar multiplication** operator.
+
+A **linear algebra** combines this operation with an associative, commutative,
+and unital binary operator
+\begin{alignat*}{6}
++ :\; & X \times X& &\rightarrow& \; & X &
+\\
+& x_{1}, x_{2} & &\mapsto& & x_{1} + x_{2} &
+\end{alignat*}
+such that $\cdot$ distributes over $+$,
+$$
+\alpha \cdot (x_{1} + x_{2}) = \alpha \cdot x_{1} + \alpha \cdot x_{2}.
+$$
+A set equipped with these operators is also known as a **vector space** with
+the individual elements denoted **vectors**.
+
+### Metrics
+
+Another way to add structure to a set is to introduce an explicit notion of
+**distance** between individual elements.  Mathematically this is done with a
+binary operation that takes two elements as inputs and returns a positive real
+number as output,
+\begin{alignat*}{6}
+d :\; & X \times X& &\rightarrow& \; & \mathbb{R}^{+} &
+\\
+& x_{1}, x_{2} & &\mapsto& & d(x_{1}, x_{2}) &.
+\end{alignat*}
+In order for this operation to conform with out intuitive notions of distance
+we need it to satisfy a few key properties.  For example the output should
+vanish when comparing an element to itself,
+$$
+d(x_{1}, x_{2}) = 0
+$$
+when $x_{1} = x_{2}$.  At the same time the output should be non-zero when
+comparing two distinct inputs,
+$$
+d(x_{1}, x_{2}) > 0
+$$
+when $x_{1} \ne x_{2}$.  The operation should also be symmetric in its inputs,
+$$
+d(x_{1}, x_{2}) = d(x_{2}, x_{1}),
+$$
+and for any three elements satisfy a _triangle inequality_,
+$$
+d(x_{1}, x_{3}) \le d(x_{1}, x_{2}) + d(x_{2}, x_{3}).
+$$
+If the operation satisfies all of these properties then we can consistently say
+that the larger $d(x_{1}, x_{2})$ is the most distant $x_{1}$ is from $x_{2}$.
+
+Any operation satisfying these criteria is known as a **distance function** or
+**metric**.  A set equipped with a metric is denoted a **metric space**.
+
+Because a metric is symmetric in its inputs it is insensitive to any ordering of
+the elements.  In fact the distances defined by a metric complement the
+arrangement defined by an ordering: while an ordering defines how elements are
+arranged but not how far apart they are, a metric defines how far apart the
+elements are but not their arrangement.  Together an ordering and metric define
+a rigid arrangement of the elements.
+
+One of the most important applications of a metric is formalizing notions of
+_convergence_ and _limits_ in a set.  Consider for example a countably infinite
+sequence of elements
+$$
+\{ x_{1}, x_{2}, \ldots, x_{i}, \ldots \}.
+$$
+A metric quantifies how far these elements are from any other element $x \in X$,
+$$
+\{ r_{1}, r_{2}, \ldots, r_{i}, \ldots \}
+=
+\{ d(x_{1}, x), d(x_{2}, x), \ldots, d(x_{i}, x) \}.
+$$
+Intuitively if these distances decay towards zero then the sequence of elements
+will move closer and closer to $x$.
+
+More formally a sequence of elements **converges** to the **limit** $x$ if for
+_any_ distance $\epsilon > 0$ we can go deep enough into the sequence that the
+distances between the tail elements
+$$
+\{ x_{i'}, x_{i' + 1}, \ldots, x_{i' + i}, \ldots \}
+$$
+and the limiting element $x$ are all bounded by $\epsilon$,
+\begin{align*}
+d(x_{i'}, x) &< \epsilon
+\\
+d(x_{i' + 1}, x) &< \epsilon
+\\
+\ldots&
+\\
+d(x_{i' + i}, x) &< \epsilon
+\\
+\ldots&,
+\end{align*}
+no matter how small it might be (@fig-metric-convergence).  In other
+words the elements of a convergent sequence will become arbitrarily close to
+$x$, at least eventually.
+
+![Equipping a set with a metric allows us to quantify when a sequence of
+elements converges to a limiting element $x \in X$.  If the distance between the
+sequential elements and the limiting element $x$ is eventually bounded by any
+finite distance $\epsilon$ then the sequential elements will become arbitrarily
+close to $x$.](
+figures/structures/metric_convergence/metric_convergence){width=90% #fig-metric-convergence}
+
+Convergent sequences can then be used to formally implement limits.  In
+particular the notation $x' \rightarrow x$ corresponds to _any_ sequence of
+elements that converges to $x$.  Limiting behavior is determined by how _all_ of
+these convergent sequences behave.
+
+### Topologies {#sec:topologies}
+
+The distances defined by a metric endow a set with a rich diversity of useful
+features.  Many of these features, however, can also be defined by
+distinguishing certain subsets, avoiding the need for a metric entirely.
+
+#### Open Balls {#sec:open-balls}
+
+A metric can be used to construct special subsets.  The collection of all
+elements within a distance $r$ from the element $x \in X$ defines a subset
+$$
+\mathsf{b}_{r}(x) = \{ x' \in X \mid d(x, x') < r \} \subseteq 2^{X}
+$$
+known as an **open ball** centered at $x$ with radius $r$.  Any open ball with
+zero radius reduces to the empty set.
+
+Including the elements exactly at a distance $r$ from $x$ defines a slightly
+larger subset
+$$
+\bar{\mathsf{b}}_{r}(x) = \{ x' \in X \mid d(x, x') \le r \} \in 2^{X}
+$$
+known as a **closed ball** centered at $x$ with radius $r$.  By themselves the
+elements exactly a distance of $r$ away from $x$ define yet another subset
+$$
+\delta \mathsf{b}_{r}(x) = \{ x' \in X \mid d(x, x') = r \} \in 2^{X}
+$$
+that defines the **boundary** of the open and closed balls.  An open ball
+becomes a closed ball when we combine it with this boundary,
+$$
+\bar{\mathsf{b}}_{r}(x) = \mathsf{b}_{r}(x) \cup \delta \mathsf{b}_{r}(x).
+$$
+
+Open balls quantify which elements are in the _proximity_ of the central element
+without directly referencing the metric.  More formally every open ball centered
+at $x \in X$ with finite but potentially arbitrarily small radius defines a
+**metric neighborhood** of $x$.  The smaller a metric neighborhood is the closer
+the elements it contains will be to the central element $x$.  To emphasize the
+possibility of arbitrarily small metric neighborhoods I will use $\epsilon$
+instead of $r$ when referring to the open ball radii that define metric
+neighborhoods.
+
+![Open balls centered at $x \in X$ define neighborhoods of elements that are
+close to $x$.  The smaller the neighborhood the closer the elements are to $x$.](
+figures/structures/metric_topology/continuous_neighborhoods/continuous_neighborhoods){
+width=50% #fig-metric-continuous-neighborhoods}
+
+The interaction of these neighborhoods reveals quite a bit about the
+relationships between individual elements in a metric space.  For example
+because any pair of distinct elements are separated by a finite distance they
+can always be contained in non-overlapping metric neighborhoods
+(@fig-metric-separation).  In other words metric neighborhoods are able to
+_distinguish_ individual elements from each other.
+
+![For any two elements $x_{1}, x_{2} \in X$ in a metric space we can always find
+radii $\epsilon_{1} + \epsilon_{2} < d(x_{1}, x_{2})$ such that the open balls
+$\mathsf{b}_{\epsilon_{1}}(x_{1})$ and $\mathsf{b}_{\epsilon_{2}}(x_{2})$
+containing the two elements will not overlap.  Consequently metric neighborhoods
+are always able to separate individual elements.](
+figures/structures/metric_topology/separation/separation){
+width=50% #fig-metric-separation}
+
+Moreover we can use metric neighborhoods to define convergent sequences.  Recall
+that, by definition, we can always go deep enough into a convergent sequence
+that the tail elements
+$$
+\{ x_{i'}, x_{i' + 1}, \ldots, x_{i' + i}, \ldots \}
+$$
+will be closer to the limiting element $x$ than any distance $\epsilon > 0$,
+\begin{align*}
+d(x_{i'}, x) &< \epsilon
+\\
+d(x_{i' + 1}, x) &< \epsilon
+\\
+\ldots&
+\\
+d(x_{i' + i}, x) &< \epsilon
+\\
+\ldots&,
+\end{align*}
+This, however, is equivalent to requiring that those tail elements are contained
+in the open ball $\mathsf{b}_{\epsilon}(x)$ centered at the limiting element,
+$$
+\{ x_{i'}, x_{i' + 1}, \ldots, x_{i' + i}, \ldots \}
+\in \mathsf{b}_{\epsilon}(x).
+$$
+In other words a sequence will converge to the limit $x$ if and only if the
+elements in the sequence are eventually contained in _any_ metric neighborhood
+of $x$ (@fig-metric-neighborhood-convergence).
+
+![On a metric space a sequence of elements converges to the limit $x \in X$
+if and only if we can always go deep enough in the sequence that all subsequent
+elements will be contained in any metric neighborhood.](
+figures/structures/metric_topology/convergence/convergence){
+width=90% #fig-metric-neighborhood-convergence}
+
+Metric neighborhoods can also be used to formalize intuitive notions of
+_continuous_ and _discrete_ metric spaces.  For example we can formalize the
+notion of a continuum by requiring that every element $x \in X$ is surrounded by
+elements at any arbitrary distance, at least up to some potentially maximum
+distance.  More succictly for _every_ element $x \in X$ and distance
+$0 < \epsilon \le \epsilon_{\max}$ we should be able to find another element
+$x' \in X$ satisfying
+$$
+d(x, x') = \epsilon.
+$$
+This requirement, however, is equivalent to every metric neighborhood with
+radius less than $\epsilon_{\max}$ defining a _distinct_ subset of $X$ because
+increasing the radius will always introduce new elements.  This then implies
+that every metric neighborhood of $x$, no matter how small, must contain more
+elements than just $x$.  In other words no metric neighborhood in such a space
+will reduce to an atomic set.
+
+On the other hand the elements in a discrete metric space are not separated by
+arbitrary distances.  Instead they are separated only by certain distances,
+specifically distances bounded below by some minimum distance.  In this case
+many metric neighborhoods are degenerate, reducing to the same subsets of $X$
+(@fig-metric-discrete-neighborhoods).  Moreover any metric neighborhood with
+radius smaller than the minimum distance will reduce to the atomic set
+containing only the central element.  These smallest neighborhoods isolate the
+elements from each other.
+
+![The elements in a discrete metric space are separated by some finite minimum
+distance, which is equivalent to many metric neighborhoods degenerating into
+the same subsets.  In particular the smallest metric neighborhoods all
+degenerate to the atomic set which contains only the central element.](
+figures/structures/metric_topology/discrete_neighborhoods/discrete_neighborhoods){
+width=90% #fig-metric-discrete-neighborhoods}
+
+#### Open Sets {#sec:open-sets}
+
+The concept of an open subsets can also be generalized beyond just open balls.
+Consider for example a subset $\mathsf{x} \subset X$ and an element
+$x \in \mathsf{x}$.  If $x$ is contained in a metric neighborhood that is itself
+contained in the subset,
+$$
+x \in \mathsf{b}_{\epsilon}(x) \subset \mathsf{x},
+$$
+then we can move away from $x$ without ever leaving $\mathsf{x}$.  When _every_
+element in $\mathsf{x}$ can be contained by at least one metric neighborhood
+that is also contained in $\mathsf{x}$ then we can always move closer to the
+edge of the subset without leaving it.
+
+A key consequence of this construction is that these subsets, just like the open
+balls, do not contain any boundary elements.  Consequently they make a natural
+generalization for **open subsets** (@fig-open-subset).  We can then define
+**closed subsets** as the complements of any open subset.  Closed subsets are
+characterized by their inclusion of elements whose metric neighborhoods all leak
+out into the surrounding set (@fig-closed-subset).
+
+![In a metric space every element of an open subset can be contained by a metric
+neighborhood that is itself fully contained by the open subset.  As we move
+closer and closer to the boundary of an open subset the metric neighborhood will
+become smaller but never vanish, allowing us to make progressively smaller moves
+towards the boundary without ever reaching it.](
+figures/structures/metric_topology/open_subset/open_subset){
+width=90% #fig-open-subset}
+
+![A closed subset of a metric space contains boundary elements whose metric
+neighborhoods always leak out of the subset.](
+figures/structures/metric_topology/closed_subset/closed_subset){
+width=50% #fig-closed-subset}
+
+Unfortunately this construction does introduce a few subtleties.  Unlike the
+colloquial use of "open" and "closed" these definitions of open subsets and
+closed subsets are not exact opposites.  If a subset and its complement are both
+open then they will, by definition, be both open and closed at the same time.
+Because mathematicians have no shame these subsets are referred to as "clopen"
+subsets.  Moreover open subsets and closed subsets are both exceptional in the
+power set; in general only _some_ subsets will be open, closed, or both, and
+most subsets will be neither open nor closed.
+
+Unlike open balls these metric-derived open subsets are _closed_ under unions
+and intersections.  If $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ are both open
+subsets then $\mathsf{x}_{1} \cup \mathsf{x}_{2}$ will also an open subset.  In
+fact the union of any _countably infinite_ number of open subsets will be open.
+Likewise if $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ are both open subsets then
+$\mathsf{x}_{1} \cap \mathsf{x}_{2}$ will also be an open subset.  Indeed the
+intersection of any _finite_ number of open subsets will also be open but, in an
+unfortunate asymmetry, the intersection of a countably infinite number of open
+subsets might not be open.
+
+Open subsets provide an immediate way to generalize the notion of neighborhood
+beyond open balls.  If we define a general neighborhood of $x$ to be _any_ open
+subset that contains $x$ then we will be able to derive many of the same
+properties as metric neighborhoods, and hence the underlying metric.  For
+example two elements can be separated by metric neighborhoods if and only if
+they can be separated by open subsets more generally.  Similarly every sequence
+that converges to the limit $x$ is eventually contained not just by every metric
+neighborhood of $x$ by also by every general neighborhood of $x$.
+
+While different metrics define different metric neighborhoods around each
+element, those different metric neighborhoods can sometimes end up defining the
+_same_ open subsets (@fig-equivalent-open-subsets).  Because those open subsets
+completely characterize properties like separation and convergence the metrics
+that yield the same open subsets will all share those properties!  Working
+directly with a collection of open subsets allows us to avoid the idiosyncrasies
+of any particular metric and isolate the properties common to _all_ compatible
+metrics.
+
+![Different metrics define different metric neighborhoods, but in some cases
+those different metric neighborhoods end up defining the same collection of
+open subsets.  Any property defined by those common open subsets will be shared
+by all of the compatible metrics.](
+figures/structures/metric_topology/equivalent_open_subsets/equivalent_open_subsets){
+width=90% #fig-equivalent-open-subsets}
+
+#### General Topologies {#sec:general-topology}
+
+Once we can define interesting properties directly from open subsets a natural
+question is whether or not those open subsets need to derived from any existing
+structure in the first place.  Indeed we can introduce all kinds of interesting
+properties to a set by equipping it directly with a self-contained collection of
+distinguished subsets.
+
+A **topology** is any collection of subsets
+$$
+\mathfrak{t}
+= \{ \emptyset, \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots, X \} \in 2^{X}
+$$
+that contains the empty set and the full set, is closed under countably infinite
+unions, and finite intersections.  Any set equipped with a topology is referred
+to as a **topological space**.
+
+The distinguished subsets that define a topology are generally referred to as
+**open subsets** even if they are not derived from a metric.  If the open
+subsets in a topology are derived from a metric, or _can be_ derived from a
+metric, then we refer to the topology as a **metric topology**.
+
+Non-empty subsets in a topology provide the ultimate generalization of
+neighborhoods.  Every subset in a topology that contains the element $x \in X$
+defines a neighborhood of $x$, with each neighborhood providing some
+quantification of which elements in the set are in the proximity of $x$
+(@fig-continuous-general-neighborhoods).  Smaller neighborhoods imply a stronger
+sense of proximity than larger neighborhoods.
+
+![The subsets in a topology define a general notion of neighborhood.  Any
+subset in the topology that contains an element $x \in X$ defines a neighborhood
+of elements in the proximity of $x$.](
+figures/structures/general_topology/neighborhoods/neighborhoods){
+width=50% #fig-continuous-general-neighborhoods}
+
+The overlap of topological neighborhoods around distinct elements determines
+how well the topology can distinguish those elements from each other.  Larger
+topologies contain more neighborhoods that better resolve the individual
+elements in the underlying set than smaller topologies.  In other words the
+larger the topology the closer we can zoom into the individual elements.
+
+For example the smallest topology, known as the **trivial topology**, contains
+only the empty set and the full set,
+$$
+\tau = \{ \emptyset, X \}.
+$$
+In this case there is only one neighborhood, and that neighborhood is shared by
+_all_ of the elements in $X$.  Consequently the topology is not able to
+discriminate any element from any other element.
+
+At the other extreme the **discrete topology** contains the entire power set,
+$$
+\tau = 2^{X}.
+$$
+Because the discrete topology contains every atomic set each element can be
+contained in a neighborhood by itself, allowing us to zoom into each element
+individually and isolate it from every other element in $X$
+(@fig-general-discrete-neighborhoods).  This generalizes the behavior of
+discrete metric spaces that we encountered in
+[Section 1.2.4.1](@sec:open-balls).
+
+![The discrete topology contains all of the atomic sets which define
+neighborhoods that completely isolate each element from every other element.](
+figures/structures/general_topology/discrete_topology/discrete_topology){
+width=50% #fig-general-discrete-neighborhoods}
+
+Particularly well-behaved topologies include enough subsets that every pair of
+elements can be contained by non-overlapping neighborhoods
+(@fig-general-separation), mirroring the separation afforded by open subsets on
+metric spaces.  In other words these **Hausdorff topologies** are able to
+distinguish every element from every other element.
+
+![A Hausdorff topology includes enough subsets that every pair of elements
+$x_{1}, x_{2} \in X$ can be contained by at least one set of neighborhoods that
+don't overlap with each other.  More formally
+$x_{1} \in \mathsf{x}_{1} \subset X$ and $x_{2} \in \mathsf{x}_{2} \subset X$
+with $\mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset$.](
+figures/structures/general_topology/separation/separation){
+width=50% #fig-general-separation}
+
+The continuous metric spaces discussed in [Section 1.2.4.1](@sec:open-balls)
+are generalized by topologies that fall in between the extreme trivial and
+discrete topologies.  They contain enough subsets to be Hausdorff but not so
+many to be discrete, allowing us to zoom in arbitrary close to each element but
+never isolate them completely from neighboring elements.  The precise subsets
+included in these intermediate topologies then endow a set a certain notions of
+"shape".
+
+For example the half-open line interval
+$$
+[0, 1) = \{ x \in \mathbb{R} \mid 0 \le x < 1 \}
+$$
+is a Hausdorff topological space with open subsets defined by half-open
+subintervals
+$$
+[a, b) = \{ x \in \mathbb{R} \mid 0 \le a \le x < b < 1 \}
+$$
+and their unions.  In particular the half-open subintervals
+$$
+[0, \epsilon) = \{ x \in \mathbb{R} \mid 0 \le x < \epsilon < 1 \}
+$$
+contain elements near lower boundary but not elements near the upper boundary,
+separating the two ends from each other and giving the line is distinctive
+shape (@fig-line-topology).  Removing these subintervals gives _another_
+Hausdorff topology, but one where the obstructions between the elements near the
+lower boundary and the elements near the upper boundary have been removed.  This
+effectively connects the two ends together, endowing the set not with the shape
+of a line but rather the shape of a circle (@fig-circle-topology)!
+
+::: {#fig-line-verses-circle layout="[ [-5, 45, 45, -5] ]"}
+![](figures/structures/general_topology/line_topology/line_topology){
+#fig-line-topology}
+
+![](figures/structures/general_topology/circle_topology/circle_topology){
+#fig-circle-topology}
+
+The precise subsets included in a topology endow the underlying set with subtle
+notions of shape.  (a) A line is an uncountably infinite set equipped with a
+topology that contains enough subsets to strongly separate the ends from each
+other.  (b) Removing those particular subsets, shown here in light red, gives a
+smaller topology where the ends are in closer proximity, giving the same set the
+shape of a circle.
+:::
+
+Convergence on topological spaces can also be defined in the same way as it is
+on metric spaces, replacing the neighborhoods derived from open balls to the
+neighborhoods defined by the topology (@fig-general-convergence).  The
+generality of topological structure, however, does come at a cost: if a topology
+cannot discriminate between individual elements than the limit of a convergent
+sequence might not be unique.  Instead unique limits are guaranteed by only
+Hausdorff topologies.
+
+![The subsets in a topology can be used to define convergent sequences in the
+same way that the open subsets in a metric space can: a sequence of elements
+converges to the limit $x \in X$ if and only if we can always go deep enough in
+the sequence that all subsequent elements can be contained in any topological
+neighborhood of $x$.  For many topologies, however, a sequence can converge to
+multiple elements at the same time.  Unique limits are a feature of only some
+topologies.](
+figures/structures/general_topology/convergence/convergence){
+width=90% #fig-general-convergence}
+
+A subtle benefit of this topological definition of convergence is that because
+it doesn't require a metric is also doesn't require us to define the positive
+real numbers.  This can be helpful for avoiding circular logic in more technical
+mathematical analyses.
+
+#### The Practical Uses of Topology
+
+In general topologies can be used to equip a set with all kinds of complicated
+structure, defining sophisticated spaces that far exceed our intuitions.
+Indeed the construction and classification of elaborate topological spaces is a
+major focus of more abstract mathematics.  Because most introductions to
+topology focus on these objectives the subject has developed an imposing
+reputation of inaccessibility, if not outright irrelevance, to more applied
+aspirations.
+
+Topology, however, can be a powerful tool in practice by helping us to
+better understand the familiar spaces that appear in more applied mathematics.
+Specifically a given topology can be used to quantify which behaviors will be
+_shared_ by different choices of other structures, such as orderings and
+metrics, and which behaviors are particular to those choices.
+
+For example if a topology is not Hausdorff then we won't be able to distinguish
+between individual elements well enough to consistently define a metric that
+assigns non-zero distances $d(x_{1}, x_{2}) > 0$ to every pair of distinct
+elements $x_{1} \ne x_{2}$.  In other words _every_ well-defined metric space
+must also be a Hausdorff topological space.  Consequently _every_ metric space
+shares the properties that can be derived from Hausdorff topological structure
+alone, such as separation of elements by neighborhoods and uniqueness of
+convergent sequence limits.
+
+Some metric spaces have even more topological similarities.  In
+[Section 1.2.4.2](@sec:open-sets) we saw that different metrics on the
+same set can define the same open sets, and hence the same metric topology.
+Different metric spaces that induce the same metric topology are particularly
+alike, sharing every property that can be defined by that common topology.  For
+example on metric spaces with the same topology convergent sequences will not
+only enjoy unique limits, they will share the _same_ limits.
+
+Similarly all spaces equipped with the topology of a line that we explored in
+[Section 1.2.4.3](@sec:general-topology) will share the same basic linear
+"shape" regardless of any compatible metric structure we introduce, while all
+spaces equipped with the topology of a circle will exhibit the same circular
+"shape".  Different metrics can warp how far apart the elements are from each
+other but they cannot disrupt those topologically-derived shapes.
+
+In other words working with topological properties allows us to isolate all of
+the behaviors shared by spaces equipped with compatible structures and disregard
+the idiosyncrasies any particular choice of that structure.  Because of this
+topological structure is often interpreted as more _fundamental_ than other
+structures.  From this perspective the foundation of a space is a set equipped
+with a particular topology.  Any additional structure, such as an ordering,
+algebra, or metric just builds on top of that foundation.
+
+# Prototypical Spaces {#sec:proto-spaces}
+
+The more structure we endow onto a set the richer its properties will be.  That
+richness offers not only mathematical but also interpretational opportunities:
+indeed the spaces that are most common in practice are absolutely spoiled with
+structure.  In section we'll review the spaces that arise most often in
+mathematical modeling.
+
+## Power Set
+
+The subsets of any set naturally feature a surprising amount of structure that
+we can use to elevate the power set into a space.
+
+For example subsets can be partially ordered by inclusion.  A subset
+$\mathsf{x}_{1} \subset X$ is smaller than a subset $\mathsf{x}_{2} \subset X$
+if $\mathsf{x}_{1} \subset \mathsf{x}_{2}$, and larger if
+$\mathsf{x}_{2} \subset \mathsf{x}_{1}$.  Two subsets that only partially
+overlap fall into the same place in the ordering.  For any set the empty
+set will always the smallest subset and the full set will always the largest.
+
+The union and intersection operations introduce algebraic structure, known as a
+**Boolean algebraic structure**, to the power set.  They are both commutative,
+\begin{align*}
+\mathsf{x}_{1} \cup \mathsf{x}_{2} &= \mathsf{x}_{2} \cup \mathsf{x}
+\\
+\mathsf{x}_{1} \cap \mathsf{x}_{2} &= \mathsf{x}_{2} \cap \mathsf{x},
+\end{align*}
+and associative,
+\begin{align*}
+(\mathsf{x}_{1} \cup \mathsf{x}_{2}) \cup \mathsf{x}_{3}
+&=
+\mathsf{x}_{1} \cup (\mathsf{x}_{2} \cup \mathsf{x}_{3})
+\\
+(\mathsf{x}_{1} \cap \mathsf{x}_{2}) \cap \mathsf{x}_{3}
+&=
+\mathsf{x}_{1} \cap (\mathsf{x}_{2} \cap \mathsf{x}_{3}).
+\end{align*}
+
+Both operations are also unital but with different identity elements.  For
+example the identity element for the union operation is empty set,
+$$
+\mathsf{x} \cup \emptyset = \emptyset \cup \mathsf{x} = \mathsf{x},
+$$
+while the identity element for the intersection operation is the full set,
+$$
+\mathsf{x} \cap X = X \cap \mathsf{x} = \mathsf{x}.
+$$
+Interestingly no elements but these identity elements admit inverse elements;
+no union can reduce a non-empty input subset to the empty set and no
+intersection can elevate a non-full input subset to the full set.
+
+At the same time the union and intersection are null operators.  Because the
+union of any subset with the full set returns the full set,
+$$
+\mathsf{x} \cup X = X \cup \mathsf{x} = X,
+$$
+the full set is an absorbing element.  Similarly because the intersection of
+any subset with the empty set is the empty set,
+$$
+\mathsf{x} \cap \emptyset = \emptyset \cap \mathsf{x} = X,
+$$
+the empty set is an absorbing element.
+
+These operations are also compatible with each other -- not only do unions
+distribute across intersections,
+$$
+\mathsf{x}_{3} \cup ( \mathsf{x}_{1} \cap \mathsf{x}_{2} )
+=
+(\mathsf{x}_{3} \cup \mathsf{x}_{1}) \cap (\mathsf{x}_{3} \cup \mathsf{x}_{2}),
+$$
+but also intersections distribute across unions,
+$$
+\mathsf{x}_{3} \cap ( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
+=
+(\mathsf{x}_{3} \cap \mathsf{x}_{1}) \cup (\mathsf{x}_{3} \cap \mathsf{x}_{2}).
+$$
+
+We can equip a power set with metrics and topologies, but the power set itself
+does not motivate any particular choice of these structures on its own.  That
+said metrics and topologies endowed on the underlying set can be used to derive
+compatible metrics and topologies on the power set.
+
+## Integers
+
+The **integers**, denoted $\mathbb{Z}$, are the prototypical discrete space
+which makes them particularly useful for modeling discrete quantities and
+indexing sequences of objects.  That said despite their ubiquity we often take
+their defining structures for granted.
+
+Formally the integers are built from a countably infinite set of elements
+equipped with a strict ordering, algebra, metric, and topology.  The algebraic
+structure is given by the familiar arithmetic operations of addition and
+multiplication that are compatible with the ordering.  We can also define
+additive inverses, and hence subtraction, but we cannot define division because
+the multiplicative inverses don't exist unless we expand the space to include
+fractions.
+
+This algebraic structure can also be used to define a metric as
+$$
+d(x_{1}, x_{2})
+= \sqrt{ (x_{1} - x_{2}) \cdot (x_{1} - x_{2}) }
+= | x_{1} - x_{2} |.
+$$
+In this case the distance between every sequential pair of integers is the same,
+\begin{align*}
+d(x_{n + 1}, x_{n})
+&= | x_{n + 1} - x_{n} |
+\\
+&= | (x_{n} + 1) - x_{n} |
+\\
+&= | 1 |
+\\
+&= 1,
+\end{align*}
+endowing the space with a particular uniformity.
+
+Because this metric enforces a minimum distance between every pair of elements
+it is compatible with the discrete topology.  In particular the atomic sets in
+the discrete topology maintain a strong separation between even neighboring
+elements.
+
+This characterization of the integers is all well and good until we consider
+permuting the elements.  Sorting the elements differently changes the ordering
+and algebraic operations, and the modified algebraic structure can define a
+different metric structure.  In general only the discrete topology survives.
+
+Despite all of this chaos, however, the behavior of this new space still
+conforms with our intuitions about the integers.  In other words we've reached a
+bit of an existential ambiguity.  Every countably infinite set equipped with the
+discrete topology and _any_ choice of compatible strict ordering, arithmetic
+operations, and metric defines a space which exhibits all of the features we
+expect of the integers!
+
+This leaves us with two possible interpretations of the "integers".  On one hand
+we can interpret the integers not as a single space but rather a _class_ of
+spaces, with each choice of compatible non-topological structure defining a
+_distinct_ instance.  From this perspective we can't speak about _the_ integers
+so much as _which_ integers we use in any given application.
+
+Alternatively we can think of the integers as a single _flexible_ space with the
+different choices of non-topological structure defining different
+_configurations_.  In this case it does make sense to talk about _the_ integers,
+but at the same that doesn't specify a configuration and hence how the integers
+should be used in practice.
+
+Regardless of which interpretation we embrace, "the" integers admit a few
+particularly useful subspaces.  In particular we can construct the
+**natural numbers**,
+$$
+\mathbb{N} = \{ x \in \mathbb{Z} \mid x \ge 0 \},
+$$
+by removing the elements smaller than zero, and the
+**strictly positive natural numbers**
+$$
+\mathbb{N}^{+} = \{ x \in \mathbb{Z} \mid x > 0 \}
+$$
+by removing the zero element as well.  These subspaces inherit ordering, metric,
+and topological structure from the integers but the algebraic structure will
+is complicated a bit.  For example we can't consistently define subtraction on
+the natural numbers because the difference between two positive integers can be
+negative, which falls outside of $\mathbb{N}$.
+
+## Real Lines
+
+The prototypical model for a continuum that appears to contain endless points no
+matter how closely we examine it is the **real line**, $\mathbb{R}$, which is
+also known as the **real numbers** and a **one-dimensional Euclidean space**.
+This space sets the stage for important constructions like differential and
+integral calculus, but it also exhibits some subtle properties that can
+compromise our intuitions and require a bit of careful technical detail at times
+to avoid inconsistent behavior.
+
+Formally the real line is built from an uncountably infinite set of elements
+that, like the integers, is equipped with a strict ordering, algebra, metric,
+and topology.  The algebraic structure includes addition and multiplication
+operators which can also be be used to define corresponding subtraction and
+division operators.
+
+At the same time the binary multiplication operator also satisfies the criteria
+for a scalar multiplication operator, making the real line a vector space as
+well.  From a linear algebraic perspective we can interpret a real line not as a
+collection of points but rather a collection of arrows stretching from the zero
+to each point.
+
+As with the integers the algebraic structure on the real line can be used to
+construct a metric,
+$$
+d(x_{1}, x_{2}) = \sqrt{ (x_{1} - x_{2}) \cdot (x_{1} - x_{2}) },
+$$
+which then defines a compatible metric topology.
+
+Unfortunately this construction is not unique, and the real line suffers from
+the same interpretational ambiguity as the integers.  Every uncountably infinite
+set equipped with a certain non-discrete, Hausdorff topology and _any_ choice of
+compatible ordering, algebra, and metric defines a space that behaves
+like a real line.  Consequently we have to accept that $\mathbb{R}$ does not
+completely specify a space.
+
+On one hand we can take $\mathbb{R}$ to denote a class of real lines, with
+infinitely many distinct realizations defined by different choices of ordering,
+algebra, and metric.  On the other hand we can interpret $\mathbb{R}$ as a
+single, flexible space that can be configured in an infinite number of different
+ways by choosing different auxiliary structures.  In this latter perspective the
+different configurations are also known as different **parameterizations** of
+the real line.
+
+The power set of a real line contains a wealth of subsets that we can use to
+construct useful subspaces.  For example the integers are a subset of the real
+line, $\mathbb{Z} \subset \mathbb{R}$.  We can also define the
+**positive real line** as
+$$
+\mathbb{R}^{+} = \{ x \in \mathbb{R} \mid x \ge 0 \}.
+$$
+More generally we can define **intervals** that contain all points within an
+upper and lower bound.  **Open intervals** do not contain the bounds,
+$$
+(x_{1}, x_{2}) =
+\{ x \in \mathbb{R} \mid x_{1} < x < x_{2} \}
+$$
+while **closed intervals** do,
+$$
+[x_{1}, x_{2}] =
+\{ x \in \mathbb{R} \mid x_{1} \le x \le x_{2} \}.
+$$
+All of these subspaces inherit topological, ordering, and metric structure from
+the initial real line, but they may not inherit all of the algebraic structure.
+
+Regardless of the interpretation we can use the metric structure of a real line
+to construct a useful visualization of the space.  In particular any partition
+of the real line into equally long intervals,
+$$
+\ldots, x_{-i}, \ldots, x_{-1}, x_{0}, x_{1}, \ldots, x_{i}, \ldots
+$$
+with
+$$
+d(x_{i + 1}, x_{i}) = \delta,
+$$
+defines a **grid** that can be used to communicate its basic structure
+(@fig-real-line-grid).
+
+![A grid of equally distant elements in a real line partitions the space into
+equally long intervals that communicates the metric structure.](
+figures/real_line_grid/real_line_grid){width=50% #fig-real-line-grid}
+
+## Extended Real Lines
+
+One limitation of a real line is that it does not contains points that
+_approach_ either negative or positive infinity, but not points that represent
+those limits directly.  An **extended real line** resolves introduces two new
+elements, one smaller than all elements in the initial real line to represent
+negative infinity and one larger than all of the elements to represent positive
+infinity.  In other words we can interpret an extended real line as the closed
+interval $[-\infty, \infty]$ while a real line is the corresponding open
+interval $(-\infty, \infty)$.
+
+The inclusion of these two points does introduce some slight technical
+challenges.  For example the algebraic structure is complicated by the fact that
+neither $-\infty$ nor $+\infty$ have well-defined additive or multiplicative
+inverses, unlike most other points.  To avoid any inconsistencies we have to
+slightly tweak any structure derived from these operations, such as the metric
+and the corresponding metric topology.
+
+Appending positive infinite to a positive real line defines an
+**extended positive real line** $[0, +\infty]$.  We have already been sneakily
+introduced to the extended positive real line in
+[Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_spaces.html).
+There we used it to model the potentially infinite reservoir that we want to
+allocate across a finite set.  In the next chapter we will use it model a
+potentially infinite reservoir to be allocated across any set.
+
+# Relating Spaces
+
+One we have defined spaces a natural question is how we can relate different
+spaces to each other.  This requires relating not only the elements in the set
+but also any structure we have endowed onto that set.
+
+## Relating Sets
+
+A **function**, also know as a **map** or **transformation**, is a relation
+between the elements of some _input_ set and the elements of some _output_ set
+(@fig-function).  Mathematically we specify functions as $f : X \rightarrow Y$
+where $X$ denotes the input set and $Y$ denotes the output set.  If we want to
+be more detailed then we can also write
+\begin{alignat*}{6}
+f :\; & X & &\rightarrow& \; & Y &
+\\
+& x & &\mapsto& & y = f(x) &,
+\end{alignat*}
+where $x \in X$ is a variable taking values in the input set and $y \in Y$ is a
+variable taking values in the output set.  This allows us to, for example,
+detail how exactly the function transforms $x$ into $y$.
+
+![A function relates elements of an input set $X$ to elements of an output set
+$Y$.](figures/maps/function/function){width=90% #fig-function}
+
+One potential source of confusion when working with functions is mistaking a
+function $f : X \rightarrow Y$ with the _evaluation_ of a function on a given
+input variable, $y = f(\tilde{x}) \in Y$.
+
+### Classifying Functions
+
+There are many ways to relate the elements from a given input set to the
+elements of a given output set.  Some relations, however, are more useful than
+others.  In order to understand the potential utility of different functions it
+helps to categorize them based on some basic properties.
+
+For example if each input element maps to one, and only one, output element then
+equal function outputs will always imply equal function inputs and vice versa.
+More formally when $f(x_1) = f(x_2)$ if and only if $x_1 = x_2$ we say that the
+function $f$ is **injective** (@fig-injectivity).  Non-injective functions are
+also known as **many-to-one** functions.
+
+::: {#fig-injectivity layout="[ [-5, 90, -5], [-5, 90, -5] ]"}
+![](figures/maps/injective/injective){#fig-injective}
+
+![](figures/maps/non_injective/non_injective){#fig-non-injective}
+
+An (a) injective function maps each distinct input element to a distinct output
+element. A (b) non-injective function maps two or more input elements to the
+same output element.
+:::
+
+Similarly if each element of $Y$ is the output of evaluating $f$ on some input
+element in $X$ then the function is said to be **surjective**
+(@fig-surjectivity).
+
+::: {#fig-surjectivity layout="[ [-5, 90, -5], [-5, 90, -5] ]"}
+![](figures/maps/surjective/surjective){#fig-surjective}
+
+![](figures/maps/non_surjective/non_surjective){#fig-non-surjective}
+
+A (a) surjective function maps input elements to _every_ element in the output
+set. A (b) non-surjective function maps input elements to only a subset of
+the output set.
+:::
+
+When a function is both injective and surjective then _every_ output element is
+uniquely paired with a single input element.  In other words the input set and
+the output set are in perfect correspondence.  These functions are known as
+**bijective** functions.
+
+To demonstrate these behaviors let's consider four different functions that
+map the elements in a real interval $X = [0, 1]$ into the elements of another
+real interval $Y = [0, 1]$.
+
+::: {#fig-function-examples layout="[ [-5, 45, 45, -5], [-5, 45, 45, -5] ]"}
+![](figures/maps/graphs/f1/f1){#fig-f1}
+
+![](figures/maps/graphs/f2/f2){#fig-f2}
+
+![](figures/maps/graphs/f3/f3){#fig-f3}
+
+![](figures/maps/graphs/f4/f4){#fig-f4}
+
+Injective functions map distinct input elements to distinct output elements
+while surjective functions map into every output element at least once.  Here
+(a) is neither injective nor surjective, (b) is injective but not surjective,
+(c) is not injective but is surjective, and (d) is both injective and
+surjective.
+:::
+
+The function (@fig-f1)
+\begin{alignat*}{6}
+f_1 :\; & [0, 1] & &\rightarrow& \; & [0, 1] &
+\\
+& x & &\mapsto& & \frac{1}{1 + 4 \cdot x \cdot (1 - x)} &
+\end{alignat*}
+is not injective because both $x$ and $1 - x$ map to the same output element.
+Moreover it is not surjective because no input element will ever yield an output
+less than $y = \frac{1}{2}$.
+
+Like $f_1$ the function (@fig-f2)
+\begin{alignat*}{6}
+f_2 :\; & [0, 1] & &\rightarrow& \; & [0, 1] &
+\\
+& x & &\mapsto& & \frac{1}{1 + x} &
+\end{alignat*}
+outputs only values larger than or equal to $y = \frac{1}{2}$ and hence is not
+surjective.  On the other hand each distinct input element maps to a distinct
+output element so unlike the function $f_1$ the function $f_2$ is injective.
+
+This function (@fig-f3)
+\begin{alignat*}{6}
+f_3 :\; & [0, 1] & &\rightarrow& \; & [0, 1] &
+\\
+& x & &\mapsto& & x \cdot (1 - x) &
+\end{alignat*}
+shares the same symmetry as $f_1$ -- because both $x$ and $1 - x$ map to the
+same output element neither function is injective.  Unlike $f_1$ the output
+elements of $f_3$ completely fill up the output set, making $f_3$ a surjective
+function.
+
+Finally the function (@fig-f4)
+\begin{alignat*}{6}
+f_4 :\; & [0, 1] & &\rightarrow& \; & [0, 1] &
+\\
+& x & &\mapsto& & x \cdot x &
+\end{alignat*}
+is both injective _and_ surjective, and hence bijective.
+
+Functions that map the input set into itself, $f : X \rightarrow X$, are known
+as **automorphisms**.  In other words a bijective automorphism doesn't change
+$X$ but may permute the elements around.  This permutation can in turn warp any
+structure endowed on $X$.
+
+The **identity function** is the unique bijective automorphism that maps every
+element $x \in X$ back to itself,
+\begin{alignat*}{6}
+\text{Id} :\; & X & &\rightarrow& \; & X &
+\\
+& x & &\mapsto& & x &,
+\end{alignat*}
+leaving the set completely unchanged. When working with algebraic spaces we have
+to be careful to distinguish between the identity _function_ that maps an input
+set into itself and the identity _element_ of that set.
+
+### Function Inverses
+
+Bijective functions are particularly special because we can always undo their
+action and recover the input set.  Formally if $f : X \rightarrow Y$ is a
+bijection then we can define an **inverse function** $f^{-1} : Y \rightarrow X$
+such that
+$$
+f^{-1}(f(x)) = x
+$$
+for all $x \in X$.  In other words no information is lost when we map from $X$
+to $Y$ allowing us to completely recover $X$ again if needed
+(@fig-function-inverse).
+
+![A bijective function $f$ identifies every output element with one and only
+input element.  Consequently we can construct an inverse function that takes
+each output element back to the corresponding input element.](
+figures/maps/inverse/inverse){width=90% #fig-function-inverse}
+
+As with the term "identity" we have to be careful when using the term "inverse"
+in the context of algebraic spaces.  In particular we have to take care to
+distinguish between inverse _functions_ between two sets and inverse _elements_
+in either of those two sets.
+
+Without bijectivity we cannot define inverse functions that map distinct output
+elements to distinct input elements.  If a function is not surjective then some
+output elements might not be related to _any_ input elements.  On the other hand
+if a function is not injective then some output elements may be related to
+_multiple_ input elements.
+
+Even if a function is not bijective, however, we can still define a generalized
+notion of inversion.  Although we cannot generally relate elements $y \in Y$ to
+unique elements of $X$ we can relate them to _subsets_ of $X$ that contain all
+of the elements that map into $y$,
+\begin{alignat*}{6}
+f^{-1} :\; & Y & &\rightarrow& \; & 2^X &
+\\
+& y & &\mapsto& & f^{-1}(y) &.
+\end{alignat*}
+The subset $f^{-1}(y) \subset X$ corresponding to a particular output element
+$y \in Y$ is referred to as a _preimage_ or _fiber_ of $y$ (@fig-fibers).
+Intuitively we can reconstruct the entire input set by "weaving" these fibers
+together,
+$$
+X = \cup_{y \in Y} f^{-1}(y).
+$$
+
+![Even if a function is not bijective we can define a generalized inverse that
+maps each output element $y \in Y$ to a fiber of input elements
+$f^{-1}(y) \subset X$ that all map into $y$.  In general these fibers can be
+empty, consist of a single input element, or consist of multiple input
+elements.](
+figures/maps/fibers/fibers){width=90% #fig-fibers}
+
+When $f$ is not surjective then some fibers may be empty, but if $f$ is
+surjective then all fibers will be non-empty.  At the same time if a function is
+not injective then fibers will generally contain multiple elements, but if it is
+injective then all of the fibers will contain either one element or no elements.
+The fibers of bijective functions contain one and only one element: the result
+of evaluating the inverse function.
+
+### Function Composition
+
+When defining a function inverse we had to take the output of a function
+$y = f(x)$ and used it as input to a second function,
+$f^{-1}(y) = f^{-1}(f(x))$.  This chaining of functions with compatible input
+and output sets together can be applied much more generally and is known as
+**function composition** or just **composition** for short.
+
+More formally given the functions $f : X \rightarrow Y$ and
+$g : Y \rightarrow Z$ we can construct the composition of $f$ with $g$ as the
+function
+\begin{alignat*}{6}
+g \circ f :\; & X & &\rightarrow& \; & Z &
+\\
+& x & &\mapsto& & z = g(f(x)) &.
+\end{alignat*}
+
+![The functions $f : X \rightarrow Y$ and $g : Y \rightarrow Z$ can be chained
+together to map an input element $x \in X$ to an output element $z \in Z$.  This
+combined mapping defines the composite function $g \circ f$.](
+figures/maps/composition/composition){width=90% #fig-composition}
+
+Using this notation we can define an inverse function a bit more compactly as
+$$
+\text{Id} = f^{-1} \circ f.
+$$
+In words the composition of a bijective function with its inverse function is
+the identify function.
+
+## Relating Structures
+
+Functions define how the elements of an input set transform into the elements
+of an output set.  If we want to relate entire _spaces_, however, then we also
+need to specify how the additional structures that define those spaces
+transform along with the underlying elements.
+
+To be more precise let $\mathfrak{x}$ denote whatever structure we endow on the
+set $X$ so that our input space is fully described as $(X, \mathfrak{x})$.  In
+order to fully define an output space we need to map input elements in $X$ to
+output elements in $Y$ _and_ equip that output space with some structure
+$\mathfrak{y}$.  We can choose that structure ourselves, or we can try to
+derive it from the input structure $\mathfrak{x}$.
+
+Fortunately maps between sets often _induce_ natural maps between structures,
+allowing us to fully transform spaces without having to make additional
+assumptions about how structures transform.  Unfortunately these induced maps
+don't always give the structure we might expect.
+
+### Pushforward and Pullback Relations
+
+Consider a function $f : X \rightarrow Y$ that maps input elements into output
+elements and a subset of the input space $\mathsf{x} \subset X$.  Applying $f$
+to each element of $\mathsf{x}$ defines a subset of the output space
+$\mathsf{y} \subset Y$,
+$$
+\mathsf{y} = \{ y \in Y \mid y = f(x) \text{ for some } x \in \mathsf{x} \}
+$$
+In other words the element-wise evaluation of $f$ implicitly defines a map from
+input subsets to output subsets (@fig-set-pushforward)
+\begin{alignat*}{6}
+f_{*} :\; & 2^X & &\rightarrow& \; & 2^Y &
+\\
+& \mathsf{x} & &\mapsto& & \mathsf{y} = f_{*}(\mathsf{x}) &.
+\end{alignat*}
+
+If $f$ is not bijective then we cannot map output elements to unique input
+elements.  We can, however, always map every output element to a, possibly
+empty, collection of input elements $f^{-1}(y) \subset X$.  The union of the
+fibers from all elements in an output subset $\mathsf{y} \subset Y$ defines
+a subset of all of the input elements that map into $\mathsf{y}$,
+$$
+\mathsf{x} = \cup_{y \in \mathsf{y}} f^{-1}(y) \subset X,
+$$
+or equivalently
+$$
+\mathsf{x} = \{ x \in X \mid f(x) \in \mathsf{y} \}.
+$$
+Weaving together these fibers implicitly defines a map from output subsets to
+input subsets (@fig-set-pullback)
+\begin{alignat*}{6}
+f^{*} :\; & 2^Y & &\rightarrow& \; & 2^X &
+\\
+& \mathsf{y} & &\mapsto& & \mathsf{x} = f^{*}(\mathsf{y}) &.
+\end{alignat*}
+
+::: {#fig-set-maps layout="[ [-5, 90, -5], [-5, 90, -5] ]"}
+![](figures/maps/set_pushforward/set_pushforward){#fig-set-pushforward}
+
+![](figures/maps/set_pullback/set_pullback){#fig-set-pullback}
+
+The action of a function $f$ on individual elements induces an action on entire
+subsets. In particular we can construct (a) a map from input subsets to output
+subsets and (b) a map from output subsets to input subsets.
+:::
+
+Conveniently this pattern is not exceptional.  Sufficiently well-behaved
+functions that map an input set into an output set often induce mappings from
+objects defined over that input set to objects defined over that output set or
+vice versa.  This includes not only subsets but also all of the structures that
+elevate a set into a space that we introduced in [Section 1.2](@sec:structures).
+
+To be a bit more formal let $X$ be the set defining an input space and
+$\mathfrak{x}$ the particular structure, or structures, that elevates that set
+to a space so that we can completely specify our space as $(X, \mathfrak{x})$.
+Moreover denote the set of all structures that we can endow onto the input space
+$X$ as $\mathfrak{X}$ and the set of all structures that we can endow onto the
+output space $Y$ as $\mathfrak{Y}$.
+
+The subset map $f_{*} : 2^X \rightarrow 2^Y$ that we constructed above
+_pushes_ inputs subsets _forward_ along the action of the function $f$.
+Analogously any relation between input structures and output structures induced
+by $f : X \rightarrow Y$ that pushes forward input structures into compatible
+output structures,
+\begin{alignat*}{6}
+f_{*} :\; & \mathfrak{X} & &\rightarrow& \; & \mathfrak{Y} &
+\\
+& \mathfrak{x} & &\mapsto& & \mathfrak{y} &,
+\end{alignat*}
+is denoted a **pushforward function along $f$**.  When the underlying function
+$f$ is unambiguous then we also sometimes refer to $f_{*}$ as a
+**pushforward function**.
+
+As with functions that act on sets we have to be careful to distinguish between
+pushforward _functions_ $f_{*} : \mathfrak{X} \rightarrow \mathfrak{Y}$ and the
+particular pushforward _structure_ defined by evaluating the pushforward
+function on a given input structure, $f_{*}(\mathfrak{x})$.  In other words if
+there might be any ambiguity then we have to be careful to use "pushforward" as
+an adjective, explicitly modifying "function" or "structure", and not an
+ambiguous noun.
+
+Similarly the subset map $f^{*} : 2^Y \rightarrow 2^X$ that we constructed above
+_pulls_ output subsets _back_ against the action of the function $f$.  More
+generally any relation between output structures and input structures induced by
+$f : X \rightarrow Y$ that pulls output structures back into compatible input
+structures,
+\begin{alignat*}{6}
+f^{*} :\; & \mathfrak{Y} & &\rightarrow& \; & \mathfrak{X} &
+\\
+& \mathfrak{y} & &\mapsto& & \mathfrak{x} &,
+\end{alignat*}
+is denoted a **pullback function against $f$**.  When the underlying function
+$f$ is unambiguous then we also sometimes refer to $f^{*}$ as a
+**pullback function**.
+
+The existence of pushforward and pullback functions depends on how the defining
+function $f : X \rightarrow Y$ interacts with the relevant structure.  In
+general the nicer the function $f$ the more structure transforming functions it
+induces.
+
+#### Relating Orderings
+
+Consider, for example, orderings.  When $f$ is an injective function every input
+element $x$ corresponds to one and only one output element, $y = f(x)$.
+Consequently any comparison between output elements can be translated to the
+corresponding input elements.  If the output space $Y$ is equipped with an
+ordering $<$ then we can define a compatible ordering on $X$ as
+$$
+x_{1} \;\; f^{*}\!\!< \; x_{2}
+$$
+if and only if
+$$
+f(x_{1}) < f(x_{2}).
+$$
+In other words every injective function allows us to pullback orderings on the
+output set $<_{Y}$ to orderings on the input set $<_{X} = f^{*}\!\!<_{Y}$.
+
+Unless $f$ is also surjective, and hence bijective, we cannot pushforward
+orderings on the input space to orderings on the output space.  The problem is
+that if any pair of output elements are associated with multiple input elements,
+\begin{align*}
+y_{1} &= f(x_1) = f(x_1')
+\\
+y_{2} &= f(x_2) = f(x_2'),
+\end{align*}
+then we can have conflicting input orderings,
+\begin{align*}
+x_1 &< x_2
+\\
+x_2' &< x_1',
+\end{align*}
+that cannot be combined into a consistent output ordering.
+
+Ultimately injective functions define ordering pullbacks but only bijective
+functions define ordering pushfowards and ordering pullbacks.
+
+#### Relating Algebras
+
+Algebraic structure is a bit more difficult to translate.  Consider, for
+example, a binary algebraic operation that takes two elements from a set and
+returns a single element.  In order to pushforward an operation on the input
+space $\cdot$ we would need to map output elements to input elements,
+apply the operation, and then map the result back to the output space,
+$$
+y_1 \; (f_{*} \cdot) \; y_2 \equiv f \left( f^{-1}(y_1) \cdot f^{-1}(y_2) \right).
+$$
+If $f$ is not bijective, however, then the inverses will be ill-defined.
+
+Similarly in order to pullback an operation on the output space $\cdot$ we
+would need to map input elements to output elements, apply the operation, and
+then map the result back to the input space,
+$$
+x_1 \; (f^{*} \cdot) \; x_2 \equiv f^{-1} \left( f(x_1) \cdot f(y_2) \right).
+$$
+An injective function is sufficient for the first two steps to be well-defined,
+but we still need $f$ to be bijective in order for the last step to also be
+well-defined.
+
+In other words we can pushforward and pullback binary algebraic operations only
+when $f$ is a bijection.
+
+#### Relating Metrics
+
+Metrics are a bit more forgiving.  Applying $f : X \rightarrow Y$ to two input
+elements defines two output elements that we can plug into a metric defined over
+the output set,
+$$
+(f^{*} d)(x_1, x_2) \equiv d(f(x_1), f(x_2)).
+$$
+This composition, however, does not always define a proper metric over the input
+set!  In particular if $f$ is not injective then $d(f(x_1), f(x_2))$ can
+vanish even if $x_1 \ne x_2$.  Fortunately if $f$ is injective then
+$(f^{*} d)(x_1, x_2)$ will satisfy all of the properties of a metric on the
+input set in which case we denote it the **pullback metric**.
+
+#### Relating Topologies
+
+Finally let's consider how we might translate topologies across a function.
+Using the map from input subsets to output subsets that we constructed above
+we can map the collection of subsets that define a topology on the input set,
+$$
+\mathfrak{t} = \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots \},
+$$
+into a collection of subsets in the output set,
+$$
+\{ f^{*}(\mathsf{x}_{1}), \ldots, f^{*}(\mathsf{x}_{i}), \ldots \}.
+$$
+This output collection, however, will not always satisfy the properties of a
+topology.  For example if $f$ it not surjective then the output collection will
+not contain the full set as needed.  Even if $f$ is surjective the pushforward
+sets are not guaranteed to be closed under unions and intersections and hence
+will not, in general, define a topology.
+
+Fortunately pullbacks sets are a bit more well-behaved.  Pulling back the
+subsets that define a topology on the output set,
+$$
+\mathfrak{t} = \{ \mathsf{y}_{1}, \ldots, \mathsf{y}_{i}, \ldots \},
+$$
+gives a collection of subsets on the input set,
+$$
+\{ f_{*}(\mathsf{y}_{1}), \ldots, f_{*}(\mathsf{y}_{i}), \ldots \}.
+$$
+When $f$ is surjective then this collection will include both
+$f^{*}(\emptyset) = \emptyset$ and $f^{*}(Y) = X$.  Moreover these pullback
+subsets are always closed under countable unions and finite intersections so
+long as the input subsets are.  In other words if $f$ is surjective then
+$$
+f^{*} \mathfrak{t} \equiv
+\{ f_{*}(\mathsf{y}_{1}), \ldots, f_{*}(\mathsf{y}_{i}), \ldots \}
+$$
+defines a **pullback topology** on $X$.
+
+### Bijective Pushforwards and Pullbacks Relations
+
+The asymmetry between the availability of pushforward and pullback actions for
+different structures can be frustrating in practice, especially when an
+application supplies structure on the wrong set.  Fortunately this asymmetry
+washes away when we consider bijective functions and their inverses.
+
+Consider for example some structure that only pulls back against a function,
+$$
+f^{*} : \mathfrak{Y} \rightarrow \mathfrak{X}.
+$$
+If $f$ is bijective then we can pullback that structure against the inverse
+function,
+$$
+(f^{-1})^{*} : \mathfrak{X} \rightarrow \mathfrak{Y},
+$$
+which implicitly pushes forward structure defined on $X$ to structure defined on
+$Y$.
+
+Similarly if we have some structure that only pushes forward along a function,
+$$
+f_{*} : \mathfrak{X} \rightarrow \mathfrak{Y},
+$$
+then we can use the pushforward along the inverse function
+$$
+(f^{-1})_{*} : \mathfrak{Y} \rightarrow \mathfrak{X},
+$$
+to pullback structure defined on $Y$ to structure defined on $X$.
+
+Importantly these induces transformations are also inverses,
+\begin{align*}
+f^{*} \circ (f^{-1})^{*} &= \mathrm{Id}_{\mathfrak{X}}
+\\
+(f^{-1})^{*} \circ f^{*} &= \mathrm{Id}_{\mathfrak{Y}}
+\\
+(f^{-1})_{*} \circ f_{*} &= \mathrm{Id}_{\mathfrak{X}}
+\\
+f_{*} \circ (f^{-1})_{*} &= \mathrm{Id}_{\mathfrak{Y}}.
+\end{align*}
+In other words bijective functions allow us to move back and forth between the
+input space and the output space without losing information about the individual
+element or any structure endowed to those elements.
+
+### Structure-Preserving Relations
+
+Pushforward and pullback functions allow us to _lift_ a transformation between
+sets into a transformation between spaces.  For structure that can be pushed
+forward along the function $f : X \rightarrow Y$ any input space
+$(X, \mathfrak{x})$ automatically defines a compatible output space
+$(Y, f_{*}(\mathfrak{x}))$.  Similarly for structure that can be pulled back
+against $f$ any output space $(Y, \mathfrak{y})$ automatically defines a
+compatible input space $(X, f^{*}(\mathfrak{y}))$.
+
+Many applications, however, don't just define only an input space
+$(X, \mathfrak{x})$ or only an output space $(Y, \mathfrak{y})$ but rather
+_both_.  In this case pushforward structure may not be compatible with the
+structure that has already been endowed on the output space,
+$$
+f_{*}(\mathfrak{x}) \ne \mathfrak{y},
+$$
+and pullback structure may not be compatible with the structure that has already
+been endowed on the input space,
+$$
+f^{*}(\mathfrak{y}) \ne \mathfrak{x}.
+$$
+The exceptional functions that yield compatible pushforward and/or pullback
+structure are known as **structure-preserving transformations**.
+Structure-preserving bijections in particular are also known as **isomorphisms**.
+
+#### Ordering-Preserving Relations
+
+For example consider an ordered input space $(X, <_{X})$ and an ordered output
+space $(Y, <_{Y})$.  For any function $f: X \rightarrow Y$ the pullback ordering
+$f^{*} \!\! <_{Y}$ is defined by
+$$
+x_{1} \;\; f^{*}\!\!<_{Y} \; x_{2}
+$$
+if and only if
+$$
+f(x_{1}) <_{Y} f(x_{2}).
+$$
+There's no guarantee, however, that this will be consistent with the
+pre-specified ordering $<_{X}$.  Instead we will have $f_{*} <_{Y} = <_{X}$ only
+for the exceptional functions satisfying
+$$
+f(x_{1}) <_{Y} f(x_{2})
+$$
+if and only if
+$$
+x_{1} <_{X} x_{2}.
+$$
+These functions are known as **monotonically increasing functions**.  Functions
+that respect given input and output partial orderings are known as
+**monotonically non-decreasing functions**.
+
+To demonstrate consider the functions
+\begin{alignat*}{6}
+f_1 :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
+\\
+& x & &\mapsto& & x \cdot x \cdot x &
+\end{alignat*}
+and
+\begin{alignat*}{6}
+f_2 :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
+\\
+& x & &\mapsto& & - x \cdot x \cdot x &
+\end{alignat*}
+that map between two distinct real lines with distinct orderings.  When
+$x_{1} <_{X} x_{2}$ we have $f_1(x_{1}) <_{Y} f_1(x_{2})$ but
+$f_2(x_{2}) <_{Y} f_2(x_{1})$ making the former monotonically increasing but the
+latter not (@fig-monoticity).
+
+::: {#fig-monoticity layout="[ [-5, 45, 45, -5] ]"}
+![](figures/maps/monotonic/monotonic){#fig-monotonic}
+
+![](figures/maps/non_monotonic/non_monotonic){#fig-non-monotonic}
+
+Monotonically increasing functions preserve orderings so that larger inputs
+always imply larger outputs. The function (a) $f_{1} : x \mapsto x^{3}$ is
+monotonic but the function (b) $f_{1} : x \mapsto -x^{3}$ is not.
+:::
+
+#### Algebra-Preserving Relations
+
+A bijective function that preserves algebraic structure is known as a
+**homomorphism**.  Given two algebraic spaces equipped with binary algebraic
+operations, $(X, \cdot_{X})$ and $(Y, \cdot_{Y})$, a function
+$f : X \rightarrow Y$ is homomorphic if and only if
+$$
+f(x_{1} \cdot_{X} x_{2}) = f(x_{1}) \cdot_{Y} f(x_{2}).
+$$
+
+Consider for example the cubic function that maps a real line into another real
+line,
+\begin{alignat*}{6}
+f :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
+\\
+& x & &\mapsto& & x \cdot x \cdot x &.
+\end{alignat*}
+Because
+$$
+(x_1 + x_2)^3 \ne x_1^3 + x_2^3
+$$,
+where the $+$ on the left denotes addition on the input space and the $+$ on the
+right denotes addition on the output space, $f$ is not a homomorphism for the
+addition operation.  On the other hand because
+$$
+(x_1 \cdot x_2)^3 = x_1^3 \cdot x_2^3,
+$$
+where again $\cdot$ on the left and right actually denotes two distinct
+multiplication operations, the function $f$ _is_ a homomorphism between for the
+multiplication operation.
+
+#### Metric-Preserving Relations
+
+Injective transformations that preserve metric structure, and hence distances
+between input and output elements
+$$
+d_X(x_1, x_2) = d_Y(f(x_1), f(x_2)),
+$$
+are known as **isometries**.  Non-isometric functions appear to _warp_ distances
+relative to metric defined on the output space, and hence any grid that we might
+use to visualize the input space.
+
+For example the linear function
+\begin{alignat*}{6}
+f_1 :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
+\\
+& x & &\mapsto& & x - \frac{1}{4} &
+\end{alignat*}
+is an isometry for the natural metric over the real line,
+\begin{align*}
+d_{Y}(f(x_1), f(x_2))
+&=
+\sqrt{ \big( f(x_{1}) - f(x_{2}) \big) \cdot \big( f(x_{1}) - f(x_{2}) \big) }
+\\
+&=
+\sqrt{       \big( \big( x_{1} - \frac{1}{4} \big) - \big( x_{2} - \frac{1}{4} \big) \big)
+       \cdot \big( \big( x_{1} - \frac{1}{4} \big) - \big( x_{2} - \frac{1}{4} \big) \big) }
+\\
+&=
+\sqrt{ \big( x_{1} - x_{2} \big) \cdot \big( x_{1} - x_{2} \big) }
+\\
+&=
+d_{X}(x_1, x_2).
+\end{align*}
+One consequence of this isometry is that any grid of equally distant input
+elements will map into a grid of equally distant output elements
+(@fig-isometric).
+
+On the other hand the bijective cubic function
+\begin{alignat*}{6}
+f_2 :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
+\\
+& x & &\mapsto& & x \cdot x \cdot x &
+\end{alignat*}
+is not an isometry.  Instead the pushforward of the input metric defines
+different distances than the output metric, resulting in a warped grids
+(@fig-non-isometric).
+
+::: {#fig-isometry layout="[ [-5, 45, 45, -5] ]"}
+![](figures/maps/isometric_pushforward/isometric_pushforward){#fig-isometric}
+
+![](figures/maps/metric_pushforward/metric_pushforward){#fig-non-isometric}
+
+Isometries preserve the metric structure of the input and output spaces,
+ensuring that equally spaced input elements map into equally spaced output
+elements.  When the input and output space are real lines (a) linear functions
+define isometries and where as (b) nonlinear functions warp the input metric
+relative to the output metric.
+:::
+
+#### Topology-Preserving Relations
+
+Bijections that respect any topological structure endowed to the input and
+output sets are denoted **homeomorphisms** which, unfortunately, we have to
+avoid confusing with algebra-preserving _homomorphisms_.  Etymologically
+"homomorphism" is derived from the Greek for "same shape" while "homeomorphism"
+is derived from the Greek for "similar shape" which have almost equivalent
+meanings.  Contemporary mathematics, however, has adopted a convention where
+the two terms are used exclusively to refer to algebraic and topological
+structure, respectively.
+
+More formally a bijective function is a homeomorphism if every subset in the
+input topology pushes forward to a subset in the output topology and vice versa.
+In other words neighborhoods are preserved and input elements near each other
+are mapped into output elements that are also near each other, preserving the
+continuity of the space.  Because of this homeomorphisms are also known as
+invertible **continuous** functions.
+
+In [Section 1.2.4.3](@sec:general-topology) we saw that lines and circles can be
+constructed from a common set equipped with different topologies.  We can
+construct bijections between the underlying set elements but any homeomorphism
+will preserve the shape induced by the initial topology, mapping lines into
+lines or circles into circles.  Only non-homeomorphic bijections are capable of
+transforming the defining topologies, and hence a line into a circle or vice
+versa (@fig-non-homeomorphism).
+
+![A line and a circle can be build from a common set but require distinct
+topologies to give them their characteristic shapes.  Because homeomorphisms
+cannot modify these topologies they can map only lines into lines and circles
+into circles but not lines into circles.  Any bijection from the elements that
+comprise a line and the elements that comprise a circle cannot be homeomorphic.](
+figures/maps/non_homeomorphism/non_homeomorphism){width=60% #fig-non-homeomorphism}
+
+### Reparameterizations
+
+The ambiguity in how we can interpret the integers and the real line as spaces
+that we encountered in [Section 2](#sec:proto-spaces) also implies an ambiguity
+in how we interpret transformation between them.
+
+Considering for example if we take the perspective where there is not a single
+real line but rather a collection of distinct real lines, each with their own
+defining ordering, algebra, and metric.  In general a homeomorphism transforms
+one of these real lines into another, and only the exceptional
+monotonically-increasing, homomorphic, and isometric homeomorphisms will map one
+of these real lines into itself.
+
+Conversely we can treat the real line as a flexible space defined by a fixed
+set and topology, with the different orderings, algebras, and metrics defining
+different configurations of the real line.  From this perspective homeomorphisms
+maintain the defining structure but generally transform the auxiliary structures.
+This maps one configuration into another, effectively _reconfiguring_ the
+flexible real line.  Because configurations are also known as parameterizations
+the homeomorphic transformations are also known as **reparameterizations**.
+
+While this interpretational ambiguity is often taken for granted it does
+manifest in a variety of different applications.  For example in physics we can
+interpret transformations of a physical system as _active_ or _passive_.  An
+active transformation is interpreted as changing the physical system while a
+passive transformation is interpreted as changing how we represent a fixed
+physical system.  Both interpretations yield equivalent results, but one can be
+more natural in some contexts than others.
+
+A variable taking values on the real line can be used to quantify some property
+of some physical system.  Transforming from one real line to another can be
+interpreted as changing the actual quantification or equivalently as a change of
+_units_ for a fixed quantification.
+
+At the same time we find can find similar ambiguities in language.  We might
+interpret text written in a particular language as fundamental in which case
+_translations_ from one language to another map one text to another.  That said
+we might also interpret these texts as _representations_ of some universal
+statement in which case translations don't change the statement but do change
+the representation.
+
+Similarly we might have the freedom to interpret computer programs written in
+different programming languages as either distinct programs or different
+implementations of some fixed program with universal inputs and outputs.  In
+the former interpretation _transpilers_ map from one program to another but in
+the latter they map from one implementation to another.
+
+Again these interpretations are equivalent, and we are free to adopt the one
+that is most useful in any given application.  In this book I will embrace the
+perspective where the real line is defined as a flexible space, with different
+choices of ordering, algebraic, and metric structure defining different
+parameterizations of that space.  This will have some subtle consequences going
+forwards, but I will address those consequences as they arise.
+
+# Conclusion
+
+Spaces are one of those ubiquitous mathematical concepts that are often taken for
+granted.  While this can be adequate for more heuristic mathematical modeling
+tasks it does leave us open to some existential crises if we look a little bit
+too closely and start asking, for example, what exactly a reparameterization is.
+
+In this chapter we've surveyed the formal construction of spaces, from an
+underlying set to the many structures that endow that set with useful
+properties, and their transformations.  Along the way we took a careful look at
+familiar concepts like variables while also digging into some more complicated
+concepts like topology with an emphasis on appreciating how they can be useful
+beyond just theoretical mathematics.  This understanding will provide a strong
+foundation on which we introduce probability theory in its full generality, and
+hence full power.
+
+There are a wealth of resources for those interested in exploring these topics
+more deeply, although finding the right resource is often a challenge.  Many of
+the more accessible resources are prone to oversimplification which can make it
+difficult to iterate to more technical resources.  At the same time the more
+technical resources often jump directly into detail with little to no context
+for why the details might be relevant.
+
+Personally I have found John Lee's introductory writing to be a reasonable
+middle ground, especially the appendices and first few chapters of @Lee:2011 as
+well as the appendices to @Lee:2013.  Similarly I find that @Curtis:1993
+provides an accessible introduction to the more technical aspects of linear
+algebra.  An additional benefit of these resources is that they can help
+acclimate one to the writing style particular to theoretical mathematics which
+can make other resources a bit more accessible.
+
+At the same time the articles on
+[Wikipedia](https://en.wikipedia.org/wiki/Mathematics) are continuously
+improving.  I find these articles to be a particularly useful reference for
+delving into technical details on precise topics.
+
+# Acknowledgements {-}
+
+I thank Simon Duane, Jerzy Baranowski, Ron Garcia, and Stone Chen for helpful
+comments and discussion.
+
+A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
+Adriano Yoshino, Alan Chang, Alessandro Varacca, Alexander Bartik,
+Alexander Noll, Alexander Petrov, Alexander Rosteck, Anders Valind,
+Andrea Serafino, Andrew Mascioli, Andrew Rouillard, Andrew Vigotsky,
+Angie_Hyunji Moon, Ara Winter, Austin Rochford, Austin Rochford, Avraham Adler,
+Ben Matthews, Ben Swallow, Benjamin Glemain, Bradley Kolb,
+Brynjolfur Gauti Jónsson, Cameron Smith, Canaan Breiss, Cat Shark,
+Charles Naylor, Chase Dwelle, Chris Zawora, Christopher Mehrvarzi,
+Chuck Carlson, Colin Carroll, Colin McAuliffe, Cruz, Damien Mannion,
+Damon Bayer, dan mackinlay, Dan Muck, Dan W Joyce, Dan Waxman, Dan Weitzenfeld,
+Daniel Edward Marthaler, Daniel Rowe, Darshan Pandit, Darthmaluus ,
+David Burdelski, David Galley, David Humeau, David Wurtz, dilsher singh dhillon,
+Doug Rivers, Dr. Jobo, Dr. Omri Har Shemesh, Ed Cashin, Ed Henry, Edgar Merkle,
+edith darin, Eric LaMotte, Erik Banek, Ero Carrera, Eugene O'Friel,
+Felipe González, Fergus Chadwick, Finn Lindgren, Florian Wellmann,
+Francesco Corona, Geoff Rollins, Greg Sutcliffe, Guido Biele, Hamed Bastan-Hagh,
+Haonan Zhu, Hector Munoz, Henri Wallen, hs, Hugo Botha, Håkan Johansson,
+Ian Costley, Ian Koller, idontgetoutmuch, Ignacio Vera, Ilaria Prosdocimi,
+Isaac Vock, J, J Michael Burgess, Jair Andrade, James Hodgson, James McInerney,
+James Wade, Janek Berger, Jason Martin, Jason Pekos, Jason Wong, Jeff Burnett,
+Jeff Dotson, Jeff Helzner, Jeffrey Erlich, Jesse Wolfhagen, Jessica Graves,
+Joe Wagner, John Flournoy, Jonathan H. Morgan, Jonathon Vallejo,
+Joran Jongerling, Joseph Despres, Josh Weinstock, Joshua Duncan,
+Joshua Griffith, Josué Mendoza, JU, Justin Bois, Karim Naguib, Karim Osman,
+Kejia Shi, Kevin Foley, Kristian Gårdhus Wichmann, Kádár András, lizzie ,
+LOU ODETTE, Marc Dotson, Marcel Lüthi, Marek Kwiatkowski, Mark Donoghoe,
+Mark Worrall, Markus P., Martin Modrák, Matt Moores, Matthew, Matthew Kay,
+Matthieu LEROY, Maurits van der Meer, Merlin Noel Heidemanns, Michael DeWitt,
+Michael Dillon, Michael Lerner, Mick Cooney, Márton Vaitkus, N Sanders, Name,
+Nathaniel Burbank, Nic Fishman, Nicholas Clark, Nicholas Cowie, Nick S,
+Nicolas Frisby, Octavio Medina, Ole Rogeberg, Oliver Crook, Olivier Ma,
+Pablo León Villagrá, Patrick  Kelley, Patrick Boehnke, Pau Pereira Batlle,
+Peter Smits, Pieter van den Berg , ptr, Putra Manggala,
+Ramiro Barrantes Reynolds, Ravin Kumar, Raúl Peralta Lozada,
+Riccardo Fusaroli, Richard Nerland, RLW, Robert Frost, Robert Goldman,
+Robert kohn, Robert Mitchell V, Robin Taylor, Ross McCullough, Ryan Grossman,
+Rémi , S Hong, Scott Block, Scott Brown, Sean Pinkney, Sean Wilson, Seth Axen,
+shira, Simon Duane, Simon Lilburn, Srivatsa Srinath, sssz, Stan_user, Stefan,
+Stephanie Fitzgerald, Stephen Lienhard, Steve Bertolani, Stone Chen,
+Susan Holmes, Svilup, Sören Berg, Tao Ye, Tate Tunstall, Tatsuo Okubo,
+Teresa Ortiz, Thomas Lees, Thomas Vladeck, Tiago Cabaço, Tim Radtke, Tobychev ,
+Tom McEwen, Tony Wuersch, Utku Turk, Virginia Fisher, Vitaly Druker,
+Vladimir Markov, Wil Yegelwel, Will Farr, Will Tudor-Evans, woejozney,
+Xianda Sun, yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
+
+# References {-}
+
+<div id="refs"></div>
+
+# License {-}
+
+A repository containing all of the files used to generate this chapter is
+available on [GitHub](
+https://github.com/betanalpha/quarto_chapters/tree/main/2_spaces).
+
+The text and figures in this chapter are copyrighted by Michael Betancourt
+and licensed under the CC BY-NC 4.0 license:
+
+https://creativecommons.org/licenses/by-nc/4.0/
