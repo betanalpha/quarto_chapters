@@ -1,0 +1,263 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+\usepackage{wasysym}
+
+\usepackage{tikz}
+\usetikzlibrary{math, calc}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+  
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1, thick]
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-4.5, -3) rectangle (5.75, 2.5);
+    
+    \pgfmathsetmacro{\dx}{0.6}
+    \pgfmathsetmacro{\dy}{0.3}
+    \pgfmathsetmacro{\tilt}{0.4}
+    
+    \begin{scope}[shift={(-2 - \tilt * 0.75, 0.15 + 0.75)}]
+      \node[light] at (0, 0) { $(\Box)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+0 - \tilt * 0.75, -0.15 + 0.75)}]
+      \node[mid] at (0, 0) { $(\clubsuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+2 - \tilt * 0.75, +0.05 + 0.75)}]
+      \node[dark] at (0, 0) { $(\diamondsuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(-1 + \tilt * 0.75, 0.15 - 1)}]
+      \node at (0, 0) { $(\heartsuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+1 + \tilt * 0.75, -0.15 - 1)}]
+      \node at (0, 0) { $(\spadesuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \pgfmathsetmacro{\dx}{3.25}
+    \pgfmathsetmacro{\dy}{0.65}
+    
+    \begin{scope}[shift={({-\tilt * 0.75}, 0.75)}]
+      \draw[gray, dashed, rounded corners=5]   
+           ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+        -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \begin{scope}[shift={({+\tilt * 0.75}, -1)}]
+      \draw[gray, dashed, rounded corners=5]   
+           ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+        -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \node[black] at (-\tilt * 0.75 + 4, +0.75) { $ X_{1}$ };
+    \node[black] at (+\tilt * 0.75 + 4, -1) { $ X_{2}$ };
+  \end{scope}
+  
+  \begin{scope}[shift={(10.25, 0)}]
+    \draw[white] (-4.5, -3) rectangle (5.75, 2.5);
+    
+    \pgfmathsetmacro{\dx}{0.6}
+    \pgfmathsetmacro{\dy}{0.3}
+    \pgfmathsetmacro{\tilt}{0.4}
+    
+    \begin{scope}[shift={(-2 - \tilt * 0.75, 0.15 + 0.75)}]
+      \node[light] at (0, 0) { $(\Box, \heartsuit)$ };
+      \draw[light]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+0 - \tilt * 0.75, -0.15 + 0.75)}]
+      \node[mid] at (0, 0) { $(\clubsuit, \heartsuit)$ };
+      \draw[mid]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+2 - \tilt * 0.75, +0.05 + 0.75)}]
+      \node[dark] at (0, 0) { $(\diamondsuit, \heartsuit)$ };
+      \draw[dark]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(-2 + \tilt * 0.75, 0.15 - 0.75)}]
+      \node[light] at (0, 0) { $(\Box, \spadesuit)$ };
+      \draw[light]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+0 + \tilt * 0.75, -0.15 - 0.75)}]
+      \node[mid] at (0, 0) { $(\clubsuit, \spadesuit)$ };
+      \draw[mid]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+2 + \tilt * 0.75, +0.05 - 0.75)}]
+      \node[dark] at (0, 0) { $(\diamondsuit, \spadesuit)$ };
+      \draw[dark]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \pgfmathsetmacro{\dx}{0.85}
+    \pgfmathsetmacro{\dy}{1.75}
+    
+    \begin{scope}[shift={(-2, 0)}]
+      \draw[gray, dashed, rounded corners=5]   
+           ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+        -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(0, 0)}]
+      \draw[gray, dashed, rounded corners=5]   
+           ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+        -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \begin{scope}[shift={(2, 0)}]
+      \draw[gray, dashed, rounded corners=5]   
+           ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+        -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \node[black] at (\tilt * 2.25 - 2, -2.25) { $ \{ \Box \} \times X_{2}$ };
+    \node[light] at (-1.53925, -2.2505) { $\Box$ };
+    
+    \node[black] at (\tilt * 2.25 + 0, -2.25) { $ \{ \clubsuit \} \times X_{2}$ };
+    \node[mid] at (0.46075, -2.2386) { $\clubsuit$ };
+    
+    \node[black] at (\tilt * 2.25 + 2, -2.25) { $ \{ \diamondsuit \} \times X_{2}$ };
+    \node[dark] at (+2.4605, -2.2385) { $\diamondsuit$ };
+  \end{scope}
+  
+  \begin{scope}[shift={(20.5, 0)}]
+    \draw[white] (-4.5, -3) rectangle (5.75, 2.5);
+    
+    \pgfmathsetmacro{\dx}{0.6}
+    \pgfmathsetmacro{\dy}{0.3}
+    \pgfmathsetmacro{\tilt}{0.4}
+    
+    \begin{scope}[shift={(-2 - \tilt * 0.75, 0.15 + 0.75)}]
+      \node at (0, 0) { $(\Box, \heartsuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+0 - \tilt * 0.75, -0.15 + 0.75)}]
+      \node at (0, 0) { $(\clubsuit, \heartsuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+2 - \tilt * 0.75, +0.05 + 0.75)}]
+      \node at (0, 0) { $(\diamondsuit, \heartsuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(-2 + \tilt * 0.75, 0.15 - 0.75)}]
+      \node at (0, 0) { $(\Box, \spadesuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+0 + \tilt * 0.75, -0.15 - 0.75)}]
+      \node at (0, 0) { $(\clubsuit, \spadesuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+  
+    \begin{scope}[shift={(+2 + \tilt * 0.75, +0.05 - 0.75)}]
+      \node at (0, 0) { $(\diamondsuit, \spadesuit)$ };
+      \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+                   -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+                   -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \pgfmathsetmacro{\dx}{3.25}
+    \pgfmathsetmacro{\dy}{1.75}
+    
+  
+    \begin{scope}[shift={(0, 0)}]
+      \draw[gray, dashed, rounded corners=5]   
+           ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
+        -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
+        -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
+    \end{scope}
+    
+    \node[black] at (\tilt * 2.25 + 0, -2.25) { $ X_{1} \times X_{2}$ };
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  
