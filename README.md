@@ -6,7 +6,7 @@ Preface
 
 Chapter 1: Probability Distribution On Finite Spaces
 
-Chapter 2: General Spaces
+Chapter 2: Spaces
 
 Chapter 3: Probability Distribution on General Spaces
 
@@ -18,10 +18,12 @@ Chapter 6: Probability Density Functions
 
 Chapter 7: Transforming Probability Distributions
 
-Chapter 8: Sampling and the Monte Carlo Method
+Chapter 8: Product Spaces
 
-Chapter 9: Conditional Probability Theory
+Chapter 9: Sampling and the Monte Carlo Method
 
-Chapter 10. Probability Theory on Product Spaces 
+Chapter 10: Conditional Probability Theory
 
-Chapter 11: Useful Families of Probability Density Functions 
+Chapter 11. Probability Theory on Product Spaces 
+
+Chapter 12: Useful Families of Probability Density Functions 
