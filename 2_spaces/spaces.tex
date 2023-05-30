@@ -172,7 +172,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, enhanced, sharp corners, breakable, interior hidden, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, enhanced, boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -279,8 +279,7 @@ unspecified element.
 \subsubsection{Subsets}\label{subsets}}
 
 As with finite spaces any selection of elements from a general set
-defines a \textbf{subset}. Subsets equipped with similar structure as
-the full set are also referred to as \textbf{subspaces}.
+defines a \textbf{subset}.
 
 Selecting elements from a subset \(\mathsf{x} \subset X\) defines
 another subset \(\mathsf{x}' \subset X\). If \(\mathsf{x}\) contains all
@@ -324,9 +323,8 @@ set} consisting of no elements, \textbf{atomic sets} or
 (Figure~\ref{fig-subsets}). Most subsets, however, contain an
 intermediate number of elements. One of the key features of uncountable
 spaces is that most subsets also contain an uncountable number of
-elements, but still only an infinitesimal proportion of the total set.
-To visually represent subsets containing an uncountable number of
-elements I will used filled shapes to contrast against individual
+elements. To visually represent subsets containing an uncountable number
+of elements I will used filled shapes to contrast against individual
 points.
 
 \begin{figure}
@@ -443,8 +441,8 @@ uncountable number of individual elements.}
 All of the set operations we introduced for finite sets generalize to
 any set. For example for any set \(X\) with power set \(2^{X}\) we can
 define a unary operation that maps each subset into a
-\textbf{complementary} subset consisting of every other element
-(Figure~\ref{fig-unary}), \begin{alignat*}{6}
+\textbf{complementary} subset, or just \textbf{complement}, consisting
+of every other element (Figure~\ref{fig-unary}), \begin{alignat*}{6}
 \cdot^c :\; & 2^X & &\rightarrow& \; & 2^X &
 \\
 & \mathsf{x} & &\mapsto& & \mathsf{x}^{c} &.
@@ -515,10 +513,10 @@ versa, \begin{align*}
 X^{c} &= \emptyset.
 \end{align*}
 
-The binary union and and intersection operations also generalize to
-general sets (Figure~\ref{fig-binary}). A \textbf{union} of two input
-subsets is the subset containing all of the elements contained in
-\emph{either} input subset, \begin{alignat*}{6}
+The binary union and intersection operations also generalize to general
+sets (Figure~\ref{fig-binary}). A \textbf{union} of two input subsets is
+the subset containing all of the elements contained in \emph{either}
+input subset, \begin{alignat*}{6}
 \cdot \cup \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
 \\
 & \mathsf{x}_1, \mathsf{x}_{2} & &\mapsto& & \mathsf{x}_1 \cup \mathsf{x}_2 &,
@@ -664,7 +662,7 @@ only so useful in practice. The sets of theoretical and practical
 interest are equipped with additional \textbf{structures} that endow
 them with more rigidity and interpretability.
 
-Earlier I defined a space as any a set equipped with any structure. When
+Earlier I defined a space as any set equipped with any structure. When
 that structure is explicit we often denote the space by specifying the
 underlying set and the additional structure together. For example if we
 denote the set \(X\) and the structure \(\mathfrak{s}\) then we would
@@ -676,25 +674,29 @@ is, frustratingly, typically used to denote both the underlying set
 In this section we will review just a few of the structures that play
 important roles in practical applications. Specifically we will focus on
 the structures that define the most common spaces that arise in
-mathematical modeling. We will introduce probabilistic structures until
-the next chapter.
+mathematical modeling. We will introduce probabilistic structures in the
+next chapter.
 
-\hypertarget{orderings}{%
-\subsubsection{Orderings}\label{orderings}}
+\hypertarget{ordering-structures}{%
+\subsubsection{Ordering Structures}\label{ordering-structures}}
 
 One way to enhance a set is to distinguish a special organization of its
 elements.
 
-An \textbf{strict ordering} or \textbf{complete ordering} establishes a
-particular sequential arrangement of the elements in a set.
-Mathematically we can encode an ordering as local relations between
-elements, writing \(x_{1} < x_{2}\) if the element \(x_{1}\) appears
-earlier in the ordering than \(x_{2}\). We also say that \(x_{1}\) is
-\emph{smaller} than \(x_{2}\), and \(x_{2}\) is \emph{larger} than
-\(x_{1}\), if \(x_{1} < x_{2}\). The ordering relation can also be
-interpreted as a binary operation that takes two elements as inputs and
-returns true if the first input element appears earlier in the ordering
-than the second input element and false otherwise.
+An \textbf{strict ordering}, \textbf{complete ordering}, or
+\textbf{total ordering} establishes a particular sequential arrangement
+of the elements in a set. Mathematically we can encode an ordering as
+local relations between elements, writing \(x_{1} < x_{2}\) if the
+element \(x_{1}\) appears earlier in the ordering than \(x_{2}\). We
+also say that \(x_{1}\) is \emph{smaller} than \(x_{2}\), and \(x_{2}\)
+is \emph{larger} than \(x_{1}\), if \(x_{1} < x_{2}\).
+
+The ordering relation can also be interpreted as a binary operation that
+takes two distinct elements as inputs and returns \(<\) if the first
+input element appears earlier in the ordering than the second input
+element and \(>\) otherwise. This relation can also be relaxed to allow
+for the comparison of an element to itself with the introduction of a
+third equality output \(=\) when the two input elements are equal.
 
 A consistent ordering of the elements in a set strongly constrains the
 behavior of these relations. For example if \(x_{1} < x_{2}\) and
@@ -702,16 +704,14 @@ behavior of these relations. For example if \(x_{1} < x_{2}\) and
 formally known as \textbf{transitivity} of the individual relations.
 
 A \textbf{partial ordering} defines a less rigid arrangement of a set
-that doesn't allows multiple elements to be indistinguishable; in other
-words multiple elements can occupy the same position along the
-sequential arrangement at the same time. To represent a partial ordering
-we use the relation \(\le\) and write \(x_{1} \le x_{2}\) if the element
-appears earlier in the order \emph{or at the same place in the order as}
-\(x_{2}\). This partial ordering relation is not only transitive -- if
-\(x_{1} \le x_{2}\) and \(x_{2} \le x_{3}\) then \(x_{1} \le x_{3}\) --
-but also allows us to compare any element to itself --
-\(x_{1} \le x_{1}\). This latter property is formally known as
-\textbf{reflexivity}.
+that doesn't require every pair of elements to be comparable; in this
+case multiple elements can occupy the same position along the sequential
+arrangement at the same time. To represent a partial ordering we use the
+relation \(\le\) and write \(x_{1} \le x_{2}\) if the element appears
+earlier in the order \emph{or at the same place in the order as} the
+distinct element \(x_{2}\). As with a strict ordering relation any
+partial ordering relation is transitive: if \(x_{1} \le x_{2}\) and
+\(x_{2} \le x_{3}\) then \(x_{1} \le x_{3}\).
 
 Intuitively we can interpret a strict ordering as a geometric
 arrangement of the elements along a one-dimensional line. Partial
@@ -725,8 +725,8 @@ A set equipped with a particular ordering is referred to as an
 \emph{ordered space}. Likewise a set equipped with a particular partial
 ordering is referred to as a \emph{partially-ordered space}.
 
-\hypertarget{algebras}{%
-\subsubsection{Algebras}\label{algebras}}
+\hypertarget{algebraic-structures}{%
+\subsubsection{Algebraic Structures}\label{algebraic-structures}}
 
 The term \textbf{algebra} is introduced so early in our mathematical
 education that it can be especially easy to take for granted. Typically
@@ -873,7 +873,8 @@ x_3 + (x_1 \cdot x_2) \ne (x_3 + x_1) \cdot (x_3 + x_2).
 \] A common example of compatible algebraic operations is addition and
 multiplication over the integer and real numbers where multiplication
 distributes across addition. An algebraic structure compromised of these
-two compatible operations is also known as \textbf{arithmetic}.
+two compatible operations is also sometimes known as
+\textbf{arithmetic}.
 
 One of the most infamous algebraic structures considers a slightly
 different combination of operations. Instead of a binary operator that
@@ -885,8 +886,9 @@ as inputs one element and one real number, \begin{alignat*}{6}
 \end{alignat*} This is sometimes referred to as a \textbf{scalar
 multiplication} operator.
 
-A \textbf{linear algebra} combines this operation with an associative,
-commutative, and unital binary operator \begin{alignat*}{6}
+A \textbf{linear algebra over the real numbers} combines this scalar
+multiplication operation with an associative, commutative, and unital
+binary operator \begin{alignat*}{6}
 + :\; & X \times X& &\rightarrow& \; & X &
 \\
 & x_{1}, x_{2} & &\mapsto& & x_{1} + x_{2} &
@@ -895,8 +897,8 @@ commutative, and unital binary operator \begin{alignat*}{6}
 \] A set equipped with these operators is also known as a \textbf{vector
 space} with the individual elements denoted \textbf{vectors}.
 
-\hypertarget{metrics}{%
-\subsubsection{Metrics}\label{metrics}}
+\hypertarget{metric-structures}{%
+\subsubsection{Metric Structures}\label{metric-structures}}
 
 Another way to add structure to a set is to introduce an explicit notion
 of \textbf{distance} between individual elements. Mathematically this is
@@ -987,7 +989,7 @@ sequence of elements that converges to \(x\). Limiting behavior is
 determined by how \emph{all} of these convergent sequences behave.
 
 \hypertarget{sec:topologies}{%
-\subsubsection{Topologies}\label{sec:topologies}}
+\subsubsection{Topological Structures}\label{sec:topologies}}
 
 The distances defined by a metric endow a set with a rich diversity of
 useful features. Many of these features, however, can also be defined by
@@ -1001,7 +1003,7 @@ elements within a distance \(r\) from the element \(x \in X\) defines a
 subset \[
 \mathsf{b}_{r}(x) = \{ x' \in X \mid d(x, x') < r \} \subseteq 2^{X}
 \] known as an \textbf{open ball} centered at \(x\) with radius \(r\).
-Any open ball with zero radius reduces to the empty set.
+Any open ball with zero radius reduces to the central element \(x\).
 
 Including the elements exactly at a distance \(r\) from \(x\) defines a
 slightly larger subset \[
@@ -1101,10 +1103,10 @@ elements will be contained in any metric neighborhood.}
 \end{figure}
 
 Metric neighborhoods can also be used to formalize intuitive notions of
-\emph{continuous} and \emph{discrete} metric spaces. For example we can
-formalize the notion of a continuum by requiring that every element
-\(x \in X\) is surrounded by elements at any arbitrary distance, at
-least up to some potentially maximum distance. More succictly for
+``continuous'' and ``discrete'' metric spaces. For example we can
+formalize the informal concept of a continuum by requiring that every
+element \(x \in X\) is surrounded by elements at any arbitrary distance,
+at least up to some potentially maximum distance. More succinctly for
 \emph{every} element \(x \in X\) and distance
 \(0 < \epsilon \le \epsilon_{\max}\) we should be able to find another
 element \(x' \in X\) satisfying \[
@@ -1114,14 +1116,14 @@ with radius less than \(\epsilon_{\max}\) defining a \emph{distinct}
 subset of \(X\) because increasing the radius will always introduce new
 elements. This then implies that every metric neighborhood of \(x\), no
 matter how small, must contain more elements than just \(x\). In other
-words no metric neighborhood in such a space will reduce to an atomic
+words no metric neighborhood in a continuum will reduce to an atomic
 set.
 
 On the other hand the elements in a discrete metric space are not
 separated by arbitrary distances. Instead they are separated only by
-certain distances, specifically distances bounded below by some minimum
-distance. In this case many metric neighborhoods are degenerate,
-reducing to the same subsets of \(X\)
+certain distances, specifically distances bounded below by some
+\emph{minimum} distance. In this case many metric neighborhoods are
+degenerate, reducing to the same subsets of \(X\)
 (Figure~\ref{fig-metric-discrete-neighborhoods}). Moreover any metric
 neighborhood with radius smaller than the minimum distance will reduce
 to the atomic set containing only the central element. These smallest
@@ -1203,13 +1205,12 @@ Unlike open balls these metric-derived open subsets are \emph{closed}
 under unions and intersections. If \(\mathsf{x}_{1}\) and
 \(\mathsf{x}_{2}\) are both open subsets then
 \(\mathsf{x}_{1} \cup \mathsf{x}_{2}\) will also an open subset. In fact
-the union of any \emph{countably infinite} number of open subsets will
-be open. Likewise if \(\mathsf{x}_{1}\) and \(\mathsf{x}_{2}\) are both
-open subsets then \(\mathsf{x}_{1} \cap \mathsf{x}_{2}\) will also be an
-open subset. Indeed the intersection of any \emph{finite} number of open
-subsets will also be open but, in an unfortunate asymmetry, the
-intersection of a countably infinite number of open subsets might not be
-open.
+the union of \emph{any} number of open subsets will be open. Likewise if
+\(\mathsf{x}_{1}\) and \(\mathsf{x}_{2}\) are both open subsets then
+\(\mathsf{x}_{1} \cap \mathsf{x}_{2}\) will also be an open subset.
+Indeed the intersection of any \emph{finite} number of open subsets will
+also be open but, in an unfortunate asymmetry, the intersection of an
+infinite number of open subsets might not be open.
 
 Open subsets provide an immediate way to generalize the notion of
 neighborhood beyond open balls. If we define a general neighborhood of
@@ -1257,9 +1258,9 @@ with a self-contained collection of distinguished subsets.
 A \textbf{topology} is any collection of subsets \[
 \mathfrak{t}
 = \{ \emptyset, \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots, X \} \in 2^{X}
-\] that contains the empty set and the full set, is closed under
-countably infinite unions, and finite intersections. Any set equipped
-with a topology is referred to as a \textbf{topological space}.
+\] that contains the empty set and the full set and is closed under
+arbitrary unions and finite intersections. Any set equipped with a
+topology is referred to as a \textbf{topological space}.
 
 The distinguished subsets that define a topology are generally referred
 to as \textbf{open subsets} even if they are not derived from a metric.
@@ -1356,17 +1357,18 @@ topologies then endow a set a certain notions of ``shape''.
 
 For example the half-open line interval \[
 [0, 1) = \{ x \in \mathbb{R} \mid 0 \le x < 1 \}
-\] is a Hausdorff topological space with open subsets defined by
-half-open subintervals \[
-[a, b) = \{ x \in \mathbb{R} \mid 0 \le a \le x < b < 1 \}
-\] and their unions. In particular the half-open subintervals \[
-[0, \epsilon) = \{ x \in \mathbb{R} \mid 0 \le x < \epsilon < 1 \}
-\] contain elements near lower boundary but not elements near the upper
-boundary, separating the two ends from each other and giving the line is
-distinctive shape (Figure~\ref{fig-line-topology}). Removing these
-subintervals gives \emph{another} Hausdorff topology, but one where the
-obstructions between the elements near the lower boundary and the
-elements near the upper boundary have been removed. This effectively
+\] is a Hausdorff topological space with open subsets defined by the
+open subintervals \[
+(a, b) = \{ x \in \mathbb{R} \mid 0 < a < x < b < 1 \},
+\] the half-open intervals that contain zero, \[
+[0, b) = \{ x \in \mathbb{R} \mid 0 \le x < b < 1 \},
+\] and their unions. The latter half-open subintervals contain elements
+near the lower boundary of zero but \emph{not} elements near the upper
+boundary of one, separating the two ends from each other and giving the
+line its distinctive shape (Figure~\ref{fig-line-topology}). Removing
+these subintervals gives \emph{another} Hausdorff topology, but one
+where the obstructions between the elements near the lower boundary and
+the elements near the upper boundary have been removed. This effectively
 connects the two ends together, endowing the set not with the shape of a
 line but rather the shape of a circle
 (Figure~\ref{fig-circle-topology})!
@@ -1426,10 +1428,10 @@ line but rather the shape of a circle
 \caption{\label{fig-line-verses-circle}The precise subsets included in a
 topology endow the underlying set with subtle notions of shape. (a) A
 line is an uncountably infinite set equipped with a topology that
-contains enough subsets to strongly separate the ends from each other.
-(b) Removing those particular subsets, shown here in light red, gives a
-smaller topology where the ends are in closer proximity, giving the same
-set the shape of a circle.}
+contains certain subsets that separate the ends from each other, shown
+here in light red. (b) Removing those particular subsets yields a
+smaller topology where the ends are in closer proximity, giving the
+\emph{same set} the shape of a circle instead of a line.}
 
 \end{figure}
 
@@ -1438,7 +1440,7 @@ it is on metric spaces, replacing the neighborhoods derived from open
 balls to the neighborhoods defined by the topology
 (Figure~\ref{fig-general-convergence}). The generality of topological
 structure, however, does come at a cost: if a topology cannot
-discriminate between individual elements than the limit of a convergent
+discriminate between individual elements then the limit of a convergent
 sequence might not be unique. Instead unique limits are guaranteed by
 only Hausdorff topologies.
 
@@ -1539,16 +1541,16 @@ For example subsets can be partially ordered by inclusion. A subset
 \(\mathsf{x}_{2} \subset X\) if
 \(\mathsf{x}_{1} \subset \mathsf{x}_{2}\), and larger if
 \(\mathsf{x}_{2} \subset \mathsf{x}_{1}\). Two subsets that only
-partially overlap fall into the same place in the ordering. For any set
-the empty set will always the smallest subset and the full set will
-always the largest.
+partially overlap are incomparable, and hence fall into the same place
+in the sequential ordering. For any set the empty set will always the
+smallest subset and the full set will always the largest.
 
 The union and intersection operations introduce algebraic structure,
 known as a \textbf{Boolean algebraic structure}, to the power set. They
 are both commutative, \begin{align*}
-\mathsf{x}_{1} \cup \mathsf{x}_{2} &= \mathsf{x}_{2} \cup \mathsf{x}
+\mathsf{x}_{1} \cup \mathsf{x}_{2} &= \mathsf{x}_{2} \cup \mathsf{x}_{1}
 \\
-\mathsf{x}_{1} \cap \mathsf{x}_{2} &= \mathsf{x}_{2} \cap \mathsf{x},
+\mathsf{x}_{1} \cap \mathsf{x}_{2} &= \mathsf{x}_{2} \cap \mathsf{x}_{1},
 \end{align*} and associative, \begin{align*}
 (\mathsf{x}_{1} \cup \mathsf{x}_{2}) \cup \mathsf{x}_{3}
 &=
@@ -1796,7 +1798,7 @@ set.
 \hypertarget{relating-sets}{%
 \subsection{Relating Sets}\label{relating-sets}}
 
-A \textbf{function}, also know as a \textbf{map} or
+A \textbf{function}, also known as a \textbf{map} or
 \textbf{transformation}, is a relation between the elements of some
 \emph{input} set and the elements of some \emph{output} set
 (Figure~\ref{fig-function}). Mathematically we specify functions as
@@ -2485,7 +2487,7 @@ f(x_{1}) < f(x_{2}).
 orderings on the output set \(<_{Y}\) to orderings on the input set
 \(<_{X} = f^{*}\!\!<_{Y}\).
 
-Unless \(f\) is also surjective, and hence bijective, we cannot
+If \(f\) is not also surjective, and hence bijective, then we cannot
 pushforward orderings on the input space to orderings on the output
 space. The problem is that if any pair of output elements are associated
 with multiple input elements, \begin{align*}
@@ -2498,9 +2500,6 @@ x_1 &< x_2
 \\
 x_2' &< x_1',
 \end{align*} that cannot be combined into a consistent output ordering.
-
-Ultimately injective functions define ordering pullbacks but only
-bijective functions define ordering pushfowards and ordering pullbacks.
 
 \hypertarget{relating-algebras}{%
 \paragraph{Relating Algebras}\label{relating-algebras}}
@@ -2554,8 +2553,7 @@ topology on the input set, \[
 properties of a topology. For example if \(f\) it not surjective then
 the output collection will not contain the full set as needed. Even if
 \(f\) is surjective the pushforward sets are not guaranteed to be closed
-under unions and intersections and hence will not, in general, define a
-topology.
+under intersections and hence will not, in general, define a topology.
 
 Fortunately pullbacks sets are a bit more well-behaved. Pulling back the
 subsets that define a topology on the output set, \[
@@ -2564,7 +2562,7 @@ subsets that define a topology on the output set, \[
 \{ f_{*}(\mathsf{y}_{1}), \ldots, f_{*}(\mathsf{y}_{i}), \ldots \}.
 \] When \(f\) is surjective then this collection will include both
 \(f^{*}(\emptyset) = \emptyset\) and \(f^{*}(Y) = X\). Moreover these
-pullback subsets are always closed under countable unions and finite
+pullback subsets are always closed under arbitrary unions and finite
 intersections so long as the input subsets are. In other words if \(f\)
 is surjective then \[
 f^{*} \mathfrak{t} \equiv
@@ -2736,7 +2734,7 @@ function (b) \(f_{1} : x \mapsto -x^{3}\) is not.}
 \paragraph{Algebra-Preserving
 Relations}\label{algebra-preserving-relations}}
 
-A bijective function that preserves algebraic structure is known as a
+A function that preserves algebraic structure is known as a
 \textbf{homomorphism}. Given two algebraic spaces equipped with binary
 algebraic operations, \((X, \cdot_{X})\) and \((Y, \cdot_{Y})\), a
 function \(f : X \rightarrow Y\) is homomorphic if and only if \[
@@ -2750,14 +2748,15 @@ f :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
 & x & &\mapsto& & x \cdot x \cdot x &.
 \end{alignat*} Because \[
 (x_1 + x_2)^3 \ne x_1^3 + x_2^3
-\], where the \(+\) on the left denotes addition on the input space and
-the \(+\) on the right denotes addition on the output space, \(f\) is
-not a homomorphism for the addition operation. On the other hand because
-\[
+\], where the \(+\) on the left-hand side denotes addition on the input
+space and the \(+\) on the right-hand side denotes addition on the
+output space, \(f\) is not a homomorphism for the addition operation. On
+the other hand because \[
 (x_1 \cdot x_2)^3 = x_1^3 \cdot x_2^3,
-\] where again \(\cdot\) on the left and right actually denotes two
-distinct multiplication operations, the function \(f\) \emph{is} a
-homomorphism between for the multiplication operation.
+\] where again the \(\cdot\) on the left-hand side and on the right-hand
+side actually denote two distinct multiplication operations, the
+function \(f\) \emph{is} a homomorphism for the multiplication
+operation.
 
 \hypertarget{metric-preserving-relations}{%
 \paragraph{Metric-Preserving
@@ -2880,8 +2879,8 @@ More formally a bijective function is a homeomorphism if every subset in
 the input topology pushes forward to a subset in the output topology and
 vice versa. In other words neighborhoods are preserved and input
 elements near each other are mapped into output elements that are also
-near each other, preserving the continuity of the space. Because of this
-homeomorphisms are also known as invertible \textbf{continuous}
+near each other, preserving notions of continuity of the space. Because
+of this homeomorphisms are also known as invertible \textbf{continuous}
 functions.
 
 In \href{@sec:general-topology}{Section 1.2.4.3} we saw that lines and
@@ -3015,8 +3014,8 @@ useful reference for delving into technical details on precise topics.
 \section*{Acknowledgements}\label{acknowledgements}}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I thank Simon Duane, Jerzy Baranowski, Ron Garcia, and Stone Chen for
-helpful comments and discussion.
+I thank Simon Duane, Jerzy Baranowski, Ron Garcia, Stone Chen, and
+Alexander Noll for helpful comments and discussion.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
