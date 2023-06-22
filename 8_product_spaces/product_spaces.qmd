@@ -308,9 +308,9 @@ product variable.
 
 ## Product Subsets
 
-Just as elements of a product sets are uniquely specified with an element from
-each of the component sets, subsets of product sets are uniquely specified with
-a subset from each of the component sets.  These product subsets
+Just as elements from each of the component sets uniquely specifies an element
+from the corresponding product set, a subset of the component sets uniquely
+specifies a subset of the product set.  These **product subsets**
 $\mathsf{x} \subset \times_{i = 1}^{I} X_{i}$ are often written as
 $$
 \mathsf{x}
@@ -343,9 +343,16 @@ $$
 X = \times_{i = 1}^{I} X_{i}.
 $$
 
-Set operations on product subsets are defined by applying them to each component
-subset individually and then combining the results.  For example given the
-product subsets
+Unfortunately most of the set operations are not compatible with the component
+structure of a product set.  For example the complement of a product subset is
+not generally given by applying the complement operation to each of the
+component subsets,
+$$
+\mathsf{x}^{c} \ne \times_{i = 1}^{I} \mathsf{x}_{i}^{c},
+$$
+although there are a few special cases where this is true.  Similarly the union
+of two product subsets is not generally given by the product of the component
+unions: for two arbitrary product subsets
 $$
 \mathsf{x} = \times_{i = 1}^{I} \mathsf{x}_{i}
 $$
@@ -353,21 +360,22 @@ and
 $$
 \mathsf{x}' = \times_{i = 1}^{I} \mathsf{x}'_{i}
 $$
-we can define their union as the product subset
+we will have
 $$
 \mathsf{x} \cup \mathsf{x}'
-=
-\times_{i = 1}^{I} \mathsf{x}_{i} \cup \mathsf{x}'_{i}
+\ne
+\times_{i = 1}^{I} \mathsf{x}_{i} \cup \mathsf{x}'_{i}.
 $$
-and their intersection as the product subset
+The lone exception is the intersection of product subsets, which can always be
+derived from the intersection of the component subsets,
 $$
 \mathsf{x} \cap \mathsf{x}'
 =
 \times_{i = 1}^{I} \mathsf{x}_{i} \cap \mathsf{x}'_{i}.
 $$
 
-These product set operations also introduce a certain geometric intuition to
-product subsets.  For example considering decomposing the product set
+This singular compatibility also introduces a convenient geometric intuition to
+product subsets.  In particular consider decomposing the product subset
 $X_{1} \times X_{2}$ into replications of $X_{1}$,
 $$
 X_{1} \times X_{2} = \bigcup_{x_{2} \in X_{2}} X_{1} \times \{ x_{2} \}.
@@ -386,7 +394,7 @@ $\{ x_{1} \} \times X_{2}$ to define the product subset
 $$
 X_{1} \times \mathsf{x}_{2} \subset X_{1} \times X_{2}.
 $$
-The intersection of these two product subsets is then just the product of
+The intersection of these two lifted product subsets is then just the product of
 $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$,
 \begin{align*}
 (\mathsf{x}_{1} \times X_{2}) \cap (X_{1} \times \mathsf{x}_{2})
@@ -396,10 +404,12 @@ $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$,
 &=
 (\mathsf{x}_{1}) \times (\mathsf{x}_{2}).
 \end{align*}
+
 In other words we can interpret the product subset
-$\mathsf{x}_{1} \times \mathsf{x}_{2}$ as the overlap of the shadows that
+$\mathsf{x}_{1} \times \mathsf{x}_{2}$ as the overlap of the "shadows" that
 $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ cast into the full product set
-(@fig-product-set).
+(@fig-product-set).  Because of this geometric intuition product subsets are
+sometimes referred to as **rectangular subsets**.
 
 ::: {#fig-product-set layout="[ [-17, 66, -17], [-17, 66, -17], [-33, 34, -33]]"}
 ![](figures/product_set/1/1){#fig-product-set1}
@@ -408,10 +418,60 @@ $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ cast into the full product set
 
 ![](figures/product_set/3/3){#fig-product-set3}
 
-One way to interpret product sets is geometrically.  From this perspective
-(a, b) we first lift each component set to the product space before (c)
-constructing the product set from their overlap.
+Product subsets admit a useful geometric interpretation where (a, b) we first
+lift each component subset to the product set before (c) constructing the
+product subset from their overlap.
 :::
+
+This geometric perspective can for example be used to better understand why the
+complement and union operations aren't compatible with component structure.
+The product of complementary component subsets generally excludes all of the
+elements in the complement of the corresponding product subset
+(@fig-product-set-complement).  On the other hand the product of the union of
+component subsets generally includes elements that are not in the union of the
+corresponding product subsets (@fig-product-set-union).  Only when considering
+intersections do both constructions always give the same subset
+(@fig-product-set-intersection).
+
+::: {#fig-product-set-complement layout="[ [-10, 80, -10], [-10, 80, -10] ]"}
+![](figures/product_set_complement/pc/pc){#fig-pc}
+
+![](figures/product_set_complement/cp/cp){#fig-cp}
+
+Combining component subsets into a product subset doesn't commute with the
+complement operator. (a) Taking the product first and then applying the
+complement operator doesn't always give the same subset as (b) applying the
+complement operator to each component subset and then taking their product.
+:::
+
+::: {#fig-product-set-union layout="[ [-15, 70, -15], [-15, 70, -15] ]"}
+![](figures/product_set_union/pu/pu){#fig-pu}
+
+![](figures/product_set_union/up/up){#fig-up}
+
+The union operator also doesn't commute with the product construction.
+(a) Taking the product first and then applying the union operator doesn't always
+give the same subset as (b) applying the union operator to each component subset
+and then taking their product.
+:::
+
+::: {#fig-product-set-intersection layout="[ [-15, 70, -15], [-15, 70, -15] ]"}
+![](figures/product_set_intersection/pi/pi){#fig-pi}
+
+![](figures/product_set_intersection/ip/ip){#fig-ip}
+
+Of the three set operators only the intersection operator commutes with
+products.  (a) Taking the product first and then applying the intersection
+operator always gives the same subset as (b) applying the intersection operator
+to each component subset and then taking their product.
+:::
+
+Finally we need to keep in mind that, while they are very useful in practice,
+product subsets do not span the entire product power set.  In other words not
+_every_ subset of $\times_{i = 1}^{I} X_{i}$ is a product subset.  This includes
+for example the union of arbitrary product subsets as well as many other,
+more intricate subsets of the product set.  Indeed most subsets of _any_ product
+set $\times_{i = 1}^{I} X_{i}$ are not product subsets!
 
 # Product Structure
 
@@ -507,7 +567,7 @@ one of the component distances will be greater than zero.  Consequently the
 summed distances will be non-zero whenever the input product elements are
 distinct.
 
-Commutativity of the product metric follows the commutativity of the component
+Symmetry of the product metric follows the commutativity of the component
 metrics,
 \begin{align*}
 d(x, x')
@@ -548,34 +608,36 @@ Because the component topologies all contain the component empty sets and
 component full sets we will always be able to construct the product empty set
 and product full set from this procedure.
 
-Moreover because the component open subsets are closed under countable unions
-and finite intersections these product subsets will be as well.  For example
-given any collection of open component subsets
+Moreover because the component open subsets are finite intersections these
+productsubsets will be as well.  For example given any finite collection of open
+component subsets
 $$
-\{ \mathsf{x}_{1, i}, \ldots, \mathsf{x}_{j, i}, \ldots \}
+\{ \mathsf{x}_{1, i}, \ldots, \mathsf{x}_{j, i}, \ldots \mathsf{x}_{J, i} \}
 $$
-we have closure under unions,
+we have closure under intersections,
 $$
-\cup_{j} \mathsf{x}_{j, i} = \mathsf{x}_{\cup, i} \in \mathfrak{t}_{i}.
+\mathsf{x}_{\cup, i}
+\equiv \cap_{j = 1}^{J} \mathsf{x}_{j, i}
+\in \mathfrak{t}_{i}.
 $$
-Consequently the union of any collection of open product subsets gives another
-open product subset,
+Consequently the intersection of any finite collection of open product subsets
+gives another open product subset,
 \begin{align*}
-\cup_{j} \mathsf{x}_{j}
+\cap_{j} \mathsf{x}_{j}
 &=
-\cup_{j} \left( \times_{i = 1}^{I} \mathsf{x}_{j, i} \right)
+\cap_{j} \left( \times_{i = 1}^{I} \mathsf{x}_{j, i} \right)
 \\
 &=
-\times_{i = 1}^{I} \left( \cup_{j} \mathsf{x}_{j, i} \right)
+\times_{i = 1}^{I} \left( \cap_{j} \mathsf{x}_{j, i} \right)
 \\
 &=
 \times_{i = 1}^{I} \left( \mathsf{x}_{\cup, i} \right).
 \end{align*}
 
-In other words the collection of all open product subsets
-$\times_{i = 1}^{I} \mathsf{x}_{i}$ with $\mathsf{x}_{i} \in \mathfrak{t}_{i}$
-satisfies all of the properties of a topology.  We refer to this topology as a
-**product topology**.
+Unfortunately the union of any open product subsets will not in general be
+another product subset.  Combining the open product subsets with all of their
+unions, however, defines a collection of subsets that satisfies all of the
+properties of a topology.  We refer to this topology as a **product topology**.
 
 # Prototypical Product Spaces
 
@@ -887,7 +949,7 @@ In most applications we will want to separate the component sets individually,
 allowing us to build a joint element up by specifying component elements one by
 one.  For example working through the component spaces in order gives the
 specification
-\begin{alignat*}{3} 
+\begin{alignat*}{3}
 \tilde{x}_{1} &\in  X_{1} &&
 \\
 \tilde{x}_{2} &\in X_{2} &\mid& \; \tilde{x}_{1}
@@ -902,7 +964,7 @@ specification
 \\
 \tilde{x}_{I} &\in X_{I} &\mid& \; ( \tilde{x}_{1}, \ldots, \tilde{x}_{I - 1} ).
 \end{alignat*}
-That said we can work through the component spaces in _any_ order.  This gives
+That said we can work through the component spaces in _any_ order.  This
 flexibility allows us to construct joint elements in whichever way is most
 convenient in a given application.
 
@@ -941,7 +1003,7 @@ d :\; & X \times X & &\rightarrow& \; & \mathbb{R}^{+} &
 
 The classification of these functions and construction of pushforward and
 pullback functions follows exactly the same as for functions with general input
-spaces.  We can say much more, howver, about functions that naturally harmonize
+spaces.  We can say much more, however, about functions that naturally harmonize
 with the component structure of an input product space.
 
 ## Component Transformations
@@ -1083,17 +1145,15 @@ selected component sets,
 
 Projection functions are particularly useful for succinctly expressing some of
 the more subtle product space behaviors.  As we saw in the previous section
-every function between product spaces
-$f : \times_{i = 1}^{I} X_{i} \rightarrow \times_{j = 1}^{J} X_{J}$ decomposes
-into component functions
+every function with a product space input decomposes into component functions,
 \begin{alignat*}{6}
 f_{j} :\; & \times_{i = 1}^{I} X_{i} & &\rightarrow& \; & Y_{j} &
 \\
 & (x_{1}, \ldots, x_{i}, \ldots, x_{I}) & &\mapsto&
 & y_{j} = f_{j}(x_{1}, \ldots, x_{i}, \ldots, x_{I}) &.
 \end{alignat*}
-Those component functions, however, can also be defined as the composition of
-$f$ with each projection function on the output space,
+Those component functions, however, can be directly defined as the composition
+of $f$ with each projection function on the output space,
 $$
 f_{j} = \varpi_{j} \circ f.
 $$
@@ -1244,6 +1304,8 @@ conceptual complexity so much as the difficulty in enumerating all of the ways
 that we can select from a general collection of component spaces.
 
 # Acknowledgements {-}
+
+I thank Alexander Noll for helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
 Adriano Yoshino, Alan Chang, Alessandro Varacca, Alexander Bartik,
