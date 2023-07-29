@@ -23,66 +23,147 @@ format:
     code-overflow: wrap
     monofontoptions:
       - Scale=0.5
-    #include-in-header:
-    #  - preamble.tex
 knitr:
   opts_chunk:
     comment: ''
   opts_knit:
     global.par: TRUE
+format-links: false
 ---
 
-Common experience tells us that unsupported objects fall towards the ground
-under the influence of Earth's gravity.  To understand this phenomenon more
-_quantitatively_ we need to compare observations of falling objects to
-mathematical models, each capturing a distinct story of how objects fall.  In
-particular we might carefully observe the trajectory that a ball traces out
-after it is released and then compare those observations to different
-mathematical models for that motion given the ball's initial height and
-velocity and the local acceleration due to gravity.
+My formal education is in experimental particle physics.  I did take a 
+theoretically-focused probability and statistics class that was mandated by my 
+undergraduate curriculum, but my practical data analysis training was mostly
+informed by heuristic techniques that I acquired in physics classes, labs, and 
+research projects.
 
-If the measurements were infinitely precise (@fig-exact-data) then we would be
-able to exclude any model that doesn't _exactly_ reproduce the observed
-trajectory (@fig-exact-fit).
+When I started my doctoral program I was assigned a thesis project that was 
+expected to require a particularly careful analysis in order to separate out a 
+weak signal from an overwhelming background.  One of the postdoctoral 
+researchers in the group suggested that I look into this up-and-coming field 
+known as "machine learning" and shared a few introductory tutorials.  To go 
+beyond those initial pieces and some unsatisfying references I was able to find 
+in the university library I asked some of my undergraduate classmates for 
+recommendations.
 
-::: {#fig-ideal layout="[ [45, 45] ]"}
+One particularly productive recommendation pointed me to Chris Bishop's
+"Pattern Recognition and Machine Learning" and David MacKay's 
+"Information Theory, Inference, and Machine Learning".  Both of these books 
+ended up being important stepping stones, but MacKay's textbook had something 
+special.
+
+One of my persistent frustrations with so many of the statistics and machine 
+learning references I encountered was how distant the techniques they presented 
+seemed to be from the experiments I was supposed to be analyzing.  While the 
+heuristic methods I learned from my physics education were not always consistent 
+nor well-behaved they at least tried to integrate models of both the experiment 
+and the underlying physical systems.  The machine learning methods, however, 
+were largely presented as black boxes that didn't need to acknowledge from where 
+the data came.
+
+The third chapter of "Information Theory, Inference, and Machine Learning" was 
+a revelation.  Using an example he encountered in his own doctoral studies 
+MacKay showed how we can use _Bayesian inference_ to learn from the the messy 
+data that is not the exception but the rule in experimental physics, 
+incorporating not only our understanding of a physical system but also the 
+complications that often arise when trying to measure those systems into a 
+consistent mathematical framework.
+
+Unfortunately that initial excitement was dampened when MacKay never came back 
+to this example in his book, instead focusing on more abstract examples.  I kept
+searching but no references ever came as close to that applied ideal teased in 
+Chapter 3.  For example many statistics and computer science references focused 
+on formal results, considering models more for their mathematical convenience 
+than any relevance to applied data analysis.  Others were encumbered by 
+philosophical baggage, spending more time discussing what mathematics we should 
+be allowed to apply in practice, or often which mathematical we _shouldn't_ be 
+allowed to apply, without any mention of how to actually apply the mathematics 
+that were being advocated.  Any discussion of realistic observations of actual, 
+physical systems was largely limited to more applied treatments that, like what 
+I had already encountered in experimental physics, used more heuristic modeling 
+and inference methods that were often unreliable in practice.
+
+After finishing my thesis I spent a year doing data analysis for a social media 
+marketing company before moving to a postdoctoral position in statistics where 
+some very patient colleagues helped me evolve beyond my heuristic education to 
+a more theoretically grounded foundation in probability and statistics.  Along 
+the way I found more and more exceptional references from authors like I.J. Good 
+and George Box that, like MacKay, bridged theory and practice in productive 
+ways.  I also had the privilege to collaborate on applied analyses in a broad 
+set of fields, consistently evaluating the efficacy of data analysis techniques 
+in those different environments.
+
+This book is my attempt to distill these insights into a systematic framework 
+for learning from one's data by modeling the particular complexities in how they 
+might actually have been generated.  Such an ambitious task, however, does not 
+come easily.  Understand this framework and how to apply it our own, unique 
+applications will require investment in a long mathematical journey.
+
+# Learning From Observations
+
+If we hold an object in our hand and release it then it will fall towards the 
+ground.  Releasing many balls from many hands establishes a persistent, 
+qualitative pattern for how objects move under the influence of Earth's gravity.
+
+To establish a more quantitative understanding of this phenomenon we to express 
+our observations as data, and we need models for how that data could behave.  
+For example we might record an object's exact height at various times during its 
+fall (@fig-exact-data).  Our models would then need to capture different ways 
+that an object could be released, in particular its initial height and velocity, 
+and how it could behave after being released, in particular the trajectory it 
+might trace out as it falls (@fig-exact-model).  The behavior of the falling 
+object should, at least in theory, be quantified by the model that exactly 
+reproduces the measurements (@fig-exact-fit).
+
+::: {#fig-ideal layout="[ [-0.5, 33, 33, 33, -0.5] ]"}
 ![](figures/gravity/exact_data/exact_data){#fig-exact-data}
+
+![](figures/gravity/exact_model/exact_model){#fig-exact-model}
 
 ![](figures/gravity/exact_fit/exact_fit){#fig-exact-fit}
 
-In an ideal world (a) infinitely precise observations of a falling ball (b)
-would exclude all mathematical models of gravity except for those that exactly
-reproduce the observations.
+In order to learn about how objects fall we have to compare (a) data to (b) 
+models. (c) Ideally the behavior of falling objects should be quantified by the 
+model that exactly reproduces the data.
 :::
 
-Unfortunately even the most skilled scientist cannot achieve infinitely precise
-measurements.  Practical measurements of a falling object are limited not only
-by chaotic atmospheric forces imparted on the ball as it falls but also finite
-spatial resolution.  Even if we knew the true model we still would not be able
-to exactly predict the outcome of each measurement (@fig-realistic-data).
+Unfortunately recording an object's height as it falls is easier said than done.  
+Chaotic atmospheric forces imparted on the ball as it falls lead to momentary
+excursions away from the expected trajectory.  At the same time we cannot 
+resolve heights and times with infinite precision, limiting how well we can 
+track an object as it falls.  Because of intricacies like these we will not, in 
+general, be able to deterministically predict the outcome of a measurement even 
+if we already understand the underlying behavior (@fig-realistic-data).  Instead 
+our data will at best appear to fluctuate our the true model.
 
-![Realistic measurements are unpredictable, at best scattering around the true
-model.](figures/gravity/data/data){width=50% #fig-realistic-data}
+![Realistic measurements are unpredictable, at best fluctuating around some 
+exact model.](figures/gravity/data/data){width=50% #fig-realistic-data}
 
-Without precise predictability we cannot exclude most models outright; just
-about every model will perfectly reproduce a given observation with a
-sufficiently convenient fluctuation in the measurement.  Even if we can restrict
-consideration to _typical_ fluctuations many different gravitational models will
-be consistent with the observed data (@fig-consistent-configs).
+These fluctuations complicate how we compare data to models.  With a 
+sufficiently convenient fluctuation just about any model will be able to 
+perfectly reproduce a given observation.  Consequently we will not be able to 
+exclude any models outright.  Even if we constraint the fluctuation behavior  
+many different models will be just as consistent with the observed data as any 
+other model (@fig-consistent-configs).
 
 ::: {#fig-consistent-configs layout="[ [45, 45] ]"}
 ![](figures/gravity/data_consistent_config1/data_consistent_config1){#fig-consistent-config1}
 
 ![](figures/gravity/data_consistent_config3/data_consistent_config3){#fig-consistent-config3}
 
-The lack of predictability in practical measurements complicates learning from
-data.  (a) Every model that is consistent with a noisy observation is
-accompanied by (b) many other models that are similarly consistent.
+The lack of predictability in practical measurements complicates how we can 
+learning from observations.  (a) Every model that is consistent with a noisy 
+observation is accompanied by (b) many other models that are similarly 
+consistent.
 :::
 
-In other words any inferences we can draw from a realistic observation will be
-fundamentally _uncertain_.  If we want to extract robust insights from data we
-have to face this uncertainty.
+Ultimately any insights we can extract from realistic data will be fundamentally
+_uncertain_.  In order to learn from observations we will need to not only 
+accept this uncertainty but also embrace it.
+
+# Science
+
+One way to formalize into a systematic process.
 
 Consider, for example, learning about the environment around us through
 experiment and observation, either for pure curiosity or to inform particular
@@ -102,6 +183,11 @@ we have to confront the fundamental limitations in measurements and determine
 how to quantify our inferential uncertainty.  Formally quantifying inferential
 uncertainty is exactly the goal of **statistical inference**.
 
+**There are many ways to implement each of these steps, and hence realize this
+conceptual scientific method into an explicit process.  In particular there
+are many ways to formalize "learning from data".  The most rigorous, however,
+involve encoding our knowledge..."
+
 To realize the "Analyze Data" step, and hence the scientific method as a whole,
 we have to encode our knowledge into mathematical models, identify how
 consistent those models are with a given observation, and then verify that the
@@ -116,23 +202,37 @@ be generated, and then quantifying how consistent each of those models are with
 an actual observation.](
 figures/scientific_method/box/box){width=75% #fig-scientific-method-box}
 
+# Bayesian Inference
+
+**Somewhere around here reference Good's 17k types of Bayesians**
+**The particular kind of Bayesian inference that we will consider in this
+book.  Use of "principled" to describe acknowleding and checking our assumptions
+instead of taking them for granted.**
+
 In this book we will learn how to use **Bayesian inference** to analyze data
 and, ultimately, implement the scientific method for both scientific and
 industrial applications.  Bayesian inference uses **probability theory** to
 not only develop **probabilistic models** of measurements but also to quantify
 how consistent those models are with our domain expertise and observed data
-(@fig-bayesian-configs)
+(@fig-bayesian-configs).  **and verify those models**.
+
+“Coherent degrees of belief”.  “Quantifying uncertainty”.
+There are many pithy phrases used to motivate Bayesian inferences.  Conceptually these are all fine, but realizing them in practice is far from trivial.   We need to build meaningful models that are actually consistent with our understanding of the system being studied.  Then we need to be able to faithfully quantify the uncertainties that arise from that model.
 
 ::: {#fig-bayesian-configs layout="[ [45, 45] ]"}
 ![](figures/gravity/prior_ensemble/prior_ensemble){#fig-config_prior }
 
 ![](figures/gravity/posterior_ensemble/posterior_ensemble){#fig-config-posterior}
 
-Bayesian inference uses probability theory to quantify which models (a) how
-a priori consistent models are with any available domain expertise and then (b)
-how a posteriori consistent they are with both the available domain expertise
-and any observed data.
+Bayesian inference uses probability theory to quantify (a) how a priori
+consistent models are with any available domain expertise and then (b) how a
+posteriori consistent they are with both the available domain expertise and any
+observed data.
 :::
+
+Build models that incorporate not just the underlying phenomenon but also all of 
+the ways that our measurements distort, contaminate, and otherwise corrupt our 
+perceptions of that phenomenon.  Allowing us to learn from even complex data.
 
 Although Bayesian inference is conceptually elegant its practical implementation
 is far from trivial.  In order to implement a successful Bayesian analysis we
@@ -143,7 +243,7 @@ Bayesian inference but also these implementation challenges so that by its
 conclusion you will be prepared to build the _bespoke_ analysis unique to your
 particular application.
 
-# The Pedagogical Approach Of This Book
+# Learning About Learning From Observations
 
 To execute such an ambitious goal as painlessly as possible we need a careful
 _pedagogical_ strategy.  What is the best way to learn how to robustly implement
@@ -272,6 +372,9 @@ introduce the basic structure of fixed-point and floating-point arithmetic and
 their pitfalls before presenting the technical details of fixed-point and
 floating-point arithmetic implementations on contemporary computers.
 
+**conceptual debt in analogy with technical debt.  Some debt is useful for
+facilitating progress but too much debt can make later steps overwhelming**
+
 ### Overlapping Progressions
 
 Alternatively we can build up to that final, sufficient abstraction with a
@@ -377,10 +480,10 @@ that introduce both `R` and `Python`.  Jenny Bryant's
 introducing oneself to `R` and @Sweigart:2019 is a nice resource for learning
 `Python`.
 
-# Outline
+# This Book
 
 With all of that said let's look at the pedagogical progression of this book in
-a bit more detail.  The book it organized into three parts: the first focuses
+a bit more detail.  The book is organized into three parts: the first focuses
 on applied probability theory, the second on the general principles of
 probabilistic modeling and statistical inference, and the third on particular
 modeling techniques.
@@ -419,9 +522,20 @@ eternal opportunity to learn new techniques, expanding our modeling toolkit and
 the sophistication of bespoke models that we can employ in practice.  This book
 will hopefully prepare you for that never-ending, but never-boring journey.
 
+# About Me?
+
+Physics analyses using heuristic methods.
+
+McKay's mention of modeling a broken particle detector.  Alas only a tease.
+This book is largely an attempt to fill in that gap and provide the tools
+necessary for building analyses around interpretable models that take
+advantage of any available domin expertise.
+
+
 # Acknowledgements
 
-I thank Ero Carrera for helpful comments.
+I thank Ero Carrera, Ramiro Barrantes-Reynolds, and Edgar Merkle for helpful
+comments.
 
 <!--
 Many people to thank for giving me the opportunity to not only learn this

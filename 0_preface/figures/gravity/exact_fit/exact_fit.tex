@@ -40,6 +40,19 @@
   \begin{scope}
     \clip (-3, -2) rectangle (3, 2);
       
+    \foreach \h/\v/\g [count=\n] in {0.663/0.636/3.801, 1.533/0.474/6.757, 0.992/-0.039/0.998, 
+                                     0.725/0.394/8.899, 1.383/0.954/4.283, 
+                                     1.866/-0.656/2.319, 0.405/0.280/0.647} {
+      \pgfmathsetmacro{\prop}{(100/ 26) * (30 - \n)};
+      \colorlet{custom}{dark!\prop!white};
+      \draw[domain={0:0.75}, smooth, samples=50, line width=1.5, variable=\t, color=custom, opacity=0.1] 
+        plot ({9 * \t - 3}, { 2 * (\h + \v * \t - 0.5 * \g * \t * \t) - 2});
+    }
+  \end{scope}
+  
+  \begin{scope}
+    \clip (-3, -2) rectangle (3, 2);
+      
    \foreach \h/\v/\g [count=\n] in {1.227/0.283/11.489} {
       \pgfmathsetmacro{\prop}{(100/ 26) * (30 - \n)};
       \colorlet{custom}{dark!\prop!white};
