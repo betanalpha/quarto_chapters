@@ -162,7 +162,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Probability Theory on General Spaces},
+  pdftitle={Measure and Probability on General Spaces},
   pdfauthor={Michael Betancourt},
   colorlinks=true,
   linkcolor={blue},
@@ -171,13 +171,13 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Probability Theory on General Spaces}
+\title{Measure and Probability on General Spaces}
 \author{Michael Betancourt}
 \date{July 2023}
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, boxrule=0pt, sharp corners, frame hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, sharp corners, enhanced, boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -239,6 +239,24 @@ and sums of measures will always converge to well-defined values.
 Element-wise measure allocations on finite and countably infinite spaces
 are also known as \textbf{mass functions}, with element-wise probability
 allocations also known as \textbf{probability mass functions}.
+
+Mass functions are particularly straightforward to visualize when \(X\)
+is not only countable but also ordered, such as the integers or a subset
+of the integers. In this case we can visualize the element-wise
+allocations with a sequence of vertical bars stacked next to each other
+(Figure~\ref{fig-mass-function}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/mass_function/mass_function.pdf}
+
+}
+
+\caption{\label{fig-mass-function}On countable, ordered spaces we can
+visualize mass functions with a sequence of vertical bars representing
+the amount of measure allocated to each individual element.}
+
+\end{figure}
 
 Unfortunately the element-wise construction does not extend any further.
 Once we consider spaces with uncountably infinite numbers of elements,
@@ -425,7 +443,7 @@ then we would be able to define consistent measures over the remaining
 subsets, and that would be sufficient for any practical application.
 
 \hypertarget{sigma-algebras}{%
-\section{\texorpdfstring{\(\sigma\)-Algebras}{\textbackslash sigma-Algebras}}\label{sigma-algebras}}
+\section{\texorpdfstring{{\(\sigma\)}-Algebras}{\textbackslash sigma-Algebras}}\label{sigma-algebras}}
 
 Because the term ``\(\sigma\)-algebra'' is often thrown around in
 measure and probability theory without much explanation it is often seen
@@ -471,18 +489,18 @@ A set equipped with a \(\sigma\)-algebra, \((X, \mathcal{X})\) is known
 as a \textbf{measurable space}. I will refer to \(X\) as the
 \textbf{ambient set}, or the \textbf{ambient space} if it is also
 equipped with additional structure. Similarly the elements of a
-\(\sigma\)-algebra are known as \textbf{measurable sets} while any
+\(\sigma\)-algebra are known as \textbf{measurable subsets} while any
 subsets in the power set but not in the \(\sigma\)-algebra are referred
 to as \textbf{non-measurable} subsets.
 
 When non-measurable subsets are misbehaving subsets they reveals the
 subtle, and often counterintuitive, pathologies inherent to that space.
-By working with \(sigma\)-algebras directly we can avoid these awkward
+By working with \(\sigma\)-algebras directly we can avoid these awkward
 pathologies entirely.
 
 \hypertarget{generating-sigma-algebras}{%
 \subsection{\texorpdfstring{Generating
-\(\sigma\)-Algebras}{Generating \textbackslash sigma-Algebras}}\label{generating-sigma-algebras}}
+{\(\sigma\)}-Algebras}{Generating \textbackslash sigma-Algebras}}\label{generating-sigma-algebras}}
 
 Now that we've defined how a consistent sub-collection of subsets
 behaves we need to consider how to construct these \(\sigma\)-algebras
@@ -523,11 +541,12 @@ natural collection of subsets that we can use to generate a
 operations to the subsets in a topology is known as a \textbf{Borel}
 \(\sigma\)-algebra. In other words a Borel \(\sigma\)-algebra is the
 unique \(\sigma\)-algebra comprised of all of the open and closed
-subsets.
+subsets. If \(X\) is a topological space then I will denote the
+corresponding Borel \(\sigma\)-algebra by \(\mathcal{B}(X)\).
 
 Every space that we will consider in this book will be a topological
 space. Consequently we can always use the corresponding Borel
-\(\sigma\)-algebra to remove any undesired subsets that would obstruct
+\(\sigma\)-algebra to remove any undesired subsets that might obstruct
 the definition of a consistent measures and probability distributions.
 Indeed Borel \(\sigma\)-algebras are so common that they are often take
 for granted, with any reference to a ``measurable space'' implicitly
@@ -537,8 +556,8 @@ assuming a topological space and its corresponding Borel
 For example finite and countably infinite spaces are almost always
 equipped with discrete topologies. Because discrete topologies contain
 all of the atomic sets the \(\sigma\)-algebras derived from them will
-always be the full power set. There are no pathological behaviors that
-we have to avoid in these cases.
+always be the full power set. In these cases there are no pathological
+behaviors that we have to avoid at all!
 
 On the the other hand the Borel \(\sigma\)-algebra derived from the
 topology that defines the real line filters out all of the
@@ -547,11 +566,13 @@ a \(\sigma\)-algebra that is strictly smaller than the full power set of
 the real line.
 
 A Borel \(\sigma\)-algebra is sufficient for removing any
-counterintuitive behavior from a topological space but in more technical
-mathematical work there are circumstances where slightly larger
-\(\sigma\)-algebras may be more convenient. In more applied practice we
-can safely assume a Borel \(\sigma\)-algebra or any extension that might
-be needed to avoid any technical problems.
+counterintuitive behavior from a topological space, but in more
+technical mathematical work there are circumstances where slightly
+larger \(\sigma\)-algebras may be more convenient; see for example the
+end of \href{@sec:lebesgue}{Section 5.2}. In more applied practice we
+can always safely assume a Borel \(\sigma\)-algebra or any extension of
+that \(\sigma\)-algebra that might be needed to resolve any technical
+issues.
 
 \hypertarget{measures-and-probability-distributions}{%
 \section{Measures and Probability
@@ -600,9 +621,9 @@ A \textbf{probability distribution} (Figure~\ref{fig-distribution}) on
 any measurable space \((X, \mathcal{X})\) is a function from the
 \(\sigma\)-algebra \(\mathcal{X}\) to the closed unit interval,
 \begin{alignat*}{6}
-\pi :\; & \mathcal{X} & &\rightarrow& \; & [0, \infty] &
+\pi :\; & \mathcal{X} & &\rightarrow& \; & [0, 1] &
 \\
-& \mathsf{x} & &\mapsto& & \mu(\mathsf{x}) &,
+& \mathsf{x} & &\mapsto& & \pi(\mathsf{x}) &,
 \end{alignat*} with \[
 \pi(X) = 1
 \] and \[
@@ -842,6 +863,40 @@ system of equations \begin{align*}
 - \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2}).
 \]
 
+\hypertarget{null-subsets}{%
+\subsection{Null Subsets}\label{null-subsets}}
+
+The measure allocated to a measurable subset quantifies the weight of
+that subset relative to any other measurable subsets. Those measurable
+subsets that are allocated \emph{zero} measure are the least important
+subsets in terms of the overall allocation. At the same time these
+negligible subsets can be useful for characterizing certain properties
+of a given measure.
+
+Any measurable subset \(\mathsf{x} \in \mathcal{X}\) that is allocated
+zero measure \[
+\mu(\mathsf{x}) = 0
+\] is referred to as a \textbf{null subset} of the measure space
+\((X, \mathcal{X}, \mu)\) or, more compactly, a \(\mu\)-null subset.
+Similarly if \[
+\pi(\mathsf{x}) = 0
+\] then the measurable subset \(\mathsf{x}\) is denoted a null subset of
+the probability space \((X, \mathcal{X}, \pi)\), or simply a
+\(\pi\)-null subset.
+
+Most properties of measures depend on the detailed allocation of the
+total across all measurable subsets. Some useful properties, however,
+are completely characterized by which measurable subsets receive a
+non-zero allocation and which measurable subsets receive a zero
+allocation.
+
+Any two measures that share the same null subsets will share any
+properties that are derived from those null subsets. Consequently the
+overlap in null subsets, or the lack thereof, is often a useful way to
+determine how compatible two measures are with each other. This
+compatibility will be particularly important when we construct density
+functions in Chapter 5.
+
 \hypertarget{measures-and-probability-distributions-in-practice}{%
 \subsection{Measures and Probability Distributions In
 Practice}\label{measures-and-probability-distributions-in-practice}}
@@ -853,29 +908,371 @@ constructing explicit allocations in practice. Specifically in almost
 all circumstances it is infeasible, if not outright impossible, to
 exhaustively specify the measure or probability allocated to
 \emph{every} subset in the ambient \(\sigma\)-algebra. Constructing and
-then storing infinitely large databases linking each measurable subset
-to their allocations is not particularly practical!
+then storing infinitely large databases linking each measurable subset,
+or even just the non-null subsets, to their allocations is not
+particularly practical!
 
-In some cases we can define a useful measures and probability
-distributions by specifying the allocation to only some of the
+In some cases we can define useful measures and probability
+distributions by specifying the allocation to only \emph{some} of the
 measurable subsets and then deriving the allocations to the rest with
 countable additivity. For example in finite and countable spaces we need
-to specify only the allocations to atomic subsets, and in some
-uncountable spaces we might need to specify only the allocations to
-certain nice subsets.
+to specify only the allocations to atomic subsets. Similarly measures
+over \((\mathbb{R}, \mathcal{B}(\mathbb{R}))\) can be completely
+specified by allocations to interval subsets.
 
 That said in most of these cases those reduced allocations are still
 impractical to specify one-by-one. Because of that our introduction to
 general measure and probability theory will have to remain a bit
-abstract, without any explicit examples, for the time being.
+abstract, without many explicit examples, for the time being.
 
 In applied problems measures and probability distributions are almost
 always defined \emph{algorithmically}, with rules to evaluate the
 measure or probability allocated to a subset on the fly instead of
 storing and retrieving the allocation from an exhaustive specification.
-We will introduce two of the most important algorithm representations of
-measures and probability distributions, and use them to define many
-useful allocations, in Chapter Five and Chapter Eight.
+We will introduce two of these algorithmic representations, and use them
+to define many useful allocations, in Chapter Five and Chapter Eight.
+
+\hypertarget{uniform-measures}{%
+\section{Uniform Measures}\label{uniform-measures}}
+
+Any given measurable space \((X, \mathcal{X})\) can be equipped with
+infinitely many measures and probability distributions. Some of these
+objects, however, are more useful in applied practice than others.
+
+This section will introduce two measures that encode distinct notions of
+\emph{uniformity} that are applicable to different types of ambient
+spaces. In the following chapters we will see how the properties of
+these \textbf{uniform measures} make them particularly useful in
+practical applications of probability theory.
+
+\hypertarget{counting-measures}{%
+\subsection{Counting Measures}\label{counting-measures}}
+
+Intuitively a uniform measure should allocate the same measure to as
+many measurable subsets as possible. The consistency of measures,
+however, limits just how many subsets can receive the same allocation.
+For example if two disjoint subsets \(\mathsf{x}_{1} \in \mathcal{X}\)
+and \(\mathsf{x}_{2} \in \mathcal{X}\) are allocated the same measure,
+\[
+\mu(\mathsf{x}_{1}) = \mu(\mathsf{x}_{2}) = \mu_{0},
+\] then their union will be allocated the measure, \[
+\mu(mathsf{x}_{1}) \cup \mu(\mathsf{x}_{2})
+=
+\mu(\mathsf{x}_{1}) + \mu(\mathsf{x}_{2})
+=
+2 \, \mu_{0};
+\] all three allocations will be equal only if \(\mu_{0} = \infty\).
+
+In order to define a notion of uniformity that doesn't abuse infinity we
+need to restrict our consideration from the entire \(\sigma\)-algebra to
+collections of measurable subsets that we want to behave in the same
+way. If this collection is large enough then we can completely define a
+uniform measure by enforcing the same allocation to those distinguished
+subsets.
+
+For example on any countable measure space \((X, 2^{X})\) a natural
+collection of subsets to consider are the atomic subsets. Because in
+this case the measure allocated to these subsets completely specifies
+the allocations to every other subset we can fully define a uniform
+measure by a enforcing the same allocation to each element. This results
+in a constant mass function (Figure~\ref{fig-uniform-mass-function}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/uniform_mass_function/uniform_mass_function.pdf}
+
+}
+
+\caption{\label{fig-uniform-mass-function}On a countable space any
+uniform measure allocates the same measure to every individual element
+resulting in a constant mass function.}
+
+\end{figure}
+
+In particular the \textbf{counting measure} on \((X, 2^{X})\) is defined
+by a unit allocation to each atomic set, \[
+\chi(\{ x \}) = 1.
+\] Equivalently we can define the counting measure with a uniform mass
+function that assigns each element to a unit allocation, \[
+\chi(x) = 1.
+\]
+
+Given these element-wise allocations we can derive the measure allocated
+to any other subset \(\mathsf{x} \subset X\) by countable additivity,
+\begin{align*}
+\chi( \mathsf{x} )
+&= \sum_{x \in \mathsf{x}} \chi(\{ x \})
+\\
+&= \sum_{x \in \mathsf{x}} 1,
+\end{align*} which always results in the total number of elements in
+\(\mathsf{x}\). The total counting measure, \[
+\chi( X ) = \sum_{x \in X} 1,
+\] just counts the number of elements in the ambient set. In other words
+a counting measure formalizes our intuitive notion of counting discrete
+objects.
+
+An immediate consequence of these derived allocations is that \emph{any}
+subset with the same number of elements will receive the same
+allocation. Uniformity over the individual elements induces uniformity
+over other subsets as well.
+
+When there are only a finite number of elements in \(X\) the total
+measure will also be finite. In this case we can normalize the counting
+measure into a uniform probability distribution, \[
+\pi ( \mathsf{x} ) =
+\frac{ \sum_{x \in \mathsf{x}} 1 }{ \sum_{x \in X} 1 },
+\] which quantifies the proportion of all of the elements in \(X\) that
+are contained in \(\mathsf{x}\). If there are an infinite number of
+elements in \(X\) then this normalization is no longer possible; for
+example there is no well-defined notion of a uniform probability
+distribution over the integers \(\mathbb{Z}\).
+
+Counting measures are not the only uniform measures that we could define
+over a countable ambient set. More generally we can define a uniform
+measure by allocating any positive real number \(c \in \mathbb{R}^{+}\)
+to each element, \[
+\kappa(\{ x \}) = c.
+\] That said these other uniform measures are somewhat redundant in the
+sense that their allocations can be recovered by scaling the
+corresponding counting measure allocations, \[
+\kappa ( \mathsf{x} ) = c \cdot \xi ( \mathsf{x} ).
+\]
+
+One important feature of a counting measure, indeed any uniform measure,
+is that every subset except the empty set receives a non-zero
+allocation. That is to say that the empty set is the \emph{only}
+\(\chi\)-null subset.
+
+\hypertarget{sec:lebesgue}{%
+\subsection{Lebesgue Measures}\label{sec:lebesgue}}
+
+Unfortunately on uncountable spaces element-wise allocations do not
+completely define measures. In order to generalize any notion of uniform
+measure we have to specify a larger class of measurable subsets that
+should receive equal allocations.
+
+An uncountable set alone, however, offers no criteria for preferring any
+collection of subsets to any other, and hence no criteria for defining a
+consistent notion of uniform measure. Additional structure on \(X\),
+however, may be able to break this ambiguity.
+
+Consider for example a real line \(\mathbb{R}\) equipped with an
+appropriate ordering, algebra, metric, and topology as discussed in
+\href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
+Two}. Using the ordering we can construct closed interval subsets, \[
+[ x_{1}, x_{2} ] = \{ x \in \mathbb{R} \mid x_{1} \le x \le x_{2} \}.
+\] We can then use the metric to characterize these intervals by the
+distance between the end points, \[
+l( \, [ x_{1}, x_{2} ] \, ) = d( x_{1}, x_{2} ) = | x_{2} - x_{1} |,
+\] otherwise known as the interval \textbf{length}. Moreover if we use a
+Borel \(\sigma\)-algebra derived from the real topology then these
+closed interavls will all be measurable subsets.
+
+Any notion of uniformity that is compatible with all of this additional
+structure should treat all interval subsets with the \emph{same length}
+in the same way. In other words a uniform measure over \(\mathbb{R}\)
+should allocate the same measure to all equal-length intervals
+(Figure~\ref{fig-equal-length-intervals}). For example because the
+intervals \[
+l( \, [-2, -1] \, ) = l( \, [5, 6] \, ) = l( \, [150, 151] \,)
+\] all have the same length any uniform measure should give \[
+\mu( \, [-2, -1] \, ) = \mu( \, [5, 6] \, ) = \mu( \, [150, 151] \, ).
+\] Likewise because \[
+l( \, [-350, -300] \, ) = l( \, [0, 50] \, )
+\] we should have \[
+\mu( \, [-350, -300] \, ) = \mu( \, [0, 50] \,),
+\] and so on.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/interval_partitions/interval_partitions.pdf}
+
+}
+
+\caption{\label{fig-equal-length-intervals}The structure that defines
+the real line also distinguishes interval subsets that we can
+characterize by their length. Any uniform measure over the real line
+should allocate the same measure to any interval with the same length.}
+
+\end{figure}
+
+The easiest way to accomplish this uniformity is to allocate to each
+interval a measure directly equal to the its length, \[
+\lambda( \, [x_{1}, x_{2}] \, )
+= l( \, [x_{1}, x_{2}] \, )
+= | x_{2} - x_{1} |.
+\] Allocations to more general measurable subsets can then be derived by
+decomposing each subset into the union of disjoint intervals and
+applying countable additivity. The resulting uniform measure over a
+given real line is known as the \textbf{Lebesgue measure}.
+
+Just as the counting measure formalizes intuition notions of counting on
+countable spaces, the Lebesgue measure formalizes intuitive notions of
+length on a real line. This formalization of length, however, is a bit
+more subtle. Counting behaves the same on all countable spaces, but
+length can behave differently across different real lines!
+
+Two real lines with incompatible metrics will assign different lengths
+to the same intervals, resulting in different Lebesgue measures.
+Equivalently the Lebesgue measure can behave differently for two
+different parameterizations of a flexible real line. When there might be
+any chance of confusion we have to be careful to communicate which
+parameterization we're using in any given application.
+
+Because the total Lebesgue measure is infinitely large, \begin{align*}
+\lambda(\mathbb{R})
+&=
+\lim_{x \rightarrow \infty} \lambda( \, [-x, x] \, )
+\\
+&=
+\lim_{x \rightarrow \infty} 2 \, | x |
+\\
+&=
+\infty,
+\end{align*} it cannot be normalized into a probability distribution. As
+with the integers there is no well-defined notion of a uniform
+probability distribution over a real line.
+
+Every other uniform measure over a real line is defined by allocating a
+measure to each interval \emph{proportional} to its length, \[
+\nu( \, [a, b] \, ) \propto l( \, [a, b] \, ).
+\] Consequently every uniform measure over a real line reduces to a
+constant scaling of the Lebesgue measure, \[
+\nu ( \mathsf{x} ) \propto \lambda ( \mathsf{x} ),
+\] similar to how every uniform measure over countable spaces reduces to
+a scaling of the counting measure.
+
+By definition the Lebesgue measure on any real line will allocate zero
+measure to individual points, \begin{align*}
+\lambda(\{ x \})
+&= \lambda([x, x])
+\\
+&= d(x, x)
+\\
+&= 0.
+\end{align*} Indeed any measurable subset with only a countable number
+of elements will also be \(\lambda\)-null, \begin{align*}
+\lambda(\mathsf{x})
+&=
+\lambda(\cup_{i} \{ x_{i} \} )
+\\
+&=
+\sum_{i} \lambda( \{ x_{i} \} )
+\\
+&=
+\sum_{i} 0
+\\
+&=
+0.
+\end{align*}
+
+Critically these properties follow from \(d(x, x) = 0\) which is true
+for \emph{any} well-behaved metric. Two real lines with incompatible
+metrics might feature different Lebesgue measures, but those Lebesgue
+measures will always share the same null subsets and hence share any
+properties derived from those null subsets.
+
+Finally there is one formal detail that I want to mention to prepare any
+readers who may continue on to more technical literature. Allocations
+based on interval lengths can be used to derive consistent allocations
+over any subset constructed from open and closed subsets, and hence
+every measurable subset in the Borel \(\sigma\)-algebra
+\(\mathcal{B}(\mathbb{R})\). They can also be used, however, to derive
+consistent allocations to some subsets that are \emph{not} in
+\(\mathcal{B}(\mathbb{R})\).
+
+Accordingly Lebesgue measures are usually formally defined not over
+\(\mathcal{B}(\mathbb{R})\) but rather over a slightly larger
+\(\sigma\)-algebra referred to as, unsurprisingly, the \textbf{Lebesgue
+\(\sigma\)-algebra}. That said these additional subsets are negligible
+in the sense that they are always allocated zero Lebesgue measure.
+Because the differences between these \(\sigma\)-algebras are limited to
+null subsets they can be effectively ignored in most practical
+applications.
+
+\hypertarget{uniformity-ignorance-and-information}{%
+\subsection{Uniformity, Ignorance, and
+Information}\label{uniformity-ignorance-and-information}}
+
+The concepts of \textbf{ignorance} and \textbf{information} are related
+to uniformity; formalizing the relationships between these concepts,
+however, is subtle. In order to avoid confusing these concepts we have
+take care to recognize not only their similarities but also their
+differences.
+
+When two elements of a countable space are allocated the same measure
+then the overall allocation will be the same even if we permute those
+two elements before allocating measures. In other words any measure that
+allocates the same measure to two elements is not able to distinguish
+between any permutations of those elements.
+
+The more regular the individual allocations are the less sensitive the
+resulting measure will be to any rearrangement of the elements.
+Conversely the more the allocations vary from element to element the
+more the resulting measure will able to discern one permutation from
+another. Informally we might say that the more uniform the measure the
+less information it encodes. Because a uniform measure allocates the
+same measure to every element it is ignorant to \emph{any} bijective
+transformation of the elements, capturing the least information possible
+on a countable space.
+
+On uncountable spaces these concepts become more delicate. The
+allocations defined by the Lebesgue measure, for example, are \emph{not}
+invariant to arbitrary transformations of the real line. Any
+transformation that warps the metric will also warp lengths and hence
+the measures allocated by the Lebesgue measure. Instead the Lebesgue
+measure is ignorant only to transformations that preserve distances.
+
+In order to formalize heuristic concepts like ``ignorance'' and
+``information'' we have to embrace a bit more abstraction. Recall that
+in
+\href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
+Two} we discussed the notion of a structure-preserving transformation.
+More generally if \(\phi : X \rightarrow X\) is a structure-preserving
+automorphism then we say that the structure is \textbf{symmetric} to
+\(\phi\) while the transformation \(\phi\) is a \textbf{symmetry} of the
+structure.
+
+In other words if \(\phi\) is a symmetry of a structure \(\mathfrak{x}\)
+then the behavior of \(\mathfrak{x}\) is the same before and after we
+apply the transformation. The structure cannot detect whether or not we
+apply the transformation.
+
+Some structures admit multiple symmetries at the same time. For example
+the discrete topology on a countable set is invariant to any permutation
+of the elements while the metric on a real line is invariant to all
+translations of the elements. The more symmetric a structure is the less
+it can distinguish between arbitrary transformations to the ambient set.
+If we formalize information as the ability of a structure to distinguish
+between transformations of the ambient set then the more symmetric a
+structure is the less information it encodes.
+
+From an abstract perspective measures and probability distributions are,
+like orderings, algebras, metrics, topologies, and \(\sigma\)-algebras,
+just structures that we can endow onto a set. The more invariant a
+measure is to transformations of that set the less information it will
+contain. We will more formally consider how measures transform, and
+hence how to precisely define symmetries of a measure, in Chapter Six.
+
+Uniform measures are built to be symmetric to some at least some
+transformations and hence encode less information than other measures.
+For example the counting measure is invariant to any permutation of a
+countable ambient set while the Lebesgue measure is invariant to any
+translation of a real line. We can also extend this construction to more
+elaborate spaces, for instance defining uniform measures on spheres that
+invariant to any rotation.
+
+Critically, however, not every uniform measure is invariant to every
+possible transformation of the ambient set. Some uniform measures are
+more informative than others! Consequently notions of uniformity do not
+define any \emph{universal} notions of ignorance, just ignorance to the
+particular transformations that are used to define uniformity in a given
+context.
+
+In practice this means that we have to be careful not to make broad
+claims about uniform measures that are least informative or most
+ignorant but instead specify \emph{with respect to which
+transformations} a measure might be least informative or most ignorant.
 
 \hypertarget{interpretations-of-measure-and-probability}{%
 \section{Interpretations of Measure And
@@ -978,7 +1375,9 @@ outcomes that fall into each subset of outcome values.
 In this case the particular ordering of the event sequences doesn't
 matter and we can also interpret them as defining a population of
 possible events. From this perspective the application of probability
-theory is equivalent to the application in the previous section.
+theory is equivalent to the application in the previous section. At the
+same time if we interpret repeated samples from a population as events
+then the population probabilities can be interpreted as frequencies.
 
 \hypertarget{modeling-uncertainties}{%
 \subsection{Modeling Uncertainties}\label{modeling-uncertainties}}
