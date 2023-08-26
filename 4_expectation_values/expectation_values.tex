@@ -1,0 +1,2479 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Expectation Values},
+  pdfauthor={Michael Betancourt},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Expectation Values}
+\author{Michael Betancourt}
+\date{August 2023}
+
+\begin{document}
+\maketitle
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, breakable, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced]}{\end{tcolorbox}}\fi
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+In
+\href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html}{Chapter
+Three} we defined measures, and probability distributions as a special
+case, as mappings from measurable subsets to allocated measures. These
+subset allocations, however, also induce a somewhat surprising but
+incredibly powerful mapping from real-valued functions to single real
+number \emph{expectation value}. This \emph{expectation} operation
+summarizes the interaction between a measure and a given function,
+allowing us to use one to learn about the other.
+
+We will being our exploration of expectation values with a heuristic
+construction on finite measure spaces before considering a more formal,
+but also more abstract, construction that applies to any measure space.
+Next we'll investigate how the specification of expectation values can
+be used to implicitly define measures without having to explicitly
+define subset allocations and some useful applications. Finally we'll
+consider expectation values that are informed by common ambient space
+structures and then conclude with a discussion of a few exceptional
+measures whose expectation values can be computed algorithmically.
+
+\hypertarget{finite_expectation}{%
+\section{Expectation on Finite Measure
+Spaces}\label{finite_expectation}}
+
+To start our discussion of expectation as simply as possible let's begin
+by considering a finite measure space compromised of the finite set
+\(X\), a measure defined by the mass function \[
+\mu : X \rightarrow [0, \infty],
+\] and a real-valued function \(f : X \rightarrow \mathbb{R}\).
+
+The allocations defined by the mass function weights the elements of
+\(X\) relative to each other, emphasizing some while suppressing others.
+At the same time the function \(f\) associates those elements with a
+numerical output. We can then weight the numerical outputs by combining
+the weights of the inputs \(\mu(x)\) and the individual output values
+\(f(x)\), \[
+\mu(x) \, f(x).
+\]
+
+Adding all of these weighted outputs together gives a single number that
+is sensitive to the interplay between \(\mu\) and \(f\), \[
+\sum_{x \in X} \mu(x) \cdot f(x).
+\] The summary emphasizes not only large output values but also outputs
+from highly-weighted inputs. More formally this procedure defines the
+\textbf{expectation value} of \(f\) with respect to \(\mu\),
+\begin{align*}
+\mathbb{E}_{\mu}[f]
+&\equiv \sum_{x \in X} \mu(x) \cdot f(x).
+\end{align*} We use square brackets instead of round brackets to hint
+that the mapping doesn't take points as input but rather entire
+functions.
+
+An interesting side effect of this construction is that expectation
+values are linear: given two real-valued functions
+\(f: X \rightarrow \mathbb{R}\) and \(g : X \rightarrow \mathbb{R}\) and
+two real constants \(\alpha, \beta \in \mathbb{R}\) we have
+\begin{align*}
+\mathbb{E}_{\mu}[\alpha \cdot f + \beta \cdot g]
+&= \sum_{x \in X} \mu(x) \cdot
+\left[ \alpha \cdot f(x) + \beta \cdot g(x) \right]
+\\
+&=  \sum_{x \in X} \mu(x) \cdot
+\left( \alpha \cdot f(x) + \beta \cdot g(x) \right)
+\\
+&=  \alpha \cdot \sum_{x \in X} \mu(x) \cdot f(x)
+  + \beta \cdot \sum_{x \in X} \mu(x) \cdot g(x)
+\\
+&=  \alpha \cdot \mathbb{E}_{\mu}[f]
+  + \beta \cdot \mathbb{E}_{\mu}[g].
+\end{align*} We will exploit this linearity property endlessly when we
+start appying expectation values in practice.
+
+The expectation \(\mathbb{E}_{\mu}[f]\) is sensitive to the behavior of
+\(f\), but only in the context of \(\mu\). By considering multiple
+\emph{test} measures, however, we can use this operation to more fully
+probe the behavior of a fixed function \(f\). Expectations of \(f\) with
+respect to test measures that emphasizes certain input elements will be
+more sensitive to the corresponding output elements, probing different
+aspects of \(f\). More intuitively we can interpret each test measure
+\(\mu_{j}\) as encoding a question about \(f\) and the corresponding
+expectation value \(\mathbb{E}_{\mu_{j}}[f]\) as encoding the answer
+(Figure~\ref{fig-probing-functions}).
+
+\begin{figure}
+
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.45\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/probing_functions/probing_functions.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-probing-functions}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.45\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/probing_measures/probing_measures.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-probing-measures}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-probes}Expectations values probe the interaction
+between a measure and a real-valued function. (a) If we fix the function
+\(f\) then expectation values with respect to multiple test measures are
+sensitive to different features of \(f\). We can interpret each test
+measure as a question about \(f\) with the corresponding expectation
+value providing an answer. (b) Similarly expectation values of multiple
+test functions with respect to a fixed measure \(\mu\) are sensitive to
+different features of \(\mu\). Again we can interpret each test function
+as a question about \(\mu\) with the corresponding expectation values
+encoding an answer.}
+
+\end{figure}
+
+For example consider a \emph{singular} probability mass function that
+concentrates entirely on a single element, \[
+\delta_{x'} (x) =
+\left\{
+\begin{array}{rr}
+1, & x = x' \\
+0, & x \neq x'
+\end{array}
+\right. .
+\] The expectation value of any real-valued function \(f\) with respect
+to \(\delta_{x_{i}}\) is given by \begin{align*}
+\mathbb{E}_{\delta_{x'}}[f]
+&= \sum_{x \in X} \delta_{x'}(x) \cdot f(x)
+\\
+&= \delta_{x'}(x') \cdot f(x')
+  + \sum_{x \neq x'} \delta_{x'}(x) \cdot f(x)
+\\
+&=  1 \cdot f(x')
+  + \sum_{x \neq x'} 0 \cdot f(x)
+\\
+&= f(x_{i}).
+\end{align*} In other words expectation values of functions with respect
+to \(\delta_{x'}\) allow us to probe individual output values \(f(x')\).
+
+Similarly consider a uniform probability mass function where each
+element is allocated the same probability, \[
+\pi(x) = \frac{1}{I}.
+\] The corresponding expectation value captures the \textbf{average} of
+the function output values, \begin{align*}
+\mathbb{E}_{\pi}[f]
+&= \sum_{x \in X} \pi(x) \cdot f(x)
+\\
+&= \sum_{x \in X} \frac{1}{I} \cdot f(x)
+\\
+&= \frac{1}{I} \sum_{x \in X} f(x).
+\end{align*} When we use non-uniform measures this expectation operation
+generalizes averages to more general summaries.
+
+At the same time we can use different test functions to probe different
+features of a fixed measure \(\mu\). Expectations of test functions with
+larger outputs for some inputs will be more sensitive to the measures
+\(\mu\) allocated to those inputs. Again we can interpret each test
+function \(f_{j}\) as encoding a different question about \(\mu\) with
+the corresponding expectation value \(\mathbb{E}_{\mu}[f_{j}]\) encoding
+the answer (Figure~\ref{fig-probing-measures}).
+
+For example for any subset \(\mathsf{x} \subset X\) we can construct an
+\textbf{indicator function} that returns \(1\) if the input is contained
+in \(\mathsf{x}\) and zero otherwise, \[
+\mathbb{I}_{\mathsf{x}} (x) =
+\left\{
+\begin{array}{rr}
+1, & x \in \mathsf{x} \\
+0, & x \notin \mathsf{x}
+\end{array}
+\right. .
+\] The expectation of the indicator function
+\(\mathbb{I}_{\mathsf{x}}\), however, is just the measure allocated to
+\(\mathsf{x}\), \begin{align*}
+\mathbb{E}_{\mu}[\mathbb{I}_{\mathsf{x}}]
+&= \sum_{x \in X} \mu(x) \cdot \mathbb{I}_{\mathsf{x}} (x)
+\\
+&= \sum_{x \in \mathsf{x}} \mu(x) \cdot \mathbb{I}_{\mathsf{x}} (x)
+  + \sum_{x \notin \mathsf{x}} \mu(x) \cdot \mathbb{I}_{\mathsf{x}} (x)
+\\
+&=  \sum_{x \in \mathsf{x}} \mu(x) \cdot 1
+  + \sum_{x \notin \mathsf{x}} \mu(x) \cdot 0
+\\
+&=  \sum_{x \in \mathsf{x}} \mu(x)
+\\
+&= \mu( \mathsf{x} ).
+\end{align*} Expectation values of various indicator functions allow us
+to directly probe the various subset allocations.
+
+\hypertarget{expectation-on-general-measure-spaces}{%
+\section{Expectation on General Measure
+Spaces}\label{expectation-on-general-measure-spaces}}
+
+Unfortunately the straightforward construction of expectation values on
+finite spaces doesn't generalize to general measure spaces. In
+particular on uncountable spaces, where element-wise allocations
+\(\mu( \{x\} )\) do not completely characterize a measure, the weighted
+output values \(\mu( \{ x \} ) \cdot f(x)\) do not completely
+characterize the interaction between a measure and a real-valued
+function.
+
+In order to generalize expectation values to arbitrary measure spaces we
+have to appeal to a more sophisticated construction with some subtle,
+but important, consequences.
+
+\hypertarget{expectation-of-simple-functions}{%
+\subsection{Expectation of Simple
+Functions}\label{expectation-of-simple-functions}}
+
+We'll build up to general expectation values by considering increasingly
+sophisticated classes of functions that are still nice enough for their
+expectation values to be unambiguous on any measurable space.
+
+For example consider a constant function that always returns the same
+output for any input, \[
+c(x) \mapsto c_{0} \in \mathbb{R}
+\] for all \(x \in X\). The only possible expectation value for a
+constant function is that common output, in which case we should have \[
+\mathbb{E}_{\mu}[c] = c_{0}
+\] for \emph{any} measure \(\mu\).
+
+Increasing the complexity slightly let's next consider indicator
+functions which vanish outside of a given measurable subset
+(Figure~\ref{fig-indicator}) \[
+\mathbb{I}_{\mathsf{x}} (x) =
+\left\{
+\begin{array}{rr}
+1, & x \in \mathsf{x} \\
+0, & x \notin \mathsf{x}
+\end{array}
+\right. .
+\]
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/indicator_function/indicator_function.pdf}
+
+}
+
+\caption{\label{fig-indicator}An indicator function corresponding to a
+measurable subset \(\mathsf{x} \in \mathcal{X}\) vanishes for all inputs
+that are not contained in \(\mathsf{x}\). Here \(\mathsf{x}\) is an
+interval subset over the real line.}
+
+\end{figure}
+
+In order to generalize the behavior on finite measure spaces that we
+encountered in \href{@finite_expectation}{Section One} the expectation
+value of any indicator function should be equal to the measure allocated
+to that subset, \[
+\mathbb{E}_{\mu}[ \mathbb{I}_{\mathsf{x}} ]
+=
+\mu( \mathsf{x} ),
+\] for any measure \(\mu\).
+
+We can manufacture even more complex functional behavior still by
+overlaying multiple indicator functions on top of each other. A
+\textbf{simple function} is given by the sum of scaled indicator
+functions (Figure~\ref{fig-simple}), \[
+s(x) = \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x),
+\] where \[
+\{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{j}, \ldots \} \in \mathcal{X}
+\] is any sequence of measurable subsets and \[
+\{ \phi_{1}, \ldots, \phi_{j}, \ldots \} \in \mathbb{R}
+\] is any sequence of real numbers. By incorporating countably many
+indicator functions we can engineer quite sophisticated functional
+behavior.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/simple_function/simple_function.pdf}
+
+}
+
+\caption{\label{fig-simple}Simple functions are constructed from linear
+combinations of indicator functions. Incorporating more indicator
+functions yields more sophisticated functional behavior.}
+
+\end{figure}
+
+If we assume that expectation is a linear operation on any measure space
+then we can immediately compute the expectation of any simple function,
+\begin{align*}
+\mathbb{E}_{\mu}[ s ]
+&=
+\mathbb{E}_{\mu} \left[ \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}} \right]
+\\
+&=
+\sum_{j} \phi_{j} \cdot \mathbb{E}_{\mu}[ I_{\mathsf{x}_{j}} ]
+\\
+&=
+\sum_{j} \phi_{j} \cdot \mu(\mathsf{x}_{j}).
+\end{align*}
+
+\hypertarget{lebesgue-integration}{%
+\subsection{Lebesgue Integration}\label{lebesgue-integration}}
+
+Most functions whose expectation values are of interest in practical
+analysis are not simple functions, but they can often be
+\emph{well-approximated} by simple functions. As we add more and more
+indicator functions we can construct simple functions that approximate
+non-simple functions better and better (Figure~\ref{fig-simple-approx}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/simple_function_approx/simple_function_approx.pdf}
+
+}
+
+\caption{\label{fig-simple-approx}As we add more indicator functions
+simple functions become more flexible and are able to better approximate
+the behavior of non-simple functions. Certain non-negative functions can
+be \emph{exactly} recovered from sufficiently flexible simple
+functions.}
+
+\end{figure}
+
+Some functions can even be \emph{exactly} recovered from sufficiently
+flexible simple functions. A real-valued function
+\(f: X \rightarrow \mathbb{R}\) is \textbf{measurable} with respect to
+the \(\sigma\)-algebra \(\mathcal{X}\), or
+\textbf{\(\mathcal{X}\)-measurable}, if every half interval of outputs
+\[
+(-\infty, x] \subset \mathbb{R}
+\] pulls back to a measurable subset on \((X, \mathcal{X})\), \[
+f^{*}( (-\infty, x] )
+=
+\{ x \in X \mid f(x) \in (\infty, x] \}
+\in \mathcal{X}.
+\] We'll come back to the topic of measurable functions in much more
+detail in Chapter Seven, but for now our main concern will be to
+avoiding confusing measurable \emph{subsets} on \((X, \mathcal{X})\) and
+measurable \emph{functions} from \((X, \mathcal{X})\) to \(\mathbb{R}\).
+
+Measurable functions with non-negative outputs, \[
+f(x) \ge 0
+\] for all \(x \in X\), are particularly special. Any non-negative,
+measurable function can always be perfectly recovered as a certain limit
+of increasingly complicated simple functions, \[
+f(x) = \sum_{j = 1}^{\infty} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x).
+\] We can then \emph{define} the expectation value of a non-negative,
+measurable function as the expectation value of the corresponding simple
+function decomposition, \begin{align*}
+\mathbb{E}_{\mu}[f]
+&\equiv
+\mathbb{E}_{\mu} \left[
+\sum_{j = 1}^{\infty} \phi_{j} \cdot I_{\mathsf{x}_{j}} \right]
+\\
+&=
+\sum_{j = 1}^{\infty} \phi_{j} \cdot
+\mathbb{E}_{\mu} \left[I_{\mathsf{x}_{j}} \right]
+\\
+&=
+\sum_{j = 1}^{\infty} \phi_{j} \cdot
+\mu(\mathsf{x}_{j}).
+\end{align*} In general a non-negative, measurable function can be
+constructed from multiple simple functions, but the expectation values
+derived from any of them will all be the same. Consequently there's no
+worry for ambiguous of otherwise inconsistent answers, and expectation
+values for non-negative, measurable function are completely
+well-behaved. This procedure for defining expectation values through
+simple functions representations is known as \textbf{Lebesgue
+integration}.
+
+We've come a long way, but non-negative functions are still somewhat
+exceptional amongst all of the functions that might come up in a given
+analysis. To define expectation values for measurable functions that
+aren't necessarily positive we just have to decompose the functions by
+the sign of their outputs (Figure~\ref{fig-sign-decomposition}), \[
+f(x) = f^{+}(x) - f^{-}(x),
+\] where \[
+f^{+} (x) =
+\left\{
+\begin{array}{rr}
+f(x), & f(x) \ge 0 \\
+0, & f(x) < 0
+\end{array}
+\right.
+\] and \[
+f^{-} (x) =
+\left\{
+\begin{array}{rr}
+- f(x), & f(x) < 0 \\
+0, & f(x) \ge 0
+\end{array}
+\right. .
+\]
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/sign_decomposition/sign_decomposition.pdf}
+
+}
+
+\caption{\label{fig-sign-decomposition}Every real-valued function
+\(f: X \rightarrow \mathbb{R}\) function can be decomposed by the sign
+of its output values, resulting in the two positive functions
+\(f^{+}: X \rightarrow \mathbb{R}^{+}\) and
+\(f^{-}: X \rightarrow \mathbb{R}^{+}\).}
+
+\end{figure}
+
+Because \(f^{+}\) and \(f^{-}\) are both non-negative we can construct
+their expectation values \(\mathbb{E}_{\mu}[f^{+}]\) and
+\(\mathbb{E}_{\mu}[f^{-}]\) as above. Provided that the expectation
+values are not both infinite we can then define the expectation value of
+\(f\) by taking advantage of linearity, \begin{align*}
+\mathbb{E}_{\mu}[f]
+=
+\mathbb{E}_{\mu}[f^{+} - f^{-}]
+=
+\mathbb{E}_{\mu}[f^{+}] - \mathbb{E}_{\mu}[f^{-}].
+\end{align*}
+
+One way to ensure that this difference is well-defined is to require
+that \begin{align*}
+\mathbb{E}_{\mu}[| f |]
+=
+\mathbb{E}_{\mu}[f^{+} + f^{-}]
+=
+\mathbb{E}_{\mu}[f^{+}] + \mathbb{E}_{\mu}[f^{-}]
+\end{align*} is finite. Measurable functions
+\(f : X \rightarrow \mathbb{R}\) with \[
+\mathbb{E}_{\mu}[| f |] < \infty
+\] are said to be \textbf{Lebesgue integrable} with respect to \(\mu\),
+or just \textbf{\(\mu\)-integrable} for short.
+
+Nearly every real-valued function that we will encounter in practical
+applications will be measurable. Consequently taking this technical
+assumption for granted is largely safe. Many real-valued functions will
+also be integrable with respect to typical measures, especially when we
+restrict attention to probability distributions, but there are enough
+exceptions that we have to be careful to explicitly validate
+integrability in practice.
+
+To streamline the writing I will take advantage of some more casual
+vocabulary for the remainder of this book. I will refer to any
+real-valued function \(f: X \rightarrow \mathbb{R}\) that is measurable
+with respect to the ambient \(\sigma\)-algebra and integrable with
+respect to any relevant measures simply as an \textbf{expectand}. This
+is a bit of a terminological analogy with calculus: an \emph{integrand}
+is a sufficiently well-behaved function whose integral is well-defined
+while an \emph{expectand} is a sufficiently well-behaved function whose
+expectation value is well-defined.
+
+\hypertarget{equivalent-expectands}{%
+\subsection{Equivalent Expectands}\label{equivalent-expectands}}
+
+One subtle but important consequence of this general definition of
+expectation is that many expectands will yield the same expectation
+values even when their individual outputs are not all equal!
+
+To see why let's consider a simple function
+\(s: X \rightarrow \mathbb{R}\) that's build up from arbitrarily many
+indicator functions, \[
+s(x) = \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x).
+\] Adding another indicator function with respect to the measurable
+subset \(\mathsf{x}'\) gives another simple function, \[
+s'(x) = s(x) + \phi' \cdot I_{\mathsf{x}'}(x).
+\] The expectation values of these two simple functions are then related
+to each other by \begin{align*}
+\mathbb{E}_{\mu}[s']
+&=
+\mathbb{E}_{\mu}[s + \phi' \cdot I_{\mathsf{x}'}]
+\\
+&=
+\mathbb{E}_{\mu}[s] + \phi' \cdot \mathbb{E}_{\mu}[I_{\mathsf{x}'}]
+\\
+&=
+\mathbb{E}_{\mu}[s] + \phi' \cdot \mu(\mathsf{x}').
+\end{align*}
+
+When \(\phi' \ne 0\) then the outputs of \(s\) and \(s'\) will differ
+for all of the inputs in \(\mathsf{x}'\); so long as \(\mathsf{x}'\) is
+not the empty set then the function outputs will differ for at least
+some inputs. On the other hand the corresponding expectation values will
+differ only if \[
+\mu(\mathsf{x}') > 0!
+\] In other words if \(\mathsf{x}'\) is a \(\mu\)-null subset then \(s\)
+and \(s'\) will share the exact same \(\mu\)-expectation values.
+
+More generally any two expectands \(f: X \rightarrow \mathbb{R}\) and
+\(g: X \rightarrow \mathbb{R}\) will share the same \(\mu\)-expectation
+value if the subset of input points where their outputs differ, \[
+\mathsf{x}_{\delta} = \{ x \in X \mid f(x) \ne g(x) \},
+\] is a subset of \(\mu\)-null subset, \[
+\mathsf{x}_{\delta} \subseteq \mathsf{x} \in \mathcal{X}
+\] with \[
+\mu(\mathsf{x}) = 0.
+\] Ultimately modifying expectands on sets of measure zero does not
+affect their expectation values.
+
+If the subset of deviant inputs is contained within a \(\mu\)-null
+subset \(f\) and \(g\) are said to be equal \textbf{almost everywhere}
+with respect to \(\mu\). When working with probability distributions
+instead of measures the term \textbf{almost surely} equal is used
+instead. A bit more colloquially we can say that the two expectands are
+equal \textbf{up to subsets of measure zero} or equal \textbf{up to null
+subsets}. I will use this latter terminology for the remainder of the
+book.
+
+Intuitively the null subsets of a measure can ``wash out'' some of the
+finer structure of expectands. For example on a real line any countable
+collection of points is allocated zero Lebesgue measure. Consequently
+expectation with respect to the Lebesgue measure will disregard any
+``point defects'' in the expectands
+(Figure~\ref{fig-equivalent-expectands}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/equivalent_expectands/equivalent_expectands.pdf}
+
+}
+
+\caption{\label{fig-equivalent-expectands}Because any countable
+collection of points is allocated zero Lebesgue measure any expectands
+whose outputs differ only at a countable number of inputs will yield the
+same expectation values. In other words from the perspective of the
+Lebesgue measure these functions are equivalent.}
+
+\end{figure}
+
+Applications of measure theory can't distinguish between expectands that
+are equal up to sets of measure zero. If we want to avoid this ambiguity
+then we have to impose structural constraints on the equivalent
+expectands to isolate a single, unique expectand. For example we can
+modifying a continuous expectand on input subsets of measure zero
+without changing the expectation value, but those modifications will
+also introduce discontinuities. Amongst all of the equivalent expectands
+only one will be continuous. Consequently even though general expectands
+are not unique continuous expectands are.
+
+Equality up to sets of measure zero is mostly a technical concern, but
+there are few exceptional circumstances where it will be relevant in
+practice. I will clearly point these circumstances out as we go along.
+
+\hypertarget{sec:alt_notations}{%
+\subsection{Alternative Expectation Notations}\label{sec:alt_notations}}
+
+One of the limitations of the standard expectation value notation,
+\(\mathbb{E}_{\mu}[f]\), is that it doesn't denote the ambient space.
+When working on a single space this isn't too much of an issue, but it
+can cause confusion when we start working with multiple spaces at the
+same time.
+
+A more expressive notation like \[
+\mathbb{E}_{(X, \mathcal{X}, \mu)}[f]
+\\
+\mathbb{E}_{(Y, \mathcal{Y}, \nu)}[g]
+\] is much more explicit but also much more cumbersome. Mathematicians
+have developed a variety of shorthand notations that offer different
+compromises between clarity and compactness.
+
+For example some references denote expectation values as \[
+\mathbb{E}_{\mu}[f] = \int_{X} \mu \, f,
+\] where the subscript of the integral sign allows us to specify the
+ambient space and a \(\sigma\)-algebra is taken for granted. When using
+this notation, however, we have to be careful to not confuse \(\int\)
+with the standard integral from calculus. We'll discuss the subtle
+relationship between expectation values and integrals in more detail in
+\href{@sec:expectation_as_integration}{Section 5.2}.
+
+We can also use variables to denote the ambient space. Taking
+\(x \in X\) to be a variable that takes values in \(X\) some references
+denote expectation values as \[
+\mathbb{E}_{\mu}[f] = \int \mu(\mathrm{d} x) \, f(x),
+\] or \[
+\mathbb{E}_{\mu}[f] = \int \mathrm{d} \mu(x) \, f(x).
+\] The placement of the measure and the expectand is conventional; some
+references prefer instead \[
+\mathbb{E}_{\mu}[f] = \int f(x) \, \mu(\mathrm{d} x),
+\] and \[
+\mathbb{E}_{\mu}[f] = \int f(x) \, \mathrm{d} \mu(x).
+\] Again when using these particular notations we have to be careful to
+avoid confusing them with integrals.
+
+For this book I will use \(\mathbb{E}_{\mu}[f]\) most often, but when it
+becomes convenient I'll also use the notation \[
+\mathbb{E}_{\mu}[f] = \int \mu(\mathrm{d} x) \, f(x).
+\]
+
+\hypertarget{specifying-measures-with-expectation-values}{%
+\section{Specifying Measures With Expectation
+Values}\label{specifying-measures-with-expectation-values}}
+
+To this point we have derived expectation values as a consequence of
+measurable subset allocations. Expectation values, however, can also be
+used to define measures directly, with subset allocations derived from
+appropriate expectation values.
+
+While a bit more abstract than our initial approach this perspective
+does have its benefits.
+
+\hypertarget{functional-perspective-of-measures}{%
+\subsection{Functional Perspective of
+Measures}\label{functional-perspective-of-measures}}
+
+Expectation values map real-valued functions into real numbers. If we
+denote the space of all functions from \(X\) to \(\mathbb{R}\) as
+\(C(X)\) then we might be tempted to write this mapping as
+\begin{alignat*}{6}
+\mathbb{E}_{\mu} :\; & C(X) & &\rightarrow& \; & \mathbb{R} &
+\\
+& f & &\mapsto& & \mathbb{E}_{\mu}[f] &.
+\end{alignat*} Unfortunately this isn't technically correct because not
+every real-valued function has a well-defined expectation value. In
+other words \(C(X)\) is too large of an input space.
+
+To remedy that we can define \[
+L(X, \mathcal{X}, \mu) \subset C(X)
+\] as the subset of real-valued functions from \(X\) to \(\mathbb{R}\)
+that are measurable with respect to \(\mathcal{X}\) and then integrable
+with respect to \(\mu\). Using the terminology introduced in the
+previous section, \(L(X, \mathcal{X}, mu)\) is the space of expectands.
+
+With this notation expectation can be interpreted as a map from
+expectands to real numbers, \begin{alignat*}{6}
+\mathbb{E}_{\mu} :\; & L(X, \mathcal{X}, \mu) & &\rightarrow& \;
+& \mathbb{R} &
+\\
+& f & &\mapsto& & \mathbb{E}_{\mu}[f] &.
+\end{alignat*} In fact expectation is the only \emph{linear} map of this
+form.
+
+Because \(L(X, \mathcal{X}, \mu)\) contains all of the indicator
+functions this functional relationship between
+\(L(X, \mathcal{X}, \mu)\) and \(\mathbb{R}\) determines the allocations
+to every measurable subset, and hence full determines the measure
+\(\mu\). At the same time \(L(X, \mathcal{X}, \mu)\) also contains many
+expectands that are not indicator functions, and hence quite a bit of
+redundant information about \(\mu\).
+
+Sufficiently nice measures can be completely characterized by their
+expectation action on subsets of \(L(X, \mathcal{X}, \mu)\) that do not
+contain any indicator functions at all! In theory the expectation values
+of other expectands, including indicator functions to recover subset
+allocations, can then be derived from these initial expectands. These
+sparser characterizations are particularly useful for analyzing certain
+theoretical properties of measures with the tools of \textbf{functional
+analysis}.
+
+The expectation perspective also has its benefits for applied practice.
+For example once we've built a probability distribution relevant to an
+application we will use expectation values to extract meaningful
+information. \textbf{Probabilistic computational algorithms} automate
+this process, mapping expectands to expectation values exactly, or more
+realistically, approximately.
+
+Interpreting measures as expectation value generators helps us
+understand not only what operations we need to carry out to realize an
+applied analysis but also how well our algorithmic tools actually
+implement those operations. We will spend a good bit of time discussing
+these issues in later chapters.
+
+\hypertarget{sec:scaling-measures}{%
+\subsection{Scaling Measures}\label{sec:scaling-measures}}
+
+Measures become much more flexible tools when we can readily modify
+their behavior, enhancing the measure at some points while suppressing
+it at others. The functional perspective of measures is particularly
+convenient for implicitly defining these modifications that would be at
+best awkward to specify directly through subset allocations.
+
+For example let's say that we want to \emph{globally} scale the subset
+allocations defined by \(\mu\) with a constant
+\(\alpha \in \mathbb{R}^{+}\). The scaled measure is straightforward to
+define by modifying the individual subset allocations, \[
+(\alpha \cdot \mu)(\mathsf{x}) \equiv \alpha \cdot \mu(\mathsf{x})
+\] for all measurable subsets \(\mathsf{x} \in \mathcal{X}\).
+
+These scaled allocations then imply that expectation values of simple
+functions with respect to \(\alpha \cdot \mu\) can be recovered as
+expectation values of \emph{scaled} expectands with respect to \(\mu\),
+\begin{align*}
+\mathbb{E}_{\alpha \cdot \mu} [ s ]
+&=
+\mathbb{E}_{\alpha \cdot \mu}
+\left[ \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}} \right]
+\\
+&=
+\sum_{j} \phi_{j} \cdot
+\mathbb{E}_{\alpha \cdot \mu} [ I_{\mathsf{x}_{j}} ]
+\\
+&=
+\sum_{j} \phi_{j} \cdot (\alpha \cdot \mu)(\mathsf{x}_{j})
+\\
+&=
+\sum_{j} \phi_{j} \cdot \alpha \cdot \mu(\mathsf{x}_{j})
+\\
+&=
+\alpha \cdot \sum_{j} \phi_{j} \cdot \mu(\mathsf{x}_{j})
+\\
+&=
+\alpha \cdot \sum_{j} \phi_{j} \cdot
+\mathbb{E}_{\mu}
+[ I_{\mathsf{x}_{j}} ]
+\\
+&=
+\mathbb{E}_{\mu}
+\left[ \alpha \cdot \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}} \right]
+\\
+&=
+\mathbb{E}_{\mu} [ \alpha \cdot s ].
+\end{align*} Because general expectation values are derived from the
+expectation values of simple functions we will then have \[
+\mathbb{E}_{\alpha \cdot \mu} [ f ] = \mathbb{E}_{\mu} [ \alpha \cdot f ]
+\] for \emph{every} expectand \(f: X \rightarrow \mathbb{R}\). In other
+words these modified expectation values fully define the scaled measure
+\(\alpha \cdot \mu\) just as well as the modified subset allocations.
+
+To complicate matters we might then ask how we can \emph{locally} scale
+a measure by some positive, \(\mathcal{X}\)-measurable, real-valued
+function \(g: X \rightarrow \mathbb{R}^{+}\). Because \(g\) varies
+across non-atomic subsets it is no longer clear how we can consistently
+modify all of the initial subset allocations to be larger when \(g\) is
+larger and smaller when \(g\) is smaller.
+
+The functional construction, however, immediately generalizes. We can
+\emph{define} a scaled measure \(g \cdot \mu\) as the unique measure
+with the expectation values \[
+\mathbb{E}_{g \cdot \mu} [ f ] \equiv \mathbb{E}_{\mu} [ g \cdot f ]
+\] for every expectand \(f: X \rightarrow \mathbb{R}\) with \[
+\mathbb{E}_{\mu} [ | g \cdot f | ] < \infty.
+\]
+
+This expectation value definition can then be used to calculate the
+subtle, but necessary, modifications to the subset allocations,
+\begin{align*}
+(g \cdot \mu)(\mathsf{x})
+&=
+\mathbb{E}_{g \cdot \mu} [ I_{\mathsf{x}} ]
+\\
+&=
+\mathbb{E}_{\mu} [ g \cdot I_{\mathsf{x}} ].
+\end{align*} In particular the modified subset allocations are no longer
+given by simple scalings of the initial subset allocations!
+
+This flexible construction can then be applied in a variety of useful
+ways. For example scaling a measure \(\mu\) by the indicator function of
+a measurable subset \(\mathsf{x}'\), \[
+\mathbb{E}_{I_{\mathsf{x}'} \cdot \mu} [ f ]
+\equiv
+\mathbb{E}_{\mu} [ I_{\mathsf{x}'} \cdot f ],
+\] consistently zeroes out all measure outside of \(\mathsf{x}'\),
+restricting \(\mu\) to that subset. If \(X\) is an ordered space and
+\(\mathsf{x}'\) is an interval subset then this restriction is also
+known as \textbf{truncation}.
+
+\hypertarget{scaling-probability-distributions}{%
+\subsection{Scaling Probability
+Distributions}\label{scaling-probability-distributions}}
+
+Scaling probability distributions is not quite as straightforward
+because we have to maintain the proper normalization. Naively scaling a
+probability distribution \(\pi\) with a positive,
+\(\mathcal{X}\)-measurable, real-valued function
+\(g : X \rightarrow \mathbb{R}^{+}\) results in a total measure
+\begin{align*}
+(g \cdot \pi)(X)
+&=
+\mathbb{E}_{g \cdot \pi} [ I_{X} ]
+\\
+&=
+\mathbb{E}_{g \cdot \pi} [ 1 ]
+\\
+&=
+\mathbb{E}_{\pi} [ g ]
+\end{align*} which is not, in general, equal to \(1\). In other words
+scaling a probability distribution results not in another probability
+distribution but rather a generic measure.
+
+If we want transform one probability distribution into another then we
+need to correct for the modified normalization, defining \[
+\mathbb{E}_{g \ast \pi} [ f ] \equiv
+\frac{ \mathbb{E}_{\pi} [ g \cdot f ] }{ \mathbb{E}_{\pi} [ g ] }
+\] for every expectand \(f: X \rightarrow \mathbb{R}\) with \[
+\mathbb{E}_{\pi} [ | g \cdot f | ] < \infty.
+\]
+
+In this case the modfied subset allocations become \begin{align*}
+(g \ast \pi)(\mathsf{x})
+&=
+\frac{ \mathbb{E}_{g \cdot \pi} [ I_{\mathsf{x}} ] }
+{ \mathbb{E}_{\pi} [ g ] }
+\\
+&=
+\frac{ \mathbb{E}_{\pi} [ g \cdot I_{\mathsf{x}} ] }
+{ \mathbb{E}_{\pi} [ g ] }.
+\end{align*} Specifically we will always have \begin{align*}
+(g \ast \pi)(X)
+&=
+\frac{ \mathbb{E}_{\pi} [ g \cdot I_{X} ] }
+{ \mathbb{E}_{\pi} [ g ] }
+\\
+&=
+\frac{ \mathbb{E}_{\pi} [ g ] }
+{ \mathbb{E}_{\pi} [ g ] }
+\\
+&=
+1
+\end{align*} as necessary.
+
+For example scaling with an indicator function restricts a probability
+distribution to the corresponding subset and reduces the total
+probability to the probability initially allocated to that subset,
+\begin{align*}
+(I_{\mathsf{x}'} \cdot \pi)(X)
+&=
+\mathbb{E}_{I_{\mathsf{x}'} \cdot \pi} [ I_{X} ]
+\\
+&=
+\mathbb{E}_{I_{\mathsf{x}'} \cdot \pi} [ 1 ]
+\\
+&=
+\mathbb{E}_{\pi} [ I_{\mathsf{x}'} ]
+\\
+&=
+\pi(\mathsf{x}').
+\end{align*}
+
+Scaling and then normalizing, however, corrects the proportional subset
+allocations to this restriction, \begin{align*}
+(I_{\mathsf{x}'} \ast \pi)( \mathsf{x} )
+&=
+\frac{ \mathbb{E}_{I_{\mathsf{x}'} \ast \pi} [ I_{\mathsf{x}} ] }
+{ \mathbb{E}_{\pi} [ I_{\mathsf{x}'} ] }
+\\
+&=
+\frac{ \mathbb{E}_{\pi} [ I_{\mathsf{x}'} \cdot I_{\mathsf{x}} ] }
+{ \mathbb{E}_{\pi} [ I_{\mathsf{x}'} ] }
+\\
+&=
+\frac{ \mathbb{E}_{\pi} [ I_{\mathsf{x}' \cap \mathsf{x}} ] }
+{ \mathbb{E}_{\pi} [ I_{\mathsf{x}'} ] }
+\\
+&=
+\frac{ \pi(\mathsf{x}' \cap \mathsf{x}) }
+{ \pi(\mathsf{x}') }.
+\end{align*} In particular \[
+(I_{\mathsf{x}'} \ast \pi)( X )
+=
+\frac{ \pi(\mathsf{x}' \cap X) }{ \pi(\mathsf{x}') }
+=
+\frac{ \pi(\mathsf{x}') }{ \pi(\mathsf{x}') }
+=
+1.
+\]
+
+\hypertarget{structure-informed-expectation-values}{%
+\section{Structure-Informed Expectation
+Values}\label{structure-informed-expectation-values}}
+
+Every ambient space admits infinitely many real-valued functions, and
+hence endless ways to interrogate a given measure through expectation
+values. Some expectands, however, are uniquely compatible with the
+structure of the space itself and their expectation values extract
+particularly interpretable information. In this section we'll review
+some of the most common of these structure-informed expectands.
+
+\hypertarget{moments-and-cumulants}{%
+\subsection{Moments and Cumulants}\label{moments-and-cumulants}}
+
+Some spaces are inherently related to a real line. The precise
+relationship between elements of a space and elements of a real line
+defines a distinguished real-valued function ,and hence a distinguished
+expectand. We can even build off of this initial expectand to construct
+an entirely family of useful expectands.
+
+\hypertarget{embeddings}{%
+\subsubsection{Embeddings}\label{embeddings}}
+
+In order for an ambient space \(X\) to be compatible with the real line
+it needs to share a metric structure. We say that we can \textbf{embed}
+a metric space \(X\) into a real line if we can construct an isometric
+injection \(\iota : X \rightarrow \mathbb{R}\), i.e.~a function that
+maps each element of \(X\) to a distinct output while also preserving
+distances, \[
+d_{X}(x_{1}, x_{2})
+= d_{\mathbb{R}}(\iota(x_{1}), \iota(x_{2}))
+= | \iota(x_{2}) - \iota(x_{1}) |.
+\] Embedding maps are often denoted with a hooked arrow instead of the
+typical flat arrow, \[
+\iota : X \hookrightarrow \mathbb{R},
+\] to communicate that some structure is being preserved.
+
+For example if \(X\) is itself a real line then the identify map defines
+a natural embedding \(\iota : \mathbb{R} \hookrightarrow \mathbb{R}\)
+(Figure~\ref{fig-identity}). Similarly we can embed subsets of the real
+line, such as intervals
+\(\iota : [x_{1}, x_{2}] \hookrightarrow \mathbb{R}\)
+(Figure~\ref{fig-interval}) or even integers
+\(\iota : \mathbb{Z} \hookrightarrow \mathbb{R}\)
+(Figure~\ref{fig-integer}).
+
+\begin{figure}
+
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/embeddings/identity/identity.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-identity}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/embeddings/interval/interval.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-interval}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/embeddings/integer/integer.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-integer}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-integrate}Many spaces naturally embed into a real
+line, including (a) that real line, (b) intervals of that real line, and
+(c) integers.}
+
+\end{figure}
+
+The existence of an embedding map can be interpreted in a few different
+ways. On one hand it implies that \(X\) is isomorphic to some subset of
+a real line, if not an entire real line, which allows us to interpret
+\(X\) as a subset of a real line. Alternatively we can think of an
+embedding map as assigning to each element \(x \in X\) a numerical
+position that we can use to characterize geometric behavior. Both
+interpretations are useful but in this section we will lean heavily on
+this latter perspective.
+
+When an embedding map is measurable with respect to the ambient
+\(\sigma\)-algebra and integrable with respect to the ambient measure it
+defines an expectand. Most embedding maps are measurable but
+integrability is less dependable, and failures of integrability are
+important in practice.
+
+\hypertarget{the-mean}{%
+\subsubsection{The Mean}\label{the-mean}}
+
+If an embedding function is an expectand than we can evaluate its
+expectation value, \(\mathbb{E}_{\mu}[\iota]\). The ultimately utility
+of this expectation value, however, depends on what information about
+the ambient measure it extracts.
+
+Interpreting \(\mathbb{E}_{\mu}[\iota]\) is straightforward when \(X\)
+is finite, \(\mathcal{X}\) is the full power set, and we can represent
+any measure with a mass function. In this case we can explicitly compute
+the \(\mathbb{E}_{\mu}[\iota]\) as a weighted sum of positions, \[
+\mathbb{E}_{\mu}[\iota] = \sum_{x \in X} \mu(x) \, \iota(x).
+\]
+
+The more measure that is allocated to an element the more strongly the
+expectation value is pulled towards the position of that element. In
+other words \(\mathbb{E}_{\mu}[\iota]\) is one way to quantify the
+position around which the measure \(\mu\) concentrates, defining a
+notion of \emph{centrality} for the measure \(\mu\).
+
+This interpretation does generalize to arbitrary spaces, although the
+formal motivation is a bit more subtle because we can no longer
+interpret expectation values as simple weighted sums. Instead consider a
+baseline position \(r_{0} \in \mathbb{R}\) and the squared distance
+function \begin{alignat*}{6}
+d_{r_{0}}^{2} :\; & X & &\rightarrow& \; &\mathbb{R}^{+}&
+\\
+& x & &\mapsto& & (\iota(x) - r_{0})^{2} &
+\end{alignat*} which quantifies how far the position of any point in the
+ambient space is from that baseline position.
+
+So long as \(\iota : X \hookrightarrow \mathbb{R}\) is an embedding this
+squared distance function will be measurable and will define a valid
+expectand. The expectation value \begin{align*}
+\mathbb{E}_{\mu} \left[ d_{r_{0}}^{2} \right]
+&=
+\mathbb{E}_{\mu} \left[ (\iota - r_{0})^{2} \right]
+\\
+&=
+\mathbb{E}_{\mu} \left[ \iota^{2} - 2 \, r_{0} \, \iota + r_{0}^{2} \right]
+\\
+&=
+\mathbb{E}_{\mu} \left[ \iota^{2} \right]
+-2 \, r_{0} \cdot \mathbb{E}_{\mu} \left[ \iota \right]
++ \mathbb{E}_{\mu} \left[ r_{0}^{2} \right]
+\\
+&=
+\mathbb{E}_{\mu} \left[ \iota^{2} \right]
+-2 \, r_{0} \cdot \mathbb{E}_{\mu} \left[ \iota \right]
++ r_{0}^{2}
+\end{align*} quantifies how diffusely the measure \(\mu\) is allocated
+around \(r_{0}\); the larger the expectation value the further \(r_{0}\)
+is from the neighborhoods where \(\mu\) concentrates its allocation.
+
+Consequently the baseline position \(r_{0} \in \mathbb{R}\) with the
+\emph{smallest} expected squared distance should be, in some sense, the
+position closest to where \(\mu\) concentrates. Because we're working
+with continuous positions we can compute the baseline position that
+minimizes the expected squared distance using calculus methods even if
+\(X\) itself is not continuous.
+
+In particular the minimum \(r_{0}^{*}\) is given by setting the
+derivative of the expectation value, \begin{align*}
+\frac{\mathrm{d}}{\mathrm{d} r_{0} }
+\mathbb{E}_{\mu} \left[ d_{r_{0}}^{2} \right]
+&=
+\frac{\mathrm{d}}{\mathrm{d} r_{0} }
+\left( \mathbb{E}_{\mu} \left[ \iota^{2} \right]
+-2 \, r_{0} \cdot \mathbb{E}_{\mu} \left[ \iota \right]
++ r_{0}^{2} \right)
+\\
+&=
+-2 \, \mathbb{E}_{\mu} \left[ \iota \right]
++ 2 \, r_{0},
+\end{align*} to zero, \begin{align*}
+0
+&= \left. \frac{\mathrm{d}}{\mathrm{d} r_{0} }
+\mathbb{E}_{\mu} \left[ d_{r_{0}}^{2} \right] \right|_{r_{0} = r_{0}^{*}}
+\\
+0
+&=
+-2 \, \mathbb{E}_{\mu} \left[ \iota \right]
++ 2 \, r_{0}^{*}
+\\
+2 \, r_{0}^{*}
+&=
+2 \, \mathbb{E}_{\mu} \left[ \iota \right]
+\\
+r_{0}^{*}
+&=
+\mathbb{E}_{\mu} \left[ \iota \right].
+\end{align*}
+
+In other words the expectation value of the embedding function
+\(\mathbb{E}_{\mu} [ \iota ]\) is exactly the position that minimizes
+the expected squared distance and, in that sense, is closest to the
+concentration of \(\mu\). Note that if \(X\) is not continuous, for
+example if \(X = \mathbb{Z}\), then this central position might fall
+between the positions of the individual elements
+(Figure~\ref{fig-mean}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/mean/mean.pdf}
+
+}
+
+\caption{\label{fig-mean}The expectation value of an embedding function,
+\(\mathbb{E}_{\mu} [ \iota ]\), is a continuous value even when the
+ambient space is discrete. In these cases the centrality of a measure
+can fall between the individual elements.}
+
+\end{figure}
+
+Because \(\mathbb{E}_{\mu} \left[ \iota \right]\) quantifies a sense of
+the centrality of the measure \(\mu\) is referred to as the
+\textbf{mean} of \(\mu\), in reference to the ``middle'' of the measure.
+When space is at a premium I will use \(\mathbb{M}_{\mu}\) to denote the
+mean, with the ambient space and embedding map all implicit.
+
+\hypertarget{higher-order-moments-and-cumulants}{%
+\subsubsection{Higher-Order Moments and
+Cumulants}\label{higher-order-moments-and-cumulants}}
+
+We have not yet, however, exhausted the usefulness of an embedding map.
+For example the expected squared distance from the mean \[
+\mathbb{E}_{\mu} \left[ d_{\mathbb{M}_{\mu}}^{2} \right]
+=
+\mathbb{E}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{2} \right]
+\] quantifies how \emph{strongly} \(\mu\) concentrates around its
+centrality; the larger the expectation value the more diffuse the
+concentration is. This is known as the \textbf{variance} of \(\mu\).
+
+Higher-powers extract even more information. For example the expectation
+value of the cubic expectand \[
+\mathbb{E}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{3} \right]
+\] characterizes how \emph{symmetric} the concentration of \(\mu\) is
+around its centrality.
+
+The expectation values that we can construct from an embedding function
+can be systemized in various ways. For example the direct powers \[
+\mathbb{M}_{\mu, k} = \mathbb{E}_{\mu} \left[ \iota^{k} \right]
+\] define the \(k\)-th order \textbf{moments} while the shifted powers
+\[
+\mathbb{D}_{\mu, k} =
+\mathbb{E}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{k} \right]
+\] define the \(k\)-th order \textbf{central moments}. In some cases
+normalizing the central moments, \[
+\mathbb{N}_{\mu, k} =
+\frac{ \mathbb{E}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{k} \right] }
+{ (\mathbb{D}_{\mu, 2})^{k / 2} }
+=
+\frac{ \mathbb{E}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{k} \right] }
+{ \left(
+    \mathbb{E}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{2} \right]
+  \right)^{k / 2} },
+\] to give \(k\)-th order \textbf{standardized central moments} is also
+useful.
+
+While straightforward to construct, higher-order moments can be tricky
+to interpret. More useful information can often be isolated by carefully
+mixing a higher-order moment with lower-order moments, resulting in
+\textbf{cumulants}, \(\mathbb{C}_{\mu, k}\). The general construction of
+cumulants is complicated, with some very interesting but very elaborate
+connections to combinatorics, but in this book we'll focus on the first
+few cumulants. Conveniently the first-order cumulant is just the mean,
+\[
+\mathbb{C}_{\mu, 1} = \mathbb{M}_{\mu, 1},
+\] the second-order cumulant is just the variance, \[
+\mathbb{C}_{\mu, 2} = \mathbb{D}_{\mu, 2},
+\] and the third-order cumulant is just the third-order central moment,
+\[
+\mathbb{C}_{\mu, 3} = \mathbb{D}_{\mu, 3}.
+\] Beyond third-order the cumulants begin deviate away from the central
+moments.
+
+\hypertarget{spaces-without-moments}{%
+\subsubsection{Spaces Without Moments}\label{spaces-without-moments}}
+
+Well-defined moments can be obstructed in a variety of different ways.
+For example if the embedding function and its powers are not integrable
+with respect to a measure then the corresponding expectation values will
+be ill-defined. The measurability of an embedding function is a more
+subtle, but still occasionally important, obstruction.
+
+Exactly when an embedding function is measurable will depend on how the
+metric and \(\sigma\)-algebra on the ambient space interact with each
+other. For example consider a space \(X\) that is equipped with a metric
+and a metric topology. When we use the Borel \(\sigma\)-algebra derived
+from that topology then the metric and the \(\sigma\)-algebra will play
+nicely with each other.
+
+In this case an embedding function will be measurable only if it is a
+homeomorphism from the ambient space into a real line. This, in turn,
+will be true only when the topology of the ambient space and the
+topology of the real line are compatible with each other. Consequently
+topological considerations can obstruct the existence of moments.
+
+Recall that in
+\href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
+Two} we saw that the topologies of a circle, \(S^{1}\), and a real line,
+\(\mathbb{R}\), are fundamentally incompatible with each other. Because
+no real-valued function \(f: S^{1} \rightarrow \mathbb{R}\) is be a
+homeomorphism, no embedding is Borel measurable, and there is no
+well-defined notion of a mean or variance for any measure on the circle
+equipped with a Borel \(\sigma\)-algebra!
+
+If you're not experienced with topology then this argument might appear
+to be overly technical and easy to dismiss, but the practical
+consequences are critical when working with spaces like circles,
+spheres, torii, and more. Many analyses have been sunk by attempts to
+estimate means on these spaces that don't actually exist!
+
+Examples like this show why topology, as frustratingly abstract as it is
+often presented, is more important to applied practice than we might
+realize. Topological considerations can be extremely helpful in
+preventing us from succumbing to many common misconceptions.
+
+\hypertarget{histograms}{%
+\subsection{Histograms}\label{histograms}}
+
+When the structure of the ambient space distinguishes certain subsets
+the corresponding indicator functions become natural expectands to
+consider. Conveniently the expectation values of indicator functions are
+also straightforward to interpret.
+
+For example an ordering on the ambient space motivates interval subsets,
+such as the half-open interval subsets \[
+( x_{1}, x_{2} ] = \{ x \in X \mid x_{1} < x \le x_{2} \}.
+\] We can then use disjoint intervals to study the behavior of a measure
+by investigating how the measure allocations, or equivalently the
+expectation values of the corresponding indicator functions, vary across
+the ambient space.
+
+More formally given the sequence of points \[
+\{ x_{1}, \ldots, x_{b}, \ldots, x_{B + 1} \} \in X
+\] we can partition a subset of the ambient space into a sequence of
+\(B\) disjoint half-open intervals, \begin{align*}
+\mathsf{b}_{1} &= ( x_{1}, x_{2} ]
+\\
+\mathsf{b}_{2} &= ( x_{2}, x_{3} ]
+\\
+\ldots&
+\\
+\mathsf{b}_{b} &= ( x_{b}, x_{b + 1} ]
+\\
+\ldots&
+\\
+\mathsf{b}_{B} &= ( x_{B}, x_{B + 1} ].
+\end{align*} Evaluating the expectation value of the indicator function
+corresponding to each interval gives the allocated measure, \[
+\mathbb{E}_{\mu}[I_{\mathsf{b}_{b}}]
+= \mu(\mathsf{b}_{b}).
+\]
+
+Each of these measure allocations can then be neatly visualized as a
+rectangle, with the collection of measure allocations visualized as a
+sequence of adjacent rectangles (Figure~\ref{fig-histogram-basics}).
+This visualization is referred to as a \textbf{histogram}, with the
+individual intervals denoted \textbf{bins}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/histograms/histogram/histogram.pdf}
+
+}
+
+\caption{\label{fig-histogram-basics}A histogram allows us to visualize
+the behavior of a measure over an ordered space. After partitioning a
+segment of the ambient space into disjoint intervals, or bins, the
+measure allocated to each bin is represented by a rectangle.}
+
+\end{figure}
+
+Histograms are incredibly useful for quickly communicating some of the
+key features of a measure (Figure~\ref{fig-hist-examples}). For example
+histograms allow us to differentiate between allocations that
+concentrate around a point, referred to as \textbf{unimodal} measures,
+or even allocations that concentrate around multiple points, referred to
+as \textbf{multimodal} measures. At the same time we can see \emph{how}
+a measure concentrates around a point, for example whether the
+concentrations is symmetric or skewed towards smaller or larger values.
+
+\begin{figure}
+
+\begin{minipage}[t]{0.10\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.40\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/histograms/varying_behaviors/diffuse/diffuse.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-hist-diffuse}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.40\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/histograms/varying_behaviors/unimodal/unimodal.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-hist-unimodal}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.10\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.10\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.40\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/histograms/varying_behaviors/unimodal_skewed/unimodal_skewed.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-hist-unimodal}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.40\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/histograms/varying_behaviors/multimodal/multimodal.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-hist-multimodal}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.10\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-hist-examples}Histogram are extremely effective at
+communicating the basic features of a measure. The measure in (a) is
+diffuse but decaying, allocating more measure at smaller values than
+larger values. Conversely the measure in (b) concentrates around a
+single point while the measure in (c) concentrates around multiple,
+distinct points. Finally the measure in (d) concentrates around a single
+point, but that concentration is strongly asymmetric unlike the
+concentration in (b).}
+
+\end{figure}
+
+The smaller the bins the finer the features we can resolve but the more
+expectation values we have to compute in order to construct the
+histogram (Figure~\ref{fig-hist-binning}). In practice we have to choose
+a binning that is suited to each measure of interest without being too
+expensive to implement.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/histograms/varying_binning/varying_binning.pdf}
+
+}
+
+\caption{\label{fig-hist-binning}A histogram with a finer binning
+communicates more detail about a given measure, but also requires the
+computation of more expectation values and hence is more expensive to
+construct. Here as we use smaller bins we start to resolve a small side
+mode. Note that as we decrease the bins we also decrease the allocated
+measures, and hence the height of each rectangle. Here the heights are
+scaled to accommodate the smaller measures and make the comparison
+between the histograms easier.}
+
+\end{figure}
+
+The practical limitation of a finite number of bins also requires care
+in how we choose the boundaries of a histogram. Because a histogram
+censors any behavior below the first bin and above the last bin we need
+to choose the binning to span all of the behaviors of interest. For
+example if the ambient measure allocations decay towards smaller and
+larger values then we can set the bin boundaries where the allocations
+become negligible.
+
+On countable spaces we can always tune the bins in a histogram to span
+only a single element. In this case the height of each bin reduces to
+\(\mu( \{ x \} )\) and the resulting histogram then reduces to a
+visualization of the mass function.
+
+\hypertarget{cumulative-distribution-functions}{%
+\subsection{Cumulative Distribution
+Functions}\label{cumulative-distribution-functions}}
+
+On an ordered space we can also use interval subsets to visualize how
+the total measure is allocated as we go from smaller values to larger
+values. More concretely consider the interval subsets consisting of all
+points smaller than or equal to a given point, \[
+I_{x} = \{ x' \in X \mid x' \le x \}.
+\] The measure allocated to these interval subsets quantifies how the
+measure accumulates as we scan across the space, \begin{alignat*}{6}
+M :\; & X & &\rightarrow& \; &[0, \mu(X)]&
+\\
+& x & &\mapsto& & M(x) = \mu(I_{x}) &.
+\end{alignat*} According this mapping is known as a \textbf{cumulative
+distribution function} (Figure~\ref{fig-cdf-basics}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/cdfs/cdf/cdf.pdf}
+
+}
+
+\caption{\label{fig-cdf-basics}A cumulative distribution function
+quantifies how measure is allocated to expanding intervals on an ordered
+space. At the lower boundary of the space the interval contains no
+points and the cumulative distribution function returns zero. As we move
+towards larger values the interval expands, accumulating more and more
+measure. Finally at the upper boundary of the space the interval
+asymptotes to the total measure.}
+
+\end{figure}
+
+Cumulative distribution functions are also sometimes written is a way
+that communicates the measure and interval at the same time, for example
+\(\mu([x' < x])\) or even \(\mu(x' < x)\). Personally I find these
+notations to be a bit too confusing as it's easy to mistake which
+variable denotes points in the interval and which variable defines the
+upper boundary of the interval itself.
+
+By construction if \(x_{1} < x_{2}\) then
+\(I_{x_{1}} \subset I_{x_{2}}\). Consequently \[
+\mu(I_{x_{1}}) \le \mu(I_{x_{2}})
+\] or, equivalently, \[
+M(x_{1}) \le M(x_{2}).
+\] In other words every cumulative distribution function is a
+monotonically non-decreasing function that begins at \(0\) and ends at
+\(\mu(X)\).
+
+The precise shape of this non-decreasing accumulation conveys many
+features of the ambient measure. For example if the measure concentrates
+around a single point then the cumulative distribution function will
+rapidly increase around that point, increasing only slowly before and
+after (Figure~\ref{fig-cdf-unimodal}). In general the faster the
+cumulative distribution function increases the stronger the
+concentration will be (Figure~\ref{fig-cdf-narrow-unimodal}). Similarly
+if there are any gaps in the allocation, intermediate intervals with
+zero allocated measure, then the cumulative distribution function will
+flatten out completely (Figure~\ref{fig-cdf-gap}).
+
+\begin{figure}
+
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/cdfs/cdf_behaviors/unimodal/unimodal.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-cdf-unimodal}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/cdfs/cdf_behaviors/narrow_unimodal/narrow_unimodal.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-cdf-narrow-unimodal}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/cdfs/cdf_behaviors/gap/gap.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-cdf-gap}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-hist-examples}A careful survey of a cumulative
+distribution function can communicate a wealth of information about the
+ambient measure. (a) Here the ambient measure is unimodal with the
+cumulative distribution function appreciably increasingly only one we
+reach the central neighborhood where the measure allocation is
+concentrated. (b) A narrower concentration results in a steeper
+cumulative distribution function. (c) A cumulative distribution function
+flattens if there are any gaps in the measure allocation. Here the
+measure concentrates around two points separated by null interval
+\(\mathsf{I}\) in between.}
+
+\end{figure}
+
+One really nice feature of cumulative distribution functions is that
+they allow us to compute explicit interval probabilities. The union of
+any two-sided, half-open interval \[
+( x_{1}, x_{2} ] = \{ x \in X \mid x_{1} < x \le x_{2} \}
+\] with the disjoint one-sided interval \(I_{x_{1}}\) defines another
+one-sided interval, \[
+I_{x_{2}} = I_{x_{1}} \cup (x_{1}, x_{2}].
+\] Measure additivity then implies that \begin{align*}
+\mu(I_{x_{2}})
+&= \mu(I_{x_{1}} \cup (x_{1}, x_{2}] )
+\\
+&= \mu(I_{x_{1}}) + \mu( (x_{1}, x_{2}] )
+\end{align*} or \begin{align*}
+\mu(I_{x_{2}})
+&=
+\mu(I_{x_{1}}) + \mu( (x_{1}, x_{2}] )
+\\
+M(x_{2})
+&=
+M(x_{1}) + \mu( (x_{1}, x_{2}] )
+\\
+\mu( (x_{1}, x_{2}] )
+&
+= M(x_{2})  - M(x_{1}).
+\end{align*} In words the measure allocated to any two-sided interval
+can be computed by subtracting the cumulative distribution function
+outputs at the interval boundaries (Figure~\ref{fig-cdf-probs}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/cdfs/cdf_probs/cdf_probs.pdf}
+
+}
+
+\caption{\label{fig-cdf-probs}The difference of cumulative distribution
+function outputs at two points is equal to the measure allocated to the
+interval spanning those two points. This allows us to calculate interval
+measure allocations as needed.}
+
+\end{figure}
+
+If the measure allocated to every measurable subset
+\(\mathsf{x} \in \mathcal{X}\) can be derived from interval allocations
+then a cumulative distribution function will provide enough information
+to compute the measure allocated to every measurable subset. In other
+words the cumulative distribution function in this case
+\emph{completely} characterizes the measure, and can be considered as
+alternative way to define measures entirely. Conveniently on every
+ordered measurable space that we will encounter, such spaces of integers
+and real numbers equipped with Borel \(\sigma\)-algebras, this will be
+true.
+
+On an ordered, countable space the cumulative distribution function can
+be written as the sum of mass function evaluations, \begin{align*}
+M(x)
+&= \mu(\{ x' \in X \mid x' \le x \})
+\\
+&= \sum_{x' \le x} \mu(x').
+\end{align*} Consequently mass functions and cumulative distribution
+functions provide redundant information on these spaces
+(Figure~\ref{fig-discrete-cdf}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/cdfs/discrete_cdf/discrete_cdf.pdf}
+
+}
+
+\caption{\label{fig-discrete-cdf}On ordered, countable spaces a mass
+function and cumulative distribution function provide equivalent, and
+hence redundant, characterizations of a measure.}
+
+\end{figure}
+
+Mass functions do not completely define a measure, however, on ordered
+but uncountable spaces. In this case a cumulative distribution function
+can provide the information that the element-wise allocations lacked.
+
+For example on a real line a continuous cumulative distribution function
+defines a measure that allocates zero to every atomic subset but still
+manages to accumulate finite measure as we scan through the space. Any
+jumps in a cumulative distribution function correspond to individual
+elements that have been allocated non-zero measure
+(Figure~\ref{fig-cdf-jump}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/cdfs/jump/jump.pdf}
+
+}
+
+\caption{\label{fig-cdf-jump}When the ambient space is ordered and
+uncountable and every atomic subset is a null subset then the cumulative
+distribution function will be continuous. Any discontinuities in a
+cumulative distribution function correspond to exceptional atomic
+subsets that have been allocated finite measure.}
+
+\end{figure}
+
+\hypertarget{quantiles}{%
+\subsection{Quantiles}\label{quantiles}}
+
+When a cumulative distribution function is bijective, mapping each point
+\(x \in X\) in the ambient space to a unique accumulated measure
+\(\mu(I_{x}) = M(x)\), we can invert it to map any accumulated measure
+to the point at which that accumulation is achieved
+(Figure~\ref{fig-quantile-function}), \begin{alignat*}{6}
+q_{\mu} :\; & [0, \mu(X)] & &\rightarrow& \; &X&
+\\
+& m & &\mapsto& & M^{-1}(m) &.
+\end{alignat*} This inverse mapping is known as a \textbf{quantile
+function}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/quantiles/quantile_function/quantile_function.pdf}
+
+}
+
+\caption{\label{fig-quantile-function}If a cumulative distribution
+function is invertible then its inverse defines a quantile function that
+maps accumulated measures to the points in the ambient space where the
+accumulation is reached.}
+
+\end{figure}
+
+Because quantiles of probability distribution functions are particularly
+useful in some applications they are often given explicit names. For
+example the point at which half of the total probability has been
+accumulated, \[
+M(x_{0.5}) = 0.5,
+\] is denoted the \textbf{median} of the probability distribution. On
+spaces where a mean is well-defined the median and mean complement each
+other by quantifying slightly different notions of centrality. Similarly
+the points where a quarter of the probability has been accumulated and a
+quarter of the probability remains, \begin{align*}
+M(x_{0.25}) &= 0.25
+\\
+M(x_{0.75}) &= 0.75,
+\end{align*} are known as the \textbf{quartiles}.
+
+If the cumulative distribution function is not continuous then the
+quantile function will not be well-defined. For example on a countable
+space the cumulative distribution function can achieve only a countable
+number of accumulated measures. Any intermediate value \(m\) can be only
+bounded below by the point \(x_{m-}\) that achieves the largest
+accumulated measure below \(m\), \[
+x_{m-} = \underset{x \in X}{\mathrm{argmax}} M(x) < m,
+\] and bounded above by the point \(x_{+}\) that achieves the smallest
+accumulated measure above \(m\)
+(Figure~\ref{fig-quantile-inverse-problems}), \[
+x_{m+} = \underset{x \in X}{\mathrm{argmin}} M(x) > m.
+\]
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/quantiles/inverse_problems/inverse_problems.pdf}
+
+}
+
+\caption{\label{fig-quantile-inverse-problems}Cumulative distribution
+functions on countable spaces are not invertible. Only a countable
+number of measure accumulations occur at individual points; most measure
+accumulations occur ``in between'' the countable points.}
+
+\end{figure}
+
+Many software packages implement quantile functions that
+\emph{heuristically} interpolate between the \(x_{m-}\) and \(x_{m+}\)
+to provide a single value when when the cumulative distribution function
+is not invertible. Each interpolation strategy defines a different
+heuristic quantile function.
+
+\hypertarget{algorithmic-expectation}{%
+\section{Algorithmic Expectation}\label{algorithmic-expectation}}
+
+Up to this point our discussion of general expectation values has been
+theoretical. Given a measure \(\mu\) we have shown that a linear map
+from sufficiently nice, real-valued functions \(f\) to real numbers
+\(\mathbb{E}_{\mu}[f] \in \mathbb{R}\) exists. We do not yet know,
+however, how to \emph{evaluate} that map to give explicit expectation
+values in practice.
+
+Fortunately a few exceptional measures produce expectation values that
+can be computed from certain mathematical operations that can be
+implemented algorithmically, if not exactly then approximately. In this
+section we'll review these exceptional measures and their practical
+consequences.
+
+\hypertarget{expectation-on-countable-spaces}{%
+\subsection{Expectation on Countable
+Spaces}\label{expectation-on-countable-spaces}}
+
+Because they can be completely specified by a mass function, measure
+allocations on countable spaces are particularly straightforward to
+implement in practice. Conveniently expectation values on these spaces
+are also completely specified by mass functions.
+
+\hypertarget{expectation-as-summation}{%
+\subsubsection{Expectation As
+Summation}\label{expectation-as-summation}}
+
+For any countable measurable space \((X, 2^{X})\) we can always
+decompose a real-valued function into a sum of atomic indicator
+functions, \[
+f(x) = \sum_{x' \in X} f(x') \cdot I_{ \{ x' \} }(x).
+\] The expectation value with respect to any measure \(\mu\) follows
+immediately by applying linearity, \begin{align*}
+\mathbb{E}_{\mu}[f]
+&\equiv
+\mathbb{E}_{\mu} \left[ \sum_{x' \in X} f(x') \cdot I_{ \{ x' \} } \right]
+\\
+&=
+\sum_{x' \in X} f(x') \cdot
+\mathbb{E}_{\mu} \left[ I_{ \{ x' \} } \right],
+\end{align*} and then the definition of expectation values for indicator
+functions, \begin{align*}
+\mathbb{E}_{\mu}[f]
+&=
+\sum_{x' \in X} f(x') \cdot
+\mathbb{E}_{\mu} \left[ I_{ \{ x' \} } \right]
+\\
+&=
+\sum_{x' \in X} f(x') \cdot \mu( \{ x' \} ).
+\end{align*}
+
+Consequently expectation values with respect to \emph{any} real-valued
+function on these measure spaces reduces to explicit summations.
+Moreover the summations are informed by only the measure allocations to
+atomic subsets, which is exactly what a mass function specifies. In
+particular if \(X\) is finite the general definition of expectation
+value reduces to the heuristic construction that we considered in
+\href{@finite_expectation}{Section 1}.
+
+\hypertarget{practical-consequences}{%
+\subsubsection{Practical Consequences}\label{practical-consequences}}
+
+When \(X\) if finite we can implement these expectation value summations
+by directly looping over each expectand outputs. Unfortunately this
+approach becomes unfeasible if \(X\) contains a countably infinite
+number of elements.
+
+Some infinite sums do enjoy closed-form solutions. For all other sums we
+cannot evaluate the corresponding expectation values exactly. That said
+we may be able to \emph{approximate} them: summing over only a finite
+number of elements with both \(\mu(x)\) and \(f(x)\) large enough can
+give answers close to the exact expectation values.
+
+Consider, for example, the counting measure that allocates unit measure
+to each atomic subset, \[
+\chi( \{x \}) = 1.
+\] More generally the counting measure allocates measure by counting the
+number of elements contained in a given subset, \[
+\chi{ \mathsf{x} } = \sum_{x \in \mathsf{x}} 1.
+\]
+
+The expectation value of any real-valued function
+\(f: X \rightarrow \mathbb{R}\) with respect to counting measure is
+given by over summing all of the output values, \begin{align*}
+\mathbb{E}_{\chi}[f]
+&=
+\int \chi( \mathrm{d} x) \, f(x)
+\\
+&=
+\sum_{x \in X} \chi(x) \cdot f(x)
+\\
+&=
+\sum_{x \in X} 1 \cdot f(x)
+\\
+&=
+\sum_{x \in X} f(x).
+\end{align*} In other words all expectation values with respect to the
+counting measure can be implemented by simply summing over the expectand
+outputs.
+
+We can scale the counting measure by a positive function
+\(g : X \rightarrow \mathbb{R}^{+}\) following the strategy introduced
+in \href{@sec:scaling-measures}{Section 3.2}. The scaled measure
+\(g \cdot \chi\) is implicitly defined by the expectation values
+\begin{align*}
+\mathbb{E}_{g \cdot \chi}[f]
+&=
+\mathbb{E}_{\chi}[g \cdot f]
+\\
+&=
+\sum_{x \in X} \chi(x) \cdot \left( g(x) \cdot f(x) \right)
+\\
+&=
+\sum_{x \in X} \left( g(x) \cdot \chi(x) \right) \cdot f(x).
+\end{align*} Consequently \(g \cdot \chi\) can be implemented by simply
+scaling the element-wise allocations, \[
+(g \cdot \chi)(x) = g(x) \cdot \chi(x).
+\] While this might have seemed obvious from the beginning, the
+machinery of expectation values allows us to prove that this intuitive
+definition is consistent with how measure theory behaves more generally.
+
+\hypertarget{sec:expectation_as_integration}{%
+\subsection{Lebesgue Expectation on Real
+Lines}\label{sec:expectation_as_integration}}
+
+Frustratingly there are no universal strategies for directly evaluating
+expectation values on uncountable spaces. Sometimes, however, the
+structure of an uncountable ambient space allow us to reduce expectation
+values to more feasible mathematical operations. In particular
+expectation values with respect to the Lebesgue measure on a real line
+can be related to the familiar integral from calculus.
+
+\hypertarget{expectation-as-integration}{%
+\subsubsection{Expectation As
+Integration}\label{expectation-as-integration}}
+
+By definition the expectation value of an indicator function is given by
+the measure allocated to the defining subset, \[
+\mathbb{E}_{\mu}[I_{\mathsf{x}}] = \mu(\mathsf{x}).
+\] On a real line \((\mathbb{R}, \mathcal{B}(\mathbb{R}))\) the Lebesgue
+measure allocated to any interval is just the distance between the end
+points, \[
+\lambda( \, [x_{1}, x_{2}] \, ) = d(x_{1}, x_{2}) = | x_{2} - x_{1} |.
+\] Consequently the Lebesgue expectation value of an interval indicator
+function becomes \[
+\mathbb{E}_{\lambda}[I_{[x_{1}, x_{2}]}]
+=
+| x_{2} - x_{1} |.
+\] That expectation value, however, also happens to be the area under
+the curve defined by the corresponding indicator function
+(Figure~\ref{fig-indicator-area}), \begin{align*}
+\text{area}
+&= \text{height} \cdot \text{length}
+\\
+&= 1 \cdot | x_{2} - x_{1} |
+\\
+&= \mathbb{E}_{\lambda}[I_{[x_{1}, x_{2}]}].
+\end{align*}
+
+This geometric coincidence also generalizes to simple functions. The
+area under the curve defined by a simple function built from a single
+interval \[
+s(x) = \phi \cdot I_{[x_{1}, x_{2}]}
+\] is just \begin{align*}
+\text{area}
+&= \text{height} \cdot \text{length}
+\\
+&= \phi \cdot | x_{2} - x_{1} |
+\\
+&= \phi \cdot \mathbb{E}_{\lambda}[I_{[x_{1}, x_{2}]}]
+\\
+&= \mathbb{E}_{\lambda}[\phi \cdot I_{[x_{1}, x_{2}]}]
+\\
+&= \mathbb{E}_{\lambda}[s].
+\end{align*} More generally the area under the curve defined by a simple
+function built from many intervals \[
+s(x) = \sum_{j} \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}
+\] is built up from rectangles defined by each component, \begin{align*}
+\text{area}
+&= \sum_{j} \text{area}_{j}
+\\
+&= \sum_{j} \text{height}_{j} \cdot \text{length}_{j}
+\\
+&= \sum_{j} \phi_{j} \cdot | x_{2, j} - x_{1, j} |
+\\
+&= \sum_{j} \mathbb{E}_{\lambda}[\phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}].
+\end{align*} By linearity, however, this is just the expectation value
+of the simple function itself (Figure~\ref{fig-simple-area})
+\begin{align*}
+\text{area}
+&=
+\sum_{j} \mathbb{E}_{\lambda}[\phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}]
+\\
+&=
+\mathbb{E}_{\lambda}[\sum_{j} \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}]
+\\
+&= \mathbb{E}_{\lambda}[s].
+\end{align*}
+
+\begin{figure}
+
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.45\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/integration/lebesgue_indicator/lebesgue_indicator.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-indicator-area}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.45\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/integration/lebesgue_simple/lebesgue_simple.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-simple-area}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-integrate}Expectations of simple functions with
+respect to the Lebesgue measure are intimately related to the area under
+the curve defined by simple functions. (a) The area under the curve
+defined by an interval indicator function is equal to the height, \(1\),
+times the length of the interval. That, however, is just equal to the
+Lebesgue expectation of the indicator function itself. (b) The area
+under the curve defined by interval simple functions is built up from
+the area of rectangles from each component. The total area is equal to
+the expectation value of the simple function itself.}
+
+\end{figure}
+
+Decomposing the positive and negative parts of a measurable, real-valued
+function into simple functions pushes this relationship further. On one
+hand we can use the decomposition to define general expectation values,
+and on the other we can use it to compute the area under the curve
+defined by any sufficiently nice function (Figure~\ref{fig-lebesgue}).
+
+We can also use calculus to compute the same area under the curve. A
+Riemann integral is defined by partitioning the real line into
+equally-sized intervals and then constructing rectangles from the height
+of the integrand at the end of each interval. As the intervals become
+smaller and smaller the sum of the rectangle areas converges to an
+integral (Figure~\ref{fig-riemann}), \[
+\int \mathrm{d} x \, f(x)
+=
+\lim_{\delta \rightarrow 0}
+\sum_{n = -\infty}^{\infty} delta \cdot f(x_{0} + n \cdot \delta).
+\]
+
+\begin{figure}
+
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.90\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/integration/lebesgue/lebesgue.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-lebesgue}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.90\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/integration/riemann/riemann.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-riemann}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-integrate}On a real line \(X = \mathbb{R}\)
+expectation with respect to the Lebesgue measure and Riemann integration
+both quantify the area under a curve defined by a sufficiently nice
+real-valued function \(f : \mathbb{R} \rightarrow \mathbb{R}\). (a) As
+we add more components the expectation value of a simple function
+converges to the Lebesgue expectation value of \(f\). At the same time
+the sum of the rectangular areas defined by each component converges to
+the area under the curve defined by \(f\). (b) Riemann integration also
+computes the area under the curve as a sum of increasingly narrow
+rectanglular areas, only the rectangles are stacked horizontally instead
+of vertically.}
+
+\end{figure}
+
+Geometrically Lebesgue expectation values compute the area under a curve
+by summing over \emph{vertically} stacked rectangles while Riemann
+integration computes the area by summing over \emph{horizontally}
+stacked rectangles. Riemann integration doesn't always result in a
+well-defined answer, but when it does we can use these two methods for
+computing the area under a curve to relate expectation with respect to
+the Lebesgue measure to classic integration! More formally for any
+measurable, real-valued function \(f \mathbb{R} \rightarrow \mathbb{R}\)
+we have \begin{align*}
+\mathbb{E}_{\lambda}[f]
+&= \int \lambda( \mathrm{d} x) \, f(x)
+\\
+&= \int_{-\infty}^{\infty} \mathrm{d} x \, f(x)
+\end{align*} so long as the integral \(\int \mathrm{d} x \, f(x)\) is
+well-defined.
+
+This particular equivalence is one motivation for the many alternative
+expectation value notations that we discussed in
+\href{@sec:alt_notations}{Section 2.4}. In general the integrals in
+those notations do not correspond to calculus integrals but in the
+special case of the Lebesgue measure over a real line they do!
+
+\hypertarget{practical-consequences-1}{%
+\subsubsection{Practical Consequences}\label{practical-consequences-1}}
+
+When a real-valued function has a well-defined integral then we can
+apply the tools of calculus to evaluate Lebesgue expectation values. The
+exceptional integrals that can be evaluated analytically allow us to
+compute the corresponding Lebesgue expectation values exactly. More
+generally we often have to resort to numerical integration techniques to
+approximate integrals, and hence approximately evaluate Lebesgue
+expectation values.
+
+For example the expectation value of an interval indicator function is
+given by \begin{align*}
+\mathbb{E}_{\lambda}[I_{[x_{1}, x_{2}]}]
+&=
+\int_{-\infty}^{\infty} \mathrm{d} x \, I_{[x_{1}, x_{2}]}(x)
+\\
+&=
+\int_{x_{1}}^{x_{2}} \mathrm{d} x
+\\
+&=
+x_{2} - x_{1},
+\end{align*} consistent with the definition of the Lebesgue measure.
+Note that the correct, positive answer required that we integrate from
+the lower end of the interval to the upper end. Changing the order
+defines the same interval, and hence the same Lebesgue measure
+allocation, but it flips the sign of the calculus integral. In order to
+properly relate Lebesgue expectation values to integrals we have to fix
+the \emph{orientation} of the integrals.
+
+Similarly the mean would by given by the integral of the identity
+function, \begin{align*}
+\mathbb{E}_{\lambda}[\iota]
+&=
+\int_{-\infty}^{\infty} \mathrm{d} x \, \iota(x)
+\\
+&=
+\int_{-\infty}^{\infty} \mathrm{d} x \, x
+\\
+&=
+\infty - \infty.
+\end{align*} Unfortunately this results in an ill-posed answer because
+\(\infty\) minus itself is consistent with \emph{every} value on the
+real line. Had we been a bit more careful, however, this would not have
+been surprising. The problem is that the identify function is not
+Lebesgue-integrable, \begin{align*}
+\mathbb{E}_{\lambda}[| \iota |]
+&=
+\int_{-\infty}^{\infty} \mathrm{d} x \, | \iota(x) |
+\\
+&=
+2 \, \int_{0}^{\infty} \mathrm{d} x \, x
+\\
+&=
+\infty!
+\end{align*} Consequently the Lebesgue measure does not have any
+well-defined moments.
+
+Likewise the scaling of the Lebesgue measure by a positive function
+\(g : X \rightarrow \mathbb{R}^{+}\) can be implemented with the
+integrals \begin{align*}
+\mathbb{E}_{g \cdot \lambda}[f]
+&=
+\mathbb{E}_{\lambda}[g \cdot f]
+\\
+&=
+\int_{-\infty}^{+\infty} \mathrm{d} x \, g(x) \cdot f(x).
+\end{align*} In particular the measure allocated to any interval becomes
+\begin{align*}
+(g \cdot \lambda) ( \, [x_{1}, x_{2} ] \, )
+&=
+\mathbb{E}_{g \cdot \lambda}[ I_{ [x_{1}, x_{2}] } ]
+\\
+&=
+\mathbb{E}_{\lambda}[ g \cdot I_{ [x_{1}, x_{2}] } ]
+\\
+&=
+\int_{-\infty}^{+\infty}
+\mathrm{d} x \, g(x) \cdot I_{ [x_{1}, x_{2}] }(x)
+\\
+&=
+\int_{x_{1}}^{x_{2}} \mathrm{d} x \, g(x).
+\end{align*}
+
+\hypertarget{conclusion}{%
+\section{Conclusion}\label{conclusion}}
+
+Expectation values are the main way that we interact with measures and
+probability distributions, both in theory and in practice. Indeed a
+recurring theme in applying probability theory in practice will be the
+principled computation of expectation values for relevant expectands.
+
+In the next chapter we'll learn how to apply the exceptional algorithmic
+expectation values with respect to the Lebesgue measures to a much
+larger class of measures. Later on we'll learn some powerful
+\emph{sampling} techniques for estimating general expectation values
+directly.
+
+\hypertarget{acknowledgements}{%
+\section*{Acknowledgements}\label{acknowledgements}}
+\addcontentsline{toc}{section}{Acknowledgements}
+
+A very special thanks to everyone supporting me on Patreon: Adam
+Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
+Alexander Bartik, Alexander Noll, Alexander Petrov, Alexander Rosteck,
+Anders Valind, Andrea Serafino, Andrew Mascioli, Andrew Rouillard,
+Andrew Vigotsky, Angie\_Hyunji Moon, Ara Winter, Austin Rochford, Austin
+Rochford, Avraham Adler, Ben Matthews, Ben Swallow, Benjamin Glemain,
+Bradley Kolb, Brandon Liu, Brynjolfur Gauti Jónsson, Cameron Smith,
+Canaan Breiss, Cat Shark, Charles Naylor, Chase Dwelle, Chris Jones,
+Chris Zawora, Christopher Mehrvarzi, Colin Carroll, Colin McAuliffe,
+Damien Mannion, Damon Bayer, dan mackinlay, Dan Muck, Dan W Joyce, Dan
+Waxman, Dan Weitzenfeld, Daniel Edward Marthaler, Darshan Pandit,
+Darthmaluus , David Burdelski, David Galley, David Wurtz, Denis
+Vlašiček, Doug Rivers, Dr.~Jobo, Dr.~Omri Har Shemesh, Ed Cashin, Edgar
+Merkle, Eric LaMotte, Erik Banek, Ero Carrera, Eugene O'Friel, Felipe
+González, Fergus Chadwick, Finn Lindgren, Florian Wellmann, Francesco
+Corona, Geoff Rollins, Greg Sutcliffe, Guido Biele, Hamed Bastan-Hagh,
+Haonan Zhu, Hector Munoz, Henri Wallen, hs, Hugo Botha, Håkan Johansson,
+Ian Costley, Ian Koller, idontgetoutmuch, Ignacio Vera, Ilaria
+Prosdocimi, Isaac Vock, J, J Michael Burgess, Jair Andrade, James
+Hodgson, James McInerney, James Wade, Janek Berger, Jason Martin, Jason
+Pekos, Jason Wong, Jeff Burnett, Jeff Dotson, Jeff Helzner, Jeffrey
+Erlich, Jesse Wolfhagen, Jessica Graves, Joe Wagner, John Flournoy,
+Jonathan H. Morgan, Jonathon Vallejo, Joran Jongerling, Joseph Despres,
+Josh Weinstock, Joshua Duncan, JU, Justin Bois, Karim Naguib, Karim
+Osman, Kejia Shi, Kristian Gårdhus Wichmann, Kádár András, Lars
+Barquist, lizzie , LOU ODETTE, Marc Dotson, Marcel Lüthi, Marek
+Kwiatkowski, Mark Donoghoe, Markus P., Martin Modrák, Matt Moores, Matt
+Rosinski, Matthew, Matthew Kay, Matthieu LEROY, Maurits van der Meer,
+Merlin Noel Heidemanns, Michael Colaresi, Michael DeWitt, Michael
+Dillon, Michael Lerner, Mick Cooney, Márton Vaitkus, N Sanders, Name,
+Nathaniel Burbank, Nic Fishman, Nicholas Clark, Nicholas Cowie, Nick S,
+Nicolas Frisby, Octavio Medina, Oliver Crook, Olivier Ma, Patrick
+Kelley, Patrick Boehnke, Pau Pereira Batlle, Peter Smits, Pieter van den
+Berg , ptr, Putra Manggala, Ramiro Barrantes Reynolds, Ravin Kumar, Raúl
+Peralta Lozada, Riccardo Fusaroli, Richard Nerland, Robert Frost, Robert
+Goldman, Robert kohn, Robin Taylor, Ross McCullough, Ryan Grossman, Rémi
+, S Hong, Scott Block, Sean Pinkney, Sean Wilson, Seth Axen, shira,
+Simon Duane, Simon Lilburn, sssz, Stan\_user, Stefan, Stephanie
+Fitzgerald, Stephen Lienhard, Steve Bertolani, Stew Watts, Stone Chen,
+Susan Holmes, Svilup, Sören Berg, Tao Ye, Tate Tunstall, Tatsuo Okubo,
+Teresa Ortiz, Thomas Lees, Thomas Vladeck, Tiago Cabaço, Tim Radtke,
+Tobychev , Tom McEwen, Tony Wuersch, Utku Turk, Virginia Fisher, Vitaly
+Druker, Vladimir Markov, Wil Yegelwel, Will Farr, Will Tudor-Evans,
+woejozney, yolhaj , Zach A, Zad Rafi, and Zhengchen Cai.
+
+\hypertarget{license}{%
+\section*{License}\label{license}}
+\addcontentsline{toc}{section}{License}
+
+A repository containing all of the files used to generate this chapter
+is available on
+\href{https://github.com/betanalpha/quarto_chapters/tree/main/4_expectation_values}{GitHub}.
+
+The text and figures in this chapter are copyrighted by Michael
+Betancourt and licensed under the CC BY-NC 4.0 license:
+
+https://creativecommons.org/licenses/by-nc/4.0/
+
+
+
+\end{document}

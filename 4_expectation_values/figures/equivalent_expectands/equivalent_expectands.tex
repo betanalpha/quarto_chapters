@@ -1,0 +1,90 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math, decorations.pathreplacing}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{light_teal}{RGB}{107, 142, 142}
+\definecolor{mid_teal}{RGB}{72, 117, 117}
+\definecolor{dark_teal}{RGB}{29, 79, 79}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray50}{gray}{0.5}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function f(\x) {
+    return sin(100 * \x) + 0.25 * \x;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1.0]
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-4.25, -2.5) rectangle (3.5, 2.75);
+    
+    \draw [<->, >=stealth, line width=1.25] (-3.00, -2.015) -- +(0, 4);
+    \draw [->, >=stealth, line width=1.25] (-3.015, 0.00) -- +(6, 0);
+    \node at (-3.6, 1.95) { $f(x)$ };
+    \node at (3, -0.3) { $x$ };   
+    
+    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=dark] 
+      plot ({\x},{f(\x)});                         
+  \end{scope}
+
+  \begin{scope}[shift={(7.75, 0)}]
+    \draw[white] (-4.25, -2.5) rectangle (3.5, 2.75);
+    
+    \draw [<->, >=stealth, line width=1.25] (-3.00, -2.015) -- +(0, 4);
+    \draw [->, >=stealth, line width=1.25] (-3.015, 0.00) -- +(6, 0);
+    \node at (-3.6, 1.95) { $f(x)$ };
+    \node at (3, -0.3) { $x$ };  
+    
+    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=dark] 
+      plot ({\x},{f(\x)});   
+      
+    \pgfmathsetmacro{\delta}{0.018}
+    \foreach \x/\y in {1/-0.5} {
+      \draw[white, line width=1] (\x, -2) -- (\x, +2);
+      \draw[line width=1.25] (\x - \delta, 0) -- (\x + \delta, 0);
+      \draw[dark, line width=2] (\x - \delta, \y) -- (\x + \delta, \y);
+    }                      
+  \end{scope}
+
+  \begin{scope}[shift={(15.5, 0)}]
+    \draw[white] (-4.25, -2.5) rectangle (3.5, 2.75);
+    
+    \draw [<->, >=stealth, line width=1.25] (-3.00, -2.015) -- +(0, 4);
+    \draw [->, >=stealth, line width=1.25] (-3.015, 0.00) -- +(6, 0);
+    \node at (-3.6, 1.95) { $f(x)$ };
+    \node at (3, -0.3) { $x$ };   
+    
+    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=dark] 
+      plot ({\x},{f(\x)});
+      
+    \pgfmathsetmacro{\delta}{0.018}
+    \foreach \x/\y in {0.145386/-0.742682,  -0.947701/-0.365729,  -0.33915/1.479915,  -2.921178/-0.718917,  -1.961322/-1.337637,  -0.179630/-1.071272,  -1.552173/0.680723,  -2.509046/-0.195309,  2/0.560346,  1.445613/-1.629459} {
+      \draw[white, line width=1] (\x, -2) -- (\x, +2);
+      \draw[line width=1.25] (\x - \delta, 0) -- (\x + \delta, 0);
+      \draw[dark, line width=2] (\x - \delta, \y) -- (\x + \delta, \y);
+    }                               
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  
