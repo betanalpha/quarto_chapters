@@ -1,0 +1,327 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, fadings}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{darker}{RGB}{124, 0, 0}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function x(\x, \y, \z, \theta, \phi) {
+    \xa = +cos(\theta) * \x + sin(\theta) * \z;
+    \ya = \y;
+    \za = -sin(\theta) * \x + cos(\theta) * \z;
+    %
+    \xb = \xa;
+    \yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %  
+    return \xb;
+  };
+  function y(\x, \y, \z, \theta, \phi) {
+    \xa = +cos(\theta) * \x + sin(\theta) * \z;
+    \ya = \y;
+    \za = -sin(\theta) * \x + cos(\theta) * \z;
+    %
+    \xb = \xa;
+    \yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %   
+    return \yb;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1.0]
+  
+  \pgfmathsetmacro{\theta}{45}
+  \pgfmathsetmacro{\phi}{15}
+   
+  \pgfmathsetmacro{\x}{1}
+  \pgfmathsetmacro{\y}{1}
+  \pgfmathsetmacro{\z}{1}
+  \pgfmathsetmacro{\delta}{1 / 16}
+  \pgfmathsetmacro{\epsilon}{0.003}
+  
+  \draw[white] (-3, -5.5) rectangle (15, 3.25);
+
+  \node at (-0.95, -4 + 0.4)
+      { $X_{1} \times X_{2} \times X_{3} = $ };
+  \node at (+0.55, -4 - 0.4)
+      { $\displaystyle \bigcup_{x_{3} \in X_{3}} X_{1} \times X_{2} \times \{ x_{3} \}$ };
+  
+  \node at (6, -4) { $ \{ X_{1} \times X_{2} \times \{ x_{3} \} \text{ for } x_{3} \in X_{3} \}$ };
+
+  \node at (12, -4) { $ X_{1} \times X_{2} \times \{ \tilde{x}_{3} \} $ };
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-3, -3) rectangle (3, 3.25);
+    
+    \foreach \n in {0, 1, ..., 32} {
+      \pgfmathsetmacro{\eta}{1 * (\n / 16 - 1)}
+      \pgfmathsetmacro{\prop}{100 * \n / 32}
+      \colorlet{custom}{darker!\prop!light}; 
+      \fill[custom] 
+           ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- cycle; 
+    }
+    
+    \colorlet{custom}{darker!140!light};
+    \draw[custom, line width=0.25]
+         ({x(-\x, +\y, -\z, \theta, \phi)}, {y(-\x, +\y, -\z, \theta, \phi)})
+      -- ({x(-\x, +\y, +\z, \theta, \phi)}, {y(-\x, +\y, +\z, \theta, \phi)})
+      -- ({x(+\x, +\y, +\z, \theta, \phi)}, {y(+\x, +\y, +\z, \theta, \phi)});
+  
+    \draw[custom, line width=0.25]
+         ({x(+\x, +\y, +\z, \theta, \phi)}, {y(+\x, +\y, +\z, \theta, \phi)})
+      -- ({x(+\x, +\y, -\z, \theta, \phi)}, {y(+\x, +\y, -\z, \theta, \phi)})
+      -- ({x(-\x, +\y, -\z, \theta, \phi)}, {y(-\x, +\y, -\z, \theta, \phi)});
+  
+    \draw[custom, line width=0.25]
+         ({x(+\x, -\y - \delta, +\z, \theta, \phi)}, {y(+\x, -\y - \delta, +\z, \theta, \phi)})
+      -- ({x(+\x, -\y - \delta, -\z, \theta, \phi)}, {y(+\x, -\y - \delta, -\z, \theta, \phi)})
+      -- ({x(-\x, -\y - \delta, -\z, \theta, \phi)}, {y(-\x, -\y - \delta, -\z, \theta, \phi)});
+  
+    \draw[custom, line width=0.25]
+          ({x(+\x, +\y + \epsilon, +\z, \theta, \phi)}, 
+           {y(+\x, +\y + \epsilon, +\z, \theta, \phi)})
+      --  ({x(+\x, -\y - \epsilon - \delta, +\z, \theta, \phi)}, 
+           {y(+\x, -\y - \epsilon  - \delta, +\z, \theta, \phi)});
+    
+    \draw[custom, line width=0.25]
+         ({x(+\x, +\y + \epsilon, -\z, \theta, \phi)},
+          {y(+\x, +\y + \epsilon, -\z, \theta, \phi)})
+      -- ({x(+\x, -\y - \epsilon  - \delta, -\z, \theta, \phi)}, 
+          {y(+\x, -\y - \epsilon  - \delta, -\z, \theta, \phi)});
+    
+    \draw[custom, line width=0.25]
+         ({x(-\x, +\y + \epsilon, -\z, \theta, \phi)}, 
+          {y(-\x, +\y + \epsilon, -\z, \theta, \phi)})
+      -- ({x(-\x, -\y - \epsilon  - \delta, -\z, \theta, \phi)}, 
+          {y(-\x, -\y - \epsilon  - \delta, -\z, \theta, \phi)});
+  \end{scope} 
+                 
+  \begin{scope}[shift={(6, 0)}]
+    \draw[white] (-3, -3) rectangle (3, 3.25);
+    
+    \foreach \n in {0, 1, ..., 32} {
+      \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
+      \pgfmathsetmacro{\prop}{100 * \n / 32}
+      \colorlet{custom}{darker!\prop!light};
+      \fill[custom] 
+           ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- cycle; 
+      
+      \colorlet{custom}{darker!140!light};
+      \draw[custom, line width=0.25]
+           ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25]
+           ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta, -\z, \theta, \phi)}, {y(+\x, \eta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25]
+           ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)});
+      
+      \draw[custom, line width=0.25]
+           ({x(+\x, \eta + \epsilon, +\z, \theta, \phi)}, 
+            {y(+\x, \eta + \epsilon, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)}, 
+            {y(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25]
+           ({x(+\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+            {y(+\x, \eta + \epsilon, -\z, \theta, \phi)})
+        -- ({x(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)}, 
+            {y(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+      
+      \draw[custom, line width=0.25]
+           ({x(-\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+            {y(-\x, \eta + \epsilon, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta - \epsilon - \delta, -\z, \theta, \phi)}, 
+            {y(-\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+    }
+  \end{scope} 
+
+  \begin{scope}[shift={(12, 0)}]
+    \draw[white] (-3, -3) rectangle (3, 3.25);
+    
+    \foreach \n in {0, 1, ..., 18} {
+      \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
+      \pgfmathsetmacro{\prop}{100 * \n / 32}
+      \colorlet{custom}{darker!\prop!light};
+      \fill[custom, opacity=0.15] 
+           ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- cycle; 
+      
+      \colorlet{custom}{darker!140!light};
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta, -\z, \theta, \phi)}, {y(+\x, \eta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)});
+      
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta + \epsilon, +\z, \theta, \phi)}, 
+            {y(+\x, \eta + \epsilon, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)}, 
+            {y(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+            {y(+\x, \eta + \epsilon, -\z, \theta, \phi)})
+        -- ({x(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)}, 
+            {y(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+      
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(-\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+            {y(-\x, \eta + \epsilon, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta - \epsilon - \delta, -\z, \theta, \phi)}, 
+            {y(-\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+    }
+    
+    \pgfmathsetmacro{\n}{19}
+    \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
+    \pgfmathsetmacro{\prop}{100 * \n / 32}
+    \colorlet{custom}{darker!\prop!light};
+    \fill[custom] 
+         ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+      -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+      -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+      -- ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+      -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+      -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
+      -- cycle; 
+    
+    \colorlet{custom}{darker!140!light};
+    \draw[custom, line width=0.25]
+         ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+      -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+      -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)});
+      
+    \draw[custom, line width=0.25]
+         ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+      -- ({x(+\x, \eta, -\z, \theta, \phi)}, {y(+\x, \eta, -\z, \theta, \phi)}) 
+      -- ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)});
+      
+    \draw[custom, line width=0.25]
+         ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+      -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+      -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)});
+    
+    \draw[custom, line width=0.25]
+         ({x(+\x, \eta + \epsilon, +\z, \theta, \phi)}, 
+          {y(+\x, \eta + \epsilon, +\z, \theta, \phi)})
+      -- ({x(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)}, 
+          {y(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)});
+      
+    \draw[custom, line width=0.25]
+         ({x(+\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+          {y(+\x, \eta + \epsilon, -\z, \theta, \phi)})
+      -- ({x(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)}, 
+          {y(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+    
+    \draw[custom, line width=0.25]
+         ({x(-\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+          {y(-\x, \eta + \epsilon, -\z, \theta, \phi)})
+      -- ({x(-\x, \eta - \epsilon - \delta, -\z, \theta, \phi)}, 
+          {y(-\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+
+    \foreach \n in {20, 21, ..., 32} {
+      \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
+      \pgfmathsetmacro{\prop}{100 * \n / 32}
+      \colorlet{custom}{darker!\prop!light};
+      \fill[custom, opacity=0.15] 
+           ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- cycle; 
+      
+      \colorlet{custom}{darker!140!light};
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta, +\z, \theta, \phi)}, {y(+\x, \eta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta, -\z, \theta, \phi)}, {y(+\x, \eta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta - \delta, +\z, \theta, \phi)}, {y(+\x, \eta - \delta, +\z, \theta, \phi)}) 
+        -- ({x(+\x, \eta - \delta, -\z, \theta, \phi)}, {y(+\x, \eta - \delta, -\z, \theta, \phi)}) 
+        -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)});
+      
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta + \epsilon, +\z, \theta, \phi)}, 
+            {y(+\x, \eta + \epsilon, +\z, \theta, \phi)})
+        -- ({x(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)}, 
+            {y(+\x, \eta - \epsilon - \delta, +\z, \theta, \phi)});
+        
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(+\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+            {y(+\x, \eta + \epsilon, -\z, \theta, \phi)})
+        -- ({x(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)}, 
+            {y(+\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+      
+      \draw[custom, line width=0.25, opacity=0.15]
+           ({x(-\x, \eta + \epsilon, -\z, \theta, \phi)}, 
+            {y(-\x, \eta + \epsilon, -\z, \theta, \phi)})
+        -- ({x(-\x, \eta - \epsilon - \delta, -\z, \theta, \phi)}, 
+            {y(-\x, \eta - \epsilon  - \delta, -\z, \theta, \phi)});
+    }
+
+  \end{scope} 
+  
+\end{tikzpicture}
+
+\end{document}  
