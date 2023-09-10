@@ -9,7 +9,6 @@
   numbers=noendperiod]{scrartcl}
 
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -19,6 +18,10 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -143,10 +146,12 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -157,7 +162,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Spaces},
+  pdftitle={Mathematical Spaces},
   pdfauthor={Michael Betancourt},
   colorlinks=true,
   linkcolor={blue},
@@ -166,13 +171,13 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Spaces}
+\title{Mathematical Spaces}
 \author{Michael Betancourt}
 \date{April 2023}
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, enhanced, boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -1521,6 +1526,53 @@ perspective the foundation of a space is a set equipped with a
 particular topology. Any additional structure, such as an ordering,
 algebra, or metric just builds on top of that foundation.
 
+\hypertarget{structure-informed-subsets}{%
+\subsection{Structure-Informed
+Subsets}\label{structure-informed-subsets}}
+
+Mathematically it is much easier to work with structures that are
+\emph{compatible} with each other. For example if we want to equip a set
+with both a topology and a metric then the resulting space will be
+particularly well-behaved if the we use a metric topology. At the same
+time ambient structure can also distinguish certain compatible subsets.
+
+For example is a set is equipped with an ordering then we can define
+\textbf{interval} subsets that contain all elements above and below two
+boundary elements. An \textbf{open interval} excludes both boundary
+elements, \[
+(x_{1}, x_{2}) =
+\{ x \in X \mid x_{1} < x < x_{2} \}
+\] while a \textbf{closed interval} includes them, \[
+[x_{1}, x_{2}] =
+\{ x \in X \mid x_{1} \le x \le x_{2} \}.
+\] We can also define \textbf{half-open}, or equivalently
+\textbf{half-closed}, intervals that contain only one boundary,
+\begin{align*}
+(x_{1}, x_{2}] &= \{ x \in X \mid x_{1} < x \le x_{2} \}
+\\
+[x_{1}, x_{2}) &= \{ x \in X \mid x_{1} \le x < x_{2} \}.
+\end{align*} Note that these notions of ``open'' and ``closed'' subsets
+are in general distinct from the open and closed subsets defined by a
+topology. Only when an ordering is compatible with a topology will these
+the open and closed intervals also be topologically open and closed.
+
+As we saw in \href{@sec:open-balls}{Section 1.2.4.1} a metric
+distinguishes subsets of elements surrounding a given element. This
+includes open balls, \[
+\mathsf{b}_{r}(x) = \{ x' \in X \mid d(x, x') < r \}
+\] and closed balls, \[
+\bar{\mathsf{b}}_{r}(x) = \{ x' \in X \mid d(x, x') \le r \} \in 2^{X}.
+\] Open and closed balls will not necessarily be topologically open and
+closed unless the subset is endowed with a metric topology.
+
+Finally by construction any topology distinguishes open subsets and the
+complementary closed subsets. When all of the structures are consistent
+with each other we can associate these subsets with intervals and balls,
+but in general each structure can distinguish different subsets. Because
+every topology contains the empty set and the full set these are always
+of interest. Moreover when working with discrete topologies the atomic
+subsets that contain only a single element are particularly relevant.
+
 \hypertarget{sec:proto-spaces}{%
 \section{Prototypical Spaces}\label{sec:proto-spaces}}
 
@@ -1667,12 +1719,14 @@ few particularly useful subspaces. In particular we can construct the
 \] by removing the elements smaller than zero, and the \textbf{strictly
 positive natural numbers} \[
 \mathbb{N}^{+} = \{ x \in \mathbb{Z} \mid x > 0 \}
-\] by removing the zero element as well. These subspaces inherit
-ordering, metric, and topological structure from the integers but the
-algebraic structure will is complicated a bit. For example we can't
-consistently define subtraction on the natural numbers because the
-difference between two positive integers can be negative, which falls
-outside of \(\mathbb{N}\).
+\] by removing the zero element as well. More generally we can construct
+subspaces from any interval.
+
+These subspaces inherit ordering, metric, and topological structure from
+the integers but the algebraic structure will is complicated a bit. For
+example we can't consistently define subtraction on the natural numbers
+because the difference between two positive integers can be negative,
+which falls outside of \(\mathbb{N}\).
 
 \hypertarget{real-lines}{%
 \subsection{Real Lines}\label{real-lines}}
@@ -1722,18 +1776,11 @@ The power set of a real line contains a wealth of subsets that we can
 use to construct useful subspaces. For example the integers are a subset
 of the real line, \(\mathbb{Z} \subset \mathbb{R}\). We can also define
 the \textbf{positive real line} as \[
-\mathbb{R}^{+} = \{ x \in \mathbb{R} \mid x \ge 0 \}.
-\] More generally we can define \textbf{intervals} that contain all
-points within an upper and lower bound. \textbf{Open intervals} do not
-contain the bounds, \[
-(x_{1}, x_{2}) =
-\{ x \in \mathbb{R} \mid x_{1} < x < x_{2} \}
-\] while \textbf{closed intervals} do, \[
-[x_{1}, x_{2}] =
-\{ x \in \mathbb{R} \mid x_{1} \le x \le x_{2} \}.
-\] All of these subspaces inherit topological, ordering, and metric
-structure from the initial real line, but they may not inherit all of
-the algebraic structure.
+\mathbb{R}^{+} = \{ x \in \mathbb{R} \mid x \ge 0 \};
+\] more generally any interval of a real line defines a subspace. All of
+these subspaces inherit topological, ordering, and metric structure from
+the initial real line, but they may not inherit all of the algebraic
+structure.
 
 Regardless of the interpretation we can use the metric structure of a
 real line to construct a useful visualization of the space. In
