@@ -137,7 +137,7 @@ subset in the power set,
 \end{alignat*}
 Importantly these subsets allocations needed to be consistent with each
 other to match the behavior of those derived from individual element
-allocations.  For any finite collection of disjoint subsets we should
+allocations.  For any finite collection of _disjoint_ subsets we should
 have
 $$
 \mu( \cup_{i = 1}^{I} \mathsf{x} )
@@ -167,7 +167,7 @@ $$
 $$
 is any finite collection of disjoint subsets,
 $$
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset,
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset,
 $$
 then a consistent measure should give
 $$
@@ -190,7 +190,7 @@ $$
 is any countably infinite collection of disjoint subsets with
 with
 $$
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset
 $$
 then
 $$
@@ -453,7 +453,7 @@ $$
 $$
 that are mutually disjoint,
 $$
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset.
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset.
 $$
 
 On finite and countably infinite spaces we can always take
@@ -496,7 +496,7 @@ $$
 $$
 that are mutually disjoint,
 $$
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset.
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset.
 $$
 These properties are also known collectively as the
 **Kolmogorov axioms**.
@@ -921,10 +921,9 @@ $$
 = l( \, [x_{1}, x_{2}] \, )
 = | x_{2} - x_{1} |.
 $$
-Allocations to more general measurable subsets can then be derived by
-decomposing each subset into the union of disjoint intervals and
-applying countable additivity.  The resulting uniform measure over a
-given real line is known as the **Lebesgue measure**.
+Allocations to more general measurable subsets can then be derived from
+these interval allocations.  The resulting uniform measure over a given
+real line is known as the **Lebesgue measure**.
 
 Just as the counting measure formalizes intuition notions of counting
 on countable spaces, the Lebesgue measure formalizes intuitive notions
@@ -1377,7 +1376,7 @@ exposition and motivation than I have found in other treatments.
 
 # Acknowledgements
 
-I thank Jeff Helzner for helpful discussion.
+I thank Jeff Helzner and Simon Duane for helpful discussion.
 
 A very special thanks to everyone supporting me on Patreon:
 Adam Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,

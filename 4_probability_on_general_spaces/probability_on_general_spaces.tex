@@ -177,7 +177,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, sharp corners, enhanced, boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, breakable, sharp corners, interior hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -248,7 +248,7 @@ allocations with a sequence of vertical bars stacked next to each other
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/mass_function/mass_function.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/mass_function/mass_function.pdf}
 
 }
 
@@ -293,8 +293,8 @@ each subset in the power set, \begin{alignat*}{6}
 & \mathsf{x} & &\mapsto& & \mu(\mathsf{x}) &.
 \end{alignat*} Importantly these subsets allocations needed to be
 consistent with each other to match the behavior of those derived from
-individual element allocations. For any finite collection of disjoint
-subsets we should have \[
+individual element allocations. For any finite collection of
+\emph{disjoint} subsets we should have \[
 \mu( \cup_{i = 1}^{I} \mathsf{x} )
 =
 \sum_{i = 1}^{I} \mu( \mathsf{x}_{i}).
@@ -320,7 +320,7 @@ finite number of subsets we only ever have to consider the consistency
 of a finite collection of subsets at a time. More formally if \[
 \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots, \mathsf{x}_{I} \}
 \] is any finite collection of disjoint subsets, \[
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset,
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset,
 \] then a consistent measure should give \[
 \mu( \cup_{i = 1}^{I} \mathsf{x} )
 =
@@ -336,7 +336,7 @@ function are consistent across countably infinite collections of
 subsets. If \[
 \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots \}
 \] is any countably infinite collection of disjoint subsets with with \[
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset
 \] then \[
 \mu( \cup_{i} \mathsf{x} )
 =
@@ -596,7 +596,7 @@ positive real line, \begin{alignat*}{6}
 \] for any countably infinite collection of subsets \[
 \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots \}
 \] that are mutually disjoint, \[
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset.
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset.
 \]
 
 On finite and countably infinite spaces we can always take
@@ -631,7 +631,7 @@ any measurable space \((X, \mathcal{X})\) is a function from the
 \] for any countably infinite collection of subsets \[
 \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots \}
 \] that are mutually disjoint, \[
-\mathsf{x}_{i} \cup \mathsf{x}_{i' \ne i} = \emptyset.
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset.
 \] These properties are also known collectively as the
 \textbf{Kolmogorov axioms}.
 
@@ -956,7 +956,7 @@ and \(\mathsf{x}_{2} \in \mathcal{X}\) are allocated the same measure,
 \[
 \mu(\mathsf{x}_{1}) = \mu(\mathsf{x}_{2}) = \mu_{0},
 \] then their union will be allocated the measure, \[
-\mu(mathsf{x}_{1}) \cup \mu(\mathsf{x}_{2})
+\mu(\mathsf{x}_{1}) \cup \mu(\mathsf{x}_{2})
 =
 \mu(\mathsf{x}_{1}) + \mu(\mathsf{x}_{2})
 =
@@ -979,7 +979,7 @@ in a constant mass function (Figure~\ref{fig-uniform-mass-function}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/uniform_mass_function/uniform_mass_function.pdf}
+{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/uniform_mass_function/uniform_mass_function.pdf}
 
 }
 
@@ -1035,7 +1035,7 @@ to each element, \[
 \] That said these other uniform measures are somewhat redundant in the
 sense that their allocations can be recovered by scaling the
 corresponding counting measure allocations, \[
-\kappa ( \mathsf{x} ) = c \cdot \xi ( \mathsf{x} ).
+\kappa ( \mathsf{x} ) = c \cdot \chi ( \mathsf{x} ).
 \]
 
 One important feature of a counting measure, indeed any uniform measure,
@@ -1089,10 +1089,10 @@ l( \, [-350, -300] \, ) = l( \, [0, 50] \, )
 
 }
 
-\caption{\label{fig-equal-length-intervals}The structure that defines
-the real line also distinguishes interval subsets that we can
-characterize by their length. Any uniform measure over the real line
-should allocate the same measure to any interval with the same length.}
+\caption{\label{fig-equal-length-intervals}The structure that defines a
+real line also distinguishes interval subsets that we can characterize
+by their length. Any uniform measure over a real line should allocate
+the same measure to any interval with the same length.}
 
 \end{figure}
 
@@ -1101,9 +1101,8 @@ interval a measure directly equal to the its length, \[
 \lambda( \, [x_{1}, x_{2}] \, )
 = l( \, [x_{1}, x_{2}] \, )
 = | x_{2} - x_{1} |.
-\] Allocations to more general measurable subsets can then be derived by
-decomposing each subset into the union of disjoint intervals and
-applying countable additivity. The resulting uniform measure over a
+\] Allocations to more general measurable subsets can then be derived
+from these interval allocations. The resulting uniform measure over a
 given real line is known as the \textbf{Lebesgue measure}.
 
 Just as the counting measure formalizes intuition notions of counting on
@@ -1553,7 +1552,7 @@ motivation than I have found in other treatments.
 \hypertarget{acknowledgements}{%
 \section{Acknowledgements}\label{acknowledgements}}
 
-I thank Jeff Helzner for helpful discussion.
+I thank Jeff Helzner and Simon Duane for helpful discussion.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
