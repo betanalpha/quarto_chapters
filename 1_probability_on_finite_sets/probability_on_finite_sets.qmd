@@ -1,5 +1,5 @@
 ---
-title: "Probability Theory on Finite Sets"
+title: "Measure and Probability on Finite Sets"
 author: "Michael Betancourt"
 date: "January 2023"
 date-format: "MMMM YYYY"
@@ -36,7 +36,7 @@ Despite its infamous reputation the foundations of probability theory are quite
 straightforward.  Much of the mathematical difficulty arises only when we
 implement probability theory on elaborate sets like the real numbers, and most
 of the philosophical difficultly arises only when trying to assign an
-interpretation to the mathematics.   In this chapter I try to avoid this baggage
+interpretation to the mathematics.   In this chapter we will avoid this baggage
 by introducing the basics of abstract probability theory on the simplest,
 nontrivial set: a collection of a finite number of elements.
 
@@ -456,7 +456,7 @@ proportional allocations.  This isn't a question of mathematics but rather
 _applying_ mathematics to model a system of interest.  We'll come back to the
 many different systems that can be consistently modeled with probability theory,
 and hence the many different interpretations of probability itself, in
-Chapter 5.
+[Chapter 4](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html).
 
 While we're on the topic of terminological issues the word "distribution" is not
 without its own problems.  In mathematics the term "distribution" is heavily
@@ -670,7 +670,7 @@ In addition to providing flexible constructions the subset definition of a
 measure $\mu : 2^{X} \rightarrow [0, \infty]$ is also critical for generalizing
 measure theory beyond finite sets.  Specifically it becomes _necessary_ when
 trying to consistently define measures on more mathematically complicated sets
-like the real line.  This will be the topic of Chapter 3.
+like the real line.  This will be the topic of [Chapter 4](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html).
 
 # Acknowledgements
 

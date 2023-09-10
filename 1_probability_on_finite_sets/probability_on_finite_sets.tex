@@ -9,7 +9,6 @@
   numbers=noendperiod]{scrartcl}
 
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -19,6 +18,10 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -120,10 +123,12 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
 \makeatother
 \makeatletter
 \@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \makeatother
@@ -134,7 +139,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Probability Theory on Finite Sets},
+  pdftitle={Measure and Probability on Finite Sets},
   pdfauthor={Michael Betancourt},
   colorlinks=true,
   linkcolor={blue},
@@ -143,13 +148,13 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Probability Theory on Finite Sets}
+\title{Measure and Probability on Finite Sets}
 \author{Michael Betancourt}
 \date{January 2023}
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, breakable, interior hidden, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, enhanced]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -161,8 +166,8 @@ Despite its infamous reputation the foundations of probability theory
 are quite straightforward. Much of the mathematical difficulty arises
 only when we implement probability theory on elaborate sets like the
 real numbers, and most of the philosophical difficultly arises only when
-trying to assign an interpretation to the mathematics. In this chapter I
-try to avoid this baggage by introducing the basics of abstract
+trying to assign an interpretation to the mathematics. In this chapter
+we will avoid this baggage by introducing the basics of abstract
 probability theory on the simplest, nontrivial set: a collection of a
 finite number of elements.
 
@@ -735,7 +740,9 @@ these proportional allocations. This isn't a question of mathematics but
 rather \emph{applying} mathematics to model a system of interest. We'll
 come back to the many different systems that can be consistently modeled
 with probability theory, and hence the many different interpretations of
-probability itself, in Chapter 5.
+probability itself, in
+\href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html}{Chapter
+4}.
 
 While we're on the topic of terminological issues the word
 ``distribution'' is not without its own problems. In mathematics the
@@ -969,7 +976,9 @@ a measure \(\mu : 2^{X} \rightarrow [0, \infty]\) is also critical for
 generalizing measure theory beyond finite sets. Specifically it becomes
 \emph{necessary} when trying to consistently define measures on more
 mathematically complicated sets like the real line. This will be the
-topic of Chapter 3.
+topic of
+\href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html}{Chapter
+4}.
 
 \hypertarget{acknowledgements}{%
 \section{Acknowledgements}\label{acknowledgements}}
