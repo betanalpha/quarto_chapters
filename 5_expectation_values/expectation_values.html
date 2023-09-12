@@ -3195,7 +3195,7 @@ X = \{ \Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit \},
 &amp;=  1 \cdot f(x&#39;)
   + \sum_{x \neq x&#39;} 0 \cdot f(x)
 \\
-&amp;= f(x_{i}).
+&amp;= f(x&#39;).
 \end{align*}</span> In other words measure-informed integration of functions with respect to <span class="math inline">\delta_{x&#39;}</span> allow us to probe the individual output values <span class="math inline">f(x&#39;)</span>.</p>
 <p>Similarly consider a uniform probability mass function where each element is allocated the same probability, <span class="math display">
 \pi(x) = \frac{1}{I}.
@@ -3272,7 +3272,7 @@ s(x) = \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x),
 <figcaption class="figure-caption">Figure 3: Simple functions are constructed from linear combinations of indicator functions. Incorporating more indicator functions yields more sophisticated functional behavior.</figcaption>
 </figure>
 </div>
-<p>If we assume that measure-informed integration is a linear operation on any measure space then we can immediately compute the expectation of any simple function, <span class="math display">\begin{align*}
+<p>If we assume that measure-informed integration is a linear operation on any measure space then we can immediately compute the integral of any simple function, <span class="math display">\begin{align*}
 \mathbb{I}_{\mu}[ s ]
 &amp;=
 \mathbb{I}_{\mu} \left[ \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}} \right]
@@ -3529,20 +3529,20 @@ L(X, \mathcal{X}, \mu) \subset C(X)
 \mathbb{I}_{g \cdot \pi} [ 1 ]
 \\
 &amp;=
-\mathbb{I}_{\pi} [ g ]
+\mathbb{E}_{\pi} [ g ]
 \end{align*}</span> which is not, in general, equal to <span class="math inline">1</span>. In other words scaling a probability distribution results not in another probability distribution but rather a generic measure.</p>
-<p>If we want transform one probability distribution into another then we need to correct for the modified normalization, defining <span class="math display">
-\mathbb{E}_{g \ast \pi} [ f ] \equiv
+<p>If we want transform one probability distribution into another then we need to correct for the modified normalization, defining <span class="math display">\begin{align*}
+\mathbb{E}_{g \ast \pi} [ f ]
+&amp;\equiv
+\mathbb{E}_{\pi} \left[ \frac{g}{ \mathbb{E}_{\pi} [ g ] } \cdot f \right]
+\\
+&amp;=
 \frac{ \mathbb{E}_{\pi} [ g \cdot f ] }{ \mathbb{E}_{\pi} [ g ] }
-</span> for every expectand <span class="math inline">f: X \rightarrow \mathbb{R}</span> with <span class="math display">
+\end{align*}</span> for every expectand <span class="math inline">f: X \rightarrow \mathbb{R}</span> with <span class="math display">
 \mathbb{E}_{\pi} [ \, | g \cdot f | \, ] &lt; \infty.
 </span></p>
 <p>In this case the modified subset allocations become <span class="math display">\begin{align*}
 (g \ast \pi)(\mathsf{x})
-&amp;=
-\frac{ \mathbb{E}_{g \cdot \pi} [ I_{\mathsf{x}} ] }
-{ \mathbb{E}_{\pi} [ g ] }
-\\
 &amp;=
 \frac{ \mathbb{E}_{\pi} [ g \cdot I_{\mathsf{x}} ] }
 { \mathbb{E}_{\pi} [ g ] }.
@@ -3659,7 +3659,7 @@ d_{X}(x_{1}, x_{2})
 </section>
 <section id="the-mean" class="level3" data-number="4.1.2">
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="the-mean"><span class="header-section-number">4.1.2</span> The Mean</h3>
-<p>If an embedding function is an integrand than we can evaluate its measure-informed integral, <span class="math inline">\mathbb{I}_{\mu}[\iota]</span>. The ultimately utility of this expectation value, however, depends on what information about the ambient measure it extracts.</p>
+<p>If an embedding function is an integrand than we can evaluate its measure-informed integral, <span class="math inline">\mathbb{I}_{\mu}[\iota]</span>. The ultimately utility of this measure-informed integral, however, depends on what information about the ambient measure it extracts.</p>
 <p>Interpreting <span class="math inline">\mathbb{I}_{\mu}[\iota]</span> is straightforward when <span class="math inline">X</span> is finite, <span class="math inline">\mathcal{X}</span> is the full power set, and we can represent any measure with a mass function. In this case we can explicitly compute the <span class="math inline">\mathbb{I}_{\mu}[\iota]</span> as a weighted sum of positions, <span class="math display">
 \mathbb{I}_{\mu}[\iota] = \sum_{x \in X} \mu(x) \, \iota(x).
 </span> The more measure that is allocated to an element the more strongly the measure-informed integral is pulled towards the position of that element. In other words <span class="math inline">\mathbb{I}_{\mu}[\iota]</span> is one way to quantify the position around which the measure <span class="math inline">\mu</span> concentrates, defining a notion of <em>centrality</em> for the measure <span class="math inline">\mu</span>.</p>
@@ -3685,9 +3685,9 @@ d_{r_{0}}^{2} :\; &amp; X &amp; &amp;\rightarrow&amp; \; &amp;\mathbb{R}^{+}&amp
 \mathbb{I}_{\mu} \left[ \iota^{2} \right]
 -2 \, r_{0} \cdot \mathbb{I}_{\mu} \left[ \iota \right]
 + r_{0}^{2}
-\end{align*}</span> quantifies how diffusely the measure <span class="math inline">\mu</span> is allocated around <span class="math inline">r_{0}</span>; the larger the integral the less <span class="math inline">mu</span> concentrates around <span class="math inline">r_{0}</span>.</p>
+\end{align*}</span> quantifies how diffusely the measure <span class="math inline">\mu</span> is allocated around <span class="math inline">r_{0}</span>; the larger the integral the less <span class="math inline">\mu</span> concentrates around <span class="math inline">r_{0}</span>.</p>
 <p>Consequently the baseline position <span class="math inline">r_{0} \in \mathbb{R}</span> with the <em>smallest</em> integrated squared distance should be, in some sense, the position closest to where <span class="math inline">\mu</span> concentrates. Because we’re working with continuous positions we can compute the baseline position that minimizes the integrated squared distance using calculus methods even if <span class="math inline">X</span> itself is not continuous.</p>
-<p>In particular the minimum <span class="math inline">r_{0}^{*}</span> is given by setting the derivative of the expectation value, <span class="math display">\begin{align*}
+<p>In particular the minimum <span class="math inline">r_{0}^{*}</span> is given by setting the derivative of the measure-informed integral, <span class="math display">\begin{align*}
 \frac{\mathrm{d}}{\mathrm{d} r_{0} }
 \mathbb{I}_{\mu} \left[ d_{r_{0}}^{2} \right]
 &amp;=
@@ -3729,11 +3729,11 @@ r_{0}^{*}
 <section id="higher-order-moments-and-cumulants" class="level3" data-number="4.1.3">
 <h3 data-number="4.1.3" class="anchored" data-anchor-id="higher-order-moments-and-cumulants"><span class="header-section-number">4.1.3</span> Higher-Order Moments and Cumulants</h3>
 <p>We have not yet, however, exhausted the usefulness of an embedding map. For example the integrated squared distance from the mean <span class="math display">
-\mathbb{I}_{\mu} \left[ d_{\mathbb{M}_{\mu}}^{2} \right]
+\mathbb{I}_{\mu} \bigg[ d_{\mathbb{M}_{\mu}}^{2} \bigg]
 =
-\mathbb{I}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{2} \right]
-</span> quantifies how <em>strongly</em> <span class="math inline">\mu</span> concentrates around its centrality; the larger the expectation value the more diffuse the concentration is. This is known as the <strong>variance</strong> of <span class="math inline">\mu</span>.</p>
-<p>Higher-powers extract even more information. For example the expectation value of the cubic integrand <span class="math display">
+\mathbb{I}_{\mu} \bigg[ (\iota - \mathbb{M}_{\mu})^{2} \bigg]
+</span> quantifies how <em>strongly</em> <span class="math inline">\mu</span> concentrates around its centrality; the larger the measure-informed integral the more diffuse the concentration is. This is known as the <strong>variance</strong> of <span class="math inline">\mu</span>.</p>
+<p>Higher-powers extract even more information. For example the measure-informed integral of the cubic integrand <span class="math display">
 \mathbb{I}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{3} \right]
 </span> characterizes how <em>symmetric</em> the concentration of <span class="math inline">\mu</span> is around its centrality.</p>
 <p>The many measure-informed integral that we can construct from an embedding function can be systemized in various ways. For example the direct powers <span class="math display">
@@ -3867,11 +3867,11 @@ r_{0}^{*}
 <section id="cumulative-distribution-functions" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="cumulative-distribution-functions"><span class="header-section-number">4.3</span> Cumulative Distribution Functions</h2>
 <p>On an ordered space we can also use interval subsets to visualize how the total measure is allocated as we go from smaller values to larger values. More concretely consider the interval subsets consisting of all points smaller than or equal to a given point, <span class="math display">
-\mathbb{I}_{x} = \{ x&#39; \in X \mid x&#39; \le x \}.
+\mathsf{I}_{x} = \{ x&#39; \in X \mid x&#39; \le x \}.
 </span> The measure allocated to these interval subsets quantifies how the measure accumulates as we scan across the space, <span class="math display">\begin{alignat*}{6}
 M :\; &amp; X &amp; &amp;\rightarrow&amp; \; &amp;[0, \mu(X)]&amp;
 \\
-&amp; x &amp; &amp;\mapsto&amp; &amp; M_{\mu}(x) = \mu(\mathbb{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathbb{I}_{x}}] &amp;.
+&amp; x &amp; &amp;\mapsto&amp; &amp; M_{\mu}(x) = \mu(\mathsf{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathsf{I}_{x}}] &amp;.
 \end{alignat*}</span> According this mapping is known as a <strong>cumulative distribution function</strong> (<a href="#fig-cdf-basics">Figure 12</a>).</p>
 <div id="fig-cdf-basics" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -3880,8 +3880,8 @@ M :\; &amp; X &amp; &amp;\rightarrow&amp; \; &amp;[0, \mu(X)]&amp;
 </figure>
 </div>
 <p>Cumulative distribution functions are also sometimes written as <span class="math inline">\mu([x&#39; &lt; x])</span> or even <span class="math inline">\mu(x&#39; &lt; x)</span>. Personally I find these notations to be a bit too confusing as it’s easy to mistake which variable denotes points in the interval and which variable defines the upper boundary of the interval itself.</p>
-<p>By construction if <span class="math inline">x_{1} &lt; x_{2}</span> then <span class="math inline">\mathbb{I}_{x_{1}} \subset \mathbb{I}_{x_{2}}</span>. Consequently <span class="math display">
-\mu(\mathbb{I}_{x_{1}}) \le \mu(\mathbb{I}_{x_{2}})
+<p>By construction if <span class="math inline">x_{1} &lt; x_{2}</span> then <span class="math inline">\mathsf{I}_{x_{1}} \subset \mathsf{I}_{x_{2}}</span>. Consequently <span class="math display">
+\mu(\mathsf{I}_{x_{1}}) \le \mu(\mathsf{I}_{x_{2}})
 </span> or, equivalently, <span class="math display">
 M(x_{1}) \le M(x_{2}).
 </span> In other words every cumulative distribution function is a monotonically non-decreasing function that begins at <span class="math inline">0</span> and ends at <span class="math inline">\mu(X)</span>.</p>
@@ -3926,16 +3926,16 @@ M(x_{1}) \le M(x_{2}).
 <p>One really nice feature of cumulative distribution functions is that they allow us to compute explicit interval probabilities. The union of any two-sided, half-open interval <span class="math display">
 ( x_{1}, x_{2} ] = \{ x \in X \mid x_{1} &lt; x \le x_{2} \}
 </span> with the disjoint one-sided interval <span class="math inline">\mathbb{I}_{x_{1}}</span> defines another one-sided interval, <span class="math display">
-\mathbb{I}_{x_{2}} = \mathbb{I}_{x_{1}} \cup (x_{1}, x_{2}].
+\mathsf{I}_{x_{2}} = \mathsf{I}_{x_{1}} \cup (x_{1}, x_{2}].
 </span> Because measure allocations are additive this implies that <span class="math display">\begin{align*}
-\mu(\mathbb{I}_{x_{2}})
-&amp;= \mu( \, \mathbb{I}_{x_{1}} \cup (x_{1}, x_{2}] \, )
+\mu(\mathsf{I}_{x_{2}})
+&amp;= \mu( \, \mathsf{I}_{x_{1}} \cup (x_{1}, x_{2}] \, )
 \\
-&amp;= \mu(\mathbb{I}_{x_{1}}) + \mu( \, (x_{1}, x_{2}] \, )
+&amp;= \mu(\mathsf{I}_{x_{1}}) + \mu( \, (x_{1}, x_{2}] \, )
 \end{align*}</span> or <span class="math display">\begin{align*}
-\mu(\mathbb{I}_{x_{2}})
+\mu(\mathsf{I}_{x_{2}})
 &amp;=
-\mu(\mathbb{I}_{x_{1}}) + \mu( \, (x_{1}, x_{2}] \, )
+\mu(\mathsf{I}_{x_{1}}) + \mu( \, (x_{1}, x_{2}] \, )
 \\
 M(x_{2})
 &amp;=
@@ -3975,7 +3975,7 @@ M(x)
 <section id="quantiles" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="quantiles"><span class="header-section-number">4.4</span> Quantiles</h2>
 <p>When a cumulative distribution function is bijective, mapping each point <span class="math inline">x \in X</span> in the ambient space to a unique accumulated measure <span class="math display">
-M(x) = \mu(\mathbb{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathbb{I}_{x}}],
+M(x) = \mu(\mathsf{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathsf{I}_{x}}],
 </span> we can invert it to map any accumulated measure to the point at which that accumulation is achieved (<a href="#fig-quantile-function">Figure 17</a>), <span class="math display">\begin{alignat*}{6}
 q_{\mu} :\; &amp; [0, \mu(X)] &amp; &amp;\rightarrow&amp; \; &amp;X&amp;
 \\
@@ -4005,7 +4005,7 @@ x_{m+} = \underset{x \in X}{\mathrm{argmin}} M(x) &gt; m.
 <figcaption class="figure-caption">Figure 18: Cumulative distribution functions on countable spaces are not invertible. Only a countable number of measure accumulations occur at individual points; most measure accumulations occur “in between” the countable points.</figcaption>
 </figure>
 </div>
-<p>Many software packages implement quantile functions that <em>heuristically</em> interpolate between <span class="math inline">x_{m-}</span> and <span class="math inline">x_{m+}</span> to provide a single value when the cumulative distribution function is not invertible. In this case different interpolation strategies define different quantile functions.</p>
+<p>Many software packages implement <em>heuristic</em> quantile functions that either return <span class="math inline">x_{m-}</span> or <span class="math inline">x_{m+}</span> or interpolate between <span class="math inline">x_{m-}</span> and <span class="math inline">x_{m+}</span> to provide a single value when the cumulative distribution function is not invertible. In this case different interpolation strategies define different quantile functions.</p>
 </section>
 </section>
 <section id="explicit-measure-informed-integrals" class="level1" data-number="5">
@@ -4206,7 +4206,7 @@ s(x) = \sum_{j} \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}
 </figure>
 </div>
 <p>Geometrically Lebesgue integration computes the area under a curve by summing over <em>vertically</em> stacked rectangles while Riemann integration computes the area by summing over <em>horizontally</em> stacked rectangles. Riemann integration doesn’t always result in a well-defined answer, but when it does we can use these two methods for computing the area under a curve to relate integrals with respect to the Lebesgue measure to classic integration!</p>
-<p>More formally for any measurable and <span class="math inline">\lambda</span>-integrable real-valued function <span class="math inline">f \mathbb{R} \rightarrow \mathbb{R}</span> we have <span class="math display">\begin{align*}
+<p>More formally for any measurable and <span class="math inline">\lambda</span>-integrable real-valued function <span class="math inline">f: \mathbb{R} \rightarrow \mathbb{R}</span> we have <span class="math display">\begin{align*}
 \mathbb{I}_{\lambda}[f]
 &amp;= \int \lambda( \mathrm{d} x) \, f(x)
 \\
@@ -4237,14 +4237,20 @@ x_{2} - x_{1},
 \int_{-\infty}^{\infty} \mathrm{d} x \, x
 \\
 &amp;=
+\left. \frac{1}{2} x^{2} \right|^{\infty}_{-\infty}
+\\
+&amp;=
 \infty - \infty.
-\end{align*}</span> Unfortunately this results in ill-posed because <span class="math inline">\infty</span> minus itself is consistent with <em>every</em> value on the real line. Had we been a bit more careful, however, this would not have been surprising. The problem is that the identify function is not Lebesgue-integrable, <span class="math display">\begin{align*}
+\end{align*}</span> Unfortunately this result is ill-posed because <span class="math inline">\infty</span> minus itself is consistent with <em>every</em> value on the real line. Had we been a bit more careful, however, this would not have been surprising. The problem is that the identify function is not Lebesgue-integrable, <span class="math display">\begin{align*}
 \mathbb{I}_{\lambda}[| \iota |]
 &amp;=
 \int_{-\infty}^{\infty} \mathrm{d} x \, | \iota(x) |
 \\
 &amp;=
 2 \, \int_{0}^{\infty} \mathrm{d} x \, x
+\\
+&amp;=
+\left. x^{2} \right|^{\infty}_{0}
 \\
 &amp;=
 \infty!
@@ -4259,10 +4265,10 @@ x_{2} - x_{1},
 \end{align*}</span> In particular the measure allocated to any interval becomes <span class="math display">\begin{align*}
 (g \cdot \lambda) ( \, [x_{1}, x_{2} ] \, )
 &amp;=
-\mathbb{I}_{g \cdot \lambda}[ I_{ [x_{1}, x_{2}] } ]
+\mathbb{I}_{g \cdot \lambda} \big[ I_{ [x_{1}, x_{2}] } \big]
 \\
 &amp;=
-\mathbb{I}_{\lambda}[ g \cdot I_{ [x_{1}, x_{2}] } ]
+\mathbb{I}_{\lambda} \big[ g \cdot I_{ [x_{1}, x_{2}] } \big]
 \\
 &amp;=
 \int_{-\infty}^{+\infty}
@@ -4277,8 +4283,8 @@ x_{2} - x_{1},
 </section>
 <section id="conclusion" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
-<p>Measure-informed integrals are the main way that we interact with measures, both in theory and in practice. Equivalently expectation values are the main way that we interact with probability distributions. Indeed a recurring theme in applying probability theory in practice will be the principled computation of expectation values for relevant expectands.</p>
-<p>In the next chapter we’ll learn how to extend the exceptionally explicit integrals with respect to Lebesgue measures to a much larger class of measures, including many probability distributions. Later on we’ll learn some powerful <em>sampling</em> techniques for directly estimating general expectation values.</p>
+<p>Measure-informed integrals are the main way that we interact with measures, both in theory and in practice. Equivalently expectation values are the main way that we can probe the behavior of probability distributions. Indeed a recurring theme in applying probability theory in practice will be the principled computation of expectation values for relevant expectands.</p>
+<p>In the next chapter we’ll learn how to extend the exceptionally explicit integrals with respect to Lebesgue measures to a much larger class of measures, including many probability distributions. Later on we’ll learn some powerful <em>sampling</em> techniques for directly estimating expectation values for general probability distributions.</p>
 </section>
 <section id="acknowledgements" class="level1 unnumbered">
 <h1 class="unnumbered">Acknowledgements</h1>
