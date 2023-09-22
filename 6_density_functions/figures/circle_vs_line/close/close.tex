@@ -1,0 +1,53 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math, arrows.meta}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{light_teal}{RGB}{107, 142, 142}
+\definecolor{mid_teal}{RGB}{72, 117, 117}
+\definecolor{dark_teal}{RGB}{29, 79, 79}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1.0]
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-2.25, -1.5) rectangle (2.25, 1);
+    %\draw[red, line width=1] (0, -4.75) circle (5);
+    \draw[dotted, line width=1] ({0 + 5 * cos(102)}, {-4.75 + 5 * sin(102)}) arc (102:110:5);
+    \draw[line width=1] ({0 + 5 * cos(78)}, {-4.75 + 5 * sin(78)}) arc (78:102:5);
+    \draw[dotted, line width=1] ({0 + 5 * cos(78)}, {-4.75 + 5 * sin(78)}) arc (78:70:5);
+    \node at (0, -1) { $\mathsf{A} \subset \mathbb{S}^{1}$ };
+  \end{scope}
+
+  \begin{scope}[shift={(4.5, 0)}]
+    \draw[white] (-2.25, -1.5) rectangle (2.25, 1);
+    \draw[dotted, line width=1] (-2, 0) -- (-1.5, 0);
+    \draw[line width=1] (-1.5, 0) -- (1.5, 0);
+    \draw[dotted, line width=1] (1.5, 0) -- (2, 0);
+    \node at (0, -1) { $\mathsf{I} \subset \mathbb{R}^{1}$ };
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  

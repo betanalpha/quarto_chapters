@@ -1,0 +1,104 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, arrows.meta, decorations.pathreplacing}
+\usepackage{pgfmath}
+\usepackage{pgfplots}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\pgfplotsset{compat=1.17}
+\pgfplotsset{
+  colormap={reds}{rgb255=(252, 250, 250) rgb255=(245, 236, 236) rgb255=(235, 218, 218)
+                  rgb255=(220, 188, 188) rgb255=(199, 153, 153) rgb255=(185, 124, 124)
+                  rgb255=(162, 80, 80) rgb255=(143, 39, 39) rgb255=(124, 0, 0) } 
+}
+
+\tikzmath{
+  function normal(\x, \m, \s) {
+    return exp(-0.5 * (\x - \m) * (\x - \m) / (\s * \s) ) / (2.506628274631001 * \s);
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-1.25, -1) rectangle (7, 5);
+  
+    \coordinate (A) at (0, 0.785);
+    \coordinate (B) at (0, 4);
+    \coordinate (C) at (2.18, 2.475);
+    \coordinate (D) at (4.67, 0);  
+    \coordinate (E) at (6.85, 1.69); 
+    
+    \draw[->, >=stealth, line width=1] (A) -- (C);
+    \node[above left] at (C) { $x_{2}$ };
+  
+    \begin{axis}[xmin=-3, xmax=3, xtick=\empty, 
+                 ymin=-3, ymax=3, ytick=\empty,
+                 zmin=0, zmax=0.7, ztick=\empty,
+                 axis lines=none,              
+                 line width=1,
+                 colormap name=reds]
+          \addplot3[surf, shader=interp, samples=70, fill opacity=1, domain=-2.9:3] 
+            {normal(x, -1, 0.5) * normal(y, -1, 0.5)};
+    \end{axis}
+    
+    \draw[->, >=stealth, line width=1] (A) -- (D);
+    \node[below right] at (D) { $x_{1}$ };
+    
+    \fill (A) circle (0.0175);
+    \draw[->, >=stealth, line width=1] (A) -- (B);
+    \node[above] at (B) { $\pi(x_{1}, x_{2})$ };
+  \end{scope}
+  
+  \begin{scope}[shift={(8.25, 0)}]
+    \draw[white] (-1.25, -1) rectangle (7, 5);
+  
+    \coordinate (A) at (0, 0.785);
+    \coordinate (B) at (0, 4);
+    \coordinate (C) at (2.18, 2.475);
+    \coordinate (D) at (4.67, 0);  
+    \coordinate (E) at (6.85, 1.69); 
+    
+    \draw[->, >=stealth, line width=1] (A) -- (C);
+    \node[above left] at (C) { $x_{2}$ };
+  
+    \begin{axis}[xmin=-3, xmax=3, xtick=\empty, 
+                 ymin=-3, ymax=3, ytick=\empty,
+                 zmin=0, zmax=0.7, ztick=\empty,
+                 axis lines=none,              
+                 line width=1,
+                 colormap name=reds]
+          \addplot3[surf, shader=interp, samples=70, fill opacity=1, domain=-2.9:3] 
+            {normal(x, +1, 0.5) * normal(y, +1, 0.5)};
+    \end{axis}
+    
+    \draw[->, >=stealth, line width=1] (A) -- (D);
+    \node[below right] at (D) { $x_{1}$ };
+    
+    \fill (A) circle (0.0175);
+    \draw[->, >=stealth, line width=1] (A) -- (B);
+    \node[above] at (B) { $\pi(x_{1}, x_{2})$ };
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  

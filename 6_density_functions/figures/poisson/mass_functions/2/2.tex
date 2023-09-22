@@ -1,0 +1,54 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-4.25, -3.5) rectangle (4, 3);
+    
+    \node at (0, 2.25) { $\lambda = 5$ };
+    
+    \foreach [count=\n] \m in {0.006738, 0.033690, 0.084224, 0.140374, 0.175467, 0.175467, 0.146223, 0.104445, 0.065278, 0.036266, 0.018133, 0.008242, 0.003434} {
+      \pgfmathsetmacro{\x}{0.5 * ( (\n - 1) - 6)};
+      \draw[dark, line width=3] (\x, -2) -- (\x, {(6.5 * \m - 2)});
+      \fill[dark] (\x, {(6.5 * \m - 2)}) circle (0.05);
+      \fill[white] (\x, -2) circle (0.065);
+      \fill[black] (\x, -2) circle (0.05);
+      
+      \pgfmathtruncatemacro{\nn}{\n - 1}
+      \node at (\x, -2.35) { $\nn$ };
+    }
+ 
+    %\fill[white] (3.5, -2) circle (0.06);
+    %\fill[black] (3.5, -2) circle (0.05);
+    \node at (3.5, -2.35) { $\cdots$ };
+ 
+    \node at (0, -3) { $n$ };
+    \node[rotate=90] at (-3.75, 0) { $\mathrm{Poisson}(x)$ };
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  

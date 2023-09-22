@@ -1,0 +1,67 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-8.5, -5.5) rectangle (7.75, 3);
+    
+    \node at (0, 2.25) { $\lambda = 5.5$ };
+    \draw[<->, >=stealth, line width=1] (-6.5, -4) -- (6.5, -4);
+    
+    \foreach [count=\n] \m in {0.004087, 0.022477, 0.061812, 0.113323, 0.155819, 0.171401, 0.157117, 0.123449, 0.084871, 0.051866, 0.028526, 0.014263, 0.006537} {
+      \pgfmathsetmacro{\x}{1.0 * ( (\n - 1) - 6)};
+      \draw[dark, line width=3] (\x, -2) -- (\x, {(20 * \m - 2)});
+      \fill[dark] (\x, {(20 * \m - 2)}) circle (0.05);
+      \fill[white] (\x, -2) circle (0.065);
+      \fill[black] (\x, -2) circle (0.05);
+      
+      \pgfmathtruncatemacro{\nn}{\n - 1}
+      \node at (\x, -2.35) { $\nn$ };
+      
+      \fill[white] (\x, -4) circle (0.065);
+      \fill[black] (\x, -4) circle (0.05);
+      \node at (\x, -4.5) { $\iota(\nn)$ };
+    }
+ 
+    \pgfmathsetmacro{\x}{1.0 * ( (6.5 - 1) - 6)};
+    \node[dark] at (\x, -3.65) { $\mathbb{E}_{\mathrm{Poisson}}[\iota] = \lambda$ };
+    \fill[white] (\x, -4) circle (0.08);
+    \fill[dark] (\x, -4) circle (0.065);
+ 
+    \node at (-7, -2) { $\mathbb{N}$ };
+    \node at (-7, -4) { $\mathbb{R}$ };
+ 
+    %\fill[white] (3.5, -2) circle (0.06);
+    %\fill[black] (3.5, -2) circle (0.05);
+    \node at (7, -2.35) { $\cdots$ };
+ 
+    \node at (0, -3) { $n$ };
+    \node at (-7, -0.5) { $\mathrm{Poisson}(x)$ };
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  
