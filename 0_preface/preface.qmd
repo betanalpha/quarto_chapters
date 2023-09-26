@@ -206,7 +206,7 @@ figures/scientific_method/box/box){width=75% #fig-scientific-method-box}
 
 **Somewhere around here reference Good's 17k types of Bayesians**
 **The particular kind of Bayesian inference that we will consider in this
-book.  Use of "principled" to describe acknowleding and checking our assumptions
+book.  Use of "principled" to describe acknowledging and checking our assumptions
 instead of taking them for granted.**
 
 In this book we will learn how to use **Bayesian inference** to analyze data
@@ -529,7 +529,7 @@ Physics analyses using heuristic methods.
 McKay's mention of modeling a broken particle detector.  Alas only a tease.
 This book is largely an attempt to fill in that gap and provide the tools
 necessary for building analyses around interpretable models that take
-advantage of any available domin expertise.
+advantage of any available domain expertise.
 
 
 # Acknowledgements
