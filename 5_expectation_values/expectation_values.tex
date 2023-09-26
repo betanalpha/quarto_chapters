@@ -154,7 +154,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, breakable, frame hidden, boxrule=0pt, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, enhanced, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners, frame hidden]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -1006,7 +1006,7 @@ distribution but rather a generic measure.
 
 If we want transform one probability distribution into another then we
 need to correct for the modified normalization, defining \begin{align*}
-\mathbb{E}_{g \ast \pi} [ f ] 
+\mathbb{E}_{g \ast \pi} [ f ]
 &\equiv
 \mathbb{E}_{\pi} \left[ \frac{g}{ \mathbb{E}_{\pi} [ g ] } \cdot f \right]
 \\
@@ -1394,46 +1394,85 @@ moments.
 \hypertarget{spaces-without-moments}{%
 \subsubsection{Spaces Without Moments}\label{spaces-without-moments}}
 
-Well-defined moments can be obstructed in a variety of different ways.
-For example if the embedding function and its powers are not integrable
-with respect to a measure then the corresponding measure-informed
-integrals will be ill-defined. The measurability of an embedding
-function is a more subtle, but still occasionally important,
-obstruction.
+Well-defined moments can be obstructed at three different places. If a
+function \(f : X \rightarrow \mathbb{R}\) is not an isometric injective
+then it does not define an embedding. Even if it is, however, we will
+not be able to integrate it with respect to a given measure unless it is
+both \(\mathcal{X}\)-measurable and \(\mu\)-integrable. To avoid any
+nonsensical results we have to take care to check all three of these
+conditions whenever we attempt to use moments in applied practice.
 
-Exactly when an embedding function is measurable will depend on how the
-metric and \(\sigma\)-algebra on the ambient space interact with each
-other. Consider for example a space \(X\) that is equipped with a metric
-and a metric topology. When we use the Borel \(\sigma\)-algebra derived
-from that topology then the metric and the \(\sigma\)-algebra will play
-nicely with each other.
+Consider, for example, a circular ambient space \(X = \mathbb{S}^{1}\)
+equipped with a metric that assigns distances based on the angle spanned
+by any two points. We can construct a bijective, real-valued function
+\(f : \mathbb{S}^{1} \rightarrow \mathbb{R}\) by first cutting the
+circle at any point, unrolling it into the half-open interval
+\((0, 2 \pi]\), and then mapping the half-open interval into the entire
+real line.
 
-In this case an embedding function will be measurable only if it is a
-homeomorphism from the ambient space into a real line. This, in turn,
-will be true only when the topology of the ambient space and the
-topology of the real line are compatible with each other. Consequently
-topological considerations can obstruct the existence of moments.
+Unfortunately any function constructed this way will not be isometric;
+two points \(x_{1}, x_{2} \in \mathbb{S}^{1}\) around the cut will be
+close to each other in the circle but are mapped into points
+\(y_{1}, y_{2} \in (0, 2 \pi]\), and then
+\(z_{1}, z_{2} \in \mathbb{R}\), that are far apart from each other
+(Figure~\ref{fig-no-circle-embedding}).
 
-Recall that in
+\begin{figure}
+
+{\centering \includegraphics[width=0.4\textwidth,height=\textheight]{figures/embeddings/circle/circle.pdf}
+
+}
+
+\caption{\label{fig-no-circle-embedding}A circle \(\mathbb{S}^{1}\) can
+be injectively mapped into a real line \(\mathbb{R}\) by first cutting
+the circle into the half-open interval \((0, 2 \pi]\) and then mapping
+the half-open interval into a real line. The resulting function,
+however, is not isometric. Two points
+\(x_{1}, x_{2} \in \mathbb{S}^{1}\) around the cut will be close to each
+other but map into points \(y_{1}, y_{2} \in (0, 2 \pi]\), and then
+\(z_{1}, z_{2} \in \mathbb{R}\), that are far from each other. Without a
+valid isometric injection we cannot define moments for any measure over
+a circle.}
+
+\end{figure}
+
+Ultimately one can use the topological incompatibility between the
+circle and the real line that we first encounterd in
 \href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
-Two} we saw that the topologies of a circle, \(S^{1}\), and a real line,
-\(\mathbb{R}\), are fundamentally incompatible with each other. Because
-no real-valued function \(f: S^{1} \rightarrow \mathbb{R}\) can be a
-homeomorphism, no embedding can be Borel measurable, and there is no
-well-defined notion of a mean or variance for any measure on the circle
-equipped with a Borel \(\sigma\)-algebra!
+Two} to show that there is no way to construct \emph{any} isometry from
+the circle \(\mathbb{S}^{1}\) into a real line \(\mathbb{R}\), let alone
+an injective one.
 
-If one is not experienced with topology then this argument might appear
-to be overly technical and easy to dismiss, but the practical
+Even if we could construct a proper embedding from the circle into a
+real line then we would still run into measurability problems. It turns
+out that any injective function from \(\mathbb{S}^{1}\) into
+\(\mathbb{R}\) does preserve the underlying topologies. This topological
+tension prevents every interval \((-\infty, y] \subset \mathbb{R}\) from
+pulling back into Borel measurable subsets on the circle. Without
+considering less conventional \(\sigma\)-algebras our attempt to
+construct moments for any measure on the circle is obstructed once
+again.
+
+These kinds of topological arguments are extremely subtle, and they are
+easy to dismiss as overly technical. Unfortunately the practical
 consequences are critical when working with spaces like circles,
-spheres, torii, and more. Many analyses on these spaces have been sunk
-by attempts to summarize measures with moments that don't actually
-exist!
+spheres, torii, and more. Many analyses on these spaces have been
+undermined by attempts to summarize measures with moments that don't
+actually exist!
 
 Examples like this show why topology, as frustratingly abstract as it is
 often presented, is more important to applied practice than we might
-realize. Topological considerations can be extremely helpful in
-preventing us from succumbing to many common misconceptions.
+realize (or hope). Topological considerations can be extremely helpful
+in preventing us from succumbing to many common misconceptions.
+
+We still to take care when working with spaces that are equipped with
+topologies that play well together. For example in
+\href{@sec:practical_lebesgue}{Section 5.2.2} we'll learn that while the
+identify function from a real line itself is not integrable with respect
+to the Lebesgue measure on a real line. Consequently the Lebesgue
+measure does not have a mean, let alone a variance or other higher-order
+moments. This obstruction, however, does not apply to all measures that
+we can construct on the real line.
 
 \hypertarget{histograms}{%
 \subsection{Histograms}\label{histograms}}
@@ -2361,8 +2400,8 @@ In general the integral signs in those notations do not correspond to
 the Riemann integral of calculus, but in the special case of the
 Lebesgue measure over a real line they do!
 
-\hypertarget{practical-consequences-1}{%
-\subsubsection{Practical Consequences}\label{practical-consequences-1}}
+\hypertarget{sec:practical_lebesgue}{%
+\subsubsection{Practical Consequences}\label{sec:practical_lebesgue}}
 
 When a real-valued function has a well-defined Riemann integral then we
 can apply the tools of calculus to evaluate Lebesgue integrals. The
