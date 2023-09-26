@@ -1239,7 +1239,7 @@ figures/embeddings/circle/circle){
 width=40% #fig-no-circle-embedding}
 
 Ultimately one can use the topological incompatibility between the
-circle and the real line that we first encounterd in
+circle and the real line that we first encountered in
 [Chapter Two](https://betanalpha.github.io/assets/chapters_html/spaces.html)
 to show that there is no way to construct _any_ isometry from the circle
 $\mathbb{S}^{1}$ into a real line $\mathbb{R}$, let alone an injective
@@ -1891,7 +1891,7 @@ the Lebesgue integral of a simple function converges to the Lebesgue
 integral of $f$.  At the same time the sum of the rectangular areas
 defined by each component indicator function converges to the area under
 the curve defined by $f$. (b) Riemann integration computes the area
-under the curve as a sum of increasingly narrow rectanglular areas, only
+under the curve as a sum of increasingly narrow rectangular areas, only
 the rectangles are stacked horizontally instead of vertically.
 :::
 
