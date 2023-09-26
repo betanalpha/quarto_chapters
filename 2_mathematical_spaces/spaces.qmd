@@ -235,7 +235,7 @@ $$
 \mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset.
 $$
 
-All of the properties of these binary operatations that we discussed for finite
+All of the properties of these binary operations that we discussed for finite
 sets also generalize to arbitrary sets.  For example the union and intersection
 of a subset with itself always returns that subset,
 $$
