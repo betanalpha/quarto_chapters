@@ -670,8 +670,7 @@ $$
 \{ x_{1}, \ldots, x_{i}, \ldots, x_{I} \},
 $$
 can be defined as elements of the replicated power set $X^{I}$.  Allowing $I$ to
-become arbitrarily large then allows for the countably infinitely long s
-equences.
+become arbitrarily large then allows for the countably infinitely long sequences.
 
 One potential difficulty that can arise when working with replicated product
 spaces is distinguishing between the different copies of the base space $X$
