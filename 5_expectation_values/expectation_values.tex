@@ -154,7 +154,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, enhanced, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, frame hidden, interior hidden, borderline west={3pt}{0pt}{shadecolor}, breakable, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -546,10 +546,14 @@ f^{*}( (-\infty, x] )
 =
 \{ x \in X \mid f(x) \in (\infty, x] \}
 \in \mathcal{X}.
-\] We'll come back to the topic of measurable functions in much more
-detail in Chapter Seven, but for now our main concern will be to avoid
-confusing measurable \emph{subsets} on \((X, \mathcal{X})\) and
-measurable \emph{functions} from \((X, \mathcal{X})\) to \(\mathbb{R}\).
+\] In practice non-measurable functions are as difficult to construct as
+non-measurable subsets and measurability can largely be taken for
+granted.
+
+We'll come back to the topic of measurable functions in much more detail
+in Chapter Seven. For now our main concern will be to avoid confusing
+measurable \emph{subsets} on \((X, \mathcal{X})\) and measurable
+\emph{functions} from \((X, \mathcal{X})\) to \(\mathbb{R}\).
 
 Measurable functions with non-negative outputs, \[
 f(x) \ge 0
@@ -715,9 +719,17 @@ subset then \(f\) and \(g\) are said to be equal \textbf{almost
 everywhere} with respect to \(\mu\). When working with probability
 distributions instead of measures the term \textbf{almost surely} equal
 is used instead. A bit more colloquially we can say that the two
-integrals are equal \textbf{up to subsets of measure zero} or equal
-\textbf{up to null subsets}. I will use this latter terminology for the
-remainder of the book.
+integrands are equal \textbf{up to subsets of measure zero} or equal
+\textbf{up to null subsets}.
+
+Much of the mathematics literature overloads the equals sign when
+referring to measurable functions that are equal almost everywhere in
+equations, as that is the only notion of equals that is relevant in
+measure and probability theory. In this book I will be more explicit and
+use \[
+f \overset{\mu}{=} g
+\] whenever comparing two measurable functions that are equal up to
+\(\mu\)-null subsets.
 
 Intuitively the null subsets of a measure can ``wash out'' some of the
 finer structure of integrands. For example on a real line any countable
@@ -735,8 +747,11 @@ integration with respect to the Lebesgue measure will disregard any
 \caption{\label{fig-equivalent-integrands}Because any countable
 collection of points is allocated zero Lebesgue measure any integrands
 whose outputs differ only at a countable number of inputs will yield the
-same measure-informed intergrals. In other words from the perspective of
-the Lebesgue measure these functions are equivalent.}
+same measure-informed integrals. Here
+\(\mathbb{I}_{\lambda}[f_{1}] = \mathbb{I}_{\lambda}[f_{2}] = \mathbb{I}_{\lambda}[f_{3}]\)
+and, from perspective of the Lebesgue measure, these functions are
+equivalent. In this case we write
+\(f_{1} \overset{\lambda}{=} f_{2} \overset{\lambda}{=} f_{3}\).}
 
 \end{figure}
 
@@ -1096,31 +1111,37 @@ review some of the most common structure-informed integrals.
 \subsection{Moments and Cumulants}\label{moments-and-cumulants}}
 
 Some spaces are inherently related to a real line. The precise
-relationship between elements of a space and elements of a real line
-defines a distinguished real-valued function, and hence a distinguished
-integrand. We can even build off of this initial integrand to construct
-an entire family of useful integrands.
+relationship between the elements of a space and the elements of a real
+line defines a distinguished real-valued function, and hence a
+distinguished integrand. We can even build off of this initial integrand
+to construct an entire family of useful integrands.
 
 \hypertarget{embeddings}{%
 \subsubsection{Embeddings}\label{embeddings}}
 
-In order for an ambient space \(X\) to be compatible with the real line
-it needs to share a metric structure. We say that we can \textbf{embed}
-a metric space \(X\) into a real line if we can construct an isometric
-injection \(\iota : X \rightarrow \mathbb{R}\), in other words a
-function that maps each element of \(X\) to a distinct output while also
-preserving distances, \[
+In order for an ambient space \(X\) to be compatible with a real line it
+needs to share the metric structure of the real line. We say that we can
+\textbf{embed} a metric space \(X\) into a real line if we can construct
+an isometric injection \(\iota : X \rightarrow \mathbb{R}\), in other
+words a function that maps each element of \(X\) to a distinct output
+while also preserving distances, \[
 d_{X}(x_{1}, x_{2})
 = d_{\mathbb{R}}(\iota(x_{1}), \iota(x_{2}))
 = | \iota(x_{2}) - \iota(x_{1}) |.
 \] Embedding maps are often denoted with a hooked arrow instead of the
 typical flat arrow, \[
 \iota : X \hookrightarrow \mathbb{R},
-\] to communicate that some structure is being preserved.
+\] to communicate that some structure is being preserved by definition.
+
+Note that the construction of an embedding requires that we fix the
+output structure of the output real line, specifying either a particular
+rigid real line or a particular parameterization of a flexible real
+line. An ambient might embed into \emph{a} real line, but it cannot
+embed into \emph{all} real lines at the same time.
 
 For example if \(X\) is itself a real line then the identify map defines
 a natural embedding \(\iota : \mathbb{R} \hookrightarrow \mathbb{R}\)
-(Figure~\ref{fig-identity}). Similarly we can embed subsets of the real
+(Figure~\ref{fig-identity}). Similarly we can embed subsets of a real
 line, such as intervals
 \(\iota : [x_{1}, x_{2}] \hookrightarrow \mathbb{R}\)
 (Figure~\ref{fig-interval}) or even integers
@@ -1394,17 +1415,17 @@ moments.
 \hypertarget{spaces-without-moments}{%
 \subsubsection{Spaces Without Moments}\label{spaces-without-moments}}
 
-Well-defined moments can be obstructed at three different places. If a
-function \(f : X \rightarrow \mathbb{R}\) is not an isometric injective
-then it does not define an embedding. Even if it is, however, we will
-not be able to integrate it with respect to a given measure unless it is
-both \(\mathcal{X}\)-measurable and \(\mu\)-integrable. To avoid any
-nonsensical results we have to take care to check all three of these
-conditions whenever we attempt to use moments in applied practice.
+Well-defined moments can be obstructed in three different ways. Firstly
+an isometric injection from the ambient space into a real line might not
+exist. Secondly if an isometric injection does exist then it needs to be
+not only \(\mathcal{X}\)-measurable but also \(\mu\)-integrable. In
+practice measurability is almost never an issue on finite dimensional
+ambient spaces, but we do need to take care to check existence and
+integrability to avoid nonsensical results.
 
 Consider, for example, a circular ambient space \(X = \mathbb{S}^{1}\)
 equipped with a metric that assigns distances based on the angle spanned
-by any two points. We can construct a bijective, real-valued function
+by any two points. We can construct an injective real-valued function
 \(f : \mathbb{S}^{1} \rightarrow \mathbb{R}\) by first cutting the
 circle at any point, unrolling it into the half-open interval
 \((0, 2 \pi]\), and then mapping the half-open interval into the entire
@@ -1425,54 +1446,38 @@ close to each other in the circle but are mapped into points
 
 \caption{\label{fig-no-circle-embedding}A circle \(\mathbb{S}^{1}\) can
 be injectively mapped into a real line \(\mathbb{R}\) by first cutting
-the circle into the half-open interval \((0, 2 \pi]\) and then mapping
-the half-open interval into a real line. The resulting function,
-however, is not isometric. Two points
-\(x_{1}, x_{2} \in \mathbb{S}^{1}\) around the cut will be close to each
-other but map into points \(y_{1}, y_{2} \in (0, 2 \pi]\), and then
-\(z_{1}, z_{2} \in \mathbb{R}\), that are far from each other. Without a
-valid isometric injection we cannot define moments for any measure over
-a circle.}
+the circle into a half-open interval
+\((\theta_{0} - \pi, \theta_{0} + \pi]\) and then mapping the half-open
+interval into a real line. This mapping, however, is not isometric. Two
+points \(x_{1}, x_{2} \in \mathbb{S}^{1}\) around the cut will be close
+to each other in the ambient space but map into points
+\(y_{1}, y_{2} \in (0, 2 \pi]\), and then
+\(z_{1}, z_{2} \in \mathbb{R}\), that are far from each other. Without
+an isometric injection we cannot define moments for any measure over a
+circle.}
 
 \end{figure}
 
 Ultimately one can use the topological incompatibility between the
-circle and the real line that we first encounterd in
+circle and the real line that we first encountered in
 \href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
 Two} to show that there is no way to construct \emph{any} isometry from
 the circle \(\mathbb{S}^{1}\) into a real line \(\mathbb{R}\), let alone
 an injective one.
 
-Even if we could construct a proper embedding from the circle into a
-real line then we would still run into measurability problems. It turns
-out that any injective function from \(\mathbb{S}^{1}\) into
-\(\mathbb{R}\) does preserve the underlying topologies. This topological
-tension prevents every interval \((-\infty, y] \subset \mathbb{R}\) from
-pulling back into Borel measurable subsets on the circle. Without
-considering less conventional \(\sigma\)-algebras our attempt to
-construct moments for any measure on the circle is obstructed once
-again.
+This formal definition of moments is easy to dismiss as overly
+technical. Unfortunately the practical consequences are critical when
+working with spaces like circles, spheres, torii, and more. Many
+analyses on these spaces have been undermined by attempts to summarize
+measures with moments that don't actually exist!
 
-These kinds of topological arguments are extremely subtle, and they are
-easy to dismiss as overly technical. Unfortunately the practical
-consequences are critical when working with spaces like circles,
-spheres, torii, and more. Many analyses on these spaces have been
-undermined by attempts to summarize measures with moments that don't
-actually exist!
-
-Examples like this show why topology, as frustratingly abstract as it is
-often presented, is more important to applied practice than we might
-realize (or hope). Topological considerations can be extremely helpful
-in preventing us from succumbing to many common misconceptions.
-
-We still to take care when working with spaces that are equipped with
-topologies that play well together. For example in
-\href{@sec:practical_lebesgue}{Section 5.2.2} we'll learn that while the
-identify function from a real line itself is not integrable with respect
-to the Lebesgue measure on a real line. Consequently the Lebesgue
-measure does not have a mean, let alone a variance or other higher-order
-moments. This obstruction, however, does not apply to all measures that
-we can construct on the real line.
+All of this said we still to take care with the necessary conditions
+when working with more familiar spaces as well. For example in
+\href{@sec:practical_lebesgue}{Section 5.2.2} we'll learn that the
+identify function from a real line into itself is not integrable with
+respect to the Lebesgue measure on a real line. Consequently the
+Lebesgue measure does not have a mean, let alone a variance or other
+higher-order moments.
 
 \hypertarget{histograms}{%
 \subsection{Histograms}\label{histograms}}
@@ -2146,9 +2151,9 @@ from calculus.
 By definition the measure-informed integral of an indicator function is
 given by the measure allocated to the defining subset, \[
 \mathbb{I}_{\mu}[I_{\mathsf{x}}] = \mu(\mathsf{x}).
-\] On a real line \((\mathbb{R}, \mathcal{B}(\mathbb{R}))\) the Lebesgue
-measure allocated to any interval is just the distance between the end
-points, \[
+\] On a real line \((\mathbb{R}, \mathcal{B}_{\mathbb{R}})\) the
+Lebesgue measure allocated to any interval is just the distance between
+the end points, \[
 \lambda( \, [x_{1}, x_{2}] \, ) = d(x_{1}, x_{2}) = | x_{2} - x_{1} |.
 \] Consequently the Lebesgue integral of an interval indicator function
 is given by \[
@@ -2369,7 +2374,7 @@ converges to the Lebesgue integral of \(f\). At the same time the sum of
 the rectangular areas defined by each component indicator function
 converges to the area under the curve defined by \(f\). (b) Riemann
 integration computes the area under the curve as a sum of increasingly
-narrow rectanglular areas, only the rectangles are stacked horizontally
+narrow rectangular areas, only the rectangles are stacked horizontally
 instead of vertically.}
 
 \end{figure}
@@ -2515,7 +2520,7 @@ expectation values for general probability distributions.
 \section*{Acknowledgements}\label{acknowledgements}}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I thank Simon Duane for helpful comments.
+I thank Simon Duane and Pietro Monticone for helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
