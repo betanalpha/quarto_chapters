@@ -3091,13 +3091,13 @@ X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
 <figcaption class="figure-caption">Figure 2: A subset <span class="math inline">\mathsf{x} \subset X</span> is any collection of elements from the ambient set <span class="math inline">X</span>. Here <span class="math inline">\mathsf{x} = \{\Box, \diamondsuit, \heartsuit\}</span> contains just three of the five elements in <span class="math inline">X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}</span>.</figcaption>
 </figure>
 </div>
-<p>If <span class="math inline">\mathsf{x}</span> is a subset of the ambient set <span class="math inline">X</span> then we write <span class="math inline">\mathsf{x} \subset X</span>. When <span class="math inline">\mathsf{x}</span> might contain all of the elements of <span class="math inline">X</span>, in which case <span class="math inline">\mathsf{x} = X</span>, then we write <span class="math inline">\mathsf{x} \subseteq X</span>.</p>
+<p>If <span class="math inline">\mathsf{x}</span> is a subset of the ambient set <span class="math inline">X</span> then we write <span class="math inline">\mathsf{x} \subset X</span>. When <span class="math inline">\mathsf{x}</span> might contain all of the elements of <span class="math inline">X</span>, in which case <span class="math inline">\mathsf{x} = X</span>, then we write <span class="math inline">\mathsf{x} \subseteq X</span>. Note that some authors use <span class="math inline">\subset</span> to refer to both circumstances, but I prefer the more precise notation.</p>
 <p>Subsets are <em>recursive</em> objects. Selecting any elements from a subset yields a new subset. For example the collection <span class="math inline">\{\diamondsuit, \heartsuit\}</span> is a subset of both the previously introduced subset, <span class="math display">
 \{ \diamondsuit, \heartsuit \} \subset \{ \Box, \diamondsuit, \heartsuit \},
 </span> and the full ambient set, <span class="math display">
 \{ \diamondsuit, \heartsuit \} \subset X.
 </span> More formally a subset <span class="math inline">\mathsf{x}&#39;</span> is a subset of another subset <span class="math inline">\mathsf{x}</span> if and only if all of the elements in <span class="math inline">\mathsf{x}&#39;</span> are also in <span class="math inline">\mathsf{x}</span>.</p>
-<p>Regardless of how many elements a finite set <span class="math inline">X</span> contains three special subsets are always well-defined. The <strong>empty set</strong> <span class="math inline">\emptyset = \{\}</span> contains no elements at all. On the other hand the entire set itself can be considered a subset containing all of the elements. A subset containing a single element is denoted <span class="math inline">\{ x_{n} \}</span> and referred to as an <strong>atomic set</strong>.</p>
+<p>Regardless of how many elements a finite set <span class="math inline">X</span> contains we can always construct three special types of subsets. The <strong>empty set</strong> <span class="math inline">\emptyset = \{\}</span> contains no elements at all. On the other hand the entire set itself can be considered a subset containing all of the elements. A subset containing a single element is denoted <span class="math inline">\{ x_{n} \}</span> and referred to as an <strong>atomic set</strong>.</p>
 <p>There are <span class="math display">
 {N \choose n} = \frac{ N! }{ n! (N - n)!}
 </span> ways to select <span class="math inline">n</span> elements from a finite set of <span class="math inline">N</span> total elements, and hence <span class="math inline">{N \choose n}</span> total subsets of size <span class="math inline">n</span>. For example there is only one subset that contains no elements, <span class="math display">
@@ -3109,7 +3109,9 @@ X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
 </span> distinct atomics sets that contain a single element, one for each element in <span class="math inline">X</span>.</p>
 <p>Counting all of the subsets of all possible sizes gives <span class="math display">
 \sum_{n = 0}^{N} {N \choose n} = 2^{N}
-</span> possible subsets that we can construct from a finite set with <span class="math inline">N</span> elements. In other words the collection of all subsets is itself a finite set with <span class="math inline">2^{N}</span> elements. We refer to this set as the <strong>power set</strong> of <span class="math inline">X</span> and denote it <span class="math inline">2^{X}</span>.</p>
+</span> possible subsets that we can construct from a finite set with <span class="math inline">N</span> elements. Those from a computer science background might recognize that this is equivalent to needed <span class="math inline">N</span> bits to specify each subset, one bit for the inclusion or exclusion of each element.</p>
+<p>The collection of all subsets is itself a finite set with <span class="math inline">2^{N}</span> elements.<br>
+We refer to this set as the <strong>power set</strong> of <span class="math inline">X</span> and denote it <span class="math inline">2^{X}</span>.</p>
 <p>When the ambient set, and all hence all of the possible elements that any subset might contain, is fixed the prefix “sub” is sometimes dropped, with all subsets simply referred to as sets. For example collections of elements might be denoted “sets” when one takes the ambient set for granted and “subsets” when one wants to explicitly acknowledge the context of the ambient set. Precise terminology, however, can vary strongly between disciplines and even individuals.</p>
 </section>
 <section id="subset-operations" class="level2" data-number="1.2">
@@ -3124,7 +3126,7 @@ X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
 <figcaption class="figure-caption">Figure 3: The complement of a subset <span class="math inline">\mathsf{x}</span> is the subset <span class="math inline">\mathsf{x}^{c}</span> consisting of all elements in the ambient set that are not in <span class="math inline">\mathsf{x}</span>.</figcaption>
 </figure>
 </div>
-<p>More formally the construction of complementary subsets defines a <em>unary</em> function that takes in a subset as input and outputs the complementary subset, <span class="math display">\begin{alignat*}{6}
+<p>More formally the construction of complementary subsets defines a <em>unary</em> operation that takes in a subset as input and outputs the complementary subset, <span class="math display">\begin{alignat*}{6}
 \cdot^c :\; &amp; 2^X &amp; &amp;\rightarrow&amp; \; &amp; 2^X &amp;
 \\
 &amp; \mathsf{x} &amp; &amp;\mapsto&amp; &amp; \mathsf{x}^{c} &amp;.
@@ -3133,7 +3135,7 @@ X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
 = \{ \clubsuit, \spadesuit \}^{c}
 = \{ \Box, \diamondsuit, \heartsuit \}.
 </span></p>
-<p>We can also construct subsets from more than one subsets. Consider, for example, two subsets <span class="math inline">\mathsf{x}_1 = \{ \Box, \heartsuit \}</span> and <span class="math inline">\mathsf{x}_2 = \{ \Box, \spadesuit \}</span> (<a href="#fig-subsets">Figure 4</a>). The collection of all elements that are contained in <em>either</em> subset is itself a subset, <span class="math display">
+<p>We can also construct subsets from more than one subset. Consider, for example, two subsets <span class="math inline">\mathsf{x}_1 = \{ \Box, \heartsuit \}</span> and <span class="math inline">\mathsf{x}_2 = \{ \Box, \spadesuit \}</span> (<a href="#fig-subsets">Figure 4</a>). The collection of all elements that are contained in <em>either</em> subset is itself a subset, <span class="math display">
 \{ \Box, \heartsuit, \spadesuit \} \subset X,
 </span> as is the collection of all elements that are contained only in <em>both</em> subsets, <span class="math display">
 \{ \Box \} \subset X.
@@ -3143,7 +3145,7 @@ X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
 = \{ \Box, \heartsuit, \spadesuit \},
 </span> and <strong>intersection</strong>, <span class="math display">
 \mathsf{x}_1 \cap \mathsf{x}_2
-= \{ \Box, \heartsuit \} \cup \{ \Box, \spadesuit \}
+= \{ \Box, \heartsuit \} \cap \{ \Box, \spadesuit \}
 = \{ \Box \},
 </span> respectively (<a href="#fig-ui">Figure 5</a>). Note that the union and intersection are both symmetric in the sense that either order of the input subsets results in the same output subset, <span class="math display">
 \mathsf{x}_1 \cup \mathsf{x}_2 = \mathsf{x}_2 \cup \mathsf{x}_1
@@ -3175,7 +3177,7 @@ X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
 </span> and the intersection of any subset with the full set returns back the subset, <span class="math display">
 \mathsf{x} \cap X = X \cap \mathsf{x} = \mathsf{x}.
 </span></p>
-<p>Because they require two inputs the union and intersection define <em>binary</em> functions that consume <em>two</em> input subsets and return a single output subset, <span class="math display">\begin{alignat*}{6}
+<p>Because they require two inputs the union and intersection define <em>binary</em> operations that consume <em>two</em> input subsets and return a single output subset, <span class="math display">\begin{alignat*}{6}
 \cdot \cup \cdot :\; &amp; 2^{X} \times 2^{X}&amp; &amp;\rightarrow&amp; \; &amp; 2^{X} &amp;
 \\
 &amp; \mathsf{x}_1, \mathsf{x}_{2} &amp; &amp;\mapsto&amp; &amp; \mathsf{x}_1 \cup \mathsf{x}_2 &amp;
@@ -3306,7 +3308,7 @@ m_\Box + m_\clubsuit + m_\diamondsuit + m_\heartsuit + m_\spadesuit = M.
 <p></p><figcaption class="figure-caption">Figure 9: A singular measure (a) allocates the total measure to a single element while the uniform measure (b) spreads the total measure to each element evenly.</figcaption><p></p>
 </figure>
 </div>
-<p>Perhaps the most important class of measures, however, are measures where the total measure is finite, <span class="math inline">M &lt; \infty</span>. Appropriately enough we refer to these as <strong>finite measures</strong>.</p>
+<p>Perhaps the most important class of measures, however, are measures where the total measure is finite, <span class="math inline">0 &lt; M &lt; \infty</span>. Appropriately enough we refer to these as <strong>finite measures</strong>.</p>
 <p>What makes finite measures so special is that we can always reframe the allocation they define into a <em>relative</em> one. Instead of considering the absolute measure allocated to each element <span class="math inline">m_{n}</span> we can consider the <em>proportion</em> of the total measure allocated to each element, (<a href="#fig-proportional">Figure 10</a>) <span class="math display">
 p_{n} = m_{n} / M.
 </span> By construction proportions are confined to the unit interval <span class="math inline">[0, 1]</span>. As with any quantity taking values in <span class="math inline">[0, 1]</span> we can represent proportions equally well with decimals, for example <span class="math inline">p_{n} = 0.2</span>, and percentages, <span class="math inline">p_{n} = 20\%</span>.</p>

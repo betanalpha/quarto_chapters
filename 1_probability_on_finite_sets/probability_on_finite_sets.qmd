@@ -90,6 +90,8 @@ figures/subset/subset){width=50% #fig-subset}
 If $\mathsf{x}$ is a subset of the ambient set $X$ then we write
 $\mathsf{x} \subset X$.  When $\mathsf{x}$ might contain all of the elements of
 $X$, in which case $\mathsf{x} = X$, then we write $\mathsf{x} \subseteq X$.
+Note that some authors use $\subset$ to refer to both circumstances, but I 
+prefer the more precise notation.
 
 Subsets are _recursive_ objects.  Selecting any elements from a subset yields a
 new subset.  For example the collection $\{\diamondsuit, \heartsuit\}$ is a
@@ -104,8 +106,8 @@ $$
 More formally a subset $\mathsf{x}'$ is a subset of another subset $\mathsf{x}$
 if and only if all of the elements in $\mathsf{x}'$ are also in $\mathsf{x}$.
 
-Regardless of how many elements a finite set $X$ contains three special
-subsets are always well-defined.  The **empty set** $\emptyset = \{\}$ contains
+Regardless of how many elements a finite set $X$ contains we can always construct
+three special types of subsets.  The **empty set** $\emptyset = \{\}$ contains
 no elements at all.  On the other hand the entire set itself can be considered
 a subset containing all of the elements.  A subset containing a single element
 is denoted $\{ x_{n} \}$ and referred to as an **atomic set**.
@@ -137,9 +139,13 @@ $$
 \sum_{n = 0}^{N} {N \choose n} = 2^{N}
 $$
 possible subsets that we can construct from a finite set with $N$ elements.
-In other words the collection of all subsets is itself a finite set with
-$2^{N}$ elements.  We refer to this set as the **power set** of $X$ and denote
-it $2^{X}$.
+Those from a computer science background might recognize that this is 
+equivalent to needed $N$ bits to specify each subset, one bit for the 
+inclusion or exclusion of each element.
+
+
+The collection of all subsets is itself a finite set with $2^{N}$ elements.  
+We refer to this set as the **power set** of $X$ and denote it $2^{X}$.
 
 When the ambient set, and all hence all of the possible elements that any
 subset might contain, is fixed the prefix "sub" is sometimes dropped, with all
@@ -171,7 +177,7 @@ consisting of all elements in the ambient set that are not in $\mathsf{x}$.](
 figures/complement/complement){width=75% #fig-complement}
 
 More formally the construction of complementary subsets defines a _unary_
-function that takes in a subset as input and outputs the complementary subset,
+operation that takes in a subset as input and outputs the complementary subset,
 \begin{alignat*}{6}
 \cdot^c :\; & 2^X & &\rightarrow& \; & 2^X &
 \\
@@ -189,7 +195,7 @@ $$
 = \{ \Box, \diamondsuit, \heartsuit \}.
 $$
 
-We can also construct subsets from more than one subsets.  Consider, for
+We can also construct subsets from more than one subset.  Consider, for
 example, two subsets $\mathsf{x}_1 = \{ \Box, \heartsuit \}$ and
 $\mathsf{x}_2 = \{ \Box, \spadesuit \}$ (@fig-subsets).  The collection of all
 elements that are contained in _either_ subset is itself a subset,
@@ -209,7 +215,7 @@ $$
 and **intersection**,
 $$
 \mathsf{x}_1 \cap \mathsf{x}_2
-= \{ \Box, \heartsuit \} \cup \{ \Box, \spadesuit \}
+= \{ \Box, \heartsuit \} \cap \{ \Box, \spadesuit \}
 = \{ \Box \},
 $$
 respectively (@fig-ui).  Note that the union and intersection are both symmetric
@@ -260,7 +266,7 @@ $$
 $$
 
 Because they require two inputs the union and intersection define _binary_
-functions that consume _two_ input subsets and return a single output subset,
+operations that consume _two_ input subsets and return a single output subset,
 \begin{alignat*}{6}
 \cdot \cup \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
 \\
@@ -406,8 +412,8 @@ the uniform measure (b) spreads the total measure to each element evenly.
 :::
 
 Perhaps the most important class of measures, however, are measures where the
-total measure is finite, $M < \infty$.  Appropriately enough we refer to these
-as **finite measures**.
+total measure is finite, $0 < M < \infty$.  Appropriately enough we refer to 
+these as **finite measures**.
 
 What makes finite measures so special is that we can always reframe the
 allocation they define into a _relative_ one.  Instead of considering the

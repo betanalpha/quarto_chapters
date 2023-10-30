@@ -154,7 +154,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, breakable, interior hidden, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, breakable, boxrule=0pt, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -237,7 +237,8 @@ of the five elements in
 If \(\mathsf{x}\) is a subset of the ambient set \(X\) then we write
 \(\mathsf{x} \subset X\). When \(\mathsf{x}\) might contain all of the
 elements of \(X\), in which case \(\mathsf{x} = X\), then we write
-\(\mathsf{x} \subseteq X\).
+\(\mathsf{x} \subseteq X\). Note that some authors use \(\subset\) to
+refer to both circumstances, but I prefer the more precise notation.
 
 Subsets are \emph{recursive} objects. Selecting any elements from a
 subset yields a new subset. For example the collection
@@ -250,8 +251,8 @@ introduced subset, \[
 \(\mathsf{x}\) if and only if all of the elements in \(\mathsf{x}'\) are
 also in \(\mathsf{x}\).
 
-Regardless of how many elements a finite set \(X\) contains three
-special subsets are always well-defined. The \textbf{empty set}
+Regardless of how many elements a finite set \(X\) contains we can
+always construct three special types of subsets. The \textbf{empty set}
 \(\emptyset = \{\}\) contains no elements at all. On the other hand the
 entire set itself can be considered a subset containing all of the
 elements. A subset containing a single element is denoted
@@ -274,9 +275,14 @@ element in \(X\).
 Counting all of the subsets of all possible sizes gives \[
 \sum_{n = 0}^{N} {N \choose n} = 2^{N}
 \] possible subsets that we can construct from a finite set with \(N\)
-elements. In other words the collection of all subsets is itself a
-finite set with \(2^{N}\) elements. We refer to this set as the
-\textbf{power set} of \(X\) and denote it \(2^{X}\).
+elements. Those from a computer science background might recognize that
+this is equivalent to needed \(N\) bits to specify each subset, one bit
+for the inclusion or exclusion of each element.
+
+The collection of all subsets is itself a finite set with \(2^{N}\)
+elements.\\
+We refer to this set as the \textbf{power set} of \(X\) and denote it
+\(2^{X}\).
 
 When the ambient set, and all hence all of the possible elements that
 any subset might contain, is fixed the prefix ``sub'' is sometimes
@@ -316,7 +322,7 @@ ambient set that are not in \(\mathsf{x}\).}
 \end{figure}
 
 More formally the construction of complementary subsets defines a
-\emph{unary} function that takes in a subset as input and outputs the
+\emph{unary} operation that takes in a subset as input and outputs the
 complementary subset, \begin{alignat*}{6}
 \cdot^c :\; & 2^X & &\rightarrow& \; & 2^X &
 \\
@@ -331,7 +337,7 @@ to the subset \(\mathsf{x} = \{ \clubsuit, \spadesuit \}\) gives \[
 = \{ \Box, \diamondsuit, \heartsuit \}.
 \]
 
-We can also construct subsets from more than one subsets. Consider, for
+We can also construct subsets from more than one subset. Consider, for
 example, two subsets \(\mathsf{x}_1 = \{ \Box, \heartsuit \}\) and
 \(\mathsf{x}_2 = \{ \Box, \spadesuit \}\) (Figure~\ref{fig-subsets}).
 The collection of all elements that are contained in \emph{either}
@@ -346,7 +352,7 @@ subset is itself a subset, \[
 = \{ \Box, \heartsuit, \spadesuit \},
 \] and \textbf{intersection}, \[
 \mathsf{x}_1 \cap \mathsf{x}_2
-= \{ \Box, \heartsuit \} \cup \{ \Box, \spadesuit \}
+= \{ \Box, \heartsuit \} \cap \{ \Box, \spadesuit \}
 = \{ \Box \},
 \] respectively (Figure~\ref{fig-ui}). Note that the union and
 intersection are both symmetric in the sense that either order of the
@@ -401,8 +407,8 @@ subset, \[
 \]
 
 Because they require two inputs the union and intersection define
-\emph{binary} functions that consume \emph{two} input subsets and return
-a single output subset, \begin{alignat*}{6}
+\emph{binary} operations that consume \emph{two} input subsets and
+return a single output subset, \begin{alignat*}{6}
 \cdot \cup \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
 \\
 & \mathsf{x}_1, \mathsf{x}_{2} & &\mapsto& & \mathsf{x}_1 \cup \mathsf{x}_2 &
@@ -679,8 +685,8 @@ spreads the total measure to each element evenly.}
 \end{figure}
 
 Perhaps the most important class of measures, however, are measures
-where the total measure is finite, \(M < \infty\). Appropriately enough
-we refer to these as \textbf{finite measures}.
+where the total measure is finite, \(0 < M < \infty\). Appropriately
+enough we refer to these as \textbf{finite measures}.
 
 What makes finite measures so special is that we can always reframe the
 allocation they define into a \emph{relative} one. Instead of
