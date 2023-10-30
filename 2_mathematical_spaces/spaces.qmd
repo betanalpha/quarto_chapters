@@ -235,7 +235,7 @@ $$
 \mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset.
 $$
 
-All of the properties of these binary operatations that we discussed for finite
+All of the properties of these binary operations that we discussed for finite
 sets also generalize to arbitrary sets.  For example the union and intersection
 of a subset with itself always returns that subset,
 $$
@@ -1019,13 +1019,13 @@ algebra, or metric just builds on top of that foundation.
 ## Structure-Informed Subsets
 
 Mathematically it is much easier to work with structures that are _compatible_
-with each other.  For example if we want to equip a set with both a topology 
-and a metric then the resulting space will be particularly well-behaved if 
+with each other.  For example if we want to equip a set with both a topology
+and a metric then the resulting space will be particularly well-behaved if
 the we use a metric topology.  At the same time ambient structure can also
 distinguish certain compatible subsets.
 
 For example is a set is equipped with an ordering then we can define **interval**
-subsets that contain all elements above and below two boundary elements.  An 
+subsets that contain all elements above and below two boundary elements.  An
 **open interval** excludes both boundary elements,
 $$
 (x_{1}, x_{2}) =
@@ -1036,19 +1036,19 @@ $$
 [x_{1}, x_{2}] =
 \{ x \in X \mid x_{1} \le x \le x_{2} \}.
 $$
-We can also define **half-open**, or equivalently **half-closed**, 
+We can also define **half-open**, or equivalently **half-closed**,
 intervals that contain only one boundary,
 \begin{align*}
 (x_{1}, x_{2}] &= \{ x \in X \mid x_{1} < x \le x_{2} \}
 \\
 [x_{1}, x_{2}) &= \{ x \in X \mid x_{1} \le x < x_{2} \}.
 \end{align*}
-Note that these notions of "open" and "closed" subsets are in general distinct 
-from the open and closed subsets defined by a topology.  Only when an ordering 
-is compatible with a topology will these the open and closed intervals also be 
+Note that these notions of "open" and "closed" subsets are in general distinct
+from the open and closed subsets defined by a topology.  Only when an ordering
+is compatible with a topology will these the open and closed intervals also be
 topologically open and closed.
 
-As we saw in [Section 1.2.4.1](@sec:open-balls) a metric distinguishes subsets 
+As we saw in [Section 1.2.4.1](@sec:open-balls) a metric distinguishes subsets
 of elements surrounding a given element.  This includes open balls,
 $$
 \mathsf{b}_{r}(x) = \{ x' \in X \mid d(x, x') < r \}
@@ -1060,11 +1060,11 @@ $$
 Open and closed balls will not necessarily be topologically open and closed
 unless the subset is endowed with a metric topology.
 
-Finally by construction any topology distinguishes open subsets and the 
-complementary closed subsets.  When all of the structures are consistent 
-with each other we can associate these subsets with intervals and balls, 
+Finally by construction any topology distinguishes open subsets and the
+complementary closed subsets.  When all of the structures are consistent
+with each other we can associate these subsets with intervals and balls,
 but in general each structure can distinguish different subsets.  Because
-every topology contains the empty set and the full set these are always 
+every topology contains the empty set and the full set these are always
 of interest.  Moreover when working with discrete topologies the atomic
 subsets that contain only a single element are particularly relevant.
 
@@ -1228,10 +1228,10 @@ $$
 by removing the zero element as well.  More generally we can construct
 subspaces from any interval.
 
-These subspaces inherit ordering, metric, and topological structure from the 
-integers but the algebraic structure will is complicated a bit.  For example 
-we can't consistently define subtraction on the natural numbers because the 
-difference between two positive integers can be negative, which falls outside 
+These subspaces inherit ordering, metric, and topological structure from the
+integers but the algebraic structure will is complicated a bit.  For example
+we can't consistently define subtraction on the natural numbers because the
+difference between two positive integers can be negative, which falls outside
 of $\mathbb{N}$.
 
 ## Real Lines
@@ -1272,11 +1272,14 @@ completely specify a space.
 
 On one hand we can take $\mathbb{R}$ to denote a class of real lines, with
 infinitely many distinct realizations defined by different choices of ordering,
-algebra, and metric.  On the other hand we can interpret $\mathbb{R}$ as a
-single, flexible space that can be configured in an infinite number of different
-ways by choosing different auxiliary structures.  In this latter perspective the
-different configurations are also known as different **parameterizations** of
-the real line.
+algebra, and metric.  I will refer to this as the **rigid real line**
+interpretation.
+
+On the other hand we can interpret $\mathbb{R}$ as a single, flexible space
+that can be configured in an infinite number of different ways by choosing
+different auxiliary structures.  I will refer to this as the **flexible real line**
+interpreation.  In this latter perspective the different configurations are
+also known as different **parameterizations** of the real line.
 
 The power set of a real line contains a wealth of subsets that we can use to
 construct useful subspaces.  For example the integers are a subset of the real
@@ -1286,7 +1289,7 @@ $$
 \mathbb{R}^{+} = \{ x \in \mathbb{R} \mid x \ge 0 \};
 $$
 more generally any interval of a real line defines a subspace.  All of these
-subspaces inherit topological, ordering, and metric structure from the initial 
+subspaces inherit topological, ordering, and metric structure from the initial
 real line, but they may not inherit all of the algebraic structure.
 
 Regardless of the interpretation we can use the metric structure of a real line
@@ -1851,8 +1854,9 @@ compatible input space $(X, f^{*}(\mathfrak{y}))$.
 
 Many applications, however, don't just define only an input space
 $(X, \mathfrak{x})$ or only an output space $(Y, \mathfrak{y})$ but rather
-_both_.  In this case pushforward structure may not be compatible with the
-structure that has already been endowed on the output space,
+_both_ input and output spaces.  In this case pushforward structure may
+not be compatible with the structure that has already been endowed on the
+output space,
 $$
 f_{*}(\mathfrak{x}) \ne \mathfrak{y},
 $$
@@ -1982,9 +1986,14 @@ d_{Y}(f(x_1), f(x_2))
 &=
 d_{X}(x_1, x_2).
 \end{align*}
+Isometries map each rigid real line, or equivalently each parameterization of a
+flexible real line, into themselves.
+
 One consequence of this isometry is that any grid of equally distant input
 elements will map into a grid of equally distant output elements
-(@fig-isometric).
+(@fig-isometric).  Because of this visualizing grids on the input and output
+spaces allow us to quickly determine whether or not a function between metric
+spaces is isometric.
 
 On the other hand the bijective cubic function
 \begin{alignat*}{6}
@@ -2045,42 +2054,66 @@ figures/maps/non_homeomorphism/non_homeomorphism){width=60% #fig-non-homeomorphi
 
 The ambiguity in how we can interpret the integers and the real line as spaces
 that we encountered in [Section 2](#sec:proto-spaces) also implies an ambiguity
-in how we interpret transformation between them.
+in how we interpret transformations between them.
 
-Considering for example if we take the perspective where there is not a single
-real line but rather a collection of distinct real lines, each with their own
-defining ordering, algebra, and metric.  In general a homeomorphism transforms
-one of these real lines into another, and only the exceptional
+Consider for example if we take the rigid real line perspective where there
+is not a single real line but rather a collection of distinct real lines, each
+with their own defining ordering, algebra, and metric.  In general a homeomorphism
+will transform one of these rigid real lines into another, and only the exceptional
 monotonically-increasing, homomorphic, and isometric homeomorphisms will map one
-of these real lines into itself.
+of these rigid real lines into itself.
 
-Conversely we can treat the real line as a flexible space defined by a fixed
-set and topology, with the different orderings, algebras, and metrics defining
-different configurations of the real line.  From this perspective homeomorphisms
-maintain the defining structure but generally transform the auxiliary structures.
-This maps one configuration into another, effectively _reconfiguring_ the
-flexible real line.  Because configurations are also known as parameterizations
-the homeomorphic transformations are also known as **reparameterizations**.
+Conversely we can take flexible real line perspective where we treat the real line
+as a flexible space defined by a fixed set and topology, with the different orderings,
+algebras, and metrics defining different configurations of the space.  From this
+perspective homeomorphisms maintain the defining structure but generally transform
+the auxiliary structures.  In other words a homeomorphism will in general map one
+configuration into another, _reconfiguring_ the flexible real line.  Because
+configurations are also known as parameterizations the homeomorphic transformations
+are also known as **reparameterizations**.  The exceptional monotonically-increasing,
+homomorphic, and isometric homeomorphisms map a parameterization into itself,
+preserving the initial configuration.
 
 While this interpretational ambiguity is often taken for granted it does
 manifest in a variety of different applications.  For example in physics we can
 interpret transformations of a physical system as _active_ or _passive_.  An
 active transformation is interpreted as changing the physical system while a
 passive transformation is interpreted as changing how we represent a fixed
-physical system.  Both interpretations yield equivalent results, but one can be
-more natural in some contexts than others.
+physical system, paralleling the rigid and flexible real line perspectives.
+Both interpretations yield equivalent results, but one can be more natural
+than the other in some contexts.
 
-A variable taking values on the real line can be used to quantify some property
-of some physical system.  Transforming from one real line to another can be
-interpreted as changing the actual quantification or equivalently as a change of
-_units_ for a fixed quantification.
+For example consider using a real-valued variable to quantify some property
+of some physical system.  In this case transforming from one real line to
+another can be interpreted in one of two ways.  An active transformation
+corresponds to stretching the physical system while keeping our rulers fixed
+while a passive transformation can be interpreted as keeping the physical
+system fixed while changing the _units_ of the ruler (@fig-ruler).
+
+::: {#fig-ruler layout="[ [-5, 30, 30, 30, -5] ]"}
+![](figures/maps/rulers/initial/initial){#fig-initial}
+
+![](figures/maps/rulers/transformed_system/transformed_system){#fig-transformed_system}
+
+![](figures/maps/rulers/transformed_ruler/transformed_ruler){#fig-transformed_ruler}
+
+When we use a real number to quantify some aspect of a system (a) we can
+interpret the real line as a ruler.  Transformations of the ambient
+space can then be interpreted in one of two equivalent ways.  (b) An
+active transformation is interpreted as warping of the system while the
+ruler remains fixed.  (c)  The equivalent passive transformation is
+interpreted as warping the ruler while the physical system remains
+fixed.  Active transformations are well align with the rigid real line
+perspective while passive transformations well align with the flexible
+real line perspective.
+:::
 
 At the same time we find can find similar ambiguities in language.  We might
 interpret text written in a particular language as fundamental in which case
 _translations_ from one language to another map one text to another.  That said
 we might also interpret these texts as _representations_ of some universal
 statement in which case translations don't change the statement but do change
-the representation.
+its representation.
 
 Similarly we might have the freedom to interpret computer programs written in
 different programming languages as either distinct programs or different
@@ -2089,11 +2122,9 @@ the former interpretation _transpilers_ map from one program to another but in
 the latter they map from one implementation to another.
 
 Again these interpretations are equivalent, and we are free to adopt the one
-that is most useful in any given application.  In this book I will embrace the
-perspective where the real line is defined as a flexible space, with different
-choices of ordering, algebraic, and metric structure defining different
-parameterizations of that space.  This will have some subtle consequences going
-forwards, but I will address those consequences as they arise.
+that is most useful in any given application.  In this book I will tend to default
+to the flexible real line perspective, although I will do my best to address both
+perspectives whenever they are relevant.
 
 # Conclusion
 
@@ -2133,8 +2164,8 @@ delving into technical details on precise topics.
 
 # Acknowledgements {-}
 
-I thank Simon Duane, Jerzy Baranowski, Ron Garcia, Stone Chen, and Alexander
-Noll for helpful comments and discussion.
+I thank Simon Duane, Jerzy Baranowski, Ron Garcia, Stone Chen, Alexander
+Noll, and Pietro Monticone for helpful comments and discussion.
 
 A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
 Adriano Yoshino, Alan Chang, Alessandro Varacca, Alexander Bartik,

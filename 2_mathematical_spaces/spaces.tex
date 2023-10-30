@@ -177,7 +177,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, interior hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, breakable, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -633,7 +633,7 @@ when their intersection is the empty set, \[
 \mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset.
 \]
 
-All of the properties of these binary operatations that we discussed for
+All of the properties of these binary operations that we discussed for
 finite sets also generalize to arbitrary sets. For example the union and
 intersection of a subset with itself always returns that subset, \[
 \mathsf{x} \cup \mathsf{x} = \mathsf{x} \cap \mathsf{x} = \mathsf{x}.
@@ -1766,11 +1766,15 @@ have to accept that \(\mathbb{R}\) does not completely specify a space.
 
 On one hand we can take \(\mathbb{R}\) to denote a class of real lines,
 with infinitely many distinct realizations defined by different choices
-of ordering, algebra, and metric. On the other hand we can interpret
-\(\mathbb{R}\) as a single, flexible space that can be configured in an
-infinite number of different ways by choosing different auxiliary
-structures. In this latter perspective the different configurations are
-also known as different \textbf{parameterizations} of the real line.
+of ordering, algebra, and metric. I will refer to this as the
+\textbf{rigid real line} interpretation.
+
+On the other hand we can interpret \(\mathbb{R}\) as a single, flexible
+space that can be configured in an infinite number of different ways by
+choosing different auxiliary structures. I will refer to this as the
+\textbf{flexible real line} interpreation. In this latter perspective
+the different configurations are also known as different
+\textbf{parameterizations} of the real line.
 
 The power set of a real line contains a wealth of subsets that we can
 use to construct useful subspaces. For example the integers are a subset
@@ -2671,9 +2675,9 @@ defines a compatible input space \((X, f^{*}(\mathfrak{y}))\).
 
 Many applications, however, don't just define only an input space
 \((X, \mathfrak{x})\) or only an output space \((Y, \mathfrak{y})\) but
-rather \emph{both}. In this case pushforward structure may not be
-compatible with the structure that has already been endowed on the
-output space, \[
+rather \emph{both} input and output spaces. In this case pushforward
+structure may not be compatible with the structure that has already been
+endowed on the output space, \[
 f_{*}(\mathfrak{x}) \ne \mathfrak{y},
 \] and pullback structure may not be compatible with the structure that
 has already been endowed on the input space, \[
@@ -2835,9 +2839,14 @@ d_{Y}(f(x_1), f(x_2))
 \\
 &=
 d_{X}(x_1, x_2).
-\end{align*} One consequence of this isometry is that any grid of
-equally distant input elements will map into a grid of equally distant
-output elements (Figure~\ref{fig-isometric}).
+\end{align*} Isometries map each rigid real line, or equivalently each
+parameterization of a flexible real line, into themselves.
+
+One consequence of this isometry is that any grid of equally distant
+input elements will map into a grid of equally distant output elements
+(Figure~\ref{fig-isometric}). Because of this visualizing grids on the
+input and output spaces allow us to quickly determine whether or not a
+function between metric spaces is isometric.
 
 On the other hand the bijective cubic function \begin{alignat*}{6}
 f_2 :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
@@ -2961,45 +2970,132 @@ homeomorphic.}
 The ambiguity in how we can interpret the integers and the real line as
 spaces that we encountered in
 \protect\hyperlink{sec:proto-spaces}{Section 2} also implies an
-ambiguity in how we interpret transformation between them.
+ambiguity in how we interpret transformations between them.
 
-Considering for example if we take the perspective where there is not a
-single real line but rather a collection of distinct real lines, each
-with their own defining ordering, algebra, and metric. In general a
-homeomorphism transforms one of these real lines into another, and only
-the exceptional monotonically-increasing, homomorphic, and isometric
-homeomorphisms will map one of these real lines into itself.
+Consider for example if we take the rigid real line perspective where
+there is not a single real line but rather a collection of distinct real
+lines, each with their own defining ordering, algebra, and metric. In
+general a homeomorphism will transform one of these rigid real lines
+into another, and only the exceptional monotonically-increasing,
+homomorphic, and isometric homeomorphisms will map one of these rigid
+real lines into itself.
 
-Conversely we can treat the real line as a flexible space defined by a
-fixed set and topology, with the different orderings, algebras, and
-metrics defining different configurations of the real line. From this
-perspective homeomorphisms maintain the defining structure but generally
-transform the auxiliary structures. This maps one configuration into
-another, effectively \emph{reconfiguring} the flexible real line.
+Conversely we can take flexible real line perspective where we treat the
+real line as a flexible space defined by a fixed set and topology, with
+the different orderings, algebras, and metrics defining different
+configurations of the space. From this perspective homeomorphisms
+maintain the defining structure but generally transform the auxiliary
+structures. In other words a homeomorphism will in general map one
+configuration into another, \emph{reconfiguring} the flexible real line.
 Because configurations are also known as parameterizations the
 homeomorphic transformations are also known as
-\textbf{reparameterizations}.
+\textbf{reparameterizations}. The exceptional monotonically-increasing,
+homomorphic, and isometric homeomorphisms map a parameterization into
+itself, preserving the initial configuration.
 
 While this interpretational ambiguity is often taken for granted it does
 manifest in a variety of different applications. For example in physics
 we can interpret transformations of a physical system as \emph{active}
 or \emph{passive}. An active transformation is interpreted as changing
 the physical system while a passive transformation is interpreted as
-changing how we represent a fixed physical system. Both interpretations
-yield equivalent results, but one can be more natural in some contexts
-than others.
+changing how we represent a fixed physical system, paralleling the rigid
+and flexible real line perspectives. Both interpretations yield
+equivalent results, but one can be more natural than the other in some
+contexts.
 
-A variable taking values on the real line can be used to quantify some
-property of some physical system. Transforming from one real line to
-another can be interpreted as changing the actual quantification or
-equivalently as a change of \emph{units} for a fixed quantification.
+For example consider using a real-valued variable to quantify some
+property of some physical system. In this case transforming from one
+real line to another can be interpreted in one of two ways. An active
+transformation corresponds to stretching the physical system while
+keeping our rulers fixed while a passive transformation can be
+interpreted as keeping the physical system fixed while changing the
+\emph{units} of the ruler (Figure~\ref{fig-ruler}).
+
+\begin{figure}
+
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/maps/rulers/initial/initial.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-initial}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/maps/rulers/transformed_system/transformed_system.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-transformed_system}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.30\linewidth}
+
+{\centering 
+
+\raisebox{-\height}{
+
+\includegraphics{figures/maps/rulers/transformed_ruler/transformed_ruler.pdf}
+
+}
+
+}
+
+\subcaption{\label{fig-transformed_ruler}}
+\end{minipage}%
+%
+\begin{minipage}[t]{0.05\linewidth}
+
+{\centering 
+
+~
+
+}
+
+\end{minipage}%
+
+\caption{\label{fig-ruler}When we use a real number to quantify some
+aspect of a system (a) we can interpret the real line as a ruler.
+Transformations of the ambient space can then be interpreted in one of
+two equivalent ways. (b) An active transformation is interpreted as
+warping of the system while the ruler remains fixed. (c) The equivalent
+passive transformation is interpreted as warping the ruler while the
+physical system remains fixed. Active transformations are well align
+with the rigid real line perspective while passive transformations well
+align with the flexible real line perspective.}
+
+\end{figure}
 
 At the same time we find can find similar ambiguities in language. We
 might interpret text written in a particular language as fundamental in
 which case \emph{translations} from one language to another map one text
 to another. That said we might also interpret these texts as
 \emph{representations} of some universal statement in which case
-translations don't change the statement but do change the
+translations don't change the statement but do change its
 representation.
 
 Similarly we might have the freedom to interpret computer programs
@@ -3011,11 +3107,8 @@ implementation to another.
 
 Again these interpretations are equivalent, and we are free to adopt the
 one that is most useful in any given application. In this book I will
-embrace the perspective where the real line is defined as a flexible
-space, with different choices of ordering, algebraic, and metric
-structure defining different parameterizations of that space. This will
-have some subtle consequences going forwards, but I will address those
-consequences as they arise.
+tend to default to the flexible real line perspective, although I will
+do my best to address both perspectives whenever they are relevant.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
@@ -3061,8 +3154,8 @@ useful reference for delving into technical details on precise topics.
 \section*{Acknowledgements}\label{acknowledgements}}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I thank Simon Duane, Jerzy Baranowski, Ron Garcia, Stone Chen, and
-Alexander Noll for helpful comments and discussion.
+I thank Simon Duane, Jerzy Baranowski, Ron Garcia, Stone Chen, Alexander
+Noll, and Pietro Monticone for helpful comments and discussion.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
