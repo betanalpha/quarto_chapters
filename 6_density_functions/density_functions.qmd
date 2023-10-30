@@ -52,7 +52,7 @@ when we can scale a given measure to reproduce the expectation values of
 a target probability distribution and how we can use scalings to
 specify new probability distributions in the context of a given measure.
 We will then investigate the detailed application of the method on
-discrete and real spaces.
+discrete and real probability spaces.
 
 # Density Functions
 
@@ -81,9 +81,9 @@ $$
 To simplify the initial construction let's first assume that all of the
 atomic allocations are non-zero and finite,
 \begin{align*}
-0 < &\mu( \{ x \} ) < \infty
+0 &< \mu( \{ x \} ) < \infty
 \\
-0 < &\nu( \{ x \} ) < \infty
+0 &< \nu( \{ x \} ) < \infty
 \end{align*}
 for all $x \in X$; this allow us to multiply and divide by the atomic
 allocations without running into ill-defined results.  In particular we
@@ -351,14 +351,14 @@ $$
 $$
 for all $\mathsf{x} \in \mathcal{P}$.  Similarly we can show that every
 Lebesgue measure $\lambda$ is $\sigma$-finite by partitioning a real
-line into intervals of constant length,
+line into intervals of constant length $L$,
 $$
 \mathcal{P} =
-\{ ( l \cdot n, l \cdot (n + 1) ] \mid n \in \ldots, -1, 0, 1, \ldots \},
+\{ ( L \cdot n, L \cdot (n + 1) ] \mid n \in \ldots, -1, 0, 1, \ldots \},
 $$
 with
 $$
-\lambda( \mathsf{x} ) = l < \infty
+\lambda( \mathsf{x} ) = L < \infty
 $$
 for all $\mathsf{x} \in \mathcal{P}$.  Even though the local interval
 allocations are finite individually they aggregate into the infinite
@@ -442,6 +442,24 @@ $\mu$ and $\nu$, and we don't lose any generality by ignoring the others
 provided that we never try to interpret these functions outside of the
 shadow of an integral!
 
+For example the unit function
+\begin{alignat*}{6}
+u :\; & X & &\rightarrow& \; & \mathbb{R}^{+} &
+\\
+& x & &\mapsto& & 1 &
+\end{alignat*}
+is one possible Radon-Nikodym derivative for any measure with respect to
+itself,
+$$
+\frac{ \mathrm{d} \nu }{ \mathrm{d} \nu }
+\overset{\nu}{=}
+u.
+$$
+At the same time any function that deviates from the unit function only
+on $\nu$-null subsets is also a valid Radon-Nikodym derivative for $\nu$
+with respect to itself.  If $X = \mathbb{R}$, however, then the unit
+function is the only continuous Radon-Nikodym derivative.
+
 Using the local scaling notation that we introduced in
 [Chapter 5](https://betanalpha.github.io/assets/chapters_html/expectation_values.html)
 we can also express the relationship between two compatible measures
@@ -475,8 +493,9 @@ If
 $$
 \mathrm{d} \mu / \mathrm{d} \nu(x) > 1
 $$
-for _almost all_ points $x \in \mathsf{x}$, we always have to excuse
-deviant behavior of the null subsets of $\nu$, then we will also have
+for _almost all_ points $x \in \mathsf{x}$ -- remember that we always
+have to excuse deviant behavior over the null subsets of $\nu$ -- then
+we will also have
 $$
 \frac{ \mathrm{d} \mu }{ \mathrm{d} \nu }(x) \cdot I_{\mathsf{x}}(x)
 > I_{\mathsf{x}}(x)
@@ -512,11 +531,11 @@ $$
 across some subset then $\mu$ will allocate _less_ measure there than
 $\nu$.  At the extreme any measurable collection of points with
 $$
-\mathrm{d} \mu / \mathrm{d} \nu(x) = 0
+\mathrm{d} \mu / \mathrm{d} \nu(x) \overset{\nu}{=} 0
 $$
 always defines a $\mu$-null subset.  In between if
 $$
-\mathrm{d} \mu / \mathrm{d} \nu(x) = 1
+\mathrm{d} \mu / \mathrm{d} \nu(x) \overset{\nu}{=} 1
 $$
 across a subset then $\mu$ and $\nu$ will allocate the _same_ measure to
 that subset.
@@ -669,7 +688,7 @@ then
 $$
 \frac{ \mathrm{d} }{ \mathrm{d} \lambda }
 (\alpha \cdot \mu + \beta \cdot \nu)
-=
+\overset{\nu}{=}
 \alpha \cdot \frac{ \mathrm{d} \mu}{ \mathrm{d} \lambda }
 + \beta \cdot \frac{ \mathrm{d} \nu }{ \mathrm{d} \lambda }
 $$
@@ -679,8 +698,8 @@ $$
 \mathcal{X}_{\lambda = 0} \subseteq
 \mathcal{X}_{\mu = 0} \cap \mathcal{X}_{\nu = 0}.
 $$
-To be technically correct, the best kind of correct, equalities like
-these hold only up to $\nu$-null subsets.
+Note that to be technically correct, the best kind of correct,
+equalities like these hold only up to $\nu$-null subsets.
 
 Similarly Radon-Nikodym differentiation satisfies a chain rule.  If
 $\mu$ is absolutely continuous with respect to $\lambda$ and $\lambda$
@@ -693,7 +712,7 @@ $$
 then
 $$
 \frac{ \mathrm{d} \mu}{ \mathrm{d} \nu}
-=
+\overset{\nu}{=}
 \frac{ \mathrm{d} \mu}{ \mathrm{d} \lambda } \cdot
 \frac{ \mathrm{d} \lambda}{ \mathrm{d} \nu }.
 $$
@@ -716,18 +735,18 @@ this case all of the Radon-Nikodym derivatives between these measures
 are almost everywhere non-zero and we can write
 \begin{align*}
 1
-&=
+&\overset{\nu}{=}
 \frac{ \mathrm{d} \nu}{ \mathrm{d} \nu}(x)
 \\
 1
-&=
+&\overset{\nu}{=}
 \frac{ \mathrm{d} \nu}{ \mathrm{d} \lambda }(x) \cdot
 \frac{ \mathrm{d} \lambda}{ \mathrm{d} \nu }(x)
 \end{align*}
 or
 $$
 \frac{ \mathrm{d} \lambda}{ \mathrm{d} \nu }(x)
-=
+\overset{\nu}{=}
 \frac{1}{ \frac{ \mathrm{d} \nu}{ \mathrm{d} \lambda }(x) }
 $$
 up to the common null subsets.
@@ -737,15 +756,15 @@ and $\nu$ as a ratio of the Radon-Nikodym derivatives with respect to
 $\lambda$,
 \begin{align*}
 \frac{ \mathrm{d} \mu}{ \mathrm{d} \nu}(x)
-&=
+&\overset{\nu}{=}
 \frac{ \mathrm{d} \mu}{ \mathrm{d} \lambda }(x) \cdot
 \frac{ \mathrm{d} \lambda}{ \mathrm{d} \nu }(x)
 \\
-&=
+&\overset{\nu}{=}
 \frac{ \mathrm{d} \mu}{ \mathrm{d} \lambda }(x) \cdot
 \frac{1}{ \frac{ \mathrm{d} \nu}{ \mathrm{d} \lambda }(x) }
 \\
-&=
+&\overset{\nu}{=}
 \frac{ \frac{ \mathrm{d} \mu}{ \mathrm{d} \lambda }(x) }
 { \frac{ \mathrm{d} \nu}{ \mathrm{d} \lambda }(x) }.
 \end{align*}
@@ -1098,7 +1117,7 @@ the points in an interval of (b) substracting the output of the
 cumulative distribution function at the interval boundaries.
 :::
 
-# Probability Density Functions on Real Lines
+# Probability Density Functions on Real Spaces
 
 Having explored discrete measure spaces let's consider our prototypical
 uncountable spaces, the spaces of real numbers.  On these spaces we
@@ -1110,8 +1129,8 @@ integrals.
 
 ## Lebesgue Probability Density Functions
 
-The measure annoitted by the metric structure of a real space is the
-corresponding Lebesgue measure.  Because Lebesgue measures are
+The metric structure of a real space makes Lebesgue measures
+particularly useful.  In particular because Lebesgue measures are
 $\sigma$-finite they serve as immediate candidates for reference
 measures.
 
@@ -1124,9 +1143,10 @@ allocate zero probability to atomic subsets and their countable unions.
 In theory there are other, more abstract, null subsets that need to be
 accommodated but the atomic subsets are the most practically relevant.
 
-Given a compatible probability distribution $\pi$ over a $D$-dimensional
-real space $\mathbb{R}^{D}$ we can define a Lebesgue probability density
-function
+Given a particular $D$-dimensional real space, that is a particular
+rigid real space or particular parameterization of a flexible real
+space, and a compatible a compatible probability distribution $\pi$ we
+can define a Lebesgue probability density function
 $$
 \frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda^{D} } :
 \mathbb{R}^{D} \rightarrow \mathbb{R}^{+}.
@@ -1244,7 +1264,12 @@ $$
 $$
 at every input point $x \in \mathbb{R}$.  Rather they can deviate from
 each other on any Lebesgue null subset
-(@fig-equivalent-density-functions).
+(@fig-equivalent-density-functions),
+$$
+\frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda}(x)
+\overset{\lambda}{=}
+\frac{ \mathrm{d} \rho }{ \mathrm{d} \lambda}.
+$$
 
 ![As with any density function Lebesgue probability density functions
 are defined only up to the null subsets of the reference measure; for
@@ -1264,8 +1289,7 @@ $$
 =
 \frac{ \mathrm{d} \rho }{ \mathrm{d} \lambda}
 $$
-to mean that the two functions are not equal exactly but rather almost
-equal so that
+to mean that
 $$
 \int_{-\infty}^{+\infty} \mathrm{d} x \,
 \frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda}(x)
@@ -1291,7 +1315,7 @@ $$
 \frac{ \mathrm{d} \rho }{ \mathrm{d} \lambda}(x)
 \, f(x)
 $$
-_does_ imply point-wise equality,
+usually implies point-wise equality,
 $$
 \frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda}(x)
 =
@@ -1301,7 +1325,7 @@ for all $x \in \mathbb{R}$.
 
 Regardless we have to be careful with unstated assumptions.  Directly
 equating probability density functions implies either that the equality
-holds only up to Lebesgue null subsets or that we're restricting
+holds only up to reference null subsets or that we're restricting
 consideration to certain structured probability density functions and
 not just any valid probability density functions.
 
@@ -1432,7 +1456,7 @@ working on $\mathbb{R}^{3}$ we can partically visualize a probability
 density function $\pi(x_{1}, x_{2}, x_{3})$ by plotting the slices
 $\pi(x_{1}, x_{2}, \tilde{x}_{3})$, $\pi(x_{1}, \tilde{x}_{2}, x_{3})$,
 and $\pi(\tilde{x}_{1}, x_{2}, x_{3})$.  Properly interpreting these
-slices, however, can be tricky.  In **Chapter 9** we'll learn how to
+slices, however, can be tricky.  In **Chapter Eight** we'll learn how to
 interpret these slices as _conditional probability density functions_.
 
 A more effective approach in practice is to not try to visualize an
@@ -1516,10 +1540,10 @@ Comparing these two results we can identify the Riemann integrand with
 the Lebesgue probability density function,
 $$
 \frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda }(x)
-= \lim_{\epsilon \rightarrow 0}
-\frac{ \pi( \, ( x, x + \epsilon ] \, ) }{ \epsilon }
+\overset{\lambda}{=}
+\lim_{\epsilon \rightarrow 0}
+\frac{ \pi( \, ( x, x + \epsilon ] \, ) }{ \epsilon }.
 $$
-for almost every point $x \in X$.
 
 Note that this result relies on the choice of metric.  The convergence
 of a scaled interval probability to a probability density function
@@ -1998,7 +2022,7 @@ example spheres, torii, and even more foreign spaces.  Mathematically
 these spaces, along with real spaces, are collectively known as
 **manifolds**.
 
-::: {#fig-circle layout="[-10, 80, -10], [-10, 80, -10]"}
+::: {#fig-circle layout="[-20, 60, -20], [-20, 60, -20]"}
 ![](figures/circle_vs_line/far/far){#fig-circle-far}
 
 ![](figures/circle_vs_line/close/close){#fig-circle-close}
@@ -2021,7 +2045,7 @@ angular intervals with a notion of length (@fig-circle-metric).  We can
 then define a uniform measure that allocates the same measure to every
 angular interval of the same length (@fig-circle-measure).
 
-::: {#fig-circle layout="[-5, 45, 45, -5]"}
+::: {#fig-circle layout="[-15, 35, 35, -15]"}
 ![](figures/uniform_circle/metric/metric){#fig-circle-metric}
 
 ![](figures/uniform_circle/measure/measure){#fig-circle-measure}
@@ -2072,16 +2096,11 @@ $f : \mathbb{S} \rightarrow \mathbb{R}$ on the circle all define
 corresponding objects on this excised space.  Once we've removed the
 point we can then unroll and stretch out $\mathbb{S}^{1} \setminus x'$
 into a real line $\mathbb{R}$, taking all of the probabilistic objects
-along with us.  If we're careful then we can translate the initial
-uniform measure on the circle to a Lebesgue measure on the final real
-line, and associate circular probability density functions with Lebesgue
-probability density functions (@fig-cutting-circles).
+along with us (@fig-cutting-circles).
 
 In general expectation values on the initial circular probability space
 will be different from the expectation values on the excised probability
-space; removing a single point changes the topology, the
-$\sigma$-algebras, and all of the probabilistic objects built up from
-there.  If $\{ x' \}$ is a null subset, however, then they will be the
+space.  If $\{ x' \}$ is a null subset, however, then they will be the
 same,
 $$
 \mathbb{E}_{\pi}[f]
