@@ -670,8 +670,8 @@ $$
 \{ x_{1}, \ldots, x_{i}, \ldots, x_{I} \},
 $$
 can be defined as elements of the replicated power set $X^{I}$.  Allowing $I$ to
-become arbitrarily large then allows for the countably infinitely long s
-equences.
+become arbitrarily large then allows for the countably infinitely long
+sequences.
 
 One potential difficulty that can arise when working with replicated product
 spaces is distinguishing between the different copies of the base space $X$
@@ -691,14 +691,15 @@ $\mathbb{R}^{I}$.  This is also referred to as a **real space** or an
 **$I$-dimensional Euclidean space**.
 
 The multivariate real numbers inherit the identity crisis of the real lines from
-which they are built.  If we take the perspective that there are infinite,
-distinct real lines then there will be infinite, distinct multivariate real
-numbers: different choices of component ordering, algebraic, and metric
-structures will define distinct product spaces.  On the other hand if we assume
-that there is a single, flexible real line that admits multiple configurations
-then the multivariate real numbers will correspond to a single, flexible space.
+which they are built.  If we take the rigid real line perspective then there will
+be infinite, distinct multivariate real numbers: different choices of component
+ordering, algebraic, and metric structures will define distinct product spaces.
+On the other hand if we assume the flexible real line perspective then the
+multivariate real numbers will correspond to a single, flexible space.
 In this case each different configuration of the component lines will define a
-different configuration of the corresponding product space.
+different configuration of the corresponding product space.  Following the real
+line terminology I will refer to these as rigid real spaces and flexible real
+spaces, respectively.
 
 To visually summarize the structure of a real space we can extend grids defined
 over the component spaces across the other component spaces and then overlay
@@ -711,7 +712,7 @@ figures/real_space_grid/real_space_grid){width=50% #fig-real_space_grid}
 
 Combining interval subsets from each component real line
 $$
-[ x_{1, i}, x_{2, i} ] = 
+[ x_{1, i}, x_{2, i} ] =
 \{ x_{i} \in X_{i} \mid x_{1, i} \le x_{i} \le x_{2, i} \},
 $$
 defines a rectangular subset over the full product space,
@@ -720,7 +721,7 @@ $$
 [ x_{1, i}, x_{2, i} ] \times \ldots
 [ x_{1, I}, x_{2, I} ].
 $$
-Because these rectangular subsets are compatible with all of the 
+Because these rectangular subsets are compatible with all of the
 structures of a multivariate real space they are particular useful.
 
 # Decomposing Product Spaces {#sec:decomposition}
@@ -832,9 +833,9 @@ $X_{1} \times X_{2} \times X_{3}$ allow us to specify an element of the product
 set by specifying component elements _in any order_.
 
 This pattern immediately generalizes to any product space.  Unfortunately the
-generalization quickly become complicated because of all of the different ways 
-that we can select from the available components.  To represent how we can 
-sequentially build up product elements from component elements we'll need some 
+generalization quickly become complicated because of all of the different ways
+that we can select from the available components.  To represent how we can
+sequentially build up product elements from component elements we'll need some
 careful, if a bit ungainly, notation.
 
 We'll start with the $I$ component spaces
@@ -932,8 +933,8 @@ elements second.
 
 Given any partition of the component sets into groups we can apply this
 decomposition _recursively_ to decompose the joint set into a sequence of
-collections of cross section sets and one terminating marginal set.  For 
-example consider five component sets $X_{1}, X_{2}, X_{3}, X_{4}, X_{5}$ which 
+collections of cross section sets and one terminating marginal set.  For
+example consider five component sets $X_{1}, X_{2}, X_{3}, X_{4}, X_{5}$ which
 are partitioned into three groups,
 $$
 \{ X_{2}, X_{5} \}, \{ X_{3} \}, \{X_{1}, X_{4} \}.
@@ -985,7 +986,7 @@ convenient in a given application.
 Because we often take sequential specification of elements for granted this
 formal, systematic treatment might appear to be a bit...excessive.  To the
 contrary this more careful perspective will help us understand some of the more
-subtle aspects of probability theory on product spaces, and how we can actually 
+subtle aspects of probability theory on product spaces, and how we can actually
 engineer sophisticated probability distributions in practice.
 
 # Transforming Product Spaces
@@ -1181,10 +1182,10 @@ $$
 =
 \varpi_{i_{1}, \ldots, i_{J}}^{-1}(x_{i_{1}}, \ldots, x_{i_{J}})!
 $$
-In other words a cross section set can be interpreted as the subset of the 
-joint set that projects to a particular element of a marginal set.  This 
-projection perspective not only clarifies how marginal and cross section sets 
-are complementary to each other but also provides a more compact way of 
+In other words a cross section set can be interpreted as the subset of the
+joint set that projects to a particular element of a marginal set.  This
+projection perspective not only clarifies how marginal and cross section sets
+are complementary to each other but also provides a more compact way of
 denoting these sets.
 
 ## Partial Evaluation
@@ -1298,7 +1299,7 @@ $s_{\tilde{x}_{1}}$ is often referred to as a scaling operator.
 In many applications translations and scalings appear to be intuitive, but
 partial evaluation allows us to formalize that conceptual reasoning.  This more
 formal construction then helps us recognize the assumptions needed for that
-intuitive to be well-defined.  For example translation isn't well-defined on 
+intuitive to be well-defined.  For example translation isn't well-defined on
 a space that isn't equipped with the right algebraic structure!
 
 # Conclusion
@@ -1320,7 +1321,7 @@ that we can select from a general collection of component spaces.
 
 # Acknowledgements {-}
 
-I thank Alexander Noll for helpful comments.
+I thank Alexander Noll and Pietro Monticone for helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
 Adriano Yoshino, Alan Chang, Alessandro Varacca, Alexander Bartik,
