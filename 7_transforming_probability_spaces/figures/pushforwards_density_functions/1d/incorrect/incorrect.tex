@@ -1,0 +1,79 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, arrows.meta, decorations.pathreplacing}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function normal(\x, \m, \s) {
+    return exp(-0.5 * (\x - \m) * (\x - \m) / (\s * \s) ) / (2.506628274631001 * \s);
+  };
+  function density(\x) {
+    return normal(\x, 0.5, 0.5);
+  };
+  function phi(\x) {
+    return \x * \x * \x / 4;
+  };
+  function invphi(\y) {
+    if \y > 0 then {
+      return +exp(ln(+4 * \y) / 3);
+    } else {
+      return -exp(ln(-4 * \y) / 3);
+    };
+  };
+  function goodpushdensity(\y) {
+    \x = invphi(\y);
+    return density(\x) * (4 / 3) / (\x * \x);
+  };
+  function badpushdensity(\y) {
+    \x = invphi(\y);
+    return density(\x);
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+
+  \pgfmathsetmacro{\ys}{0.5};
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-4.5, -3) rectangle (3.75, 2.5);
+        
+    \begin{scope}
+      \clip (-3, -2) rectangle (3, 2);
+      \draw[domain=-1:1, smooth, samples=200, variable=\y, dark, line width=1] 
+        plot (3 * \y, { \ys * goodpushdensity(\y) - 2});
+      \draw[domain=-1:1, smooth, samples=200, variable=\y, light, line width=1] 
+        plot (3 * \y, { \ys * badpushdensity(\y) - 2});
+    \end{scope}
+    
+    \node[dark] at (1.85, 0) { $p \left( f^{-1}(y) \right) \cdot | J(y) |^{-1}$ };
+    \node[light] at (1.75, -1.5) { $p \left( f^{-1}(y) \right)$ };
+     
+    \draw [->, >=stealth, line width=1] (-3.00, -2.015) -- +(0, 4.25);
+    \draw [->, >=stealth, line width=1] (-3.015, -2.00) -- +(6.25, 0);
+    
+    \node at (0, -2.5) { $y$ };
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}  

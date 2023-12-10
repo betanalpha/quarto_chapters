@@ -1,0 +1,66 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, math}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function logistic(\x) {
+    if \x > 0 then {
+      return 1 / (1 + exp(-\x));
+    } else {
+      return 1 * exp(\x) / (1 + exp(\x));
+    };
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-8.5, -5.75) rectangle (7.75, -0.25);
+    
+    \fill[light] (-3, -2) -- (4, -2) -- ({2 * logistic(2)}, -4) -- ({2 * logistic(-1.5)}, -4) -- cycle;
+    \draw[mid, dashed] (-3, -2) -- ({2 * logistic(-1.5)}, -4);
+    \draw[mid, dashed] (4, -2) -- ({2 * logistic(2)}, -4);
+    
+    \draw[<->, >=stealth, line width=1] (-6.5, -2) -- (6.5, -2);
+    \draw[arrows={Parenthesis[sharp]-Parenthesis[sharp]}, line width=1] (0, -4) -- (2, -4);
+    
+    \foreach [count=\n] \x in {-1.5, 2} {
+      \fill[white] (2 * \x, -2) circle (0.065);
+      \fill[black] (2 * \x, -2) circle (0.05);
+      \node at (2 * \x, -1.65) { $x_{\n} = \mathrm{logit}(y_{\n})$ };
+    
+      \fill[white] ({2 * logistic(\x)}, -4) circle (0.065);
+      \fill[black] ({2 * logistic(\x)}, -4) circle (0.05);
+      \node at ({2 * logistic(\x)}, -4.35) { $y_{\n}$ };
+    }
+    
+    \node at (-7.5, -4) { $(0, 1)$ };
+    \node at (-7.5, -2) { $\mathbb{R}$ };
+    
+    \node[dark] at (0.5, -1) { $\pi ( \, (\mathrm{logit}(y_{1}), \mathrm{logit}(y_{2}) ) \, )$ };
+    \node[dark] at (1, -5) { $f_{*} \pi ( \, (y_{1}, y_{2}) \, )$ };
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  

@@ -1,0 +1,55 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function mu(\x) {
+    return 0 - 0.1 * \x - 0.05 * \x * \x + 0.005 * \x * \x * \x;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1, thick]
+  \draw[white] (-4.5, -3) rectangle (3.5, 2.5);
+
+  \foreach \x in {-3, -2.5, ..., 2.5} {
+
+    \foreach [count=\n] \i in {1.2815516, 0.8416212, 0.5244005, 0.2533471} {
+      \pgfmathsetmacro{\prop}{25 * (\n - 1)};
+      \colorlet{custom}{dark!\prop!light};
+      \fill[color=custom] ({\x}, {mu(\x) + 0.5 * \i}) rectangle ({\x + 0.5}, {mu(\x) - 0.5 * \i});
+    }
+    
+    \draw[color=dark, line width=1] ({\x}, {mu(\x)}) -- ({\x + 0.5}, {mu(\x)});
+  }
+
+  \node[] at (-3.75, 0) { $(f_{n})_{*} \pi$ };
+
+  \draw [->, >=stealth, line width=1] (-3.015, -2) -- +(6, 0);
+  \draw [->, >=stealth, line width=1] (-3, -2) -- +(0, 4);
+  \node[] at (0, -2.5) { $n$ };
+
+  
+\end{tikzpicture}
+
+\end{document}  

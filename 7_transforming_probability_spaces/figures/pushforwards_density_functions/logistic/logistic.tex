@@ -1,0 +1,109 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, arrows.meta, decorations.pathreplacing}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function normal(\x, \m, \s) {
+    return exp(-0.5 * (\x - \m) * (\x - \m) / (\s * \s) ) / (2.506628274631001 * \s);
+  };
+  function density(\x) {
+    return normal(\x, 0, 1);
+  };
+  function logistic(\x) {
+    if \x > 0 then {
+      return 1 / (1 + exp(-\x));
+    } else {
+      return 1 * exp(\x) / (1 + exp(\x));
+    };
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+
+  \pgfmathsetmacro{\ys}{2.4};
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-3.5, -3) rectangle (2.75, 2.5);
+        
+    \begin{scope}
+      \clip (-2, -2) rectangle (2, 2);
+      \draw[domain=-4:4, smooth, samples=100, variable=\x, dark, line width=1] 
+        plot (\x / 2, { \ys * density(\x) - 2});
+    \end{scope}
+    
+    \foreach \x in {-3.5, -3, ..., 3.5} {
+      \draw[line width=1] (\x / 2, -2) -- (\x / 2, -2.15);
+    }
+     
+    \draw [->, >=stealth, line width=1] (-2.00, -2.015) -- +(0, 4.25);
+    \draw [->, >=stealth, line width=1] (-2.015, -2.00) -- +(4.25, 0);
+
+    \node at (-2.65, 0) { $p(x)$ };
+    \node at (0, -2.5) { $x$ };
+  \end{scope}
+  
+  \begin{scope}[shift={(0, -5.5)}]
+    \draw[white] (-3.5, -3) rectangle (2.75, 2.5);
+        
+    \begin{scope}
+      \clip (-2, -2) rectangle (2, 2);
+      \draw[domain=-4:4, smooth, samples=100, variable=\x, dark, line width=1] 
+        plot (\x / 2, {4 * logistic(\x) - 2});
+    \end{scope}
+    
+    \foreach \x in {-3.5, -3, ..., 3.5} {
+      \draw[line width=1] (\x / 2, -2) -- (\x / 2, -2.15);
+      \draw[line width=1] (-2, {4 * logistic(\x) - 2}) -- (-2.15, {4 * logistic(\x) - 2});
+    }
+     
+    \draw [-|, >=stealth, line width=1] (-2.00, -2.015) -- +(0, 4);
+    \draw [->, >=stealth, line width=1] (-2.015, -2.00) -- +(4.25, 0);
+
+    \node at (-2.65, 0) { $y$ };
+    \node at (0, -2.5) { $x$ };
+  \end{scope}
+  
+  \begin{scope}[shift={(6.25, -5.5)}]
+    \draw[white] (-3.5, -3) rectangle (2.75, 2.5);
+        
+    \begin{scope}
+      \clip (-2, -2) rectangle (2, 2);
+      \draw[domain=0.01:0.99, smooth, samples=150, variable=\y, dark, line width=1] 
+        plot ({ \ys * density(ln(\y / (1 - \y))) / (\y * (1 - \y)) - 2}, 4 * \y - 2);
+    \end{scope}
+    
+    \foreach \x in {-3.5, -3, ..., 3.5} {
+      \draw[line width=1] (-2, {4 * logistic(\x) - 2}) -- (-2.15, {4 * logistic(\x) - 2});
+    }
+     
+    \draw [-|, >=stealth, line width=1] (-2.00, -2.015) -- +(0, 4);
+    \draw [->, >=stealth, line width=1] (-2.015, -2.00) -- +(4.25, 0);
+
+    \node at (-2.65, 0) { $y$ };
+    \node at (0, -2.5) { $f_{*} p(y)$ };
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}  

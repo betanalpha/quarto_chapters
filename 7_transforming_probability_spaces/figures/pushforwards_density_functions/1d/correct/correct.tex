@@ -1,0 +1,116 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, arrows.meta, decorations.pathreplacing}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function normal(\x, \m, \s) {
+    return exp(-0.5 * (\x - \m) * (\x - \m) / (\s * \s) ) / (2.506628274631001 * \s);
+  };
+  function density(\x) {
+    return normal(\x, 0.5, 0.5);
+  };
+  function phi(\x) {
+    return \x * \x * \x / 4;
+  };
+  function invphi(\y) {
+    if \y > 0 then {
+      return +exp(ln(+4 * \y) / 3);
+    } else {
+      return -exp(ln(-4 * \y) / 3);
+    };
+  };
+  function pushdensity(\y) {
+    \x = invphi(\y);
+    return density(\x) * (4 / 3) / (\x * \x);
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+
+  \pgfmathsetmacro{\ys}{0.65};
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-3.5, -3) rectangle (2.75, 2.5);
+        
+    \begin{scope}
+      \clip (-2, -2) rectangle (2, 2);
+      \draw[domain=-2:2, smooth, samples=100, variable=\x, dark, line width=1] 
+        plot (\x, { \ys * density(\x) - 2});
+    \end{scope}
+    
+    \foreach \x in {-1.75, -1.5, ..., 1.75} {
+      \draw[line width=1] (\x, -2) -- (\x, -2.15);
+    }
+     
+    \draw [->, >=stealth, line width=1] (-2.00, -2.015) -- +(0, 4.25);
+    \draw [->, >=stealth, line width=1] (-2.015, -2.00) -- +(4.25, 0);
+
+    \node at (-2.65, 0) { $p(x)$ };
+    \node at (0, -2.5) { $x$ };
+  \end{scope}
+  
+  \begin{scope}[shift={(0, -5.5)}]
+    \draw[white] (-3.5, -3) rectangle (2.75, 2.5);
+        
+    \begin{scope}
+      \clip (-2, -2) rectangle (2, 2);
+      \draw[domain=-2:2, smooth, samples=100, variable=\x, dark, line width=1] 
+        plot (\x, {phi(\x)});
+    \end{scope}
+    
+    \foreach \x in {-1.75, -1.5, ..., 1.75} {
+      \draw[line width=1] (\x, -2) -- (\x, -2.15);
+      \draw[line width=1] (-2, {phi(\x)}) -- (-2.15, {phi(\x)});
+    }
+     
+    \draw [->, >=stealth, line width=1] (-2.00, -2.015) -- +(0, 4.25);
+    \draw [->, >=stealth, line width=1] (-2.015, -2.00) -- +(4.25, 0);
+
+    \node at (-2.65, 0) { $y$ };
+    \node at (0, -2.5) { $x$ };
+  \end{scope}
+  
+  \begin{scope}[shift={(6.25, -5.5)}]
+    \draw[white] (-3.5, -3) rectangle (2.75, 2.5);
+        
+    \begin{scope}
+      \clip (-2, -2) rectangle (2, 2);
+      \draw[domain=-2:2, smooth, samples=150, variable=\y, dark, line width=1] 
+        plot ({ \ys * pushdensity(\y) - 2}, \y);
+    \end{scope}
+    
+    \foreach \x in {-1.75, -1.5, ..., 1.75} {
+      \draw[line width=1] (-2, {phi(\x)}) -- (-2.15, {phi(\x)});
+    }
+     
+    \draw [->, >=stealth, line width=1] (-2.00, -2.015) -- +(0, 4.25);
+    \draw [->, >=stealth, line width=1] (-2.015, -2.00) -- +(4.25, 0);
+
+    \node at (-2.65, 0) { $y$ };
+    \node at (0, -2.5) { $f_{*} p(y)$ };
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}  
