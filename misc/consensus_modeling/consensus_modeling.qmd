@@ -305,7 +305,7 @@ with
 $$
 0 \le \phi_{r, jk} \le 1
 \\
-\sum_{j = 1}^{J} \gamma_{r, jk} = 1.
+\sum_{j = 1}^{J} \phi_{r, jk} = 1.
 $$
 Once we restrict to finite, unordered spaces our models become simplices
 all the way down.
@@ -1258,7 +1258,52 @@ available.
 
 # Acknowledgements {-}
 
+I thank Ian Costley for helpful comments.
+
 A very special thanks to everyone supporting me on Patreon:
+Adam Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
+Alexander Noll, Alexander Petrov, Alexander Rosteck, Andrea Serafino,
+Andrew Mascioli, Andrew Rouillard, Andrew Vigotsky, Angie_Hyunji Moon,
+Ara Winter, Austin Rochford, Austin Rochford, Avraham Adler,
+Ben Matthews, Ben Swallow, Benoit Essiambre, Bradley Kolb, Brandon Liu,
+Brendan Galdo, Brynjolfur Gauti Jónsson, Cameron Smith, Canaan Breiss,
+Cat Shark, Charles Naylor, Chase Dwelle, Chris, Chris Jones,
+Christopher Cahill, Christopher Mehrvarzi, Colin Carroll,
+Colin McAuliffe, Damien Mannion, Damon Bayer, dan mackinlay,
+Dan W Joyce, Dan Waxman, Dan Weitzenfeld, Daniel Edward Marthaler,
+Darshan Pandit, Darthmaluus , David Galley, David Wurtz,
+Denis Vlašiček, Doug Rivers, Dr. Jobo, Dr. Omri Har Shemesh,
+Dylan Maher, Ed Cashin, Edgar Merkle, Eric LaMotte, Ero Carrera,
+Eugene O'Friel, Felipe González, Fergus Chadwick, Finn Lindgren,
+Florian Wellmann, Francesco Corona, Geoff Rollins, Guido Biele,
+Hamed Bastan-Hagh, Haonan Zhu, Hector Munoz, Henri Wallen, herr, hs,
+Hugo Botha, Håkan Johansson, Ian, Ian Costley, idontgetoutmuch,
+Ignacio Vera, Ilaria Prosdocimi, Isaac Vock, J, J Michael Burgess,
+Jair Andrade, James C, James Hodgson, James Wade, Janek Berger,
+Jason Martin, Jason Pekos, Jason Wong, Jeff Burnett, Jeff Dotson,
+Jeff Helzner, Jeffrey Erlich, Jesse Wolfhagen, Jessica Graves,
+Joe Wagner, John Flournoy, Jonathan H. Morgan, Jonathon Vallejo,
+Joran Jongerling, Joshua Griffith, JU, Justin Bois, Karim Naguib,
+Karim Osman, Kejia Shi, Kristian Gårdhus Wichmann, Kádár András,
+Lars Barquist, lizzie , LOU ODETTE, Luís F, Marcel Lüthi,
+Marek Kwiatkowski, Mark Donoghoe, Markus P., Martin Modrák, Matt Moores,
+Matthew, Matthew Kay, Matthieu LEROY, Mattia Arsendi,
+Maurits van der Meer, Michael Colaresi, Michael DeWitt, Michael Dillon,
+Michael Lerner, Mick Cooney, Márton Vaitkus, N Sanders, N.S. , Name,
+Nathaniel Burbank, Nic Fishman, Nicholas Clark, Nicholas Cowie, Nick S,
+Octavio Medina, Oliver Crook, Olivier Ma, Patrick  Kelley,
+Patrick Boehnke, Pau Pereira Batlle, Pieter van den Berg , ptr,
+Ramiro Barrantes Reynolds, Ravin Kumar, Raúl Peralta Lozada,
+Riccardo Fusaroli, Richard Nerland, Robert Frost, Robert Goldman,
+Robert kohn, Robin Taylor, Ryan Grossman, Rémi , S Hong, Scott Block,
+Sean Pinkney, Sean Wilson, Sergiy Protsiv, Seth Axen, shira,
+Simon Duane, Simon Lilburn, sssz, Stan_user, Stephanie Fitzgerald,
+Stephen Lienhard, Steve Bertolani, Stew Watts, Stone Chen, Susan Holmes,
+Svilup, Tao Ye, Tate Tunstall, Tatsuo Okubo, Teresa Ortiz,
+Theodore Dasher, Thomas Vladeck, Tiago Cabaço, Tim Radtke, Tobychev ,
+Tom McEwen, Tomáš Frýda, Tony Wuersch, Virginia Fisher, Vitaly Druker,
+Vladimir Markov, Wil Yegelwel, Will Farr, Will Tudor-Evans, woejozney,
+yolhaj , Zach A, Zad Rafi, and Zhengchen Ca.
 
 # References {-}
 
