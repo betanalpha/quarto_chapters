@@ -154,7 +154,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, interior hidden, enhanced, breakable, boxrule=0pt, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, interior hidden, frame hidden, enhanced, breakable, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -165,7 +165,7 @@
 Despite its infamous reputation the foundations of probability theory
 are quite straightforward. Much of the mathematical difficulty arises
 only when we implement probability theory on elaborate sets like the
-real numbers, and most of the philosophical difficultly arises only when
+real numbers, and most of the philosophical difficulty arises only when
 trying to assign an interpretation to the mathematics. In this chapter
 we will avoid this baggage by introducing the basics of abstract
 probability theory on the simplest, nontrivial set: a collection of a
@@ -284,13 +284,13 @@ elements.\\
 We refer to this set as the \textbf{power set} of \(X\) and denote it
 \(2^{X}\).
 
-When the ambient set, and all hence all of the possible elements that
-any subset might contain, is fixed the prefix ``sub'' is sometimes
-dropped, with all subsets simply referred to as sets. For example
-collections of elements might be denoted ``sets'' when one takes the
-ambient set for granted and ``subsets'' when one wants to explicitly
-acknowledge the context of the ambient set. Precise terminology,
-however, can vary strongly between disciplines and even individuals.
+When the ambient set, and hence all of the possible elements that any
+subset might contain, is fixed the prefix ``sub'' is sometimes dropped,
+with all subsets simply referred to as sets. For example collections of
+elements might be denoted ``sets'' when one takes the ambient set for
+granted and ``subsets'' when one wants to explicitly acknowledge the
+context of the ambient set. Precise terminology, however, can vary
+strongly between disciplines and even individuals.
 
 \hypertarget{subset-operations}{%
 \subsection{Subset Operations}\label{subset-operations}}
@@ -343,7 +343,7 @@ example, two subsets \(\mathsf{x}_1 = \{ \Box, \heartsuit \}\) and
 The collection of all elements that are contained in \emph{either}
 subset is itself a subset, \[
 \{ \Box, \heartsuit, \spadesuit \} \subset X,
-\] as is the collection of all elements that are contained only in
+\] as is the collection of all elements that are contained in
 \emph{both} subsets, \[
 \{ \Box \} \subset X.
 \] These derived subsets are referred to as the \textbf{union}, \[
@@ -615,9 +615,9 @@ The larger \(m_{n}\) the more of \(M\) is allocated to the element
 \textbf{total measure} and \(m_{n}\) as the \textbf{measure allocated to
 \(x_{n}\)}.
 
-If the total measure in infinite, \(M = \infty\), then at least one of
+If the total measure is infinite, \(M = \infty\), then at least one of
 the elements in \(X\) \emph{has} to receive an infinite allocation in
-order to empty the reservior. We can also consistently allocate infinite
+order to empty the reservoir. We can also consistently allocate infinite
 measure to multiple elements, or even all of the elements, at the same
 time. Infinite measures can be very generous in their allocations.
 
@@ -634,10 +634,10 @@ evaluating \(\mu\) at only a single input \(m_{n} = \mu(x_{n})\).
 
 In general there are an infinite number of ways to allocate a total
 measure to the elements of a finite set, and hence an infinite number of
-measures that we can define over that set. I will denote the set of all
-possible measures over \(X\) as \(\mathcal{M}(X)\).
+measures that we can define over that set. I will denote the collection
+of all possible measures over \(X\) as \(\mathcal{M}(X)\).
 
-Within this set there a few notable examples. For example a
+Within this collection there are a few notable examples. For example a
 \textbf{singular measure} allocates the total measure \(M\) to a single
 element, leaving the rest with nothing
 (Figure~\ref{fig-types_of_measurea}). On the other hand a
@@ -845,7 +845,7 @@ smaller subsets then we can also decompose the measure allocated to that
 initial subset into measures allocated to the component subsets. This
 consistency property is known as \textbf{additivity}.
 
-A subset \(\mathsf{x}\) and its complement \(\mathsf{x}^{c}\) always
+A subset \(\mathsf{x}\) and its complement \(\mathsf{x}^{c}\) are always
 disjoint, \(\mathsf{x} \cap \mathsf{x}^{c} = \emptyset\). At the same
 time their union covers the entire set,
 \(\mathsf{x} \cup \mathsf{x}^{c} = X\). Consequently additivity implies
@@ -989,7 +989,8 @@ topic of
 \hypertarget{acknowledgements}{%
 \section{Acknowledgements}\label{acknowledgements}}
 
-I thank Simon Duane and Edgar Merkle for helpful comments.
+I thank Simon Duane, Edgar Merkle, and Florian Pargent for helpful
+comments.
 
 A very special thanks to everyone supporting me on Patreon: Aapeli
 Nevala, Adam Bartonicek, Adam Fleischhacker, Adan, Adriano Yoshino, Alan
