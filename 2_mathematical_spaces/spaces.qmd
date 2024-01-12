@@ -1520,7 +1520,7 @@ f^{-1} :\; & Y & &\rightarrow& \; & 2^X &
 & y & &\mapsto& & f^{-1}(y) &.
 \end{alignat*}
 The subset $f^{-1}(y) \subset X$ corresponding to a particular output element
-$y \in Y$ is referred to as a _preimage_ or _fiber_ of $y$ (@fig-fibers).
+$y \in Y$ is referred to as a _level set_ or _fiber_ of $y$ (@fig-fibers).
 Intuitively we can reconstruct the entire input set by "weaving" these fibers
 together,
 $$
@@ -1528,18 +1528,18 @@ X = \cup_{y \in Y} f^{-1}(y).
 $$
 
 ![Even if a function is not bijective we can define a generalized inverse that
-maps each output element $y \in Y$ to a fiber of input elements
-$f^{-1}(y) \subset X$ that all map into $y$.  In general these fibers can be
-empty, consist of a single input element, or consist of multiple input
+maps each output element $y \in Y$ to a level set, or fiber, of input elements
+$f^{-1}(y) \subset X$ that all map into $y$.  In general these level sets can
+be empty, consist of a single input element, or consist of multiple input
 elements.](
 figures/maps/fibers/fibers){width=90% #fig-fibers}
 
-When $f$ is not surjective then some fibers may be empty, but if $f$ is
-surjective then all fibers will be non-empty.  At the same time if a function is
-not injective then fibers will generally contain multiple elements, but if it is
-injective then all of the fibers will contain either one element or no elements.
-The fibers of bijective functions contain one and only one element: the result
-of evaluating the inverse function.
+When $f$ is not surjective then some level sets may be empty, but if $f$ is
+surjective then all level sets will be non-empty.  At the same time if a function
+is not injective then level sets will generally contain multiple elements, but if
+it is injective then all of the level sets will contain either a single element or
+no elements.  The level sets of bijective functions contain one and only one
+element: the result of evaluating the inverse function.
 
 ### Function Composition
 
@@ -1605,11 +1605,13 @@ f_{*} :\; & 2^X & &\rightarrow& \; & 2^Y &
 \\
 & \mathsf{x} & &\mapsto& & \mathsf{y} = f_{*}(\mathsf{x}) &.
 \end{alignat*}
+These output subsets are often referred to as the **image** of the
+corresponding input subset.
 
 If $f$ is not bijective then we cannot map output elements to unique input
 elements.  We can, however, always map every output element to a, possibly
 empty, collection of input elements $f^{-1}(y) \subset X$.  The union of the
-fibers from all elements in an output subset $\mathsf{y} \subset Y$ defines
+level sets from all elements in an output subset $\mathsf{y} \subset Y$ defines
 a subset of all of the input elements that map into $\mathsf{y}$,
 $$
 \mathsf{x} = \cup_{y \in \mathsf{y}} f^{-1}(y) \subset X,
@@ -1618,13 +1620,15 @@ or equivalently
 $$
 \mathsf{x} = \{ x \in X \mid f(x) \in \mathsf{y} \}.
 $$
-Weaving together these fibers implicitly defines a map from output subsets to
-input subsets (@fig-set-pullback)
+Weaving together these level sets implicitly defines a map from output subsets
+to input subsets (@fig-set-pullback)
 \begin{alignat*}{6}
 f^{*} :\; & 2^Y & &\rightarrow& \; & 2^X &
 \\
 & \mathsf{y} & &\mapsto& & \mathsf{x} = f^{*}(\mathsf{y}) &.
 \end{alignat*}
+These input subsets are often referred to as the **inverse image** or
+**preimage** of the corresponding output subset.
 
 ::: {#fig-set-maps layout="[ [-5, 90, -5], [-5, 90, -5] ]"}
 ![](figures/maps/set_pushforward/set_pushforward){#fig-set-pushforward}
