@@ -119,6 +119,7 @@
     
     \node[gray80] at (0, -1) { $x'$ };  
     
+    \node[dark] at (-2.5, 0.5) { $p(x)$ };
     \node at (0, -1.5) { $\mathbb{S}^{1}$ };        
   \end{scope}
   
@@ -158,6 +159,7 @@
     
     \draw[gray80, line width=1, dashed] (\x, \y) -- +(0, 2.5); 
     
+    \node[dark] at (-2.5, 0.5) { $p'(x)$ };
     \node at (0, -1.5) { $\mathbb{S}^{1} \setminus x'$ };  
   \end{scope}
   
@@ -176,6 +178,7 @@
           plot (\y, { 30 * \s * unrolledvonmises(3 * \y, 270 - \mu, \kappa, \logI) } );    
     \end{scope}
     
+    \node[dark] at (-2.5, 0.5) { $p''(x)$ };
     \node at (0, -1.5) { $\mathbb{R}$ };
     
   \end{scope}

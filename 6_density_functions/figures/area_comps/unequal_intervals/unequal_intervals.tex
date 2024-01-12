@@ -46,7 +46,7 @@
     
     \pgfmathsetmacro{\y}{7 * density(\xb) - 2};
     \draw[gray80, dashed, line width=1] (-3, \y) -- (3, \y);
-    \node[gray80, anchor=west] at (3, \y) { $\pi_{1} = \displaystyle \max_{x \in \mathsf{I}_{1}} \pi(x)$ };
+    \node[gray80, anchor=west] at (3, \y - 0.05) { $p_{1} = \displaystyle \max_{x \in \mathsf{I}_{1}} \frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda }(x)$ };
 
     \pgfmathsetmacro{\xc}{-0.1};
     \draw[gray80, dashed, line width=1] (\xc, -2) -- (\xc, 2);
@@ -56,7 +56,7 @@
     
     \pgfmathsetmacro{\y}{7 * density(\xc) - 2};
     \draw[gray80, dashed, line width=1] (-3, \y) -- (3, \y);
-    \node[gray80, anchor=west] at (3, \y) { $\pi_{2} = \displaystyle \min_{x \in \mathsf{I}_{2}} \pi(x)$ };
+    \node[gray80, anchor=west] at (3, \y + 0.05) { $p_{2} = \displaystyle \min_{x \in \mathsf{I}_{2}} \frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda }(x)$ };
       
     \begin{scope}
       \clip (-3, -2.1) rectangle (2.85, 2);
@@ -89,7 +89,7 @@
     \draw[gray80, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (\xc, -2.1) -- (\xd, -2.1);
     \node[gray80] at ({0.5 * (\xc + \xd)}, -2.6) { $\mathsf{I}_{2}$ };
     
-    \node at (-3.75, 0) { $\pi(x)$ };
+    \node at (-3.75, 0) { $\frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda }(x)$ };
     \node at (0, -3.25) { $x$ };
     
   \end{scope}

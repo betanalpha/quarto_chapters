@@ -154,7 +154,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, breakable, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, breakable, boxrule=0pt, sharp corners, borderline west={3pt}{0pt}{shadecolor}, frame hidden, enhanced]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -381,9 +381,11 @@ space into disjoint subsets that probe that local structure. A
 \textbf{partition} of \(X\) is any collection of subsets, \[
 \mathcal{P}
 = \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots \},
-\] that are mutually disjoint, \[
+\] that are non-empty, \[
+\mathsf{x}_{i} \ne \emptyset,
+\] mutually disjoint, \[
 \mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset,
-\] but cover the entire space, \[
+\] and cover the entire space, \[
 \cup_{i} \mathsf{x}_{i} = X.
 \] When working with measures we need to restrict attention to
 \textbf{measurable partitions}, which contain only measurable subsets,
@@ -499,6 +501,12 @@ with each other. In particular when a collection of measures all share
 the \emph{same} null subsets then each measure will be absolutely
 continuous with respect to every other measure, regardless of their
 idiosyncratic behaviors.
+
+For example on a discrete space every measure with non-zero atomic
+allocations is absolutely continuous with respect to every other measure
+with non-zero atomic allocations. Moreover Lebesgue meaures defined with
+respect to different metrics are always absolutely continuous with each
+other.
 
 \hypertarget{radon-nikodym-derivatives}{%
 \subsubsection{Radon-Nikodym
@@ -634,9 +642,9 @@ within any given volume.
 
 Personally I've always found the term ``Radon-Nikodym derivative'' to be
 aesthetically pleasing -- it sounds like a term straight out of science
-fiction -- but this density function analogy is typically much more
-accessible. Because of that I will use the term ``density function''
-instead of ``Radon-Nikodym derivative'' as much as possible.
+fiction to me -- but this density function analogy is typically much
+more accessible. Because of that I will use the term ``density
+function'' instead of ``Radon-Nikodym derivative'' as much as possible.
 
 \hypertarget{operator-perspective}{%
 \subsubsection{Operator Perspective}\label{operator-perspective}}
@@ -736,13 +744,14 @@ from \(X\) to \(\mathbb{R}^{+}\). We can then define
 \frac{ \mathrm{d} \mu }{ \mathrm{d} \nu } : X \rightarrow \mathbb{R}^{+}
 \] that captures how \(\mu\) varies relative to \(\nu\).
 
-Admittedly we're being a bit mathematically sloppy here because
-Radon-Nikodym derivatives are defined only up to \(\nu\)-null subsets.
-Without imposing additional constraints Radon-Nikodym differentiation
-doesn't specify a unique output function but rather a collection of
-output functions that are equivalent up to \(\nu\)-null subsets. This
-sloppy notation, however, does allow us to show many of the useful
-properties of the operation.
+Admittedly I'm being a bit mathematically sloppy here because
+Radon-Nikodym derivatives are defined only up to \(\nu\)-null subsets;
+technically this mapping doesn't yield a single function but rather a
+collection of all functions that are equal \(\nu\)-almost everywhere. In
+order to achieve a unique outptu function we need to introduce
+additional constraints, such as continuity or even smoothness. This
+sloppy notation, however, does allow us to investigate many of the
+useful properties of the operation.
 
 For example Radon-Nikodym differentiation is linear. If we define a
 linear combination of measures by the allocations \[
@@ -826,19 +835,19 @@ Radon-Nikodym derivatives.
 Functions}\label{specifying-probability-distributions-with-density-functions}}
 
 The initial use case for density functions, née Radon-Nikodym
-derivatives, requires the selection of a target measure and a convenient
-reference measure \(\nu\). In this setting we can translate implicit
-integrals with respect to the target measure to explicit integrals with
-respect to the reference measure, \[
+derivatives, requires the selection of a target measure and a reference
+measure \(\nu\). In this setting we can translate implicit integrals
+with respect to the target measure to explicit integrals with respect to
+the reference measure, \[
 \mathbb{I}_{\mu}[f] =
 \mathbb{I}_{\nu}
 \left[ \frac{ \mathrm{d} \pi}{ \mathrm{d} \nu } \cdot f \right].
 \]
 
-This construction, however, can also be reversed. Given a convenient
-reference measure, any measurable any positive-real valued function
-implicitly defines a target measure without having to directly specify
-any subset allocations.
+This construction, however, can also be reversed. Given a reference
+measure, any measurable, positive-real valued function implicitly
+defines a target measure without having to directly specify any subset
+allocations.
 
 Consider, for example, a measurable space \((X, \mathcal{X})\) and a
 convenient, \(\sigma\)-finite measure \(\nu\). Every non-negative,
@@ -864,12 +873,12 @@ integral with respect to the reference measure,
 \mathbb{I}_{\nu} [ m ]
 \\
 &=
-1;
-\end{align*} in this case the density function defines not just any
-measure but rather a probability distribution.
+1.
+\end{align*} Consequently a properly normalized density function defines
+not just a measure but a probability distribution.
 
 In other words every non-negative, \(\mathcal{X}\)-measurable function
-\(p : X \rightarrow R^{+}\) that is properly normalized,
+\(p : X \rightarrow R^{+}\) with unit normalization,
 \(\mathbb{I}_{\nu} [ p ] = 1\), implicitly defines a probability
 distribution \(\pi\) with the expectation values \[
 \mathbb{E}_{\pi}[f] = \mathbb{I}_{\nu} \left[ p \cdot f \right].
@@ -877,11 +886,11 @@ distribution \(\pi\) with the expectation values \[
 practice, we will be working with mostly these probability density
 functions.
 
-Note, while the probabilities given by evaluating a probability
+Note that, while the probabilities given by evaluating a probability
 distribution can take only real values between zero and one, the
 probability densities given by evaluating a probability density function
-can take \emph{any} non-negative real value Probability densities and
-probabilities are distinct objects!
+can take \emph{any} non-negative real value. Probability densities and
+probabilities are distinct and should not be confused with each other!
 
 In practice working with point-wise functions is much easier than
 working with subset-wise functions. For example when the ambient space
@@ -894,59 +903,44 @@ latter feature in the context of Lebesgue reference measures in
 This is not to say that probability density functions are not without
 their limitations. In particular probability density functions are
 defined only relative to the given reference measure. If the reference
-measure is at all ambiguous then a density function will not fully
+measure is at all ambiguous then a density function will not completely
 determine a probability distribution! At the same time if the reference
 measure every changes then probability density functions will also have
 to change if we want them to represent the same probability
 distributions.
 
 We will use probability density functions to define relevant probability
-distributions almost exclusively in this book. This then raises a subtle
-question of notation. If we start with a probability distribution
-\(\pi\) and reference measure \(\nu\) then the notation \[
+distributions almost exclusively in this book. In the cases where we
+start with a probability distribution \(\pi\) and reference measure
+\(\nu\) then I will use the notation \[
 \frac{ \mathrm{d} \pi}{ \mathrm{d} \nu}
-\] for the corresponding probability density function is both clear and
-explicit. On the other hand if we start with the reference measure
-\(\nu\) and a properly normalized function \(p\) then the notation \[
-\pi = p \cdot \nu
-\] for the corresponding probability distribution is also clear and
-explicit. These notations, however, are asymmetric and require the
-introduction of a third symbol, \[
-p = \frac{ \mathrm{d} \pi}{ \mathrm{d} \nu}.
-\]
+\] for the corresponding probability density function. This notation is
+both compact and explicit, display all of the information needed to put
+the density function into context.
 
-One way to make these two notations not only more symmetric but also
-more compact is to take the reference measure for granted and overload
-the \emph{same symbol} to denote both the probability distribution and
-the probability density function, with only their arguments to
-distinguish between them. In other words \(\pi(\mathsf{x})\) will denote
-a probability distribution mapping measurable subsets to probability
-allocations while \(\pi(x)\) will denote a probability density function
-mapping individual points to local scalings of the reference measure.
+Most of the time, however, we don't start with an explicit probability
+distribution but rather a reference measure \(\nu\) and a properly
+normalized function \(p : X \rightarrow \mathbb{R}^{+}\) to implicitly
+define a probability distribution, \[
+\pi = p \cdot \nu,
+\] or, equivalently, \[
+\mathbb{E}_{\pi}[f] = \mathbb{I}_{\nu}[p \cdot f].
+\] In these more common cases I will use Roman letters to denote
+probability density functions. Whenever possible I will also match the
+Roman letter used to denote a probability density function and the Greek
+letter used to denote the induced probability distribution.
 
-To be honest this overloaded notation is not the best. Overloaded
-expressions like \begin{align*}
-\mathbb{E}_{\pi}[f]
-&=
-\mathbb{I}_{\nu} \left[ \pi \cdot f \right]
-\\
-\int \pi(\mathrm{d}x) \, f(x)
-&=
-\int \nu(\mathrm{d}x) \, \pi(x) \, f(x)
-\end{align*} are awkward at best, and without care it can be easy to
-confuse probability distributions with probability density functions. At
-the same time it is not difficult to lose track of the underlying
-reference measure, especially when multiple reference measures are
-relevant at the same time. Really the only benefit to this notational
-shorthand is that it is typographically compact and doesn't take up much
-room on the page.
+The only limitation of this latter notational convention is that it
+doesn't communicate the underlying reference measure. Because of this it
+is not difficult to lose track of that reference measure, especially
+when multiple reference measures might be relevant in a given
+application.
 
-Unfortunately this convention has also become standard in many fields
-and consequently nearly impossible to avoid. To make this book as
-accessible as possible I will adopt this more overloaded notation but do
-my best to clarify the obscured details whenever they might be relevant.
-At times I might also fall back to the more explicit notations when
-there is any particular risk of confusion.
+Unfortunately this convention has also become standard in many fields,
+and it is nearly impossible to avoid in practice. To avoid any confusion
+when we encounter a probability density function
+\(p : X \rightarrow \mathbb{R}^{+}\) we have to take care to consider
+what the accompanying reference measure is.
 
 \hypertarget{probability-density-functions-on-discrete-measure-spaces}{%
 \section{Probability Density Functions on Discrete Measure
@@ -1295,22 +1289,22 @@ Given a particular \(D\)-dimensional real space, that is a particular
 rigid real space or particular parameterization of a flexible real
 space, and a compatible a compatible probability distribution \(\pi\) we
 can define a Lebesgue probability density function \[
-\frac{ \mathrm{d} \pi }{ \mathrm{d} \lambda^{D} } :
+\frac{ \mathrm{d} \pi \hphantom{ {}^{D} } }{ \mathrm{d} \lambda^{D} } :
 \mathbb{R}^{D} \rightarrow \mathbb{R}^{+}.
 \]
 
 Alternatively any measurable, positive real-valued function \[
-\pi : \mathbb{R}^{D} \rightarrow \mathbb{R}^{+}
+p : \mathbb{R}^{D} \rightarrow \mathbb{R}^{+}
 \] that is appropriately normalized, \[
-\mathbb{I}_{\lambda^{D}}[ \pi ]
-= \int \mathrm{d}^{D} x \, \pi(x_{1}, \ldots, x_{d}, \ldots, x_{D})
+\mathbb{I}_{\lambda^{D}}[ p ]
+= \int \mathrm{d}^{D} x \, p(x_{1}, \ldots, x_{d}, \ldots, x_{D})
 = 1,
-\] will implicitly specify a probability distribution that is absolutely
-continuous with respect to the Lebesgue measure. By construction these
-engineered probability distributions will allocate zero probability to
-every atomic subset. In practice almost every probability distribution
-over real spaces that we will consider will be built up by scaling the
-Lebesgue measure in this way.
+\] will implicitly specify a probability distribution. By construction
+these engineered probability distributions will be absolutely continuous
+with respect to the defining Lebesgue measure, allocating zero
+probability to every atomic subset. In practice almost every probability
+distribution over real spaces that we will encounter in applied problems
+will be built up by scaling the Lebesgue measure in this way.
 
 Given a one-dimensional Lebesgue probability density function we can
 compute the probability allocated to any interval subset with an
@@ -1530,10 +1524,11 @@ probability density function.
 
 For example consider two intervals \(\mathsf{I}_{1}\) and
 \(\mathsf{I}_{2}\) of the same width but at different positions on a
-real line. If \(\pi(x)\) is larger for all points in \(\mathsf{I}_{1}\)
-than it is for all points in \(\mathsf{I}_{2}\) then the probability
-allocated to the first interval will be larger than the probability
-allocated to the second interval (Figure~\ref{fig-equal-intervals}) \[
+real line. If \(\mathrm{d} \pi / \mathrm{d} \lambda (x)\) is larger for
+all points in \(\mathsf{I}_{1}\) than it is for all points in
+\(\mathsf{I}_{2}\) then the probability allocated to the first interval
+will be larger than the probability allocated to the second interval
+(Figure~\ref{fig-equal-intervals}) \[
 \pi(\mathsf{I}_{1}) > \pi(\mathsf{I}_{2}).
 \]
 
@@ -1593,14 +1588,14 @@ allocated to the second interval (Figure~\ref{fig-equal-intervals}) \[
 function by eye is not always straightforward. In particular bounds
 between probability densities do not always imply bounds between
 interval probabilities. (a) Here largest probability density in the
-first interval, \(\pi_{1}\), is smaller than the smallest probability
-density in the second interval, \(\pi_{2}\). Because the two intervals
-are the same length the probability allocated to the second interval
-must be larger than the probability allocated to the second interval.
-(b) In this case we still have the largest probability density in the
-first interval smaller than the smallest probability density in the
-second interval, \(\pi_{1} < \pi_{2}\). Because the two intervals are
-not the same length, however, this does not imply that
+first interval, \(p_{1}\), is smaller than the smallest probability
+density in the second interval, \(p_{2}\). Because the two intervals are
+the same length the probability allocated to the second interval must be
+larger than the probability allocated to the second interval. (b) In
+this case we still have the largest probability density in the first
+interval smaller than the smallest probability density in the second
+interval, \(p_{1} < p_{2}\). Because the two intervals are not the same
+length, however, this does not imply that
 \(\pi(\mathsf{I}_{1}) < \pi(\mathsf{I}_{2})\). Indeed
 \(\pi(\mathsf{I}_{1})\) is almost twice as large as
 \(\pi(\mathsf{I}_{2})\)!}
@@ -1741,13 +1736,21 @@ direction at the same time.
 We can plot how a probability density function varies along one and
 two-dimensional cross sections of the ambient space. For example when
 working on \(\mathbb{R}^{3}\) we can partically visualize a probability
-density function \(\pi(x_{1}, x_{2}, x_{3})\) by plotting the slices
-\(\pi(x_{1}, x_{2}, \tilde{x}_{3})\),
-\(\pi(x_{1}, \tilde{x}_{2}, x_{3})\), and
-\(\pi(\tilde{x}_{1}, x_{2}, x_{3})\). Properly interpreting these
-slices, however, can be tricky. In \textbf{Chapter Eight} we'll learn
-how to interpret these slices as \emph{conditional probability density
-functions}.
+density function \[
+\frac{ \mathrm{d} \pi \hphantom{ {}^{3} } }{ \mathrm{d} \lambda^{3} }
+(x_{1}, x_{2}, x_{3})
+\] by plotting the partial evaluations \[
+\frac{ \mathrm{d} \pi \hphantom{ {}^{3} } }{ \mathrm{d} \lambda^{3} }
+(\tilde{x}_{1}, x_{2}, x_{3}),
+\] \[
+\frac{ \mathrm{d} \pi \hphantom{ {}^{3} } }{ \mathrm{d} \lambda^{3} }
+(x_{1}, \tilde{x}_{2}, x_{3}),
+\] and \[
+\frac{ \mathrm{d} \pi \hphantom{ {}^{3} } }{ \mathrm{d} \lambda^{3} }
+(x_{1}, x_{2}, \tilde{x}_{3})
+\] Properly interpreting these slices, however, can be tricky. In
+\textbf{Chapter Eight} we'll learn how to interpret these slices as
+\emph{conditional probability density functions}.
 
 A more effective approach in practice is to not try to visualize an
 entire probability density function at once but rather investigate its
@@ -1800,8 +1803,8 @@ will converge to a Riemann integral, \begin{align*}
 &=
 \lim_{N \rightarrow \infty}
 \sum_{n = 0}^{N}
-\pi \left( ( x_{1} + n \, \frac{L}{N},
-             x_{1} + (n + 1) \, \frac{L}{N} ] \right)
+\pi \left( \left( x_{1} + n \, \frac{L}{N},
+                  x_{1} + (n + 1) \, \frac{L}{N} \right] \right)
 \\
 &=
 \int_{x_{1}}^{x_{1} + L} \mathrm{d} x \, p(x),
@@ -2119,8 +2122,7 @@ Dirac distributions are not absolutely continuous with respect to any
 reference measure that allocates vanishing probability to the atomic
 subsets. In particular singular probability distributions on real lines
 are not absolutely continuous with respect to the Lebesgue measure, and
-we \emph{cannot represent them with ordinary probability density
-functions}!
+we \emph{cannot represent them with ordinary functions}!
 
 For example if a probability density function existed then we should be
 able to engineer a function \(\delta(x - x')\) such that \[
@@ -2217,8 +2219,9 @@ functions reduce to an infinitely high spike at the mean, \[
 Unfortunately this intuition doesn't quite work out. Remember that
 probability density functions can be modified at a null subset of input
 points without affecting their integrals. Because \(\{ x' \}\) is a
-Lebesgue null subset this implies that our infinite spike is equivalent
-to a function \(z\) that returns zero for \emph{all} inputs, \[
+Lebesgue null subset this implies that our infinite spike should be
+equivalent to a function \(z\) that returns zero for \emph{all} inputs,
+\[
 \mathbb{I}_{\lambda} [ \delta(\cdot - x') \cdot f]
 =
 \mathbb{I}_{\lambda} [ z \cdot f]
@@ -2285,34 +2288,45 @@ measure, \[
 
 Using the Dirac delta function we can \emph{heuristicaly} represent this
 mixture distribution as \[
-\rho(x) = \gamma \, \delta(x - x') + (1 - \gamma) \, \pi(x)
+\frac{\mathrm{d} \rho}{\mathrm{d} \lambda}(x)
+=   \gamma \, \delta(x - x')
+  + (1 - \gamma) \, \frac{\mathrm{d} \pi}{\mathrm{d} \lambda}(x)
 \] where all expectation values are calculated as \begin{align*}
 \mathbb{E}_{\rho}[f]
 &=
-\int_{-\infty}^{\infty} \mathrm{d} x \, \rho(x) \, f(x)
+\int_{-\infty}^{\infty} \mathrm{d} x \,
+\frac{\mathrm{d} \rho}{\mathrm{d} \lambda}(x) \, f(x)
 \\
 &=
 \int_{-\infty}^{\infty} \mathrm{d} x \,
-\left( \gamma \, \delta(x - x') + (1 - \gamma) \, \pi(x) \right) \, f(x)
+\left( \gamma \, \delta(x - x') +
+       (1 - \gamma) \, \frac{\mathrm{d} \pi}{\mathrm{d} \lambda}(x)(x)
+\right) \, f(x)
 \\
 &=
 \gamma \, \int_{-\infty}^{\infty} \mathrm{d} x \, \delta(x - x') \, f(x)
-+ (1 - \gamma) \, \int_{-\infty}^{\infty} \mathrm{d} x \, \pi(x) \, f(x)
++ (1 - \gamma) \,
+\int_{-\infty}^{\infty} \mathrm{d} x \,
+\frac{\mathrm{d} \pi}{\mathrm{d} \lambda}(x) \, f(x)
 \\
 &=
 \gamma \, f(x')
-+ (1 - \gamma) \, \int_{-\infty}^{\infty} \mathrm{d} x \, \pi(x) \, f(x)
++ (1 - \gamma) \,
+\int_{-\infty}^{\infty} \mathrm{d} x \,
+\frac{\mathrm{d} \pi}{\mathrm{d} \lambda}(x) \, f(x)
 \\
 &=
 \gamma \, f(x') + (1 - \gamma) \, \mathbb{E}_{\pi}[f].
 \end{align*}
 
 If we restrict consideration to continuous probability density functions
-then we can visualize this mixture density function \(\rho(x)\) as a
-continuous base density function \(\pi(x)\) with a single discontinuity
-at \(x'\) (Figure~\ref{fig-inflation}). Without this restriction,
-however, visualizations like this are ambiguous because \(\pi(x)\) is
-defined only up to subsets of null Lebsegue measure.
+then we can visualize this mixture density function
+\(\mathrm{d} \rho / \mathrm{d} \lambda\) as a continuous base density
+function \(\mathrm{d} \pi / \mathrm{d} \lambda\) with a single
+discontinuity at \(x'\) (Figure~\ref{fig-inflation}). Without this
+restriction, however, visualizations like this are ambiguous because
+\(\mathrm{d} \pi / \mathrm{d} \lambda\) is defined only up to subsets of
+null Lebsegue measure.
 
 \begin{figure}
 
@@ -2505,7 +2519,7 @@ every atomic subset. Consequently any probability distribution over
 \(S^{1}\) that also allocates vanishing probability to the atomic
 subsets will be absolutely continuous to these uniform measures. This
 allows us to define \textbf{circular probability density functions} \[
-\pi : \mathbb{S}^{1} \rightarrow \mathbb{R}^{+}
+p : \mathbb{S}^{1} \rightarrow \mathbb{R}^{+}
 \] to represent each of these absolutely continuous probability
 distributions (Figure~\ref{fig-circular-density-functions}).
 
@@ -2518,7 +2532,7 @@ distributions (Figure~\ref{fig-circular-density-functions}).
 \caption{\label{fig-circular-density-functions}Sufficiently nice
 probability distributions on a circle \(\mathbb{S}^{1}\) can be
 represented by circular probability density functions
-\(\pi : \mathbb{S}^{1} \rightarrow \mathbb{R}^{+}\). Similar to Lebesgue
+\(p : \mathbb{S}^{1} \rightarrow \mathbb{R}^{+}\). Similar to Lebesgue
 probability density functions these circular probability density
 functions visualize a host of qualitative behaviors, such as where and
 how the implied probability distributions concentrate.}
@@ -2528,9 +2542,9 @@ how the implied probability distributions concentrate.}
 We have to take care, however, not to confuse these circular probability
 density functions with Lebesgue probability density functions. In
 particular expectation values \[
-\mathbb{E}_{\pi}[f] = \mathbb{I}_{\nu}[\pi \cdot f]
+\mathbb{E}_{\pi}[f] = \mathbb{I}_{\nu}[p \cdot f]
 \] are not implemented with classic Riemann integration but rather a
-more general \textbf{manifold integration} that cannot be implemented in
+more general \textbf{manifold integration} that is not implemented in
 the same way.
 
 That said sometimes there are work arounds. For example removing a point
@@ -2548,9 +2562,9 @@ will be different from the expectation values on the excised probability
 space. If \(\{ x' \}\) is a null subset, however, then they will be the
 same, \[
 \mathbb{E}_{\pi}[f]
-= \mathbb{I}_{\nu}[\pi \cdot f]
-= \mathbb{I}_{\nu'}[\pi' \cdot f']
-= \mathbb{I}_{\nu''}[\pi'' \cdot f''],
+= \mathbb{I}_{\nu}[p \cdot f]
+= \mathbb{I}_{\nu'}[p' \cdot f']
+= \mathbb{I}_{\nu''}[p'' \cdot f''],
 \] where no ticks denotes objects on \(\mathbb{S}^{1}\), one tick
 denotes objects on \(\mathbb{S}^{1} \setminus \mathbb{R}\), and two
 ticks denotes objects on \(\mathbb{R}\).
