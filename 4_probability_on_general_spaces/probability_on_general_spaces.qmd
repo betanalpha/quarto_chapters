@@ -422,13 +422,29 @@ of the interval subsets and the subsets that we can derive from them.
 This results in a $\sigma$-algebra that is strictly smaller than the
 full power set of the real line.
 
-A Borel $\sigma$-algebra is sufficient for removing any counterintuitive
-behavior from a topological space, but in more technical mathematical
-work there are circumstances where slightly larger $\sigma$-algebras may
-be more convenient; see for example the end of
-[Section 5.2](@sec:lebesgue).  In more applied practice we can always
-safely assume a Borel $\sigma$-algebra or any extension of that
-$\sigma$-algebra that might be needed to resolve any technical issues.
+## Measurability Is Not Recursive
+
+A potentially counterintuitive feature of general $\sigma$-algebras is
+that the subsets of a measurable subset need not themselves be
+measurable.  For example the intervals that are measurable with respect
+to the Borel $\sigma$-algebra over a real line contain many non-Borel
+measurable subsets.
+
+This behavior doesn't really have any practical consequence, but it can
+frustrate many formal proofs and derivations.  Consequently when
+engaging in more technical calculations it can be helpful to expand a
+given $\sigma$-algebra so that the subsets of certain measurable subsets
+are always guaranteed to be measurable as well; see for example the
+discussions at the end of [Section 4.3](@sec:null) and
+[Section 5.2](@sec:lebesgue).
+
+If we add subsets to a $\sigma$-algebra then we also have to add the
+subsets that are generated from complements, unions, and intersections.
+Fortunately there is a systematic construction for this process that
+ensures a valid $\sigma$-algebra.  This means that in more applied
+practice we can always safely assume a Borel $\sigma$-algebra or any
+extension of that $\sigma$-algebra that might be needed to resolve any
+technical issues.
 
 # Measures and Probability Distributions
 
@@ -685,7 +701,7 @@ $$
 - \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2}).
 $$
 
-## Null Subsets
+## Null Subsets { #sec:null }
 
 The measure allocated to a measurable subset quantifies the weight of
 that subset relative to any other measurable subsets.  Those measurable
@@ -734,6 +750,19 @@ other.  We'll formalize this compatibility when we construct density
 functions in
 [Chapter Six](https://betanalpha.github.io/assets/chapters_html/density_functions.html).
 
+Many formal calculations become particularly straightforward when every
+subset of a null subset is a null subset as well.  This allows us to
+decompose null subsets into smaller subsets without having to worry
+about measurability concerns.  Any measure with recursively-consistent
+null subsets is known as a **complete measure**.
+
+Unfortunately many measures that we encounter in practice, for example
+many measures defined with respect to Borel $\sigma$-algebras, are not
+complete because not enough subsets are measurable.  In these cases
+extending the initial $\sigma$-algebra to include every subset of the
+initial null subsets is particularly useful for more technical work.
+That said these considerations have little to no practical consequence.
+
 ## Measures and Probability Distributions In Practice
 
 The formal definition of measures and probability distributions tell us
@@ -751,9 +780,9 @@ In some cases we can define useful measures and probability
 distributions by specifying the allocation to only _some_ of the
 measurable subsets and then deriving the allocations to the rest with
 countable additivity.  For example in finite and countable spaces we
-need to specify only the allocations to atomic subsets.  Similarly
+need to specify only the allocations to all atomic subsets.  Similarly
 measures over $(\mathbb{R}, \mathcal{B}_{\mathbb{R}})$ can be completely
-specified by allocations to interval subsets.
+specified by allocations to all interval subsets.
 
 That said in most of these cases those reduced allocations are still
 impractical to specify one-by-one.  Because of that our introduction to
@@ -900,7 +929,7 @@ Consider for example a real line $\mathbb{R}$ equipped with an
 appropriate ordering, algebra, metric, and topology as discussed in
 [Chapter Two](https://betanalpha.github.io/assets/chapters_html/spaces.html),
 that is a particular rigid real line or a particular parameterization of
-a flesible real line.  Using the ordering we can construct closed interval
+a flexible real line.  Using the ordering we can construct closed interval
 subsets,
 $$
 [ x_{1}, x_{2} ] = \{ x \in \mathbb{R} \mid x_{1} \le x \le x_{2} \}.
@@ -1031,25 +1060,28 @@ derived from those null subsets.  Moving between rigid real lines or
 parameterizations of a flexible real line will change the Lebesgue
 measure but not these shared properties.
 
-Finally there is one formal detail that I want to mention to prepare any
-readers who may continue on to more technical literature.  Allocations
-based on interval lengths can be used to derive consistent allocations
-over any subset constructed from open and closed subsets, and hence
-every measurable subset in the Borel $\sigma$-algebra
-$\mathcal{B}_{\mathbb{R}}$.  They can also be used, however, to derive
-consistent allocations to some subsets that are _not_ in
-$\mathcal{B}_{\mathbb{R}}$.
+Let's conclude on a more technical note.  Allocations based on interval
+lengths can be used to derive consistent allocations over any subset
+constructed from open and closed subsets, and hence every measurable
+subset in the Borel $\sigma$-algebra $\mathcal{B}_{\mathbb{R}}$.  They
+can also be used, however, to derive null allocations to many subsets
+that are _not_ in $\mathcal{B}_{\mathbb{R}}$.
 
-Accordingly Lebesgue measures are usually formally defined not over
-$\mathcal{B}_{\mathbb{R}}$ but rather over a slightly larger
-$\sigma$-algebra referred to as, unsurprisingly, the
-**Lebesgue $\sigma$-algebra**.  That said these additional subsets are
-negligible in the sense that they are always allocated zero Lebesgue
-measure.  Because the differences between these $\sigma$-algebras are
-limited to null subsets they can be effectively ignored in most
-practical applications.  Theoretical derivations, however, are
-substantially cleaner with the Lebesgue $\sigma$-algebra and
-consequently it is much preferred in most mathematics texts.
+Extending $\mathcal{B}_{\mathbb{R}}$ to include these additional null
+subsets results in a larger $\sigma$-algebra known as the
+**Lebesgue $\sigma$-algebra**.  Conveniently if we define the Lebesgue
+measure with respect to this larger $\sigma$-algebra then it becomes a
+complete measure which, as we have previously discussed, facilitates
+many technical results and is consequently preferred in more formal
+mathematical references.
+
+Many references reserve the term "Lebsegue measure" for the _complete_
+uniform measure defined over the Lebesgue $\sigma$-algebra and introduce
+the term "Borel measure" for the _incomplete_ uniform measure defined
+over the smaller Borel $\sigma$-algebra $\mathcal{B}_{\mathbb{R}}$.
+That said because the differences between these definitions are limited
+to null subsets they can be effectively ignored in most practical
+applications.
 
 ## The Lebesgue Measure On Multivariate Real Spaces
 
@@ -1153,8 +1185,8 @@ like orderings, algebras, metrics, topologies, and $\sigma$-algebras,
 just structures that we can endow onto a set.  The more invariant a
 measure is to transformations of that set the less information it will
 contain.  We will more formally consider how measures transform,
-and hence how to precisely define symmetries of a measure, in Chapter
-Six.
+and hence how to precisely define symmetries of a measure, in
+[Chaper Seven](https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html).
 
 Uniform measures are built to be symmetric to at least some
 transformations and hence encode less information than other measures.
@@ -1162,10 +1194,10 @@ For example the counting measure is invariant to any permutation of a
 countable ambient set while the Lebesgue measure is invariant to any
 translation of a real line.  We can also extend this construction to
 more elaborate spaces, for instance defining uniform measures on spheres
-that invariant to any rotation.
+that are invariant to any rotation.
 
 Critically, however, not every uniform measure is invariant to every
-possible transformation of the ambient set.  Some uniform measures are
+possible transformation of the ambient set; some uniform measures are
 more informative than others!  Consequently notions of uniformity do not
 define any _universal_ notions of ignorance, just ignorance to the
 particular transformations that are used to define uniformity in a given
