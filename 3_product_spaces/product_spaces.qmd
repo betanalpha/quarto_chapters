@@ -1176,7 +1176,7 @@ $$
 Similarly the marginal sets that we introduced in
 [Section 4](@sec:decomposition) can also be defined as the outputs of various
 multi-projection functions.  Even better every cross section set can be defined
-as the preimage of a particular multi-projection function,
+as a level set of a particular multi-projection function,
 $$
 \times_{i' = 1}^{I} X_{i'} \mid (x_{i_{1}}, \ldots, x_{i_{J}})
 =
