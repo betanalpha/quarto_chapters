@@ -2046,7 +2046,7 @@ example spheres, torii, and even more foreign spaces.  Mathematically
 these spaces, along with real spaces, are collectively known as
 **manifolds**.
 
-::: {#fig-circle layout="[-20, 60, -20], [-20, 60, -20]"}
+::: {#fig-circle layout="[ [-20, 60, -20], [-20, 60, -20] ]"}
 ![](figures/circle_vs_line/far/far){#fig-circle-far}
 
 ![](figures/circle_vs_line/close/close){#fig-circle-close}
