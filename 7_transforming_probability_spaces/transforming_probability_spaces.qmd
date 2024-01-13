@@ -1199,10 +1199,25 @@ $$
 \int_{\mathbb{R}^{N}} \mathrm{d}^{N} y \,
 | \mathrm{det} \,  \mathbf{J}_{h}(y) | \, q(h(y)),
 $$
-where $| \mathrm{det} \,  \mathbf{J}_{h}(x) |$ is the absolute value of the
-determinant of the **Jacobian matrix** with elements
+where $| \mathrm{det} \, \mathbf{J}_{h}(y) |$ is the absolute value of
+the determinant of the **Jacobian matrix** with elements
 $$
 J_{h, ij}(y) = \frac{ \partial h_{i} }{ \partial y_{j} } (y).
+$$
+When working with one-dimensional real spaces the Jacobian matrix 
+reduces to a singe element,
+$$
+\mathbf{J}_{h}(y) 
+= \frac{ \partial h }{ \partial y } (y) 
+\equiv J_{h}(y),
+$$
+and the determinant becomes an identity,
+$$
+| \mathrm{det} \, \mathbf{J}_{h}(y) |
+=
+| \mathrm{det} \, J_{h}(y) |
+=
+| J_{h}(y) |.
 $$
 
 Taking $h = f^{-1}$ and $q = g \circ f$ this becomes

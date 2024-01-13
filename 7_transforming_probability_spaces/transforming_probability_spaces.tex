@@ -177,7 +177,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[borderline west={3pt}{0pt}{shadecolor}, sharp corners, interior hidden, breakable, enhanced, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, boxrule=0pt, interior hidden, sharp corners, frame hidden, borderline west={3pt}{0pt}{shadecolor}, breakable]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -1636,9 +1636,20 @@ and integrand \(q : X \rightarrow \mathbb{R}\) we have \[
 =
 \int_{\mathbb{R}^{N}} \mathrm{d}^{N} y \,
 | \mathrm{det} \,  \mathbf{J}_{h}(y) | \, q(h(y)),
-\] where \(| \mathrm{det} \, \mathbf{J}_{h}(x) |\) is the absolute value
+\] where \(| \mathrm{det} \, \mathbf{J}_{h}(y) |\) is the absolute value
 of the determinant of the \textbf{Jacobian matrix} with elements \[
 J_{h, ij}(y) = \frac{ \partial h_{i} }{ \partial y_{j} } (y).
+\] When working with one-dimensional real spaces the Jacobian matrix
+reduces to a singe element, \[
+\mathbf{J}_{h}(y) 
+= \frac{ \partial h }{ \partial y } (y) 
+\equiv J_{h}(y),
+\] and the determinant becomes an identity, \[
+| \mathrm{det} \, \mathbf{J}_{h}(y) |
+=
+| \mathrm{det} \, J_{h}(y) |
+=
+| J_{h}(y) |.
 \]
 
 Taking \(h = f^{-1}\) and \(q = g \circ f\) this becomes \begin{align*}
