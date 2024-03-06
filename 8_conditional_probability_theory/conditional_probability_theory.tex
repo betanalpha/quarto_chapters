@@ -591,9 +591,8 @@ subsets, \[
 \(\mathcal{X}\)-measurable subsets of the input space, \[
 f^{-1}( y ) = f^{*}( \{ y \} ) \in \mathcal{X}.
 \] If \(\mathcal{Y}\) does contain all of the atomic subsets, however,
-then every surjective and (\(\mathcal{X}\)-\(\mathcal{Y}\))-measurable
-will define measurable partition cells, and hence a measurable
-partition.
+then every surjective and \((\mathcal{X}, \mathcal{Y})\)-measurable will
+define measurable partition cells, and hence a measurable partition.
 
 A \(\sigma\)-algebras that contains of all of the atomic subsets in the
 ambient space is known as a \textbf{Hausdorff \(\sigma\)-algebra}.
@@ -636,7 +635,8 @@ decomposed into its intersections with the cells of a given partition
 (Figure~\ref{fig-total-probability-subset-decomposition}), \[
 \mathsf{x}
 =
-\bigcup_{\mathsf{c} \in \mathcal{P}} \mathsf{x} \cap \mathsf{c}.
+\bigcup_{\mathsf{c} \in \mathcal{P}}
+\left( \mathsf{x} \cap \mathsf{c} \right).
 \] Because the partition cells are mutually disjoint these intersections
 will also be mutually disjoint: if \(\mathsf{c}_{1} \in \mathcal{P}\)
 and \(\mathsf{c}_{2} \in \mathcal{P}\) are two distinct partition cells
@@ -669,7 +669,8 @@ probabilities allocated to the disjoint partition intersections,
 \begin{align*}
 \pi(\mathsf{x})
 &=
-\pi( \cup_{\mathsf{c} \in \mathcal{P}} \mathsf{x} \cap \mathsf{c} )
+\pi \left( \bigcup_{\mathsf{c} \in \mathcal{P}}
+           \left( \mathsf{x} \cap \mathsf{c} \right) \right)
 \\
 &=
 \sum_{\mathsf{c} \in \mathcal{P}} \pi( \mathsf{x} \cap \mathsf{c} ).
@@ -759,7 +760,7 @@ law of total probability to give \begin{align*}
 \\
 &=
 \sum_{\mathsf{c} \in \mathcal{P}}
-\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi \mathsf{c} })
+\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi ( \mathsf{c} ) }
 \cdot \pi( \mathsf{c} )
 \\
 &\equiv
@@ -768,7 +769,7 @@ law of total probability to give \begin{align*}
 \cdot \pi( \mathsf{c} ).
 \end{align*} Here each \textbf{conditional probability} \[
 \pi^{\mathcal{P}}( \mathsf{x} \mid \mathsf{c} ) =
-\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi \mathsf{c} })
+\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi (\mathsf{c}) }
 \] quantifies the \emph{proportion} of the probability allocated to the
 intersection of \(\mathsf{x}\) and the conditioning partition cell,
 \(\pi(\mathsf{x} \cap \mathsf{c})\), relative to the total probability
@@ -794,7 +795,7 @@ probability allocated to the partition cell \(\mathsf{c}\).}
 By definition a measurable subset \(\mathsf{x} \in \mathcal{X}\) that
 doesn't overlap with the conditioning partition cell \(\mathsf{c}\) is
 allocated zero conditional probability, \begin{align*}
-\pi( \mathsf{x} \mid \mathsf{c} )
+\pi^{\mathcal{P}}( \mathsf{x} \mid \mathsf{c} )
 &=
 \frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi (\mathsf{c}) }
 \\
@@ -810,7 +811,7 @@ allocated zero conditional probability, \begin{align*}
 overlaps with the conditioning partition cell,
 \(\mathsf{x} \cap \mathsf{c} = \mathsf{c}\), is allocated full
 conditional probability, \begin{align*}
-\pi( \mathsf{x} \mid \mathsf{c} )
+\pi^{\mathcal{P}}( \mathsf{x} \mid \mathsf{c} )
 &=
 \frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi (\mathsf{c}) }
 \\
@@ -869,9 +870,7 @@ additivity. For any countable collection of measurable but disjoint
 subset sets \[
 \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{j}, \ldots \}
 \] we have \begin{align*}
-\pi^{\mathcal{P}}_{\mathsf{c}}( \, (\cup_{j} \mathsf{x}_{j}) \, )
-&=
-\\
+\pi^{\mathcal{P}}_{\mathsf{c}}( \cup_{j} \mathsf{x}_{j} )
 &=
 \frac{ \pi( \, (\cup_{j} \mathsf{x}_{j}) \, \cap \mathsf{c}) }
 { \pi(\mathsf{c}) }
@@ -1057,7 +1056,8 @@ Kernels}\label{conditional-probability-kernels}
 
 We can push our organization one step further and collect all of the
 conditional probability distributions for all of the partition cells
-into a single mathematical object, \begin{alignat*}{6}
+into a single mathematical object
+(Figure~\ref{fig-conditional-organization}) \begin{alignat*}{6}
 \pi^{\mathcal{P}}( \cdot \mid \cdot )
 :\; &\mathcal{X} \times \mathcal{P}& &\rightarrow& \; &[0, 1]&
 \\
@@ -1065,6 +1065,66 @@ into a single mathematical object, \begin{alignat*}{6}
 &\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi (\mathsf{c}) }&.
 \end{alignat*} I will refer to this binary function as a
 \textbf{conditional probability kernel}.
+
+\begin{figure}
+
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
+%
+\begin{minipage}{0.30\linewidth}
+
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics{figures/conditional_distribution/organization/probabilities/probabilities.pdf}
+
+}
+
+\subcaption{\label{fig-conditional-organization-probabilities}}
+
+\end{minipage}%
+%
+\begin{minipage}{0.30\linewidth}
+
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics{figures/conditional_distribution/organization/distributions/distributions.pdf}
+
+}
+
+\subcaption{\label{fig-conditional-organization-distributions}}
+
+\end{minipage}%
+%
+\begin{minipage}{0.30\linewidth}
+
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics{figures/conditional_distribution/organization/kernel/kernel.pdf}
+
+}
+
+\subcaption{\label{fig-conditional-organization-kernel}}
+
+\end{minipage}%
+%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
+
+\caption{\label{fig-conditional-organization}An important part of
+conditional probability theory is organization. (a) The conditional
+probabilities defined by \(\pi\)-non-null partition cells can be
+organized into (b) conditional probability distributions that return
+conditional probabilities when evaluated. Likewise the collection of
+conditonal probability distributions defined by all partition cells can
+be organized into a conditional probability kernel that returns
+conditonal probability distributions when partially evaluated. In order
+to generalize conditional probability theory to \(\pi\)-null partitions
+we will actually work backwards, showing first that a conditional
+probability kernel exists and then deriving conditonal probability
+distributions from the kernel and conditional probabilities from those
+distributions.}
+
+\end{figure}%
 
 Partially evaluating a conditional probability kernel on a measurable
 subset in its first argument results in a measurable, unary function
@@ -1209,10 +1269,10 @@ Partitions}\label{conditioning-on-implicit-partitions}
 
 The construction, and notation, of conditional probability distributions
 becomes particularly elegant when we implicitly define countable
-partitions through the fibers of a surjective function. This also paves
-the way for generalizing conditional probability theory to uncountable
-partitions implicitly defined by functions with an uncountable number of
-output points.
+partitions through the level sets of a surjective function. This also
+paves the way for generalizing conditional probability theory to
+uncountable partitions implicitly defined by functions with an
+uncountable number of output points.
 
 \subsection{Conditioning On Countable Implicit
 Partitions}\label{conditioning-on-countable-implicit-partitions}
@@ -1240,7 +1300,7 @@ conditional probability kernel as \begin{alignat*}{6}
 \pi^{f} :\; &\mathcal{X} \times Y& &\rightarrow& \; &[0, 1]&
 \\
 &\mathsf{x}, y& &\mapsto&
-&\pi^{f} ( \mathcal{x} \mid y ) =
+&\pi^{f} ( \mathsf{x} \mid y ) =
  \frac{ \pi(\mathsf{x} \cap f^{-1}(y)) }{ \pi(f^{-1}(y)) } &.
 \end{alignat*}
 
@@ -1253,7 +1313,7 @@ function, and for each \(y \in Y\) the partial evaluation
 \pi^{f}_{y} = \pi^{f} ( \cdot \mid y )
 :\; &\mathcal{X}& &\rightarrow& \; &[0, 1]&
 \\
-&\mathsf{x}& &\mapsto& &\pi^{f} ( \mathcal{x} \mid y )  &
+&\mathsf{x}& &\mapsto& &\pi^{f} ( \mathsf{x} \mid y )  &
 \end{alignat*} defines a conditional probability distribution that
 concentrates entirely on the corresponding level set, \begin{align*}
 \pi^{f}_{y}( f^{-1}(y) )
@@ -1282,7 +1342,7 @@ on particular level sets or as a collection of probability distributions
 over the particular level sets themselves.
 
 At the same time because we have assumed that \(f\) is
-\((\mathcal{X}-\mathcal{Y})\)-measurable we can push \(\pi\) forward
+\((\mathcal{X}, \mathcal{Y})\)-measurable we can push \(\pi\) forward
 along \(f\) to define a marginal probability distribution \(f_{*} \pi\)
 over the output space. By definition the pushforward probability
 allocated to the output atomic subset \(\{ y \} \in \mathcal{Y}\) is
@@ -1463,13 +1523,14 @@ infinite number of level sets \(f^{-1}(y)\).
 As in the countable case we can decompose any measurable subset
 \(\mathsf{x} \in \mathcal{X}\) into its intersections with these level
 sets (Figure~\ref{fig-general-decomposition}), \[
-\mathsf{x} = \bigcup_{y \in Y} \mathsf{x} \cap f^{-1}(y).
+\mathsf{x} = \bigcup_{y \in Y} \left( \mathsf{x} \cap f^{-1}(y) \right).
 \] Because there are an uncountably infinite number of intersections,
 however, we cannot write \(\pi(\mathsf{x})\) as a sum over the
 intersection probabilities, \[
 \pi( \mathsf{x} )
 =
-\pi \left( \bigcup_{y \in Y} \mathsf{x} \cap f^{-1}(y) \right)
+\pi \left( \bigcup_{y \in Y}
+           \left( \mathsf{x} \cap f^{-1}(y) \right) \right)
 \ne
 \sum_{y \in Y} \pi( \mathsf{x} \cap f^{-1}(y) ).
 \] Remember that probability distributions are defined to have
@@ -1524,7 +1585,7 @@ probabilities by the ratio \[
 =
 \pi^{f}_{y}( \mathsf{x} )
 =
-\frac{ \pi( \mathsf{x} \cap \varpi^{-1}(y) ) }{ \pi( \varpi^{-1}(y) ) }
+\frac{ \pi( \mathsf{x} \cap f^{-1}(y) ) }{ \pi( f^{-1}(y) ) }
 \] would result with indefinite \(0 / 0\) outcomes.
 
 Is there any hope for generalizing conditional probability to
@@ -2369,7 +2430,7 @@ pushforward of the target measure but also \emph{any} convenient
 \item
   an output Hausdorff measurable space \((Y, \mathcal{Y})\).
 \item
-  a measurable function
+  a surjective measurable function
   \(f: (X, \mathcal{X}) \rightarrow (Y, \mathcal{Y})\),
 \item
   and finally a \(\sigma\)-finite measure
@@ -2438,16 +2499,17 @@ Recall that to construct a conditional probability distribution we need
 \item
   an input measurable space \((X, \mathcal{X})\),
 \item
-  a probability distribution \(\pi : \mathcal{X} \rightarrow [0, 1]\),
+  a Radon probability distribution
+  \(\pi : \mathcal{X} \rightarrow [0, 1]\),
 \item
   an output Hausdorff measurable space \((Y, \mathcal{Y})\).
 \item
-  and a measurable function
+  and a surjective measurable function
   \(f: (X, \mathcal{X}) \rightarrow (Y, \mathcal{Y})\).
 \end{enumerate}
 
 In order to construct conditional probability density functions we will
-also convenient \(\sigma\)-finite reference measures for
+also need convenient \(\sigma\)-finite Radon reference measures for
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2462,8 +2524,10 @@ also convenient \(\sigma\)-finite reference measures for
   \(\eta_{y} : \mathcal{F}_{y} \rightarrow [0, \infty]\).
 \end{enumerate}
 
-Technically \(\pi\) and \(\mu\) also need to be Radon measures, but
-again this can be safely assumed in any practical application.
+As we have previously discussed we can safely take measurable functions,
+Hausdorff \(\sigma\)-algebras, and Radon measures for granted in
+practice. We will, however, have to be careful about the surjectivity of
+\(f\) and the \(\sigma\)-finiteness of the reference measures.
 
 If \(\pi \ll \mu\) then we can construct the probability density
 function \[
@@ -2475,18 +2539,19 @@ probability density function \[
 probability density functions relative to the conditional measures, \[
 \frac{ \mathrm{d}  \pi^{f} }{ \mathrm{d}  \mu^{f, \nu}  }
 : X \times Y \rightarrow \mathbb{R}^{+}.
-\] Finally if \(\mu^{f, \nu}_{y} \ll \eta_{y}\) we can convert these
-conditional probability density functions into conditional probability
-density functions relative to our level set reference measures, \[
+\] Finally if \(\mu^{f, \nu}_{y} \ll \eta_{y}\) then we can convert
+these conditional probability density functions into conditional
+probability density functions relative to our level set reference
+measures, \[
 \frac{ \mathrm{d}  \pi^{f} }{ \mathrm{d}  \eta_{y}  } (x \mid y)
 \overset{ \eta_{y} }{=}
 \frac{ \mathrm{d}  \pi^{f} }{ \mathrm{d}  \mu^{f, \nu}  } (x \mid y)
 \cdot
 \frac{ \mathrm{d}  \mu^{f, \nu} }{ \mathrm{d}  \eta_{y}  } (x \mid y).
 \] In many applications the conditional measures \(\mu^{f, \nu}_{y}\)
-will already be sufficiently convenient that we will not need an
-auxiliary collection of reference measures \(\eta_{y}\), but I here will
-consider the more general scenario.
+will be convenient reference measures and we will not need to consider
+an auxiliarycollection of reference measures \(\eta_{y}\). That said
+here I will consider the more general scenario for completeness.
 
 All that we're missing is a mathematical relationship that ties this
 menagerie of probability density functions together. That information is
@@ -2628,12 +2693,12 @@ Isolating the ambient probability density function gives \begin{align*}
 &\overset{ \mu }{ = }
 \frac{ \mathrm{d}  f_{*} \pi }{ \mathrm{d} \nu }(y) \,
 \frac{ \mathrm{d}  \pi^{f} }{ \mathrm{d}  \mu^{f, \nu}  } (x_{y} \mid y),
-\end{align*} or, equivalently, \[
+\end{align*} or, in terms of unconditional variables, \[
 \frac{ \mathrm{d} \pi}{ \mathrm{d} \mu }(x)
 \overset{ \mu }{ = }
 \frac{ \mathrm{d}  f_{*} \pi }{ \mathrm{d} \nu }(f(x)) \,
 \frac{ \mathrm{d}  \pi^{f} }{ \mathrm{d}  \mu^{f, \nu}  } (x \mid f(x)).
-\] This is relationship is known as the \textbf{product rule} for
+\] This relationship is known as the \textbf{product rule} for
 probability density functions. The product rule allows to construct the
 ambient probability density function, the conditional probability
 density function, or the pushforward probability density function given
@@ -3012,9 +3077,7 @@ f_{N} :& \, X_{N - 1} \rightarrow X_{N},
 probability distribution over \(X_{0}\) from an initial probability
 distribution over \(X_{N}\) and a sequence of conditional probability
 kernels \[
-\{
-\pi_{f^{-1}_{N} }, \ldots, \pi_{f^{-1}_{n} }, \ldots \pi_{f^{-1}_{1} }.
-\}
+\{ \tau_{N}, \ldots, \tau_{n}, \ldots, \tau_{1} \}.
 \] This allows us to incrementally build up sophisticated probability
 distributions over \(X_{0}\) from much simpler pieces. Iteratively
 constructing probability distributions is particularly useful on product
@@ -3041,16 +3104,17 @@ distribution \(\rho = r \, \nu\) through the expectation values \[
 \] Similarly given an input reference measure \(\mu\) and its
 disintegration \(\mu^{f, \nu}\) any sufficiently well-behaved binary
 function \[
-t : X \times Y \mathbb{R}^{+}
+t : X \times Y \rightarrow \mathbb{R}^{+}
 \] with \[
 \mathbb{I}_{\mu^{f, \nu}_{y}}[ t ] \overset{\nu}{=} 1
 \] defines a conditional probability kernel \(\tau = t \, \mu^{f, \nu}\)
 through the conditional expectation values \[
 \int \tau( \mathrm{d} x_{y} \mid y) \, g(y, x_{y})
 =
-\int \mu^{f, \nu}( \mathrm{d} x_{y} \mid y) \, g(y, x_{y}).
+\int \mu^{f, \nu}( \mathrm{d} x_{y} \mid y) \,
+     \tau(x_{y} \mid y) \, g(y, x_{y}).
 \] Finally the product of these two functions \[
-p(x) = t(x \mid f(x) ) \, r( f(x) )
+p(x) = p(y, x_{y}) = t(x_{y} \mid y ) \, r( y )
 \] will always satisfy \[
 \mathbb{I}_{\mu} [ p ] = 1
 \] and hence define an input probability distribution \(\pi = p \, \mu\)
@@ -3063,7 +3127,7 @@ through the expectation values \begin{align*}
 &=
 \int \nu (\mathrm{d}x ) \, r(y) \,
 \int \mu^{f, \nu}( \mathrm{d}x_{y} \mid y) \,
-t(x_{y}, y) \, g(y, x_{y}).
+t(x_{y} \mid y) \, g(y, x_{y}).
 \end{align*}
 
 Iterating this construction over a sequence of spaces \[
@@ -3073,16 +3137,17 @@ f_{n} : X_{n - 1} \rightarrow X_{n},
 \] an probability density function over the terminal space, \[
 p_{N} : X_{N} \rightarrow \mathbb{R}^{+},
 \] and a sequence of conditional probability density functions, \[
-t_{n} : X_{n - 1} \times X_{n} \mathbb{R}^{+}.
+t_{n} : X_{n - 1} \times X_{n} \rightarrow \mathbb{R}^{+}.
 \] Applying the product rule once gives a probability density function
 over \(X_{N - 1}\), \[
 p_{N - 1}(x_{N}, ( x_{N - 1})_{x_{N}} ) =
 t_{N}( (x_{N - 1})_{x_{N}} \mid x_{N} ) \,
 p_{N} (x_{N} ).
 \] Repeating the product rule \(N - 1\) more times then gives a
-probability density function over \(X_{0}\). The conditional variable
-notation becomes a bit cumbersome here, so I'll write this product as
-\begin{align*}
+probability density function over \(X_{0}\).
+
+The conditional variable notation becomes a bit cumbersome here, so I'll
+write this product as \begin{align*}
 p_{0}(x_{0})
 &=
 t_{1}( x_{0} \mid x_{1} ) \cdots
@@ -3094,7 +3159,8 @@ t_{N}( x_{N - 1} \mid x_{N} ) \, p_{N} (x_{N})
 p_{N} (x_{N})
 \end{align*} along with the recursive constraints \[
 x_{n} = f_{n}( x_{n - 1} )
-\] that completely fix \(\{ x_{1}, \ldots, x_{N} \}\) given \(x_{0}\).
+\] that completely fix the variables \(\{ x_{1}, \ldots, x_{N} \}\)
+given a point \(x_{0}\).
 
 In \textbf{Chapter 9} we'll introduce a more elegant notation that works
 well in the special case of product spaces.

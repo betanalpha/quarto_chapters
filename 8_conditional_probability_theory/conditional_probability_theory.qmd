@@ -315,7 +315,7 @@ $$
 f^{-1}( y ) = f^{*}( \{ y \} ) \in \mathcal{X}.
 $$
 If $\mathcal{Y}$ does contain all of the atomic subsets, however, then
-every surjective and ($\mathcal{X}$-$\mathcal{Y}$)-measurable will
+every surjective and $(\mathcal{X}, \mathcal{Y})$-measurable will
 define measurable partition cells, and hence a measurable partition.
 
 A $\sigma$-algebras that contains of all of the atomic subsets in the
@@ -356,7 +356,8 @@ $\mathcal{P}$ (@fig-total-probability-subset-decomposition),
 $$
 \mathsf{x}
 =
-\bigcup_{\mathsf{c} \in \mathcal{P}} \mathsf{x} \cap \mathsf{c}.
+\bigcup_{\mathsf{c} \in \mathcal{P}}
+\left( \mathsf{x} \cap \mathsf{c} \right).
 $$
 Because the partition cells are mutually disjoint these intersections
 will also be mutually disjoint: if
@@ -391,7 +392,8 @@ partition intersections,
 \begin{align*}
 \pi(\mathsf{x})
 &=
-\pi( \cup_{\mathsf{c} \in \mathcal{P}} \mathsf{x} \cap \mathsf{c} )
+\pi \left( \bigcup_{\mathsf{c} \in \mathcal{P}}
+           \left( \mathsf{x} \cap \mathsf{c} \right) \right)
 \\
 &=
 \sum_{\mathsf{c} \in \mathcal{P}} \pi( \mathsf{x} \cap \mathsf{c} ).
@@ -448,7 +450,7 @@ law of total probability to give
 \\
 &=
 \sum_{\mathsf{c} \in \mathcal{P}}
-\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi \mathsf{c} })
+\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi ( \mathsf{c} ) }
 \cdot \pi( \mathsf{c} )
 \\
 &\equiv
@@ -459,7 +461,7 @@ law of total probability to give
 Here each **conditional probability**
 $$
 \pi^{\mathcal{P}}( \mathsf{x} \mid \mathsf{c} ) =
-\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi \mathsf{c} })
+\frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi (\mathsf{c}) }
 $$
 quantifies the _proportion_ of the probability allocated to the
 intersection of $\mathsf{x}$ and the conditioning partition cell,
@@ -479,7 +481,7 @@ By definition a measurable subset $\mathsf{x} \in \mathcal{X}$ that
 doesn't overlap with the conditioning partition cell $\mathsf{c}$ is
 allocated zero conditional probability,
 \begin{align*}
-\pi( \mathsf{x} \mid \mathsf{c} )
+\pi^{\mathcal{P}}( \mathsf{x} \mid \mathsf{c} )
 &=
 \frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi (\mathsf{c}) }
 \\
@@ -496,7 +498,7 @@ At the same time any measurable subset that completely overlaps with the
 conditioning partition cell, $\mathsf{x} \cap \mathsf{c} = \mathsf{c}$,
 is allocated full conditional probability,
 \begin{align*}
-\pi( \mathsf{x} \mid \mathsf{c} )
+\pi^{\mathcal{P}}( \mathsf{x} \mid \mathsf{c} )
 &=
 \frac{ \pi(\mathsf{x} \cap \mathsf{c}) }{ \pi (\mathsf{c}) }
 \\
@@ -559,9 +561,7 @@ $$
 $$
 we have
 \begin{align*}
-\pi^{\mathcal{P}}_{\mathsf{c}}( \, (\cup_{j} \mathsf{x}_{j}) \, )
-&=
-\\
+\pi^{\mathcal{P}}_{\mathsf{c}}( \cup_{j} \mathsf{x}_{j} )
 &=
 \frac{ \pi( \, (\cup_{j} \mathsf{x}_{j}) \, \cap \mathsf{c}) }
 { \pi(\mathsf{c}) }
@@ -742,7 +742,7 @@ applications of probability theory.
 
 We can push our organization one step further and collect all of the
 conditional probability distributions for all of the partition cells
-into a single mathematical object,
+into a single mathematical object (@fig-conditional-organization)
 \begin{alignat*}{6}
 \pi^{\mathcal{P}}( \cdot \mid \cdot )
 :\; &\mathcal{X} \times \mathcal{P}& &\rightarrow& \; &[0, 1]&
@@ -752,6 +752,28 @@ into a single mathematical object,
 \end{alignat*}
 I will refer to this binary function as a
 **conditional probability kernel**.
+
+::: {#fig-conditional-organization layout="[-5, 30, 30, 30, -5]"}
+
+![](figures/conditional_distribution/organization/probabilities/probabilities){#fig-conditional-organization-probabilities}
+
+![](figures/conditional_distribution/organization/distributions/distributions){#fig-conditional-organization-distributions}
+
+![](figures/conditional_distribution/organization/kernel/kernel){#fig-conditional-organization-kernel}
+
+An important part of conditional probability theory is organization.
+(a) The conditional probabilities defined by $\pi$-non-null partition
+cells can be organized into (b) conditional probability distributions
+that return conditional probabilities when evaluated.  Likewise the
+collection of conditonal probability distributions defined by all
+partition cells can be organized into a conditional probability kernel
+that returns conditonal probability distributions when partially
+evaluated.  In order to generalize conditional probability theory to
+$\pi$-null partitions we will actually work backwards, showing first
+that a conditional probability kernel exists and then deriving
+conditonal probability distributions from the kernel and conditional
+probabilities from those distributions.
+:::
 
 Partially evaluating a conditional probability kernel on a measurable
 subset in its first argument results in a measurable, unary function
@@ -914,10 +936,10 @@ technique.
 
 The construction, and notation, of conditional probability distributions
 becomes particularly elegant when we implicitly define countable
-partitions through the fibers of a surjective function.  This also paves
-the way for generalizing conditional probability theory to uncountable
-partitions implicitly defined by functions with an uncountable number of
-output points.
+partitions through the level sets of a surjective function.  This also
+paves the way for generalizing conditional probability theory to
+uncountable partitions implicitly defined by functions with an
+uncountable number of output points.
 
 ## Conditioning On Countable Implicit Partitions
 
@@ -947,7 +969,7 @@ conditional probability kernel as
 \pi^{f} :\; &\mathcal{X} \times Y& &\rightarrow& \; &[0, 1]&
 \\
 &\mathsf{x}, y& &\mapsto&
-&\pi^{f} ( \mathcal{x} \mid y ) =
+&\pi^{f} ( \mathsf{x} \mid y ) =
  \frac{ \pi(\mathsf{x} \cap f^{-1}(y)) }{ \pi(f^{-1}(y)) } &.
 \end{alignat*}
 
@@ -962,7 +984,7 @@ for each $y \in Y$ the partial evaluation
 \pi^{f}_{y} = \pi^{f} ( \cdot \mid y )
 :\; &\mathcal{X}& &\rightarrow& \; &[0, 1]&
 \\
-&\mathsf{x}& &\mapsto& &\pi^{f} ( \mathcal{x} \mid y )  &
+&\mathsf{x}& &\mapsto& &\pi^{f} ( \mathsf{x} \mid y )  &
 \end{alignat*}
 defines a conditional probability distribution that concentrates
 entirely on the corresponding level set,
@@ -995,7 +1017,7 @@ level sets or as a collection of probability distributions over the
 particular level sets themselves.
 
 At the same time because we have assumed that $f$ is
-$(\mathcal{X}-\mathcal{Y})$-measurable we can push $\pi$ forward along
+$(\mathcal{X}, \mathcal{Y})$-measurable we can push $\pi$ forward along
 $f$ to define a marginal probability distribution $f_{*} \pi$ over the
 output space.  By definition the pushforward probability allocated to
 the output atomic subset $\{ y \} \in \mathcal{Y}$ is equal to the input
@@ -1144,7 +1166,7 @@ As in the countable case we can decompose any measurable subset
 $\mathsf{x} \in \mathcal{X}$ into its intersections with these level
 sets (@fig-general-decomposition),
 $$
-\mathsf{x} = \bigcup_{y \in Y} \mathsf{x} \cap f^{-1}(y).
+\mathsf{x} = \bigcup_{y \in Y} \left( \mathsf{x} \cap f^{-1}(y) \right).
 $$
 Because there are an uncountably infinite number of intersections,
 however, we cannot write $\pi(\mathsf{x})$ as a sum over the
@@ -1152,7 +1174,8 @@ intersection probabilities,
 $$
 \pi( \mathsf{x} )
 =
-\pi \left( \bigcup_{y \in Y} \mathsf{x} \cap f^{-1}(y) \right)
+\pi \left( \bigcup_{y \in Y}
+           \left( \mathsf{x} \cap f^{-1}(y) \right) \right)
 \ne
 \sum_{y \in Y} \pi( \mathsf{x} \cap f^{-1}(y) ).
 $$
@@ -1190,7 +1213,7 @@ $$
 =
 \pi^{f}_{y}( \mathsf{x} )
 =
-\frac{ \pi( \mathsf{x} \cap \varpi^{-1}(y) ) }{ \pi( \varpi^{-1}(y) ) }
+\frac{ \pi( \mathsf{x} \cap f^{-1}(y) ) }{ \pi( f^{-1}(y) ) }
 $$
 would result with indefinite $0 / 0$ outcomes.
 
@@ -2044,7 +2067,7 @@ $\sigma$-finite measure on the output space.  Mathematically if we have
 2. a $\sigma$-finite Radon measure
    $\mu : \mathcal{X} \rightarrow [0, \infty]$,
 3. an output Hausdorff measurable space $(Y, \mathcal{Y})$.
-4. a measurable function
+4. a surjective measurable function
    $f: (X, \mathcal{X}) \rightarrow (Y, \mathcal{Y})$,
 5. and finally a $\sigma$-finite measure
    $\nu : \mathcal{Y} \rightarrow [0, \infty]$
@@ -2113,21 +2136,24 @@ distribution and sufficiently well-behaved reference measure.
 Recall that to construct a conditional probability distribution we need
 
 1. an input measurable space $(X, \mathcal{X})$,
-2. a probability distribution $\pi : \mathcal{X} \rightarrow [0, 1]$,
+2. a Radon probability distribution
+   $\pi : \mathcal{X} \rightarrow [0, 1]$,
 3. an output Hausdorff measurable space $(Y, \mathcal{Y})$.
-4. and a measurable function
+4. and a surjective measurable function
    $f: (X, \mathcal{X}) \rightarrow (Y, \mathcal{Y})$.
 
 In order to construct conditional probability density functions we will
-also convenient $\sigma$-finite reference measures for
+also need convenient $\sigma$-finite Radon reference measures for
 
 5. the input space, $\mu : \mathcal{X} \rightarrow [0, \infty]$,
 6. the output space, $\nu : \mathcal{Y} \rightarrow [0, \infty]$,
 7. and each level set,
    $\eta_{y} : \mathcal{F}_{y} \rightarrow [0, \infty]$.
 
-Technically $\pi$ and $\mu$ also need to be Radon measures, but again
-this can be safely assumed in any practical application.
+As we have previously discussed we can safely take measurable functions,
+Hausdorff $\sigma$-algebras, and Radon measures for granted in practice.
+We will, however, have to be careful about the surjectivity of $f$ and
+the $\sigma$-finiteness of the reference measures.
 
 If $\pi \ll \mu$ then we can construct the probability density function
 $$
@@ -2144,7 +2170,7 @@ $$
 \rnd{ \pi^{f} }{ \mu^{f, \nu} }
 : X \times Y \rightarrow \mathbb{R}^{+}.
 $$
-Finally if $\mu^{f, \nu}_{y} \ll \eta_{y}$ we can convert these
+Finally if $\mu^{f, \nu}_{y} \ll \eta_{y}$ then we can convert these
 conditional probability density functions into conditional probability
 density functions relative to our level set reference measures,
 $$
@@ -2155,9 +2181,9 @@ $$
 \rnd{ \mu^{f, \nu} }{ \eta_{y} } (x \mid y).
 $$
 In many applications the conditional measures $\mu^{f, \nu}_{y}$ will
-already be sufficiently convenient that we will not need an auxiliary
-collection of reference measures $\eta_{y}$, but I here will consider
-the more general scenario.
+be convenient reference measures and we will not need to consider an
+auxiliarycollection of reference measures $\eta_{y}$.  That said here I
+will consider the more general scenario for completeness.
 
 All that we're missing is a mathematical relationship that ties this
 menagerie of probability density functions together.  That information
@@ -2311,14 +2337,14 @@ Isolating the ambient probability density function gives
 \rnd{ f_{*} \pi }{\nu}(y) \,
 \rnd{ \pi^{f} }{ \mu^{f, \nu} } (x_{y} \mid y),
 \end{align*}
-or, equivalently,
+or, in terms of unconditional variables,
 $$
 \rnd{\pi}{\mu}(x)
 \overset{ \mu }{ = }
 \rnd{ f_{*} \pi }{\nu}(f(x)) \,
 \rnd{ \pi^{f} }{ \mu^{f, \nu} } (x \mid f(x)).
 $$
-This is relationship is known as the **product rule** for probability
+This relationship is known as the **product rule** for probability
 density functions.  The product rule allows to construct the ambient
 probability density function, the conditional probability density
 function, or the pushforward probability density function given the
@@ -2639,9 +2665,7 @@ we can even iterate this procedure, building up a probability
 distribution over $X_{0}$ from an initial probability distribution over
 $X_{N}$ and a sequence of conditional probability kernels
 $$
-\{
-\pi_{f^{-1}_{N} }, \ldots, \pi_{f^{-1}_{n} }, \ldots \pi_{f^{-1}_{1} }.
-\}
+\{ \tau_{N}, \ldots, \tau_{n}, \ldots, \tau_{1} \}.
 $$
 This allows us to incrementally build up sophisticated probability
 distributions over $X_{0}$ from much simpler pieces.  Iteratively
@@ -2674,7 +2698,7 @@ $$
 Similarly given an input reference measure $\mu$ and its disintegration
 $\mu^{f, \nu}$ any sufficiently well-behaved binary function
 $$
-t : X \times Y \mathbb{R}^{+}
+t : X \times Y \rightarrow \mathbb{R}^{+}
 $$
 with
 $$
@@ -2685,11 +2709,12 @@ through the conditional expectation values
 $$
 \int \tau( \mathrm{d} x_{y} \mid y) \, g(y, x_{y})
 =
-\int \mu^{f, \nu}( \mathrm{d} x_{y} \mid y) \, g(y, x_{y}).
+\int \mu^{f, \nu}( \mathrm{d} x_{y} \mid y) \,
+     \tau(x_{y} \mid y) \, g(y, x_{y}).
 $$
 Finally the product of these two functions
 $$
-p(x) = t(x \mid f(x) ) \, r( f(x) )
+p(x) = p(y, x_{y}) = t(x_{y} \mid y ) \, r( y )
 $$
 will always satisfy
 $$
@@ -2706,7 +2731,7 @@ through the expectation values
 &=
 \int \nu (\mathrm{d}x ) \, r(y) \,
 \int \mu^{f, \nu}( \mathrm{d}x_{y} \mid y) \,
-t(x_{y}, y) \, g(y, x_{y}).
+t(x_{y} \mid y) \, g(y, x_{y}).
 \end{align*}
 
 Iterating this construction over a sequence of spaces
@@ -2723,7 +2748,7 @@ p_{N} : X_{N} \rightarrow \mathbb{R}^{+},
 $$
 and a sequence of conditional probability density functions,
 $$
-t_{n} : X_{n - 1} \times X_{n} \mathbb{R}^{+}.
+t_{n} : X_{n - 1} \times X_{n} \rightarrow \mathbb{R}^{+}.
 $$
 Applying the product rule once gives a probability density function
 over $X_{N - 1}$,
@@ -2733,8 +2758,10 @@ t_{N}( (x_{N - 1})_{x_{N}} \mid x_{N} ) \,
 p_{N} (x_{N} ).
 $$
 Repeating the product rule $N - 1$ more times then gives a probability
-density function over $X_{0}$.  The conditional variable notation
-becomes a bit cumbersome here, so I'll write this product as
+density function over $X_{0}$.
+
+The conditional variable notation becomes a bit cumbersome here, so I'll
+write this product as
 \begin{align*}
 p_{0}(x_{0})
 &=
@@ -2750,7 +2777,8 @@ along with the recursive constraints
 $$
 x_{n} = f_{n}( x_{n - 1} )
 $$
-that completely fix $\{ x_{1}, \ldots, x_{N} \}$ given $x_{0}$.
+that completely fix the variables $\{ x_{1}, \ldots, x_{N} \}$ given a
+point $x_{0}$.
 
 In **Chapter 9** we'll introduce a more elegant notation that works well
 in the special case of product spaces.
@@ -3211,45 +3239,45 @@ $$
 # Acknowledgements {-}
 
 A very special thanks to everyone supporting me on Patreon:
-Adam Fleischhacker, Adriano Yoshino, Alessandro Varacca, Alexander Noll, 
-Alexander Petrov, Alexander Rosteck, Andrea Serafino, Andrew Mascioli, 
-Andrew Rouillard, Andrew Vigotsky, Ara Winter, Austin Rochford, 
-Avraham Adler, Ben Matthews, Ben Swallow, Benoit Essiambre, 
-Bradley Kolb, Brandon Liu, Brendan Galdo, Brynjolfur Gauti Jónsson, 
-Cameron Smith, Canaan Breiss, Cat Shark, Charles Naylor, Charles Shaw, 
-Chase Dwelle, Chris Jones, Christopher Mehrvarzi, Colin Carroll, 
-Colin McAuliffe, Damien Mannion, dan mackinlay, Dan W Joyce, Dan Waxman, 
-Dan Weitzenfeld, Daniel Edward Marthaler, Darshan Pandit, Darthmaluus, 
-David Galley, David Wurtz, Denis Vlašiček, Doug Rivers, Dr. Jobo, 
-Dr. Omri Har Shemesh, Dylan Maher, Ed Cashin, Edgar Merkle, 
-Eric LaMotte, Ero Carrera, Eugene O'Friel, Felipe González, 
-Fergus Chadwick, Finn Lindgren, Florian Wellmann, Geoff Rollins, 
-Guido Biele, Håkan Johansson, Hamed Bastan-Hagh, Haonan Zhu, 
-Hector Munoz, Henri Wallen, hs, Hugo Botha, Ian, Ian Costley, 
-idontgetoutmuch, Ignacio Vera, Ilaria Prosdocimi, Isaac Vock, J, 
-J Michael Burgess, jacob pine, Jair Andrade, James C, James Hodgson, 
-James Wade, Janek Berger, Jason Martin, Jason Pekos, Jason Wong, 
-Jeff Burnett, Jeff Dotson, Jeff Helzner, Jeffrey Erlich, 
-Jesse Wolfhagen, Jessica Graves, Joe Wagner, John Flournoy, 
-Jonathan H. Morgan, Jonathon Vallejo, Joran Jongerling, JU, Justin Bois, 
-Kádár András, Karim Naguib, Karim Osman, Kejia Shi, 
-Kristian Gårdhus Wichmann, Lars Barquist, lizzie , LOU ODETTE, Luís F, 
+Adam Fleischhacker, Adriano Yoshino, Alessandro Varacca, Alexander Noll,
+Alexander Petrov, Alexander Rosteck, Andrea Serafino, Andrew Mascioli,
+Andrew Rouillard, Andrew Vigotsky, Ara Winter, Austin Rochford,
+Avraham Adler, Ben Matthews, Ben Swallow, Benoit Essiambre,
+Bradley Kolb, Brandon Liu, Brendan Galdo, Brynjolfur Gauti Jónsson,
+Cameron Smith, Canaan Breiss, Cat Shark, Charles Naylor, Charles Shaw,
+Chase Dwelle, Chris Jones, Christopher Mehrvarzi, Colin Carroll,
+Colin McAuliffe, Damien Mannion, dan mackinlay, Dan W Joyce, Dan Waxman,
+Dan Weitzenfeld, Daniel Edward Marthaler, Darshan Pandit, Darthmaluus,
+David Galley, David Wurtz, Denis Vlašiček, Doug Rivers, Dr. Jobo,
+Dr. Omri Har Shemesh, Dylan Maher, Ed Cashin, Edgar Merkle,
+Eric LaMotte, Ero Carrera, Eugene O'Friel, Felipe González,
+Fergus Chadwick, Finn Lindgren, Florian Wellmann, Geoff Rollins,
+Guido Biele, Håkan Johansson, Hamed Bastan-Hagh, Haonan Zhu,
+Hector Munoz, Henri Wallen, hs, Hugo Botha, Ian, Ian Costley,
+idontgetoutmuch, Ignacio Vera, Ilaria Prosdocimi, Isaac Vock, J,
+J Michael Burgess, jacob pine, Jair Andrade, James C, James Hodgson,
+James Wade, Janek Berger, Jason Martin, Jason Pekos, Jason Wong,
+Jeff Burnett, Jeff Dotson, Jeff Helzner, Jeffrey Erlich,
+Jesse Wolfhagen, Jessica Graves, Joe Wagner, John Flournoy,
+Jonathan H. Morgan, Jonathon Vallejo, Joran Jongerling, JU, Justin Bois,
+Kádár András, Karim Naguib, Karim Osman, Kejia Shi,
+Kristian Gårdhus Wichmann, Lars Barquist, lizzie , LOU ODETTE, Luís F,
 Marcel Lüthi, Marek Kwiatkowski, Mark Donoghoe, Markus P., Martin Modrák,
-Márton Vaitkus, Matt Moores, Matthew, Matthew Kay, Matthieu LEROY, 
-Mattia Arsendi, Maurits van der Meer, Michael Colaresi, Michael DeWitt, 
-Michael Dillon, Michael Lerner, Mick Cooney, N Sanders, N.S. , Name, 
-Nathaniel Burbank, Nic Fishman, Nicholas Clark, Nicholas Cowie, Nick S, 
-Octavio Medina, Oliver Crook, Olivier Ma, Patrick  Kelley, 
-Patrick Boehnke, Pau Pereira Batlle, Peter Johnson, Pieter van den Berg, 
-ptr, Ramiro Barrantes Reynolds, Raúl Peralta Lozada, Ravin Kumar, Rémi, 
-Riccardo Fusaroli, Richard Nerland, Robert Frost, Robert Goldman, 
-Robert kohn, Robin Taylor, Ryan Grossman, S Hong, Saleem Huda, 
-Sean Wilson, Sergiy Protsiv, Seth Axen, shira, Simon Duane, 
-Simon Lilburn, sssz, Stan_user, Stephen Lienhard, Stew Watts, 
-Stone Chen, Susan Holmes, Svilup, Tao Ye, Tate Tunstall, Tatsuo Okubo, 
-Teresa Ortiz, Theodore Dasher, Thomas Kealy, Thomas Vladeck, 
-Tiago Cabaço, Tim Radtke, Tobychev , Tom McEwen, Tomáš Frýda, 
-Tony Wuersch, Virginia Fisher, Vladimir Markov, Wil Yegelwel, Will Farr, 
+Márton Vaitkus, Matt Moores, Matthew, Matthew Kay, Matthieu LEROY,
+Mattia Arsendi, Maurits van der Meer, Michael Colaresi, Michael DeWitt,
+Michael Dillon, Michael Lerner, Mick Cooney, N Sanders, N.S. , Name,
+Nathaniel Burbank, Nic Fishman, Nicholas Clark, Nicholas Cowie, Nick S,
+Octavio Medina, Oliver Crook, Olivier Ma, Patrick  Kelley,
+Patrick Boehnke, Pau Pereira Batlle, Peter Johnson, Pieter van den Berg,
+ptr, Ramiro Barrantes Reynolds, Raúl Peralta Lozada, Ravin Kumar, Rémi,
+Riccardo Fusaroli, Richard Nerland, Robert Frost, Robert Goldman,
+Robert kohn, Robin Taylor, Ryan Grossman, S Hong, Saleem Huda,
+Sean Wilson, Sergiy Protsiv, Seth Axen, shira, Simon Duane,
+Simon Lilburn, sssz, Stan_user, Stephen Lienhard, Stew Watts,
+Stone Chen, Susan Holmes, Svilup, Tao Ye, Tate Tunstall, Tatsuo Okubo,
+Teresa Ortiz, Theodore Dasher, Thomas Kealy, Thomas Vladeck,
+Tiago Cabaço, Tim Radtke, Tobychev , Tom McEwen, Tomáš Frýda,
+Tony Wuersch, Virginia Fisher, Vladimir Markov, Wil Yegelwel, Will Farr,
 woejozney, yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
 
 # References {-}
