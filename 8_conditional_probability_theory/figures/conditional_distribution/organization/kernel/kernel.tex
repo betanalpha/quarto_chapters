@@ -4,7 +4,7 @@
 \usepackage{color}
 
 \usepackage{tikz}
-\usetikzlibrary{math, calc, arrows.meta}
+\usetikzlibrary{math, calc, arrows.meta, decorations.pathreplacing}
 
 \definecolor{light}{RGB}{220, 188, 188}
 \definecolor{mid}{RGB}{185, 124, 124}
@@ -24,18 +24,36 @@
 
 \begin{tikzpicture}[scale=1, thick]
 
-  \foreach \c/\dy in {1/0, 2/-1.75, 3/-3.5} {
-    \begin{scope}[shift={(0, \dy)}]
-      \draw[white] (-3, -0.5) rectangle (3, 1.25);
-    \end{scope}
-  }
+  \pgfmathsetmacro{\dy}{0}
+  \begin{scope}[shift={(0, \dy)}]
+    \draw[white] (-3, -0.5) rectangle (3, 0.5);
+  \end{scope}
   
-  \node at (0, 0.375 - 1.75) { $\pi^{\mathcal{P}}( \cdot \mid \cdot )$ };
+  \pgfmathsetmacro{\dy}{-1}
+  \begin{scope}[shift={(0, \dy)}]
+      \draw[white] (-3, -0.5) rectangle (3, 0.5);
+  \end{scope}
+  
+  \pgfmathsetmacro{\dy}{-2}
+  \begin{scope}[shift={(0, \dy)}]
+    \draw[white] (-3, -0.5) rectangle (3, 0.5);
+    \node at (0, 0) { $\pi^{\mathcal{P}}(\cdot \mid \cdot)$ };
+  \end{scope}
+  
+  \pgfmathsetmacro{\dy}{-3}
+  \begin{scope}[shift={(0, \dy)}]
+      \draw[white] (-3, -0.5) rectangle (3, 0.5);
+  \end{scope}
 
-  \begin{scope}[shift={(0, -4.5)}]
+  \begin{scope}[shift={(0, -4)}]
     \draw[white] (-3, -0.5) rectangle (3, 0.5);
     \node at (0, 0) { Conditional Probability Kernel };
   \end{scope}
+  
+  
+  \draw[decorate,decoration={brace,amplitude=5pt,mirror}, dark] (-3, -4.5) -- (-3, 0.5);
+  \filldraw[white] (-3, -4.5) rectangle (-2.75, -3);
+  \draw[dark, densely dashed] (-2.9125, -3.5) -- +(0, 0.5);
 
 \end{tikzpicture}
 

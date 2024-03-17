@@ -753,7 +753,7 @@ into a single mathematical object (@fig-conditional-organization)
 I will refer to this binary function as a
 **conditional probability kernel**.
 
-::: {#fig-conditional-organization layout="[-5, 30, 30, 30, -5]"}
+::: {#fig-conditional-organization layout="[-0.5, 33, 33, 33, -0.5]"}
 
 ![](figures/conditional_distribution/organization/probabilities/probabilities){#fig-conditional-organization-probabilities}
 
