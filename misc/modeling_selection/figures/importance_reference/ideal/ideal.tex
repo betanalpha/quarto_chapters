@@ -1,0 +1,66 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{darkteal}{RGB}{29, 79, 79}
+\definecolor{darkolive}{RGB}{97, 123, 45}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function normal(\x) {
+    return exp(-0.5 * \x * \x);
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1.0]
+  
+\begin{scope}[shift={(0, 0)}]
+
+  \draw[white] (-3.5, -3) rectangle (3.5, 3.5);
+    
+  \foreach \m/\s [count=\n] in {0.571/0.272, 0.013/0.112, -0.064/0.151, 0.116/0.180, -0.136/0.122, 
+                                -0.446/0.468, 0.177/0.180, 0.167/0.153, -0.434/0.129, 
+                                -0.497/0.232, -0.472/0.162, -0.693/0.173, -0.302/0.218, 
+                                -0.639/0.529, -0.311/0.507, -0.129/0.152, -0.586/0.461, -0.096/0.609} {
+    \pgfmathsetmacro{\prop}{100 * (\n + 5) / 25};
+    \colorlet{custom}{dark!\prop!white};
+    \draw[domain={-3:3}, smooth, samples=100, line width=1.25, variable=\x, color=custom] 
+      plot ({\x},{0.7 * normal((\x - (0.5 * \m) ) / (0.5 * \s) ) / (2.506628274631001 * (0.5 * \s) ) - 2});
+  }
+  \node[dark, align=center] at (1.25, 1) { Latent\\Probability\\Density\\Functions };
+  
+  \pgfmathsetmacro{\m}{-0.5 * 0.25};
+  \pgfmathsetmacro{\s}{0.5 * 0.75};
+  \draw[domain={-3:3}, smooth, samples=100, line width=2, variable=\x, color=white]
+      plot ({\x},{0.7 * normal((\x - \m) / \s) / (2.506628274631001 * \s) - 2});
+  \draw[domain={-3:3}, smooth, samples=100, line width=1.25, variable=\x, color=black]
+      plot ({\x},{0.7 * normal((\x - \m) / \s) / (2.506628274631001 * \s) - 2});
+  \node[black, align=center] at (-1.75, -0.75) { Ideal\\Reference\\Probability\\Density\\Function };
+  
+  \draw [<->, >=stealth, line width=1.25] (-3.1, -2.00) -- +(6.2, 0);
+  
+  \node at (0, -2.5) { $y$ };
+  
+\end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  

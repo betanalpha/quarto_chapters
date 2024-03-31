@@ -1,0 +1,107 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{intersections, backgrounds, math}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{darkteal}{RGB}{29, 79, 79}
+\definecolor{darkolive}{RGB}{97, 123, 45}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function normal(\x) {
+    return exp(-0.5 * \x * \x);
+  };
+  function logistic(\x) {
+    if \x > 0 then {
+      return 1 / (1 + exp(-\x));
+    } else {
+      return 1 * exp(\x) / (1 + exp(\x));
+    };
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1.0]
+  
+\begin{scope}[shift={(0, 0)}]
+  \draw[white] (-3.25, -3) rectangle (3.25, 3.25);
+    
+  \pgfmathsetmacro{\s}{0.5}
+  \pgfmathsetmacro{\g}{3}
+  \pgfmathsetmacro{\c}{-2}  
+    
+  \draw[domain={-3:3}, smooth, samples=150, line width=1.25, variable=\x, color=dark] 
+    plot ({\x},{5 * normal(\x / \s) / (2.506628274631001 * \s) - 2});
+  \node[dark, align=center] at (0, 2.75) { Latent Probability Density Function };
+  \node[dark, align=center] at (1.25, 0.25) { $p(y)$ };
+    
+  %\draw [->, >=stealth, line width=1.25] (-3.00, -2.015) -- +(0, 4);
+  \draw [<->, >=stealth, line width=1.25] (-3.1, -2.00) -- +(6.2, 0);
+  
+  \node at (0, -2.5) { $y$ };
+\end{scope}
+
+\begin{scope}[shift={(6.5, 0)}]
+  \draw[white] (-3.25, -3) rectangle (3.25, 3.25);
+    
+  \pgfmathsetmacro{\s}{0.5}
+  \pgfmathsetmacro{\g}{3}
+  \pgfmathsetmacro{\c}{-2}  
+    
+  \draw[domain={-3:3}, smooth, samples=150, line width=1.25, variable=\x, color=light] 
+    plot ({\x},{5 * normal(\x / \s) / (2.506628274631001 * \s) - 2});
+
+  \draw[domain={-3:3}, smooth, samples=150, line width=1.25, variable=\x, color=dark] 
+    plot ({\x},{4 * logistic(\g * (\x - \c)) - 2});
+  \node[dark, align=center] at (0, 2.75) { Selection Function };
+  \node[dark, align=center] at (1.75, 1.5) { $p(z = 1 \mid y)$ };
+
+  %\draw [->, >=stealth, line width=1.25] (-3.00, -2.015) -- +(0, 4);
+  \draw [<->, >=stealth, line width=1.25] (-3.1, -2.00) -- +(6.2, 0);
+  
+  \node at (0, -2.5) { $y$ };
+\end{scope}
+
+\begin{scope}[shift={(13, 0)}]
+  \draw[white] (-3.25, -3) rectangle (3.25, 3.25);
+    
+  \pgfmathsetmacro{\s}{0.5}
+  \pgfmathsetmacro{\g}{3}
+  \pgfmathsetmacro{\c}{-2}  
+    
+  \draw[domain={-3:3}, smooth, samples=150, line width=1.25, variable=\x, color=light] 
+    plot ({\x},{5 * normal(\x / \s) / (2.506628274631001 * \s) - 2});
+
+  \draw[domain={-3:3}, smooth, samples=150, line width=1.25, variable=\x, color=mid] 
+    plot ({\x},{4 * logistic(\g * (\x - \c)) - 2});
+
+  \draw[domain={-3:3}, smooth, samples=150, line width=1.25, variable=\x, color=dark] 
+    plot ({\x},{5 * 1.007275 * normal(\x / \s) / (2.506628274631001 * \s) * logistic(\g * (\x - \c)) - 2});
+  \node[dark, align=center] at (0, 2.75) { Observed Probability Density Function };
+  \node[dark, align=center] at (1.75, 0.25) { $p(y \mid z = 1)$ };
+    
+  %\draw [->, >=stealth, line width=1.25] (-3.00, -2.015) -- +(0, 4);
+  \draw [<->, >=stealth, line width=1.25] (-3.1, -2.00) -- +(6.2, 0);
+  
+  \node at (0, -2.5) { $y$ };
+\end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  
