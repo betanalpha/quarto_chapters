@@ -1,0 +1,68 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+
+  \filldraw[fill=black, draw=black] (-5, -5) rectangle (5, 5);
+
+  \pgfmathsetmacro{\deltax}{0.2}
+  \pgfmathsetmacro{\deltay}{0.1}
+
+  % Wall
+  \pgfmathsetmacro{\D}{5}
+
+  \draw[white, line width=1] ({-\D * (1 - \deltax)}, {-\D * (1 - \deltay)}) rectangle 
+                             ({+\D * (1 - \deltax)}, {+\D * (1 - \deltay)});
+  
+  \foreach \sx in {-1, +1} {
+    \foreach \sy in {-1, +1} {
+      \draw[white, line width=1] ({\sx * \D * (1 - \deltax)}, {\sy * \D * (1 - \deltay)}) -- 
+                                 ({\sx * \D}, {\sy * \D});
+    }
+  }
+  
+  % Window
+  \begin{scope}[shift={(1.25, 0.5)}]
+    \pgfmathsetmacro{\D}{1.5}
+    \draw[white, line width=1] ({-\D}, {-\D}) rectangle ({+\D}, {+\D});
+    \draw[white, line width=1] ({-\D * (1 - \deltax)}, {-\D * (1 - \deltay)}) rectangle 
+                               ({+\D * (1 - \deltax)}, {+\D * (1 - \deltay)});
+    
+    \foreach \sx in {-1, +1} {
+      \foreach \sy in {-1, +1} {
+        \draw[white, line width=1] ({\sx * \D * (1 - \deltax)}, {\sy * \D * (1 - \deltay)}) -- 
+                                   ({\sx * \D}, {\sy * \D});
+      }
+    }
+    
+    \foreach \x/\y in {-0.071/1.096, 0.388/-0.641, 1.0/0.953, 0.428/0.128, 1.078/-0.103, 0.999/-0.778, -0.306/0.706, 0.796/-0.876, 0.118/-0.801, -0.365/-0.581} {
+      \node[white] at (\x, \y) { $\star$ };          
+    }
+    
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}  
