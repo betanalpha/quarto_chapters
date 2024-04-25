@@ -82,7 +82,8 @@ model {
   for (n in 1:N) {
     real s = sum(y[n]);
     real log_select_prob = log( Phi(gamma * (s - chi)) );
-    real lpdf = normal_lpdf(y[n] | mu, tau);
+    real lpdf =
+      multi_normal_cholesky_lpdf(y[n] | mu, diag_pre_multiply(tau, Psi));
     target += log_select_prob + lpdf - log(norm);
   }
 }
