@@ -361,7 +361,8 @@ Z(\phi, \psi)
 \pi ( S^{-1}(1; \psi) ).
 \end{align*}
 Consequently a deterministic selection process is equivalent to restricting the
-latent probability distribution to the subset $S^{-1}(1; \psi)$,
+latent probability distribution to the subset $S^{-1}(1; \psi)$
+(@fig-partition),
 \begin{align*}
 p(y \mid \phi, \psi, z = 1)
 &=
@@ -389,15 +390,31 @@ $$
 $$
 Consequently any model configuration with $S(\tilde{y}; \psi) = 0$ is
 completely inconsistent with the observation and must be excluded from our
-inferences.  When deriving inferences from multiple observations
+inferences.  When deriving inferences from multiple observed events
 $$
 \{ \tilde{y}_{1}, \ldots, \tilde{y}_{N} \}
 $$
 we can include only those model configurations where the acceptance subset
-contains all of the observations,
+contains all of the observations (@fig-multi-good)
 $$
 \{ \tilde{y}_{1}, \ldots, \tilde{y}_{N} \} \in S^{-1}(1; \psi).
 $$
+
+::: {#fig-selection-function-level-sets layout="[ [-27.5, 45, -27.5], [-5, 45, 45, -5] ]"}
+![](figures/level_set_partition/partition/partition){#fig-partition}
+
+![](figures/level_set_partition/multi_data_good_config/multi_data_good_config){#fig-multi-good}
+
+![](figures/level_set_partition/multi_data_bad_config/multi_data_bad_config){#fig-multi-bad}
+
+\(a) A deterministic selection function partitions the observational space into
+a subset of possible observed values $S^{-1}(1; \psi)$ and a subset of
+impossible observed values $S^{-1}(0; \psi)$.  (b) Only those configurations of
+the selection function with
+$\{ \tilde{y}_{1}, \ldots, \tilde{y}_{N} \} \in S^{-1}(1; \psi)$ are consistent
+with the observed data.  (c) Proper inferences have to avoid any configurations
+where even one observed events falls into $S^{-1}(0; \psi)$.
+:::
 
 Any computational method attempting to quantify a posterior distribution derived
 from a deterministic selection model will then have to avoid model
@@ -4335,6 +4352,7 @@ S \left( z_{1}; \chi, \gamma \right)
 The importance sampling estimator approach was first introduced to me by Will
 Farr.  I thank Alexander Noll for helpful comments.
 
+A very special thanks to everyone supporting me on Patreon:
 Adam Fleischhacker, Adriano Yoshino, Alessandro Varacca, Alexander Noll,
 Alexander Petrov, Alexander Rosteck, Andrea Serafino, Andrew Mascioli,
 Andrew Rouillard, Andrew Vigotsky, Ara Winter, Austin Rochford, Avraham Adler,
@@ -4372,6 +4390,10 @@ Kejia Shi, Kristian Gårdhus Wichmann, Lars Barquist, lizzie , LOU ODETTE, Luís
  Thomas Siegert, Thomas Vladeck, Tim Radtke, Tobychev , Tom McEwen, Tomáš Frýda,
  Tony Wuersch, Virginia Fisher, Vladimir Markov, Wil Yegelwel, Will Farr,
  woejozney, Xianda Sun, yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
+
+# References {-}
+
+<div id="refs"></div>
 
 # License {-}
 

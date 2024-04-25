@@ -719,7 +719,7 @@ Z(\phi, \psi)
 \pi ( S^{-1}(1; \psi) ).
 \end{align*} Consequently a deterministic selection process is
 equivalent to restricting the latent probability distribution to the
-subset \(S^{-1}(1; \psi)\), \begin{align*}
+subset \(S^{-1}(1; \psi)\) (Figure~\ref{fig-partition}), \begin{align*}
 p(y \mid \phi, \psi, z = 1)
 &=
 \frac{ p(y \mid \phi) \, S(y; \psi ) }
@@ -746,13 +746,75 @@ subset, \[
 \tilde{y} \in S^{-1}(1; \psi).
 \] Consequently any model configuration with \(S(\tilde{y}; \psi) = 0\)
 is completely inconsistent with the observation and must be excluded
-from our inferences. When deriving inferences from multiple observations
-\[
+from our inferences. When deriving inferences from multiple observed
+events \[
 \{ \tilde{y}_{1}, \ldots, \tilde{y}_{N} \}
 \] we can include only those model configurations where the acceptance
-subset contains all of the observations, \[
+subset contains all of the observations (Figure~\ref{fig-multi-good}) \[
 \{ \tilde{y}_{1}, \ldots, \tilde{y}_{N} \} \in S^{-1}(1; \psi).
 \]
+
+\begin{figure}
+
+\begin{minipage}{0.28\linewidth}
+~\end{minipage}%
+%
+\begin{minipage}{0.45\linewidth}
+
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics{figures/level_set_partition/partition/partition.pdf}
+
+}
+
+\subcaption{\label{fig-partition}}
+
+\end{minipage}%
+%
+\begin{minipage}{0.28\linewidth}
+~\end{minipage}%
+\newline
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
+%
+\begin{minipage}{0.45\linewidth}
+
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics{figures/level_set_partition/multi_data_good_config/multi_data_good_config.pdf}
+
+}
+
+\subcaption{\label{fig-multi-good}}
+
+\end{minipage}%
+%
+\begin{minipage}{0.45\linewidth}
+
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics{figures/level_set_partition/multi_data_bad_config/multi_data_bad_config.pdf}
+
+}
+
+\subcaption{\label{fig-multi-bad}}
+
+\end{minipage}%
+%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
+
+\caption{\label{fig-selection-function-level-sets}(a) A deterministic
+selection function partitions the observational space into a subset of
+possible observed values \(S^{-1}(1; \psi)\) and a subset of impossible
+observed values \(S^{-1}(0; \psi)\). (b) Only those configurations of
+the selection function with
+\(\{ \tilde{y}_{1}, \ldots, \tilde{y}_{N} \} \in S^{-1}(1; \psi)\) are
+consistent with the observed data. (c) Proper inferences have to avoid
+any configurations where even one observed events falls into
+\(S^{-1}(0; \psi)\).}
+
+\end{figure}%
 
 Any computational method attempting to quantify a posterior distribution
 derived from a deterministic selection model will then have to avoid
@@ -4674,8 +4736,8 @@ SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
 Chain 1: Iteration: 1 / 1 [100%]  (Sampling)
 Chain 1: 
 Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-Chain 1:                0.002 seconds (Sampling)
-Chain 1:                0.002 seconds (Total)
+Chain 1:                0.003 seconds (Sampling)
+Chain 1:                0.003 seconds (Total)
 Chain 1: 
 \end{verbatim}
 
@@ -5503,7 +5565,8 @@ in the previous Monte Carlo exercise.
   \ControlFlowTok{for}\NormalTok{ (n }\ControlFlowTok{in} \DecValTok{1}\NormalTok{:N) \{}
     \DataTypeTok{real}\NormalTok{ s = sum(y[n]);}
     \DataTypeTok{real}\NormalTok{ log\_select\_prob = log( Phi(gamma * (s {-} chi)) );}
-    \DataTypeTok{real}\NormalTok{ lpdf = normal\_lpdf(y[n] | mu, tau);}
+    \DataTypeTok{real}\NormalTok{ lpdf =}
+\NormalTok{      multi\_normal\_cholesky\_lpdf(y[n] | mu, diag\_pre\_multiply(tau, Psi));}
     \KeywordTok{target +=}\NormalTok{ log\_select\_prob + lpdf {-} log(norm);}
 \NormalTok{  \}}
 \NormalTok{\}}
@@ -7533,7 +7596,8 @@ S \left( z_{1}; \chi, \gamma \right)
 The importance sampling estimator approach was first introduced to me by
 Will Farr. I thank Alexander Noll for helpful comments.
 
-Adam Fleischhacker, Adriano Yoshino, Alessandro Varacca, Alexander Noll,
+A very special thanks to everyone supporting me on Patreon: Adam
+Fleischhacker, Adriano Yoshino, Alessandro Varacca, Alexander Noll,
 Alexander Petrov, Alexander Rosteck, Andrea Serafino, Andrew Mascioli,
 Andrew Rouillard, Andrew Vigotsky, Ara Winter, Austin Rochford, Avraham
 Adler, Ben Matthews, Ben Swallow, Benoit Essiambre, Bradley Kolb,
@@ -7573,17 +7637,8 @@ Tobychev , Tom McEwen, Tomáš Frýda, Tony Wuersch, Virginia Fisher,
 Vladimir Markov, Wil Yegelwel, Will Farr, woejozney, Xianda Sun, yolhaj
 , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
 
-\section*{License}\label{license}
-\addcontentsline{toc}{section}{License}
-
-A repository containing all of the files used to generate this chapter
-is available on
-\href{https://github.com/betanalpha/quarto_chapters/tree/main/misc/modeling_selection}{GitHub}.
-
-The text and figures in this chapter are copyrighted by Michael
-Betancourt and licensed under the CC BY-NC 4.0 license:
-
-https://creativecommons.org/licenses/by-nc/4.0/
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
@@ -7615,6 +7670,18 @@ Vehtari, Aki, Daniel Simpson, Andrew Gelman, Yuling Yao, and Jonah
 Gabry. 2015. {``Pareto Smoothed Importance Sampling,''} July.
 
 \end{CSLReferences}
+
+\section*{License}\label{license}
+\addcontentsline{toc}{section}{License}
+
+A repository containing all of the files used to generate this chapter
+is available on
+\href{https://github.com/betanalpha/quarto_chapters/tree/main/misc/modeling_selection}{GitHub}.
+
+The text and figures in this chapter are copyrighted by Michael
+Betancourt and licensed under the CC BY-NC 4.0 license:
+
+https://creativecommons.org/licenses/by-nc/4.0/
 
 
 
