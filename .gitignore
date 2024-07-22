@@ -281,3 +281,6 @@ TSWLatexianTemp*
 
 # Mac Detritus
 *.DS_Store
+
+# R Detritus
+*.Rhistory
