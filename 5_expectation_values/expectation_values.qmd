@@ -1039,7 +1039,7 @@ important in practice.
 
 ### The Mean
 
-If an embedding function is an integrand than we can evaluate its
+If an embedding function is an integrand then we can evaluate its
 measure-informed integral, $\mathbb{I}_{\mu}[\iota]$.  The ultimately
 utility of this measure-informed integral, however, depends on what
 information about the ambient measure it extracts.
