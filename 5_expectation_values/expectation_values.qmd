@@ -875,7 +875,7 @@ which is not, in general, equal to $1$.  In other words scaling a
 probability distribution results not in another probability distribution
 but rather a generic measure.
 
-If we want transform one probability distribution into another then we
+If we want to transform one probability distribution into another then we
 need to correct for the modified normalization, defining
 \begin{align*}
 \mathbb{E}_{g \ast \pi} [ f ]
