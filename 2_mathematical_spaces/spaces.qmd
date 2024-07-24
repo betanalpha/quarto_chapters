@@ -36,7 +36,7 @@ sophisticated sets but also sets that are equipped with additional structure.
 These combinations of sets and structure are also known as _spaces_.
 
 In this chapter we will discuss the basic conceptual features of general spaces
-before reviewing some of prototypical spaces that are particularly common in
+before reviewing some of the prototypical spaces that are particularly common in
 practical applications.  This presentation will include not only the properties
 of sets with an arbitrary number of elements but also a survey of some of the
 most fundamental structures that we can endow onto those sets.
@@ -154,7 +154,7 @@ single element, and a **full set** consisting of the entire set (@fig-subsets).
 Most subsets, however, contain an intermediate number of elements.  One of the
 key features of uncountable spaces is that most subsets also contain an
 uncountable number of elements.  To visually represent subsets containing an
-uncountable number of elements I will used filled shapes to contrast against
+uncountable number of elements I will use filled shapes to contrast against
 individual points.
 
 ::: {#fig-subsets layout="[ [-5, 45, 45, -5], [-5, 45, 45, -5]]"}
