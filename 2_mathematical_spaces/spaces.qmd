@@ -787,7 +787,7 @@ most subsets will be neither open nor closed.
 
 Unlike open balls these metric-derived open subsets are _closed_ under unions
 and intersections.  If $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ are both open
-subsets then $\mathsf{x}_{1} \cup \mathsf{x}_{2}$ will also an open subset.  In
+subsets then $\mathsf{x}_{1} \cup \mathsf{x}_{2}$ will also be an open subset.  In
 fact the union of _any_ number of open subsets will be open.  Likewise if
 $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ are both open subsets then
 $\mathsf{x}_{1} \cap \mathsf{x}_{2}$ will also be an open subset.  Indeed the
@@ -964,7 +964,7 @@ figures/structures/general_topology/convergence/convergence){
 width=90% #fig-general-convergence}
 
 A subtle benefit of this topological definition of convergence is that because
-it doesn't require a metric is also doesn't require us to define the positive
+it doesn't require a metric, it also doesn't require us to define the positive
 real numbers.  This can be helpful for avoiding circular logic in more technical
 mathematical analyses.
 
@@ -1021,10 +1021,10 @@ algebra, or metric just builds on top of that foundation.
 Mathematically it is much easier to work with structures that are _compatible_
 with each other.  For example if we want to equip a set with both a topology
 and a metric then the resulting space will be particularly well-behaved if
-the we use a metric topology.  At the same time ambient structure can also
+we use a metric topology.  At the same time ambient structure can also
 distinguish certain compatible subsets.
 
-For example is a set is equipped with an ordering then we can define **interval**
+For example if a set is equipped with an ordering then we can define **interval**
 subsets that contain all elements above and below two boundary elements.  An
 **open interval** excludes both boundary elements,
 $$
@@ -1045,7 +1045,7 @@ intervals that contain only one boundary,
 \end{align*}
 Note that these notions of "open" and "closed" subsets are in general distinct
 from the open and closed subsets defined by a topology.  Only when an ordering
-is compatible with a topology will these the open and closed intervals also be
+is compatible with a topology will these open and closed intervals also be
 topologically open and closed.
 
 As we saw in [Section 1.2.4.1](@sec:open-balls) a metric distinguishes subsets
