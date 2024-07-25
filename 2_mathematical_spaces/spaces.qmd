@@ -1086,8 +1086,8 @@ $\mathsf{x}_{1} \subset X$ is smaller than a subset $\mathsf{x}_{2} \subset X$
 if $\mathsf{x}_{1} \subset \mathsf{x}_{2}$, and larger if
 $\mathsf{x}_{2} \subset \mathsf{x}_{1}$.  Two subsets that only partially
 overlap are incomparable, and hence fall into the same place in the sequential
-ordering.  For any set the empty set will always the smallest subset and the
-full set will always the largest.
+ordering.  For any set the empty set will always be the smallest subset and the
+full set will always be the largest.
 
 The union and intersection operations introduce algebraic structure, known as a
 **Boolean algebraic structure**, to the power set.  They are both commutative,
@@ -1310,6 +1310,10 @@ equally long intervals that communicates the metric structure.](
 figures/real_line_grid/real_line_grid){width=50% #fig-real-line-grid}
 
 ## Extended Real Lines
+
+<!---
+Two weird formulations in the next 2 sentences.
+-->
 
 One limitation of a real line is that it does not contains points that
 _approach_ either negative or positive infinity, but not points that represent
