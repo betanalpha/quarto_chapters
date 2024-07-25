@@ -1927,7 +1927,7 @@ latter not (@fig-monoticity).
 
 Monotonically increasing functions preserve orderings so that larger inputs
 always imply larger outputs. The function (a) $f_{1} : x \mapsto x^{3}$ is
-monotonic but the function (b) $f_{1} : x \mapsto -x^{3}$ is not.
+monotonic but the function (b) $f : x \mapsto -x^{2}$ is not.
 :::
 
 #### Algebra-Preserving Relations
