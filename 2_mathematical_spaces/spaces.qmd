@@ -104,7 +104,7 @@ In many circumstances we will need to distinguish between variables that refer
 to _arbitrary_ elements and variables that refer to _particular_ but unspecified
 elements.  Following the computer science canon I will refer to these as
 **unbound variables** and **bound variables**, respectively.  To distinguish
-between the two I will decorate bound variables with a tilde; in words $x$
+between the two I will decorate bound variables with a tilde; in other words $x$
 denotes any element of the space $X$ while $\tilde{x}$ denotes a fixed but
 unspecified element.
 
@@ -1571,7 +1571,7 @@ Using this notation we can define an inverse function a bit more compactly as
 $$
 \text{Id} = f^{-1} \circ f.
 $$
-In words the composition of a bijective function with its inverse function is
+In other words the composition of a bijective function with its inverse function is
 the identify function.
 
 ## Relating Structures
@@ -1856,7 +1856,7 @@ Pushforward and pullback functions allow us to _lift_ a transformation between
 sets into a transformation between spaces.  For structure that can be pushed
 forward along the function $f : X \rightarrow Y$ any input space
 $(X, \mathfrak{x})$ automatically defines a compatible output space
-$(Y, f_{*}(\mathfrak{x}))$.  Similarly for structure that can be pulled back
+$(Y, f_{*}(\mathfrak{x}))$.  Similarly for a structure that can be pulled back
 against $f$ any output space $(Y, \mathfrak{y})$ automatically defines a
 compatible input space $(X, f^{*}(\mathfrak{y}))$.
 
