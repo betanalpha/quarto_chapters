@@ -205,7 +205,7 @@ sufficiently useful for practical application or if we need to consider
 countably additive measures, let alone measures that might be additive
 over even larger collections of subsets.
 
-For example a common problem that arises is practice is reconstructing
+For example a common problem that arises in practice is reconstructing
 the measure allocated to a general subset from the measures allocated to
 particularly nice subsets that are easier with which to work.  If we
 could always decompose a generic subset into the disjoint union of a
@@ -228,9 +228,9 @@ allocations to **rectangular** subsets (@fig-disk-decomposition).  In
 general a non-rectangular subset, in this case a disk, can be crudely
 approximated by a single rectangular subset.  The disk can be
 approximated more precisely as the disjoint union of many different
-rectangular subsets, but that will never exact reconstruct the disk.
+rectangular subsets, but that will never exactly reconstruct the disk.
 Only when we incorporate a countably infinite number of rectangular
-subsets can be reconstruct the disk without any error.
+subsets can we reconstruct the disk without any error.
 
 ![On a two-dimensional real plane $\mathbb{R}^{2}$ a non-rectangular
 disc can be approximated, but not exactly reconstructed, by the finite
@@ -339,7 +339,7 @@ Similarly the elements of a $\sigma$-algebra are known as
 **measurable subsets** while any subsets in the power set but not in the
 $\sigma$-algebra are referred to as **non-measurable** subsets.
 
-When non-measurable subsets are misbehaving subsets they reveals the
+When non-measurable subsets are misbehaving subsets they reveal the
 subtle, and often counterintuitive, pathologies inherent to that space.
 By working with $\sigma$-algebras directly we can avoid these awkward
 pathologies entirely.
@@ -415,7 +415,7 @@ behaviors that we have to avoid at all!  I will refer to any measurable
 space $(X, 2^{X})$ compatible with a discrete topology as
 **discrete measurable spaces**.
 
-On the the other hand the Borel $\sigma$-algebra derived from the
+On the other hand the Borel $\sigma$-algebra derived from the
 topology that defines the real line filters out all of the
 non-constructive subsets and their undesired behaviors while keeping all
 of the interval subsets and the subsets that we can derive from them.
