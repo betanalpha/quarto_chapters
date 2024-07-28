@@ -973,7 +973,7 @@ figures/interval_partitions/interval_partitions){
 width=90% #fig-equal-length-intervals}
 
 The easiest way to accomplish this uniformity is to allocate to each
-interval a measure directly equal to the its length,
+interval a measure directly equal to its length,
 $$
 \lambda( \, [x_{1}, x_{2}] \, )
 = L( \, [x_{1}, x_{2}] \, )
