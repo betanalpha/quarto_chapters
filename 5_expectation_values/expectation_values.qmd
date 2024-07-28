@@ -42,7 +42,7 @@ from calculus.  This measure-informed integration operation summarizes
 the interaction between a measure and a given function, allowing us to
 use one to learn about the other.
 
-We will being our exploration of measure-informed integration with a
+We will begin our exploration of measure-informed integration with a
 heuristic construction on finite measure spaces before considering a
 more formal, but also more abstract, construction that applies to any
 measure space.  Next we'll investigate how the specification of
@@ -56,7 +56,7 @@ exceptional measures whose integrals can be computed algorithmically.
 # Integration on Finite Measure Spaces {#sec:finite_integration}
 
 To start our discussion of measure-informed integration as simply as
-possible let's begin by considering a finite measure space compromised
+possible let's begin by considering a finite measure space comprised
 of the finite set
 $$
 X = \{ \Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit \},
@@ -409,9 +409,9 @@ corresponding simple function decomposition,
 In general a non-negative, measurable function can be represented by
 more than one simple function decomposition.  Fortunately the
 measure-informed integral derived from any of them will always be the
-same.  Consequently there's no worry for ambiguous of otherwise
+same.  Consequently there's no worry for ambiguous or otherwise
 inconsistent answers, and measure-informed integrals for non-negative,
-measurable function are completely well-behaved.
+measurable functions are completely well-behaved.
 
 This procedure for defining measure-informed integrals through simple
 functions representations is known as **Lebesgue integration** in the
@@ -722,7 +722,7 @@ this form.
 Because $L(X, \mathcal{X}, \mu)$ contains all of the indicator functions
 this functional relationship between $L(X, \mathcal{X}, \mu)$ and
 $\mathbb{R}$ determines the allocations to every measurable subset,
-and hence full determines the measure $\mu$.  At the same time
+and hence fully determines the measure $\mu$.  At the same time
 $L(X, \mathcal{X}, \mu)$ also contains many integrands that are not
 indicator functions, and hence quite a bit of redundant information
 about $\mu$.
