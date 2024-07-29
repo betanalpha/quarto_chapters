@@ -1272,7 +1272,7 @@ working with spaces like circles, spheres, torii, and more.  Many
 analyses on these spaces have been undermined by attempts to summarize
 measures with moments that don't actually exist!
 
-All of this said we still to take care with the necessary conditions
+All of this said we still have to take care with the necessary conditions
 when working with more familiar spaces as well.  For example in
 [Section 5.2.2](@sec:practical_lebesgue) we'll learn that the identify
 function from a real line into itself is not integrable with respect to
@@ -1354,7 +1354,7 @@ skewed towards smaller or larger values.
 
 ![](figures/histograms/varying_behaviors/multimodal/multimodal){#fig-hist-multimodal}
 
-Histogram are extremely effective at communicating the basic features of
+Histograms are extremely effective at communicating the basic features of
 a measure.  The measure in (a) is diffuse but decaying, allocating more
 measure at smaller points than larger points.  Conversely the measure in
 (b) concentrates around a single point while the measure in (c)
@@ -1409,7 +1409,7 @@ M :\; & X & &\rightarrow& \; &[0, \mu(X)]&
 \\
 & x & &\mapsto& & M_{\mu}(x) = \mu(\mathsf{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathsf{I}_{x}}] &.
 \end{alignat*}
-According this mapping is known as a
+This mapping is known as a
 **cumulative distribution function** (@fig-cdf-basics).
 
 ![A cumulative distribution function quantifies how measure is allocated
@@ -1451,7 +1451,7 @@ are any gaps in the allocation, intermediate intervals with zero
 allocated measure, then the cumulative distribution function will
 flatten out completely (@fig-cdf-gap).
 
-::: {#fig-hist-examples layout="[-5, 30, 30, 30, -5]"}
+::: {#fig-cdf-examples layout="[-5, 30, 30, 30, -5]"}
 ![](figures/cdfs/cdf_behaviors/unimodal/unimodal){#fig-cdf-unimodal}
 
 ![](figures/cdfs/cdf_behaviors/narrow_unimodal/narrow_unimodal){#fig-cdf-narrow-unimodal}
@@ -1461,7 +1461,7 @@ flatten out completely (@fig-cdf-gap).
 A careful survey of a cumulative distribution function can communicate a
 wealth of information about the ambient measure.  (a) Here the ambient
 measure is unimodal with the cumulative distribution function
-appreciably increasingly only one we reach the central neighborhood
+appreciably increasing only once we reach the central neighborhood
 where the measure allocation is concentrated.  (b)  A narrower
 concentration results in a steeper cumulative distribution function.
 (c)  A cumulative distribution function flattens if there are any gaps
@@ -1607,7 +1607,7 @@ accumulated measure below $m$,
 $$
 x_{m-} = \underset{x \in X}{\mathrm{argmax}} M(x) < m,
 $$
-and bounded above by the point $x_{+}$ that achieves the smallest
+and bounded above by the point $x_{m+}$ that achieves the smallest
 accumulated measure above $m$ (@fig-quantile-inverse-problems),
 $$
 x_{m+} = \underset{x \in X}{\mathrm{argmin}} M(x) > m.
@@ -1715,7 +1715,7 @@ $$
 $$
 
 The integral of any real-valued function $f: X \rightarrow \mathbb{R}$
-with respect to counting measure is given by over summing all of the
+with respect to counting measure is given by summing over all of the
 output values,
 \begin{align*}
 \mathbb{I}_{\chi}[f]
@@ -1934,7 +1934,7 @@ When a real-valued function has a well-defined Riemann integral then we
 can apply the tools of calculus to evaluate Lebesgue integrals.  The
 exceptional Riemann integrals that can be evaluated analytically allow
 us to compute the corresponding Lebesgue integrals exactly.  More
-generally we can use to numerical integration techniques to approximate
+generally we can use numerical integration techniques to approximate
 the Riemann integrals, and hence approximately evaluate Lebesgue
 integrals.
 
@@ -1959,7 +1959,7 @@ the sign of the Riemann integral.  In order to properly relate Lebesgue
 integrals to Riemann integrals we have to fix the _orientation_ of the
 intervals.
 
-Similarly the mean of a Lebesgue measure would by given by the integral
+Similarly the mean of a Lebesgue measure would be given by the integral
 of the identity function,
 \begin{align*}
 \mathbb{I}_{\lambda}[\iota]
