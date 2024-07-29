@@ -322,7 +322,7 @@ in a crude measurable partition might also be infinite.  If we break up
 those subsets into finer and finer pieces, however, then the infinite
 allocations might spread out into finite allocations.  When we can
 construct a fine enough measurable partition such that _all_ of the
-subset allocations are finite we will always able to avoid infinity
+subset allocations are finite we will always be able to avoid infinity
 entirely by working with small enough subsets.  Moreover if that fine
 enough measurable partition is also countable then we will always be
 able to aggregate those smaller-subset allocations into any general
@@ -404,7 +404,7 @@ behaviors.
 
 For example on a discrete space every measure with non-zero atomic
 allocations is absolutely continuous with respect to every other
-measure with non-zero atomic allocations.  Moreover Lebesgue meaures
+measure with non-zero atomic allocations.  Moreover Lebesgue measures
 defined with respect to different metrics are always absolutely
 continuous with each other.
 
@@ -683,7 +683,7 @@ Admittedly I'm being a bit mathematically sloppy here because
 Radon-Nikodym derivatives are defined only up to $\nu$-null subsets;
 technically this mapping doesn't yield a single function but rather
 a collection of all functions that are equal $\nu$-almost everywhere.
-In order to achieve a unique outptu function we need to introduce
+In order to achieve a unique output function we need to introduce
 additional constraints, such as continuity or even smoothness.  This
 sloppy notation, however, does allow us to investigate many of the
 useful properties of the operation.
@@ -861,7 +861,7 @@ their limitations.  In particular probability density functions are
 defined only relative to the given reference measure.  If the reference
 measure is at all ambiguous then a density function will not completely
 determine a probability distribution!  At the same time if the reference
-measure every changes then probability density functions will also have
+measure ever changes then the probability density functions will also have
 to change if we want them to represent the same probability
 distributions.
 
@@ -951,7 +951,7 @@ expectation value to an integral informed by the counting measure gives
 &=
 \mathbb{I}_{\chi} [ \pi \cdot f ],
 \end{align*}
-where $\pi$ in the last term denotes a function maps each element of
+where $\pi$ in the last term denotes a function that maps each element of
 $X$ to its atomic allocation,
 \begin{alignat*}{6}
 \pi :\; & X & &\rightarrow& \; & [0, \infty] &
@@ -1097,7 +1097,7 @@ $$
 On the other hand we can evaluate the cumulative distribution
 function at each boundary and subtract,
 $$
-\mathrm{Poisson}( \, (n_{1}, n_{2}] \, ; \lambda) f
+\mathrm{Poisson}( \, (n_{1}, n_{2}] \, ; \lambda)
 =
 \Pi_{\mathrm{Poisson}}(n_{2}) - \Pi_{\mathrm{Poisson}}(n_{1}).
 $$
