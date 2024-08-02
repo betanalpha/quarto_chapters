@@ -217,7 +217,7 @@ Potentially some subsets might be decomposable only into an uncountably
 infinite number of subsets in which case we would need even stronger
 notions of additivity!
 
-Fortunately for us we don't have to go to that last extreme.  In turns
+Fortunately for us we don't have to go to that last extreme.  It turns
 out that on most spaces that we'll encounter in practice, and typical
 notions of "nice" subsets, countable additivity is sufficient for
 reconstructing the measure allocated to more general subsets.
