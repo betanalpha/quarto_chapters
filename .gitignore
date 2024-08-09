@@ -284,3 +284,4 @@ TSWLatexianTemp*
 
 # R Detritus
 *.Rhistory
+*.rds
