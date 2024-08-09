@@ -1,0 +1,2568 @@
+---
+title: "Randomized Time Trial"
+author: "Michael Betancourt"
+date: "August 2024"
+date-format: "MMMM YYYY"
+toc: true
+number-sections: true
+highlight: pygments
+bibliography: racing.bib
+crossref:
+  lst-title: "Stan Program"
+filters:
+   - include-code-files
+format:
+  html:
+    html-math-method: katex
+    theme:
+      - lux
+      - custom.scss
+    standalone: true
+    embed-resources: true
+    code-overflow: wrap
+    linkcolor: "#B97C7C"
+  pdf:
+    keep-tex: true
+    fig-width: 4
+    fig-height: 4
+    code-overflow: wrap
+    monofontoptions:
+      - Scale=0.5
+knitr:
+  opts_chunk:
+    comment: ''
+  opts_knit:
+    global.par: TRUE
+format-links: false
+---
+
+Modeling the outcome of competitions, for example games between competing sports
+teams or tests between students and a standardized set of questions, is a common
+statistics application.  Different types of competitions, however, are more or
+less compelling to certain audiences.  In this case study I consider a Bayesian
+analysis of a somewhat niche competition that also happens to be particular
+compelling to the author -- racing to see who can finish a modified version of a
+thirty year old video game as quickly as possible.
+
+# Super Metroid Map Randomizer Races
+
+In the era of the Super Nintendo Entertainment System&reg; the assets comprising
+each video game -- such as code, visuals, and music -- were stored in the
+read-only memory, or **ROM**, of physical cartridges.  **ROM hacks** rearrange
+the assets of a particular game, and in some cases include assets from
+other games or even entirely new assets, to create novel gaming experiences.
+Many popular ROM hacks, for example, add quality of life features to make older
+games less frustrating to play.  Others focus on drastically increasing the
+difficulty of existing games while still others offer the ability to randomize
+locations, items, and more so that each new playthrough is unique.
+
+Super Metroid&reg; was first released for the Super Nintendo Entertainment
+System&reg; in 1994.  The game's well-designed core mechanics interact
+surprisingly well with unintended bugs, resulting in fast-paced and
+highly-technical game play that has long been a favorite target of the ROM
+hacking community.
+
+One prominent example is the [Super Metroid Map Randomizer](https://maprando.com)
+[@MapRando:2024], or _MapRando_ for short.  The Super Metroid Map Randomizer is
+an [open source project](https://github.com/blkerby/MapRandomizer) started in
+2021 that randomizes individual rooms, items, objectives, and more while also
+avoiding any inconsistencies that would prevent players from completing the
+game.  Randomization options are extensive and can be configured to control
+everything from the topology of the room placement to the difficulty of the
+techniques needed for completion.  Each realized map is referred to as a _seed_
+for the seed that initializes the behavior of the underlying pseudo-random
+number generator.
+
+By 2024 the project had stimulated a passionate user community that not only
+played the games individually but also started to race against each other to see
+who could finish a particular seed the fastest.  Because some seeds end up being
+easier to finish than others the races tend to be a bit chaotic and consistently
+entertaining.
+
+Community races are even organized and recorded on the non-commercial speed
+running website [racetime.gg](https://racetime.gg/smr) [@RacetimeSMR:2024].
+Conveniently this organization makes data on previous races, including
+individual entrants and their race outcomes, readily accessible.  The
+availability of this data in turn puts us in a position to infer and compare the
+skill of those entrants and predict the outcome of future races.
+
+# Environment Setup
+
+Before exploring that data we'll need to set up our local `R` environment.
+
+```{r}
+par(family="serif", las=1, bty="l",
+    cex.axis=1, cex.lab=1, cex.main=1,
+    xaxs="i", yaxs="i", mar = c(5, 5, 3, 1))
+
+library(rstan)
+rstan_options(auto_write = TRUE)            # Cache compiled Stan programs
+options(mc.cores = parallel::detectCores()) # Parallelize chains
+parallel:::setDefaultClusterOptions(setup_strategy = "sequential")
+```
+
+To facilitate the implementation of Bayesian inference we'll also need my
+recommended [diagnostics](https://github.com/betanalpha/mcmc_diagnostics) and
+[visualization](https://github.com/betanalpha/mcmc_visualization_tools) tools.
+
+```{r}
+util <- new.env()
+source('mcmc_analysis_tools_rstan.R', local=util)
+source('mcmc_visualization_tools.R', local=util)
+```
+
+# Data Exploration
+
+To assemble the full data set I programmatically scraped
+`https://racetime.gg/smr` for all races with the title `Map Rando` that also
+include a link to the MapRando configuration in their description.  This then
+allowed me to collect additional information on the MapRando version while also
+restricting consideration to only those seeds with a `Hard` skill assumption and
+`Tricky` item progression setting.
+
+For each valid race I then scraped information on the individual participants,
+in particular whether they finished the race or forfeited and, if they finished,
+what their finish time was in seconds.  Forfeits are also referred to as "did
+not finish" or "DNF".  Although forfeit times are available on
+`https://racetime.gg/smr` interactively they are difficult to extract
+programmatically and I consequently did not include them.
+
+Following the `racetime.gg` terminology I will refer to individual participants
+in a race as **entrants** and their participation into a particular race as an
+**entrance**.  For programming convenience I encoded the individual entrant
+usernames into sequential numerical labels that can also be used for indexing.
+
+Each race consists of a variable number of entrances, with each entrance
+resulting in either a finish time or a forfeit.  To accommodate this ragged
+structure I organized the finish entrances and forfeit entrances for all races
+into single arrays that are complemented with indexing arrays for
+straightforward retrieval of individual race information.
+
+The data collection scripts, translation between entrant indices and usernames,
+and final data are all accessible in the [GitHub repository](https://github.com/betanalpha/quarto_chapters/tree/main/case_studies/racing/data)
+for this chapter.
+
+```{r}
+entrant_info <- read.csv("data/entrant_level_defs.csv")
+
+race_info <- read.csv("data/race_info.csv")
+race_entrant_f_info <- read.csv("data/race_entrant_f_info.csv")
+race_entrant_dnf_info <- read.csv("data/race_entrant_dnf_info.csv")
+
+data <- list("N_races" = nrow(race_info),
+             "N_entrants" = nrow(entrant_info),
+             "race_N_entrants_f" = race_info$race_N_entrants_f,
+             "race_N_entrants_dnf" = race_info$race_N_entrants_dnf,
+             "race_f_start_idxs" = race_info$race_f_start_idxs,
+             "race_f_end_idxs" = race_info$race_f_end_idxs,
+             "race_dnf_start_idxs" = race_info$race_dnf_start_idxs,
+             "race_dnf_end_idxs" = race_info$race_dnf_end_idxs,
+             "race_entrant_f_idxs" = race_entrant_f_info$race_entrant_f_idxs,
+             "race_entrant_f_times" =  race_entrant_f_info$race_entrant_f_times,
+             "N_entrances_fs" = length(race_entrant_f_info$race_entrant_f_idxs),
+             "race_entrant_dnf_idxs" = race_entrant_dnf_info$race_entrant_dnf_idxs,
+             "N_entrances_dnfs" = length(race_entrant_dnf_info$race_entrant_dnf_idxs))
+```
+
+Altogether the data spans 192 races across the first seven and a half months of
+2024.
+
+```{r}
+cat(sprintf('%i total races', data$N_races))
+cat(sprintf('First Race: %s', race_info$race_datetimes[1]))
+cat(sprintf('Last Race: %s',
+            race_info$race_datetimes[length(race_info$race_datetimes)]))
+
+```
+
+Those races included 107 distinct entrants.
+
+```{r}
+cat(sprintf('%i total entrants', data$N_entrants))
+```
+
+While the majority of races include at least five entrants some include over
+thirty.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 2, 1))
+
+util$plot_line_hist(data$race_N_entrants_f + data$race_N_entrants_dnf,
+                    0, 35, 3,
+                    xlab="Total Entrants Per Race")
+```
+
+Similarly most races see most entrants finishing but some races, presumable
+using more difficult seeds, can see over half of the entrants forfeit.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 2, 1))
+util$plot_line_hist(data$race_N_entrants_dnf /
+                    (data$race_N_entrants_f + data$race_N_entrants_dnf),
+                    0, 1, 0.02,
+                    xlab="Proportion of Forfeits Per Race")
+```
+
+The finish times across races vary substantially, peaking near an hour but
+stretching from half an hour all the way to multiple hours.  This suggests that
+player skill, seed difficulty, or some combination of the two, is highly
+variable from race to race.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 2, 1))
+
+util$plot_line_hist(data$race_entrant_f_times / 60, 0, 500, 10,
+                    xlab="Finish Time (minutes)", main="All Races")
+```
+
+If we isolate the finish times for a few entrants near the top of the
+`https://racetime.gg/smr` leader boards then we see much less variability,
+especially in the upper tail.
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 2, 1))
+
+for (e in c(18, 29, 65, 91)) {
+  times <- data$race_entrant_f_times[which(data$race_entrant_f_idxs == e)]
+  util$plot_line_hist(times / 60, 0, 220, 10,
+                      xlab="Finish Time (minutes)",
+                      main=paste("Entrant", e))
+}
+```
+
+Overall participation and proportion of forfeits exhibits its own heterogeneity
+across the individual entrants.
+
+```{r}
+par(mfrow=c(2, 1), mar=c(5, 5, 2, 1))
+
+entrant_f_idxs <- function(e) {
+  which(data$race_entrant_f_idxs == e)
+}
+
+entrant_dnf_idxs <- function(e) {
+  which(data$race_entrant_dnf_idxs == e)
+}
+
+N_entrant_f_races <- sapply(1:data$N_entrants,
+                            function(e) length(entrant_f_idxs(e)))
+N_entrant_dnf_races <- sapply(1:data$N_entrants,
+                              function(e) length(entrant_dnf_idxs(e)))
+
+barplot(N_entrant_f_races,
+        space=0, col=util$c_dark_teal, border="white",
+        xlab="Entrant Index", ylab="Total Races Finished")
+
+barplot(N_entrant_dnf_races,
+        space=0, col=util$c_dark_teal, border="white",
+        xlab="Entrant Index", ylab="Total Races Forfeited")
+```
+
+There are many more ways that we could dive further into the data here, but
+without domain expertise to guide us it's easy to get lost.  Instead let's
+leverage what understanding we've developed into an initial model.
+
+# Model Development
+
+To make the modeling process as manageable as possible we will start simple and
+then add features iteratively.
+
+##  Model 1
+
+To begin let's ignore forfeits altogether and instead focus on modeling the
+finish times of the entrants who do not forfeit in each race.
+
+One of the challenging aspects of modeling races in general is that individual
+entrant behavior can depend on their position at any given time.  For example an
+entrant in first place might slow their pace to stay just ahead of the entrant
+in second place, while racers in lower places might play more aggressively in an
+attempt to catch up.  While some MapRando race entrants live-stream their play
+publicly the community largely follows the rules of `https://racetime.gg/smr`
+which disallow entrants from following the progress of any other entrants.
+
+Consequently entrants are mostly ignorant of their position during races, at
+least until the first entrants finish and post their finish times on the
+active `https://racetime.gg/smr` race page.  This suggest that modeling the
+finish time of each entrant independently of the other entrants, without having
+to worry about interactions within each race, is a reasonable approximation to
+the true race dynamics.
+
+Now a particularly crude model of independent finish times might assume that the
+finish times across all races concentrate around some common baseline value,
+$$
+\mu = t_{\mathrm{baseline}} = \exp(\gamma).
+$$
+Not all races, however, are the same.
+
+For example some seeds result in map layouts that require traveling longer
+distances than others and some require spending difficult techniques that
+usually take longer to complete than others.  We could account for this
+heterogeneity with a separate baseline finish time for each seed, but we could
+also account for it by proportionally modifying the common baseline,
+\begin{align*}
+\mu_{s}
+&=
+t_{\mathrm{baseline}} \cdot \delta_{\mathrm{difficulty}, s}
+\\
+&=
+\exp(\gamma) \cdot \exp( \lambda_{\mathrm{difficulty}, s} )
+\\
+&=
+\exp(\gamma + \lambda_{\mathrm{difficulty}, s}).
+\end{align*}
+
+
+Similarly not all entrants are the same.  The entrants who are more experienced
+with Super Metroid&reg; game play in general, and MapRando game play in
+particular, should be able to finish a random seed faster than those who are
+less experienced.  Again we can model this with a proportional modification to
+the common baseline,
+\begin{align*}
+\mu_{se}
+&=
+t_{\mathrm{baseline}}
+\cdot \delta_{\mathrm{difficulty}, s}
+\cdot \frac{1}{\delta_{\mathrm{skill}, e}}
+\\
+&=
+\exp(\gamma)
+\cdot \exp( \lambda_{\mathrm{difficulty}, s} )
+\cdot \frac{1}{\exp( \lambda_{\mathrm{skill}, e} ) }
+\\
+&=
+\exp(\gamma + \lambda_{\mathrm{difficulty}, s} - \lambda_{\mathrm{skill}, e}).
+\end{align*}
+
+Note that this model is an example of an **adversarial model** where the result
+of a competition between two agents concentrates around some central value $\mu$
+that increases when the ability of the first agent, $\lambda_{1}$, is larger
+than the second, $\lambda_{2}$, and decreases when the ability of the second
+agent is larger than the first,
+$$
+\mu = f( \lambda_{1} - \lambda_{2} ).
+$$
+Comparing this model to other adversarial models, such as Bradley-Terry models
+and item response theory models, can be a productive way to motivate useful
+model expansions.  For example if the MapRando algorithm ever suffered from
+weird bugs that sometimes resulted in seeds insensitive to player skill then we
+could introduce a discrimination parameter for each race, similar to some
+popular item response theory models,
+$$
+\mu_{se}
+=
+\exp(
+\gamma
++ \alpha_{s} \cdot (  \lambda_{\mathrm{difficulty}, s}
+                    - \lambda_{\mathrm{skill}, e}) ).
+$$
+The smaller $\alpha_{s}$ is the less sensitive the finish times for the given
+seed will be to the contrast between seed difficulty and entrant skill.
+
+To complete our observational model we need to model the variation of finish
+times around these baselines.  One immediate possibility is the gamma family of
+probability density functions, not in its conventional parameterizations but
+rather in its mean-dispersion parameterization.  For example the gamma family of
+probability density functions is typically parameterized in terms of a shape
+parameter $\alpha$ and a scale parameter $\beta$.  We can also parameterize this
+same family in terms of a location parameter
+$$
+\mu = \text{mean}(\alpha, \beta) = \frac{\alpha}{\beta},
+$$
+and a dispersion parameter
+\begin{align*}
+\psi
+&=
+\frac{ \text{variance}(\alpha, \beta) }{ \text{mean}^{2}(\alpha, \beta) }
+\\
+&=
+\frac{\alpha}{\beta^{2}} \left( \frac{\beta}{\alpha} \right)^{2}
+\\
+&=
+\frac{1}{\alpha}.
+\end{align*}
+We can then define an appropriate observational model by replacing the location
+parameter $\mu$ with the seed-entrant baseline $\mu_{se}$ for each entrant in a
+particular race.
+
+Finally in order to elevate our observational model to a full Bayesian model we
+need to specify a prior model over our model configuration variables.  Here
+we'll assume that the prior model is built up from independent component prior
+models for each parameter.
+
+To avoid unrealistically fast and slow races let's constrain the baseline finish
+time to
+\begin{align*}
+1800 \text{ seconds} \lessapprox
+&t_{\mathrm{baseline}} \lessapprox
+5400 \text{ minutes}
+\\
+1800 \text{ seconds} \lessapprox
+&\exp(\gamma) \cdot 1 \text{ second} \lessapprox
+5400 \text{ seconds}
+\\
+1800 \lessapprox
+&\exp(\gamma) \lessapprox
+5400
+\\
+\log 1800 \lessapprox
+&\exp(\gamma) \lessapprox
+\log 5400.
+\end{align*}
+We can ensure that 98% of the prior probability is contained within these bounds
+with the prior model
+\begin{align*}
+p( \gamma )
+&=
+\text{normal} \left(
+\gamma \mid \frac{\log 5400 + \log 1800}{2},
+            \frac{1}{2.32} \frac{\log 5400 - \log 1800}{2} \right)
+\\
+&= \text{normal}( \gamma \mid 8.045, 0.237).
+\end{align*}
+Note that this prior model doesn't suppress finish times below 30 minutes and
+above 90 minutes, just the central baseline.  The variation of the gamma
+observational model will allow for much smaller and much larger finish times.
+
+Similarly it would be a bit extreme if seed difficulty or entrant skill modified
+the baseline by more than a factor of two,
+\begin{align*}
+\frac{1}{2} \lessapprox &\delta \lessapprox 2
+\\
+\log \frac{1}{2} \lessapprox &\lambda \lessapprox \log 2
+\\
+- \log 2 \lessapprox &\lambda \lessapprox \log 2.
+\end{align*}
+A reasonable prior that achieves this soft containment is then
+\begin{align*}
+p( \delta )
+&=
+\text{normal} \left(
+\gamma \mid \frac{\log 2 + (-\log 2)}{2},
+            \frac{1}{2.32} \frac{\log 2 - (-\log 2)}{2} \right)
+\\
+&=
+\text{normal} \left(
+\gamma \mid 0, \frac{1}{2.32} \, \log 2\right)
+\\
+&= \text{normal}( \gamma \mid 0, 0.299).
+\end{align*}
+
+Lastly we need to consider the dispersion strength $\psi$.  Here let's suppress
+model configurations where the variance would exceed the squared mean,
+\begin{align*}
+0 \lessapprox
+&\frac{ \text{variance}(\alpha, \beta) }{ \text{mean}^{2}(\alpha, \beta) }
+\lessapprox 1
+\\
+0 \lessapprox & \quad\quad\;\;\;\, \psi \quad\quad\;\;\;\,  \lessapprox 1.
+\end{align*}
+One way to achieve this soft containment is with the prior model
+$$
+p( \psi )
+= \text{half-normal} \left( \psi \mid 0, \frac{1}{2.57} \right)
+= \text{half-normal} \left( \psi \mid 0, 0.389 \right).
+$$
+
+
+We can now implement our full Bayesian model as a Stan program, plug in the
+observed data, and give Stan's Hamiltonian Monte Carlo sampler a chance at
+exploring the posterior distribution.
+
+```{.stan include="stan_programs/model1.stan" filename="model1.stan"}
+```
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: true
+fit <- stan(file="stan_programs/model1.stan",
+            data=data, seed=8438338,
+            warmup=1000, iter=2024, refresh=0)
+```
+
+The warnings indicate strong auto-correlations in $\gamma$, the difficulty
+parameters for some of the seeds, and the skill parameters for some of the
+entrants.
+
+```{r}
+diagnostics1 <- util$extract_hmc_diagnostics(fit)
+util$check_all_hmc_diagnostics(diagnostics1)
+
+samples1 <- util$extract_expectands(fit)
+base_samples <- util$filter_expectands(samples1,
+                                       c('gamma', 'difficulties',
+                                         'skills', 'psi'),
+                                       check_arrays=TRUE)
+util$summarize_expectand_diagnostics(base_samples)
+```
+
+This behavior is unfortunately not uncommon with adversarial models.  Without
+enough data the model is vulnerable a degeneracies where some of the additive
+terms vary without changing their sum, tracing out a narrow plane of consistent
+model configurations that can be difficult to explore efficiently.
+
+Indeed we see that the consistent values of $\gamma$ are negatively correlated,
+albeit weakly, with the seed difficulties: $\gamma$ can increase without
+changing the baseline finish times so long as all of the seed difficulties
+decrease at the same time.
+
+```{r}
+util$plot_div_pairs(c('gamma'),
+                    c('difficulties[84]', 'difficulties[90]',
+                      'difficulties[147]', 'difficulties[165]'),
+                    samples1, diagnostics1)
+```
+
+On the other hand $\gamma$ is positively correlated with the individual skill
+parameters.  In this case increases to $\gamma$ and all of the entrant skills
+cancel to give the same baseline finish times.
+
+```{r}
+util$plot_div_pairs(c('gamma'),
+                    c('skills[1]', 'skills[30]',
+                      'skills[55]', 'skills[107]'),
+                    samples1, diagnostics1)
+```
+
+If we wanted to be careful then we could run longer Markov chains to compensate
+for the large auto-correlations and ensure more well-behaved Markov chain Monte
+Carlo estimation.  As this is our first model, however, let's just push ahead to
+the posterior retrodictive checks.
+
+There are a lot of summary statistics that we might consider for our visual
+posterior retrodictive checks.  For example we could use a histogram summary
+statistic that aggregates the finish times across all races.  Here we see a
+pretty strong retrodictive tension with the observed finish times exhibiting
+stronger skewness than what the posterior predictive distribution can
+accommodate.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+util$plot_hist_quantiles(samples1, 'race_entrant_f_times_pred',
+                         baseline_values=data$race_entrant_f_times,
+                         xlab="Finish Time (s)",
+                         main="All Races, All Entrants")
+```
+
+This tension could be due to inadequacy of the gamma observational model, but it
+could also be a consequence of poorly modeling the heterogeneity in seed
+difficulties and entrant skills.  One way to explore these possibilities is to
+separate the histogram summary statistic by race and entrant.
+
+Here there doesn't seem to be any substantial retrodictive tension in the finish
+times for a few arbitrarily selected races.
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (r in c(7, 33, 77, 140)) {
+  idxs <- data$race_f_start_idxs[r]:data$race_f_end_idxs[r]
+  names <- sapply(idxs,
+                  function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples1, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 11000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("Race ", r, ", All Entrants"))
+}
+```
+
+Similarly the finish time behaviors for a few spot-checked entrants are
+consistent between the observed data and our posterior predictions.  One might
+argue that the observed behavior for entrant 93 is slightly heavier-tailed than
+the posterior predictions but the disagreement is relatively weak.
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (e in c(19, 31, 73, 93)) {
+  idxs <- which(data$race_entrant_f_idxs == e)
+  names <- sapply(idxs,
+                  function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples1, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 12000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("All Races, Entrant ", e))
+}
+```
+
+If we really wanted to be thorough then we would need to examine the behavior of
+the hundreds of finish time histograms across all of the individual races and
+all of the individual entrants.  Based on the reasonable behavior of the few
+spot checks that we've performed here, however, let's see if changing the
+observational model addresses the issue.
+
+## Model 2
+
+The gamma family of probability density functions are naturally complemented
+with the inverse gamma family of probability density functions.  Because the
+gamma probability density functions exhibit heavier tails towards zero and
+lighter tails towards infinity they skew towards larger values.  On the other
+hand the inverse gamma probability density functions exhibit lighter tails
+towards zero and heavier tails towards infinity, resulting in a skew towards
+smaller values.  This conveniently contrasting behavior might be exactly what we
+need to address the retrodictive tension in our first model.
+
+In order to build an inverse gamma observational model we need to engineer a
+location-dispersion parameterization.  The inverse gamma family, like the gamma
+family, is typically parameterized in terms of a shape parameter $\alpha$ and a
+scale parameter $\beta$.  At the same time we can also parameterize the family
+in terms of a location parameter
+$$
+\mu = \text{mean}(\alpha, \beta) = \frac{\beta}{\alpha - 1}
+$$
+and a dispersion parameter
+\begin{align*}
+\psi
+&=
+\frac{ \text{variance}(\alpha, \beta) }{ \text{mean}^{2}(\alpha, \beta) }
+\\
+&=
+\frac{1}{\alpha - 2} \left( \frac{ \beta }{ \alpha - 1} \right)^{2}
+\left( \frac{ \alpha - 1 }{ \beta } \right)^{2}
+\\
+&=
+\frac{1}{\alpha - 2}.
+\end{align*}
+
+Let's try swapping the gamma observational model with an inverse gamma
+observational model.
+
+```{.stan include="stan_programs/model2.stan" filename="model2.stan"}
+```
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: true
+fit <- stan(file="stan_programs/model2.stan",
+            data=data, seed=8438338,
+            warmup=1000, iter=2024, refresh=0)
+```
+
+The computational diagnostics continue to show strong auto-correlation warnings
+but nothing else.
+
+```{r}
+diagnostics2 <- util$extract_hmc_diagnostics(fit)
+util$check_all_hmc_diagnostics(diagnostics2)
+
+samples2 <- util$extract_expectands(fit)
+base_samples <- util$filter_expectands(samples2,
+                                       c('gamma', 'difficulties',
+                                         'skills', 'psi'),
+                                       check_arrays=TRUE)
+util$summarize_expectand_diagnostics(base_samples)
+```
+
+It looks like this may have done the trick.  The observed and posterior
+predictive behavior of the aggregate finish time histogram is a bit more
+consistent than it was in our first model.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+util$plot_hist_quantiles(samples2, 'race_entrant_f_times_pred',
+                         baseline_values=data$race_entrant_f_times,
+                         xlab="Finish Time (s)",
+                         main="All Races, All Entrants")
+```
+
+
+The retrodictive agreement in the individual race finish time histograms is
+similar to what we saw above.  In particular no new retrodictive tensions have
+arisen.
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (r in c(7, 33, 77, 140)) {
+  idxs <- data$race_f_start_idxs[r]:data$race_f_end_idxs[r]
+  names <- sapply(idxs,
+                  function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples2, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 11000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("Race ", r, ", All Entrants"))
+}
+```
+
+Interestingly the heavier tail of the inverse gamma family appears to allow the
+posterior predictive behavior for entrant 93 to spread out further and better
+match the observed behavior.
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (e in c(19, 31, 73, 93)) {
+  idxs <- which(data$race_entrant_f_idxs == e)
+  names <- sapply(idxs,
+                  function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples2, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 12000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("All Races, Entrant ", e))
+}
+```
+
+With no immediate reason to doubt our modeling assumptions we can finally move
+on to investigating our posterior inferences.  The marginal posterior
+distributions for $\gamma$ and $\psi$ look reasonable, with both strongly
+contracting within the prior model.
+
+```{r}
+par(mfrow=c(1, 2), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples2[['gamma']], 20,
+                                display_name="gamma")
+
+util$plot_expectand_pushforward(samples2[['psi']], 20,
+                                display_name="psi")
+```
+
+While the values of the individual seed difficulties all seem reasonable there
+does appear to be an unexpected pattern across the races.  Initially the
+difficulties systematically decay before flatting out.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+names <- sapply(1:data$N_races,
+                function(r) paste0('difficulties[', r,']'))
+util$plot_disc_pushforward_quantiles(samples2, names,
+                                     xlab="Race",
+                                     ylab="Difficulty")
+```
+
+On the other hand the entrant skills exhibit both reasonable values and no
+systematic patterns.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+names <- sapply(1:data$N_entrants,
+                function(n) paste0('skills[', n,']'))
+util$plot_disc_pushforward_quantiles(samples2, names,
+                                     xlab="Entrant",
+                                     ylab="Skill")
+```
+
+Let's go back to the difficulties and consider why we might see a pattern like
+that.  Notice that the seeds for each race are ordered by the time at which
+the race occurred.  Consequently the pattern we see is likely a relationship
+between seed difficulty and time.
+
+One possibility is that the seed difficulties are actually getting easier.
+Another possibility is that our inferences for the seed difficulties are
+actually compensating for other time-dependent behaviors in these races that the
+model cannot otherwise accommodate.  For example if the entire racing community
+was gradually getting better at the game then the entrant skills would improve
+with time.  Because our model assumes static skills, however, this improvement
+could manifest only as decreasing seed difficulties.
+
+In order to distinguish between these possible hypotheses let's dive into this
+inferential behavior a bit deeper.  If the MapRando code were static then it
+would be natural to assume that the seed difficulties scatter around some
+constant baseline.  The MapRando code, however, is not static and has in fact
+undergone consistent develop throughout 2024.  Fortunately the code version of
+each seed is included in our data, and we can visualize the MapRando development
+by overlaying the difficulties with the version numbers.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 5))
+
+names <- sapply(1:data$N_races,
+                function(r) paste0('difficulties[', r,']'))
+util$plot_disc_pushforward_quantiles(samples2, names,
+                                     xlab="Race",
+                                     ylab="Difficulty")
+
+text_versions <- c("105", "108", "109", "111",
+                   "112 \\(DEV\\)", "112", "113 \\(DEV\\)", "113")
+num_versions <- c(105, 108, 109, 111, 111.5, 112, 112.5, 113)
+versions <- race_info$versions
+for (n in seq_along(text_versions)) {
+  versions <- gsub(text_versions[n], num_versions[n], versions)
+}
+versions <- as.numeric(versions)
+
+par(new=TRUE)
+plot(0, type='n', axes=FALSE, bty = "n",
+     xlab = "", xlim=c(1, data$N_races),
+     ylab = "", ylim=c(104, 114))
+
+plot_xs <- sapply(1:data$N_races, function(r) c(r - 0.5, r + 0.5))
+dim(plot_xs) <- c(1, 2 * data$N_races)
+
+for (r in 1:data$N_races) {
+  idx1 <- 2 * r - 1
+  idx2 <- 2 * r
+  lines(plot_xs[1, idx1:idx2], rep(versions[r], 2), col=util$c_mid_teal, lwd=3)
+}
+
+mtext("Version", side=4, col=util$c_mid_teal, line=3, las=0)
+axis(4, ylim=c(104, 114), las=1,
+     col=util$c_mid_teal, col.axis=util$c_mid_teal)
+
+abline(v=16.5, col="#DDDDDD", lwd=3)
+abline(v=87.5, col="#DDDDDD", lwd=3)
+```
+
+Indeed many of the prominent patterns in seed difficulty over time perfectly
+line up with the transition from one version to another.  In hindsight this is
+completely reasonable as each version improves the randomization logic to be
+more consistent and easier for experienced players to manage, especially in the
+earlier versions.
+
+What about the hypothesis of improving entrant skills?  If entrant skills were
+improving then it would be reasonable to expect systematic patterns between
+entrant skill and their overall experience with MapRando.  While we do not have
+access to any exact quantification of experience we can consider proxies, such
+as the total number of race entrances.  In particular while entrants might play
+MapRando, and gain experience, outside of official races that play time is
+likely to at least somewhat scale with the number of race entrances.
+
+```{r}
+total_entrances <- table(data$race_entrant_f_idxs)
+sorted_entrances <- as.data.frame(sort(total_entrances))
+
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+names <- sapply(sorted_entrances$Var1,
+                function(n) paste0('skills[', n, ']'))
+util$plot_disc_pushforward_quantiles(samples2, names,
+                                     xlab="Entrants Ordered By Total Entrances",
+                                     xticklabs=sorted_entrances$Var1,
+                                     ylab="Skill")
+```
+
+The most striking pattern that we see is that the _uncertainty_ in the entrant
+skill inferences decreases with increasing participation, which is just a
+consequence of having more data from which to learn.  Beyond the decreasing
+uncertainty there might also be a mild increase in skill for the most
+experienced players.
+
+That said this increase is not necessarily tied to increased experience.  For
+example entrant skills might be fixed with more skilled players just enjoying
+the MapRando races more and hence playing more.
+
+In order to distinguish between these possibilities we would need to start
+investigating how the behavior for a single entrant changes with increasing
+experience.  If entrant skills increased enough, for instance, then we would see
+the finish times for a particular entrant systematically decrease with an
+increasing number of entrances.
+
+Here let's look at entrant 65.
+
+```{r}
+e <- 65
+cum_completed_races <- c()
+completion_times <- c()
+
+for (r in 1:data$N_races) {
+  N_previous_races <- length(cum_completed_races)
+
+  entrant_idxs <- data$race_f_start_idxs[r]:data$race_f_end_idxs[r]
+  if (e %in% data$race_entrant_f_idxs[entrant_idxs]) {
+    entrant_idx <- which(data$race_entrant_f_idxs[entrant_idxs] == e)
+    time <- data$race_entrant_f_times[data$race_f_start_idxs[r] + entrant_idx - 1]
+
+    if (N_previous_races == 0) {
+      cum_completed_races <- c(1)
+    } else {
+      cum_completed_races <- c(cum_completed_races,
+                               cum_completed_races[N_previous_races] + 1)
+    }
+    completion_times <- c(completion_times, time)
+  } else {
+    if (N_previous_races > 0) {
+      cum_completed_races <- c(cum_completed_races,
+                               cum_completed_races[N_previous_races])
+      completion_times <- c(completion_times,
+                            completion_times[N_previous_races])
+    }
+  }
+}
+
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+plot(cum_completed_races, completion_times / 60,
+     pch=16, cex=1.0, col=util$c_dark,
+     xlab="Total Entrances",
+     ylab="Completion Time (minutes)",
+     main=paste("Entrant", e))
+```
+
+While there might be a small reduction in the _variation_ of finish times there
+doesn't seem to be any systematic increase or decrease in the mean.  That's not
+to say that skills don't improve, just that they're not improving strongly
+enough to manifest in this particular visualization.
+
+Overall the development of the MapRando code offers a satisfying explanation for
+the patterns we see the in seed difficulties.  That said it's always helpful to
+keep the other hypotheses in mind, especially if we are able to collect more
+data in the future.
+
+## Model 3
+
+For our next model let's consider forfeits.  The danger with ignoring forfeits
+is that if the forfeit probability is coupled with entrant skill then inferences
+from the finish times alone will give us a biased view of those skills.
+
+One possible assumption is that forfeits are completely random.  For example
+entrants could forfeit mostly due to unexpected events that arise during each
+race that have nothing to do with their performance.  In this case we could
+still extract information from the forfeit times because we can lower bound what
+the finish time would have been,
+\begin{align*}
+p(t_{\mathrm{forfeit}} \mid \mu_{se}, \psi)
+&=
+\pi( \, [ t_{\mathrm{forfeit}}, \infty ) \, \mid \mu_{se}, \psi)
+\\
+&=
+\int_{0}^{t_{\mathrm{forfeit}}} \mathrm{d} t \,
+\text{inv-gamma}(t \mid \mu_{se}, \psi)
+\\
+&=
+1 - \Pi_{\text{inv-gamma}}(t_{\mathrm{forfeit}} \mid \mu_{se}, \psi).
+\end{align*}
+Unfortunately while forfeit times are recorded they are difficult to
+programmatically access from `https://racetime.gg/smr`.
+
+Forfeiting, however, is unlikely to be completely random.  Entrants are more
+likely to forfeit when they're frustrated by the overall difficulty, for example
+when they get lost in a complex map layout or die at an inopportune point and
+lose too much progress.  This suggests that $p(t_{\mathrm{forfeit}})$ should
+depend on the contrast between seed difficulty and entrant skill,
+$$
+p(t_{\mathrm{forfeit}} \mid \lambda_{\mathrm{difficulty}, s},
+                            \lambda_{\mathrm{skill}, e})
+=
+f(\lambda_{\mathrm{difficulty}, s} - \lambda_{\mathrm{skill}, e}).
+$$
+
+To start let's assume a logistic model,
+$$
+p(t_{\mathrm{forfeit}} \mid \lambda_{\mathrm{difficulty}, s},
+                            \lambda_{\mathrm{skill}, e},
+                            \kappa_{e}, \beta_{e})
+= \
+\mathrm{logistic}( \beta_{e} \cdot (
+                   (   \lambda_{\mathrm{difficulty}, s}
+                     - \lambda_{\mathrm{skill}, e})
+                    - \kappa_{e}     ) ),
+$$
+where $\kappa$ quantifies the threshold contrast where an entrant achieves a
+forfeit probability of $\frac{1}{2}$ and $\beta$ quantifies how sensitive the
+forfeit probability is to the difference around this threshold.  In order to
+ensure that a larger contrast always results in a higher forfeit we'll need to
+assume that $\beta$ is limited to only positive values.
+
+Beyond this functional form it's not straightforward to elicit domain expertise
+about reasonable values for $\kappa$ and $\beta$.  Here let's just take a prior
+model that constraint $\kappa$ and $\beta$ below five in order to avoid
+saturating the outputs of the logistic function too quickly.
+
+Lastly once we explicitly model forfeits we are in a position to predict
+forfeits.  This in turn provides new opportunities for retrodictive check
+summary statistics.  In particular here we will consider the total number of
+forfeits in each race.
+
+```{.stan include="stan_programs/model3.stan" filename="model3.stan"}
+```
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: true
+fit <- stan(file="stan_programs/model3.stan",
+            data=data, seed=8438338,
+            warmup=1000, iter=2024, refresh=0)
+```
+
+The diagnostics continue to complain about strong auto-correlations but no new
+problems have arisen.  In particular the $\hat{\xi}$ warnings are not a concern
+so long as we don't try to summarize the $\kappa$ parameters with a component
+mean.
+
+```{r}
+diagnostics3 <- util$extract_hmc_diagnostics(fit)
+util$check_all_hmc_diagnostics(diagnostics3)
+
+samples3 <- util$extract_expectands(fit)
+base_samples <- util$filter_expectands(samples3,
+                                       c('gamma', 'difficulties',
+                                         'skills', 'kappas',
+                                         'betas', 'psi'),
+                                       check_arrays=TRUE)
+util$summarize_expectand_diagnostics(base_samples)
+```
+
+The retrodictive agreement between the observed and posterior predictive finish
+time histograms continues.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+util$plot_hist_quantiles(samples3, 'race_entrant_f_times_pred',
+                         baseline_values=data$race_entrant_f_times,
+                         xlab="Finish Time (s)",
+                         main="All Races, All Entrants")
+```
+
+Now we can also consider the number of forfeits in each race.  Fortunately the
+behavior of this statistic is also reasonably consistent.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+names <- sapply(1:data$N_races,
+                function(r) paste0('race_N_entrants_dnf_pred[', r,']'))
+util$plot_disc_pushforward_quantiles(samples3, names,
+                                     baseline_values=data$race_N_entrants_dnf,
+                                     xlab="Race",
+                                     ylab="N_dnf")
+```
+
+To make the comparison more clear we can always visualize the residuals and then
+compare to zero.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+names <- sapply(1:data$N_races,
+                function(r) paste0('race_N_entrants_dnf_pred[', r,']'))
+util$plot_disc_pushforward_quantiles(samples3, names,
+                                     baseline_values=data$race_N_entrants_dnf,
+                                     residual=TRUE,
+                                     xlab="Race",
+                                     ylab="N_dnf")
+```
+
+Finally the finish time histograms separated by selected races and entrants also
+show no signs of retrodictive tension.
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (r in c(7, 33, 77, 140)) {
+  idxs <- data$race_f_start_idxs[r]:data$race_f_end_idxs[r]
+  names <- sapply(idxs,
+                  function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples3, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 11000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("Race ", r, ", All Entrants"))
+}
+```
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (e in c(19, 31, 73, 93)) {
+  idxs <- which(data$race_entrant_f_idxs == e)
+  names <- sapply(idxs,
+                  function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples3, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 12000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("All Races, Entrant ", e))
+}
+```
+
+Without any concerns about our modeling assumptions we can move on to examining
+the resulting posterior inferences.  Inferences for the existing parameters are
+at least superficially similar to those from the second model; we'll make a
+more direct comparison in [Section 4.5](#sec:inf-comp).
+
+```{r}
+par(mfrow=c(1, 2), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples3[['gamma']], 20,
+                                display_name="gamma")
+
+util$plot_expectand_pushforward(samples3[['psi']], 20,
+                                display_name="psi")
+```
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+names <- sapply(1:data$N_races,
+                function(r) paste0('difficulties[', r,']'))
+util$plot_disc_pushforward_quantiles(samples3, names,
+                                     xlab="Race",
+                                     ylab="Difficulty")
+```
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+names <- sapply(1:data$N_entrants,
+                function(n) paste0('skills[', n,']'))
+util$plot_disc_pushforward_quantiles(samples3, names,
+                                     xlab="Entrant",
+                                     ylab="Skill")
+```
+
+More interesting here are the posterior inferences for the new, forfeit-related
+parameters.  Overall the uncertainties are relatively large but we can pick out
+a few exceptional behaviors
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+names <- sapply(1:data$N_entrants,
+                function(n) paste0('kappas[', n,']'))
+util$plot_disc_pushforward_quantiles(samples3, names,
+                                     xlab="Entrant",
+                                     ylab="Forfeit Threshold")
+```
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+names <- sapply(1:data$N_entrants,
+                function(n) paste0('betas[', n,']'))
+util$plot_disc_pushforward_quantiles(samples3, names,
+                                     xlab="Entrant",
+                                     ylab="Forfeit Scale")
+```
+
+For example posterior inferences of the forfeit thresholds for entrants 37 and
+38 both concentrate on negative values.
+
+```{r}
+par(mfrow=c(1, 2), mar=c(5, 5, 1, 1))
+
+e <- 37
+name <- paste0('kappas[', e, ']')
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                display_name="Forfeit Threshold",
+                                main=paste('Entrant', e))
+
+e <- 38
+name <- paste0('kappas[', e, ']')
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                display_name="Forfeit Threshold",
+                                main=paste('Entrant', e))
+```
+
+Both of these entrants forfeited every race they entered.
+
+```{r}
+summarize_entrant <- function(e) {
+  N <- N_entrant_f_races[e] + N_entrant_dnf_races[e]
+  Nf <- N_entrant_f_races[e]
+  Ndnf <- N_entrant_dnf_races[e]
+
+  cat(sprintf("Entrant %i\n", e))
+  if (N > 1)
+    cat(sprintf("  %i total entrances\n", N))
+  else
+    cat(sprintf("  %i total entrance\n", N))
+
+  if (Nf > 1)
+    cat(sprintf("  %i finishes (%.1f%%)\n", Nf, 100 * Nf / N))
+  else if (Nf == 1)
+    cat(sprintf("  %i finish (%.1f%%)\n", Nf, 100 * Nf / N))
+
+  if (Ndnf > 1)
+    cat(sprintf("  %i forfeits (%.1f%%)\n", Ndnf, 100 * Ndnf / N))
+  else if (Ndnf == 1)
+    cat(sprintf("  %i forfeit (%.1f%%)\n", Ndnf, 100 * Ndnf / N))
+}
+```
+
+```{r}
+summarize_entrant(37)
+summarize_entrant(38)
+```
+
+On the other hand posterior inferences of the forfeit threshold for entrant 65 concentrates on positive values.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+e <- 65
+name <- paste0('kappas[', e, ']')
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                display_name="Forfeit Threshold",
+                                main=paste('Entrant', e))
+```
+
+This entrant forfeited only once out of 64 total entrances.
+
+```{r}
+summarize_entrant(e)
+```
+
+Moreover that forfeit occurred for a particularly difficult seed, pushing the
+consistent forfeit threshold behaviors to larger values.
+
+```{r}
+dnf_races <- c()
+for (r in 1:data$N_races) {
+  if (data$race_N_entrants_dnf[r] == 0) next
+  idxs <- data$race_dnf_start_idxs[r]:data$race_dnf_end_idxs[r]
+  if (e %in% data$race_entrant_dnf_idxs[idxs])
+    dnf_races <- c(dnf_races, r)
+}
+
+name <- paste0('difficulties[', dnf_races[1], ']')
+util$plot_expectand_pushforward(samples3[[name]], 40, flim=c(-1, 1),
+                                display_name="Seed Difficulty",
+                                main=paste('Race', dnf_races[1]))
+```
+
+Finally the posterior inferences of the forfeit threshold for entrant 44
+mostly concentrates on values between $0$ and $1$.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+e <- 44
+name <- paste0('kappas[', e, ']')
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                display_name="Forfeit Threshold",
+                                main=paste('Entrant', e))
+```
+
+While entrant 44 finishes most of their entrances forfeits are not uncommon.
+
+```{r}
+summarize_entrant(e)
+```
+
+This higher propensity to forfeit suppresses larger values of the forfeit
+threshold.
+
+Overall our posterior inferences for the forfeit behavior are reasonable, but
+the relative scarcity of forfeits prevents us from resolving that behavior with
+too much precision.
+
+## Model 4
+
+A natural extension of the current model is to couple the behavior across seeds
+and entrants, allowing data to be shared and reducing inferential uncertainties
+especially for races and entrants with few entrances to inform them directly.
+In particular if our domain expertise about these behaviors is exchangeable then
+we can couple them together with hierarchical models.  As a side benefit we can
+also use the inferred hierarchical population behavior to make inferences and
+predictions about new, hypothetical seeds and entrants.
+
+Because the MapRando version distinguishes some seeds from each other, however,
+not all of the seed difficulties are exchangeable.  That said we don't have any
+information to discriminate between the seeds _within_ a version, suggesting a
+conditional exchangeabilty.  In other words we can couple the seed difficulties
+within each MapRando version together into separate hierarchical models.
+
+For programmatic convenience we'll just need to convert the version numbers into
+sequential indices.
+
+```{r}
+uniq_versions <- unique(race_info$versions)
+data$N_versions <- length(uniq_versions)
+data$version_idxs <- as.numeric(factor(race_info$versions,
+                                       levels=uniq_versions,
+                                       labels=1:data$N_versions))
+```
+
+On the other hand we don't have any prior information capable of discriminating
+between the entrants, at least not without doing additional research into their
+experience with Super Metroid&reg; in general and MapRando in particular.
+Consequently all of the entrant behaviors are exchangeable with each other and
+can be captured within a single hierarchy.  For simplicity I will couple only
+the entrant skills together, leaving the heterogeneous entrant forfeit behaviors
+independent of each other.
+
+Because the seed difficulties and entrant skills are modeled with
+one-dimensional, and unconstrained, real values we can reach for the standard
+normal hierarchical model.  The last step we then need in order to fully define
+the model is a parameterization of the individual parameters in each hierarchy.
+Here I will use a monolithic non-centered parameterization for all of the
+hierarchies and hope that the large number of seeds and entrants results in
+strong enough regularization to suppress any problematic degeneracies.  In the
+worst case our computational diagnostics will indicate if we need to consider
+more sophisticated parameterizations.
+
+```{.stan include="stan_programs/model4.stan" filename="model4.stan"}
+```
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: true
+fit <- stan(file="stan_programs/model4.stan",
+            data=data, seed=8438338,
+            warmup=1000, iter=2024, refresh=0)
+```
+
+Fortunately we don't see any of the tell-tale signs of problematic hierarchical
+geometries, such as divergences and E-FMI warnings.  Even better the
+auto-correlations are consistently weaker than before!  This suggests that the
+hierarchical coupling is indeed reducing the posterior uncertainties and
+improving the overall posterior geometry.
+
+```{r}
+diagnostics4 <- util$extract_hmc_diagnostics(fit)
+util$check_all_hmc_diagnostics(diagnostics4)
+
+samples4 <- util$extract_expectands(fit)
+base_samples <- util$filter_expectands(samples4,
+                                       c('gamma',
+                                         'eta_difficulties',
+                                         'tau_difficulties',
+                                         'eta_skills',
+                                         'tau_skills',
+                                         'kappas', 'betas',
+                                         'psi'),
+                                       check_arrays=TRUE)
+util$summarize_expectand_diagnostics(base_samples)
+```
+
+A review of our visual retrodictive checks doesn't show any indications that the
+introduction of the hierarchical coupling compromised the adequacy of our
+modeling assumptions.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+util$plot_hist_quantiles(samples4, 'race_entrant_f_times_pred',
+                         baseline_values=data$race_entrant_f_times,
+                         xlab="Finish Time (s)",
+                         main="All Races, All Entrants")
+```
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+names <- sapply(1:data$N_races,
+                function(r) paste0('race_N_entrants_dnf_pred[', r,']'))
+util$plot_disc_pushforward_quantiles(samples4, names,
+                                     baseline_values=data$race_N_entrants_dnf,
+                                     residual=TRUE,
+                                     xlab="Race",
+                                     ylab="N_dnf")
+```
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (r in c(7, 33, 77, 140)) {
+  idxs <- data$race_f_start_idxs[r]:data$race_f_end_idxs[r]
+  names <- sapply(idxs, function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples4, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 11000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("Race ", r, ", All Entrants"))
+}
+```
+
+```{r}
+par(mfrow=c(2, 2), mar=c(5, 5, 3, 1))
+
+for (e in c(19, 31, 73, 93)) {
+  idxs <- which(data$race_entrant_f_idxs == e)
+  names <- sapply(idxs, function(n) paste0('race_entrant_f_times_pred[', n, ']'))
+  filtered_samples <- util$filter_expectands(samples4, names)
+  util$plot_hist_quantiles(filtered_samples, 'race_entrant_f_times_pred',
+                           1000, 12000, 1000,
+                           baseline_values=data$race_entrant_f_times[idxs],
+                           xlab="Finish Time (s)",
+                           main=paste0("All Races, Entrant ", e))
+}
+```
+
+Now we can explore the posterior inferences for not just the individual
+behaviors but also the hierarchical populations from which those behaviors are,
+at least mathematically, drawn.
+
+Each MapRando version defines a separate hierarchical population and,
+unsurprisingly, the inferred population behavior is most precise for the later
+versions that have been played the most.
+
+```{r}
+for (v in 1:data$N_versions) {
+  par(mfrow=c(1, 2), mar=c(5, 5, 1, 1))
+
+  races <- which(data$version_idxs == v)
+  names <- sapply(races, function(r) paste0('difficulties[', r,']'))
+  util$plot_disc_pushforward_quantiles(samples4, names,
+                                       xlab="Race",
+                                       xticklabs=races,
+                                       ylab="Difficulty")
+
+  name <- paste0('tau_difficulties[', v, ']')
+  util$plot_expectand_pushforward(samples4[[name]], 30, flim=c(0, 1.1),
+                                  display_name="tau_difficulties",
+                                  main=paste("Version", uniq_versions[v]))
+}
+```
+
+Subject to the posterior uncertainties all of the version population behaviors
+are consistent with each other.  For example both versions 112 and 113 strongly
+suppress seed difficulty magnitudes above
+$$
+2 \tau_{\mathrm{difficulty}} \approx 0.4,
+$$
+implying range of proportional changes to the baseline finish time between
+$$
+\exp(-0.4) \approx 0.67
+$$
+and
+$$
+\exp(+0.4) \approx 1.49.
+$$
+
+Interestingly the entrant skills exhibit similar regularization, with the
+population scale concentrating just under $0.3$.
+
+```{r}
+par(mfrow=c(1, 2), mar=c(5, 5, 1, 1))
+
+names <- sapply(1:data$N_entrants,
+                function(n) paste0('skills[', n,']'))
+util$plot_disc_pushforward_quantiles(samples4, names,
+                                     xlab="Entrant",
+                                     ylab="Skill")
+
+util$plot_expectand_pushforward(samples4[['tau_skills']], 20,
+                                display_name="tau_skills")
+```
+
+## Inferential Comparison { #sec:inf-comp }
+
+Before applying our posterior inferences to make useful statements about the
+entrants and their behavior in future races let's pause and examine the impact
+our model development has had on our posterior inferences.
+
+### Log Baseline
+
+To start let's look at the parameter $\gamma$ which, once exponentiated, sets
+the baseline finish time.
+
+Interestingly changing the observational model doesn't seem to have strongly
+impacted $\gamma$, at least within the resolution of our Markov chain Monte
+Carlo estimators.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples1[['gamma']], 20,
+                                flim=c(8.45, 8.8),
+                                display_name="gamma",
+                                col=util$c_light)
+text(8.525, 10, "Model 1", col=util$c_light)
+
+util$plot_expectand_pushforward(samples2[['gamma']], 20,
+                                flim=c(8.45, 8.8),
+                                border="#BBBBBB88", add=TRUE)
+text(8.675, 10, "Model 2", col=util$c_dark)
+```
+
+On the other hand incorporating forfeits results in a substantial shift of the
+entire marginal posterior distribution up to larger values, implying longer
+baseline finish times.  This makes sense because without accounting for forfeits
+the observed finish times are biased towards more optimistic outcomes.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples2[['gamma']], 20,
+                                flim=c(8.45, 8.8),
+                                display_name="gamma",
+                                col=util$c_light)
+text(8.525, 10, "Model 2", col=util$c_light)
+
+util$plot_expectand_pushforward(samples3[['gamma']], 20,
+                                flim=c(8.45, 8.8),
+                                border="#BBBBBB88", add=TRUE)
+text(8.7, 10, "Model 3", col=util$c_dark)
+```
+
+The introduction of the seed difficulty and entrant skill hierarchies has no
+impact on smaller values of $\gamma$ but it does suppress larger values,
+giving a narrower marginal posterior distribution.  This is just a manifestation
+of the smaller uncertainties that appropriately coupling the individuals
+behaviors together can give.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples3[['gamma']], 20,
+                                flim=c(8.45, 8.8),
+                                ylim=c(0, 15),
+                                display_name="gamma",
+                                col=util$c_light)
+text(8.55, 10, "Model 3", col=util$c_light)
+
+util$plot_expectand_pushforward(samples4[['gamma']], 20,
+                                flim=c(8.45, 8.8),
+                                border="#BBBBBB88", add=TRUE)
+text(8.7, 10, "Model 4", col=util$c_dark)
+```
+
+### Entrant 29 Skill
+
+Now let's dig into posterior inferences for some entrants with particularly
+extreme observed behaviors that will hopefully emphasize the impact of our
+model improvements.
+
+For example the record of entrant 29 features lots of entrances and only a
+single forfeit.  Consequently we might naively expect the introduction of
+forfeits and the entrant skill hierarchy to have less impact on inferences for
+the skill parameter of entrant 29.
+
+```{r}
+e <- 29
+summarize_entrant(e)
+```
+
+```{r}
+name <- paste0('skills[', e,']')
+xname <- paste0('Entrant ', e, ' Skill')
+```
+
+Transitioning from a gamma to inverse gamma observational model seems to yield a
+very slight shift of the marginal skill posterior distribution to smaller
+values.  On the other hand because this shift is largely enveloped by the Markov
+chain Monte Carlo errors it could also just be a computational artifact.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples1[[name]], 20,
+                                flim=c(0.25, 0.6),
+                                display_name=xname,
+                                col=util$c_light)
+text(0.49, 10, "Model 1", col=util$c_light)
+
+util$plot_expectand_pushforward(samples2[[name]], 20,
+                                flim=c(0.25, 0.6),
+                                border="#BBBBBB88", add=TRUE)
+text(0.355, 10, "Model 2", col=util$c_dark)
+```
+
+Interestingly the introduction of forfeits into the model has a much stronger
+impact on the marginal skill posterior distribution, shifting it up to larger
+values.  Even though entrant 29 rarely forfeited the ignorance of forfeits can
+allow data from other entrants to bias inferences for common parameters like
+$\gamma$, which then bias inferences for all entrant skills.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples2[[name]], 20,
+                                flim=c(0.25, 0.6),
+                                display_name=xname,
+                                col=util$c_light)
+text(0.355, 10, "Model 2", col=util$c_light)
+
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                flim=c(0.25, 0.6),
+                                border="#BBBBBB88", add=TRUE)
+text(0.5, 10, "Model 3", col=util$c_dark)
+```
+
+The introduction of the skill hierarchy has a similar, albeit weaker, influence
+on the entrant 29 skill parameter as it did on $\gamma$.  Larger values are
+suppressed, narrowing the marginal posterior distribution.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                flim=c(0.25, 0.6),
+                                ylim=c(0, 14),
+                                display_name=xname,
+                                col=util$c_light)
+text(0.49, 10, "Model 3", col=util$c_light)
+
+util$plot_expectand_pushforward(samples4[[name]], 20,
+                                flim=c(0.25, 0.6),
+                                border="#BBBBBB88", add=TRUE)
+text(0.36, 10, "Model 4", col=util$c_dark)
+```
+
+### Entrant 44 Skill
+
+Let's contrast these changes with those for the skill parameter of entrant 44,
+who also entered into many races but forfeited at a much higher rate than
+entrant 29.
+
+```{r}
+e <- 44
+summarize_entrant(e)
+```
+
+```{r}
+name <- paste0('skills[', e,']')
+xname <- paste0('Entrant ', e, ' Skill')
+```
+
+Again the tweak of the observational model has a negligible impact on the
+marginal posterior inferences.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples1[[name]], 20,
+                                flim=c(0, 0.4),
+                                display_name=xname,
+                                col=util$c_light)
+text(0.12, 10, "Model 1", col=util$c_light)
+
+util$plot_expectand_pushforward(samples2[[name]], 20,
+                                flim=c(0, 0.4),
+                                border="#BBBBBB88", add=TRUE)
+text(0.24, 10, "Model 2", col=util$c_dark)
+```
+
+Somewhat surprisingly incorporating forfeits shifts the entrant 44 skill
+parameter to larger values!
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples2[[name]], 20,
+                                flim=c(0, 0.4),
+                                display_name=xname,
+                                col=util$c_light)
+text(0.12, 10, "Model 2", col=util$c_light)
+
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                flim=c(0, 0.4),
+                                border="#BBBBBB88", add=TRUE)
+text(0.255, 10, "Model 3", col=util$c_dark)
+```
+
+This suggests that entrant 44 forfeiting for only particularly difficult races.
+Indeed examining the seed difficulty inferences it appears that entrant 44 has
+largely forfeited only when confronted with difficult seeds.
+
+```{r}
+f_races <- c()
+for (r in 1:data$N_races) {
+  idxs <- data$race_f_start_idxs[r]:data$race_f_end_idxs[r]
+  if (e %in% data$race_entrant_f_idxs[idxs])
+    f_races <- c(f_races, r)
+}
+
+dnf_races <- c()
+for (r in 1:data$N_races) {
+  if (data$race_N_entrants_dnf[r] == 0) next
+  idxs <- data$race_dnf_start_idxs[r]:data$race_dnf_end_idxs[r]
+  if (e %in% data$race_entrant_dnf_idxs[idxs])
+    dnf_races <- c(dnf_races, r)
+}
+
+par(mfrow=c(1, 2), mar=c(5, 5, 1, 1))
+
+names <- sapply(f_races, function(r) paste0('difficulties[', r,']'))
+util$plot_disc_pushforward_quantiles(samples4, names,
+                                     xlab="Race",
+                                     xticklabs=f_races,
+                                     ylab="Difficulty",
+                                     display_ylim=c(-0.6, 0.6),
+                                     main="Entrant 44 Finished")
+
+names <- sapply(dnf_races, function(r) paste0('difficulties[', r,']'))
+util$plot_disc_pushforward_quantiles(samples4, names,
+                                     xlab="Race",
+                                     xticklabs=dnf_races,
+                                     ylab="Difficulty",
+                                     display_ylim=c(-0.6, 0.6),
+                                     main="Entrant 44 Forfeited")
+```
+
+Because the entrant 44 skill parameter concentrates on smaller values than the
+entrant 29 skill parameter the influence of the hierarchical coupling isn't
+as pronounced.  Here only a small slice of larger values are suppressed and the
+marginal posterior distribution tightens only slightly.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                flim=c(0, 0.4),
+                                ylim=c(0, 13),
+                                display_name=xname,
+                                col=util$c_light)
+text(0.12, 10, "Model 3", col=util$c_light)
+
+util$plot_expectand_pushforward(samples4[[name]], 20,
+                                flim=c(0, 0.4),
+                                border="#BBBBBB88", add=TRUE)
+text(0.26, 10, "Model 4", col=util$c_dark)
+```
+
+### Entrant 83 Skill
+
+Lastly let's take a look at an entrant with only a few race entrances.  In
+particular entrant 83 has only five entrances and almost half of them are
+forfeits.
+
+```{r}
+e <- 83
+summarize_entrant(e)
+```
+
+```{r}
+name <- paste0('skills[', e,']')
+xname <- paste0('Entrant ', e, ' Skill')
+```
+
+Once again the transition from gamma to inverse gamma observational models has
+little impact on the marginal skill inferences.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples1[[name]], 20,
+                                flim=c(-0.6, 0.1),
+                                display_name=xname,
+                                col=util$c_light)
+text(-0.4, 3, "Model 1", col=util$c_light)
+
+util$plot_expectand_pushforward(samples2[[name]], 20,
+                                flim=c(-0.6, 0.1),
+                                border="#BBBBBB88", add=TRUE)
+text(-0.075, 3, "Model 2", col=util$c_dark)
+```
+
+Incorporating forfeits pushes the skill marginal posterior distribution to
+larger values, but only slightly.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples2[[name]], 20,
+                                flim=c(-0.6, 0.1),
+                                display_name=xname,
+                                col=util$c_light)
+text(-0.4, 3, "Model 2", col=util$c_light)
+
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                flim=c(-0.6, 0.1),
+                                border="#BBBBBB88", add=TRUE)
+text(-0.05, 3, "Model 3", col=util$c_dark)
+```
+
+It's hard to say if the hierarchical coupling has any substantial impact.
+There is perhaps a very weak suppression of more negative skill values, but that
+trend is also within the span of the Markov chain Monte Carlo estimator errors.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+util$plot_expectand_pushforward(samples3[[name]], 20,
+                                flim=c(-0.6, 0.1),
+                                ylim=c(0, 5.5),
+                                display_name=xname,
+                                col=util$c_light)
+text(-0.4, 3, "Model 3", col=util$c_light)
+
+util$plot_expectand_pushforward(samples4[[name]], 20,
+                                flim=c(-0.6, 0.1),
+                                border="#BBBBBB88", add=TRUE)
+text(-0.05, 3, "Model 4", col=util$c_dark)
+```
+
+In hindsight we shouldn't expect any substantial impact from the introduction of
+the hierarchical modeling components given that the initial posterior inferences
+for the entrant 83 skill parameter already concentrated with the inferred
+span of the hierarchical population model.
+
+## Possible Model Expansions
+
+At this point our model appears to be adequate, at least within the scope of the
+summary statistics that we considered.  In particular because we only spot
+checked the retrodictive behavior for a few individual races and entrants there
+is plenty of room for subtle model inadequacies to hide.  Moreover the available
+domain expertise suggests plenty of possible model improvements that we could
+investigate more carefully if we had the time, need, or both.
+
+Attempting to implement any of these model expansions would be a useful exercise
+for any enterprising readers.
+
+### Idiosyncratic Entrants
+
+Given that we have already argued that our domain expertise about the entrant
+behaviors is exchangeable there is nothing preventing us from hierarchically
+modeling the variation in not only entrant skill but also entrant forfeit
+behaviors.
+
+If entrant skill, forfeit threshold, and forfeit scale all varied independently
+then implementing this model would be mostly straightforward, with some possible
+challenges in accommodating the positivity constraint on the forfeit scale.
+There's no immediate reason, however, why the heterogeneity in these parameters
+wouldn't be coupled together.  For example entrants with higher skills might
+also tend to have higher forfeit thresholds and vice versa.  In this case we
+would need to consider a multivariate hierarchical population model.
+
+This is the inevitable challenge with hierarchical modeling in practice.  Once
+we identify which behaviors are heterogeneous and exchangeable we still need to
+determine _how_ those behaviors could vary.
+
+### Transcending Normal Population Models
+
+Speaking of hierarchies, we are in a somewhat privileged position with the
+large number of entrants and seeds in our data set.  This abundance of contexts
+might allow us to resolve more sophisticated hierarchical population behavior
+beyond the normal population model that we have assumed.  For example we could
+consider a Student's $t$ population model where we have to infer not only the
+breadth of the population but also the precise shape of the population tails.
+
+This more flexible hierarchical population model would allow our inferences to
+better accommodate sparsity, strongly regularizing most of the seed difficulties
+or entrant skills towards zero while allowing the more extreme behaviors to be
+more weakly regularized.
+
+### Self-Improvement
+
+When exploring the time-dependence of the seed difficulties we briefly
+considered time-dependent entrant skills before accepting the evolving MapRando
+version as the most likely explanation.  That said there's no reason why we
+couldn't expand our model to allow for time-dependent entrant skills, if only to
+see if we could resolve any substantial dependencies with the data we have
+collected.
+
+The main challenge with implementing time-dependent skills is determining how
+exactly to model how entrants improve and hence what kinds of time-dependencies
+we should prioritize.  For example if learning scales with the number of
+MapRando games played, and entrant interest in the game is not uniform in time,
+then modeling skill as a function of race date-time might not be the most best
+path.  Instead it might be more productive to allow entrant skills to depend
+on cumulative participation or even something else entirely.
+
+We still then have to determine the possible functional relationships between
+skill and the appropriate evolution metric.  We could, for instance, simply
+assume a linear relationship for simplicity or consider more sophisticated
+relationships that allow for more complicated behaviors such as saturation.
+
+### Variable Variability
+
+Throughout our model development have assumed a common $\psi$ across all races,
+even as the randomization seeds change.  That said sometimes the MapRando
+randomization logic results in particularly ambiguous progression paths;
+entrants taking the correct path first will tend to finish especially fast while
+those who explore the incorrect paths will tend to finish later, resulting in
+especially large variability.  This is especially true if a seed allows for
+unintended sequence breaks of which only the more skilled entrants can take
+advantage.  On the other hand some seeds result in progression paths that are
+easier to predict which narrows the range of possible finish times.
+
+One way to account for this heterogeneity is to allow $\psi$ to vary across
+seeds.  We could even model the $\psi$ parameters hierarchically to help
+regularize inferences for races with only a few entrants.
+
+Before expanding the model, however, we would first want to see if we can
+identify any consequences of this behavior in new posterior retrodictive checks.
+For example we could look at the finish time histograms for more races to see
+if the observed behavior is wider or narrow than the posterior predictive
+behavior.  We could also try to engineer summary statistics that are directly
+sensitive to the variability, such as the ratio of the empirical variance to
+the squared empirical mean within each race and even statistics that are
+sensitive to heterogeneity in those individual race statistics.
+
+At the same time entrants who are more experienced with MapRando games,
+especially the underlying logic of the map randomization, can often identify
+the correct progression paths quickly and avoid wasting time exploring dead
+ends.  This suggests that $\psi$ could also vary across entrants.  The study of
+this heterogeneity would proceed similarly to the above study of seed
+heterogeneity, only separating the summary statistics by individual entrants
+instead of individual races.
+
+# Actionable Insights
+
+Although it's easy to become distracted by all of the directions we can take our
+last model we don't want to forget all of the powerful things that we can
+already do with it.  In this section we'll apply our posterior inferences to a
+few applications that might arise in actual practice.
+
+## Ranking Entrants
+
+A common objective of races is to construct leader boards where entrants are
+ranked in order of their performance.  For example `https://racetime.gg/smr`
+uses a heuristic, iterative system to assign points to entrants based on their
+performance in each race and then uses those points to determine a dynamic
+[leader board](https://racetime.gg/smr/leaderboards).  The top nine entrants as
+of August 3rd, 2024 are shown in @tbl-leader-board.
+
+::: { #tbl-leader-board .striped }
+
+| Rank | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+| - | - | - | - | - | - | - | - | - | - |
+| Entrant Index | 70 | 105 | 29 | 100 | 18 | 91 | 60 | 65 | 4 |
+
+The website `https://racetime.gg/smr` ranks entrants based on points earned
+during each race.
+
+:::
+
+Our posterior distribution can also be used to rank the entrants by their
+inferred skills.
+
+Mathematically any configuration of entrant skills
+$$
+( \lambda_{\mathrm{skill}, 1}, \ldots,
+  \lambda_{\mathrm{skill}, e}, \ldots,
+  \lambda_{\mathrm{skill}, N_{\mathrm{entrants}}} )
+\in \left( \Lambda_{\mathrm{skill}} \right)^{N_{\mathrm{entrants}}}
+$$
+implies a unique ranking
+$$
+(r_{1}, \ldots, r_{e}, \ldots, r_{N_{\mathrm{entrants}}}) \in R
+$$
+where entrants are ordered by their their individual skills,
+$$
+\lambda_{\mathrm{skill}, r_{1}} > \ldots >
+\lambda_{\mathrm{skill}, r_{e}} > \ldots >
+\lambda_{\mathrm{skill}, r_{N_{\mathrm{entrants}}}}.
+$$
+This in fact defines a bijective function from the space of entrant skills to
+the space $R$ of the $N_{\mathrm{entrants}}!$ possible orderings of the
+$N_{\mathrm{entrants}}$ entrants,
+$$
+o : \left( \Lambda_{\mathrm{skill}} \right)^{N_{\mathrm{entrants}}}
+    \rightarrow R.
+$$
+
+Pushing forward our posterior distribution along this function gives a posterior
+distribution $o_{*} \pi$ that quantifies our uncertainty about the possible
+entrant rankings.  The only challenge is that the space of ranking $R$ is
+massive and difficult to navigate.  In particular it's not immediately clear how
+we can construct practical point summaries of this rank posterior distribution
+for applications like leader boards.
+
+For example intuitively we might be interested in point estimates that quantify
+the centrality of the rank posterior distribution in some way.  Because the
+space of rankings is discrete each rank will in general be allocated non-zero
+probability and we might consider a modal ranking,
+$$
+r^{*} = \underset{r \in R}{\mathrm{argmax}} \; o_{*} \pi( \{ r \} ).
+$$
+Unfortunately even if a unique mode exists actually finding it will typically be
+intractable.  Not only can we not compute the atomic allocations
+$o_{*} \pi( \{ r \} )$ in closed form but also exhaustively searching through
+all $N_{\mathrm{entrants}}!$ elements will almost always be too expensive and we
+have no gradient information to guide a more efficient search.
+
+In analogy to a posterior mean we might consider a distance function
+$d : R \times R \rightarrow \mathbb{R}^{+}$ and then define a point summary that
+minimizes the expected distance,
+$$
+\mu_{R}
+=
+\underset{r \in R}{\mathrm{argmax}} \; \mathbb{E}_{o_{*} \pi}[ d( \cdot, r) ].
+$$
+Conveniently there are a variety of useful distance functions on $R$ that we
+could use here. and the expectation values can be readily estimated with Markov
+chain Monte Carlo.  The minimization over all possible candidate rankings
+$r \in R$, however, suffers from the same problems as above.
+
+Because of these computational issues we will usually need to appeal to more
+heuristic methods in practice.  For instance we can always rank the entrants by
+the posterior expectation values of their individual skills.
+
+```{r}
+expected_skill <- function(e) {
+  util$ensemble_mcmc_est(samples4[[paste0('skills[', e, ']')]])[1]
+}
+
+expected_skills <- sapply(1:data$N_entrants,
+                          function(e) expected_skill(e))
+
+ranked_entrants <- sort(expected_skills, index.return=TRUE)$ix
+
+for (r in 1:9) {
+  cat(sprintf("Rank %i: Entrant %i\n",
+              r, ranked_entrants[data$N_entrants + 1 - r]))
+  if (r == 9) cat("...")
+}
+```
+
+Interestingly the top eight entrants in this heuristic ranking are the same as
+the top eight entrants in the official `https://racetime.gg/smr` leader boards.
+That said the ordering of positions two through five are different.
+
+```{r}
+rank <- 1:9
+post_mean_ranking <- rev(tail(ranked_entrants, 9))
+racetime_ranking <- c(70, 105, 29, 100, 18, 91, 60, 65, 4)
+
+df <- data.frame(rank, post_mean_ranking, racetime_ranking)
+names(df) <- c("Rank", "Posterior Mean Ranking", "racetime.gg Ranking")
+
+print(df, row.names=FALSE)
+```
+
+Inconsistent rankings is not at all surprising given our posterior
+uncertainties.  For example even though entrant 70 exhibits a higher expected
+skill than entrant 29 our inferential uncertainties are not inconsistent with
+the exact skill of entrant 29 actually surpassing the exact skill of entrant 70.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+e <- ranked_entrants[data$N_entrants + 1 - 3]
+name <- paste0('skills[', e,']')
+
+util$plot_expectand_pushforward(samples4[[name]], 25,
+                                flim=c(0.25, 0.65),
+                                ylim=c(0, 15),
+                                display_name="Skill",
+                                col=util$c_light)
+text(0.36, 11.5, paste("Rank 3\nEntrant", e), col=util$c_light)
+
+e <- ranked_entrants[data$N_entrants + 1 - 2]
+name <- paste0('skills[', e,']')
+
+util$plot_expectand_pushforward(samples4[[name]], 25,
+                                flim=c(0.25, 0.65),
+                                col=util$c_mid,
+                                border="#BBBBBB88",
+                                add=TRUE)
+text(0.415, 14.25, paste("Rank 2\nEntrant", e), col=util$c_mid)
+
+e <- ranked_entrants[data$N_entrants + 1 - 1]
+name <- paste0('skills[', e,']')
+
+util$plot_expectand_pushforward(samples4[[name]], 25,
+                                flim=c(0.25, 0.65),
+                                col=util$c_dark,
+                                border="#BBBBBB88",
+                                add=TRUE)
+text(0.485, 11.5, paste("Rank 1\nEntrant", e), col=util$c_dark)
+```
+
+If we want to compare only two entrants at a time then instead of comparing
+their expected skills we can compute the posterior probability that one skill
+surpasses the other.  In particular this latter comparison accounts for
+inferential coupling between the two skill parameters.
+
+```{r}
+C <- 4
+S <- 1024
+
+e1 <- ranked_entrants[data$N_entrants + 1 - 1]
+e2 <- ranked_entrants[data$N_entrants + 1 - 2]
+derived_samples <- matrix(NA, nrow=C, ncol=S)
+
+for (c in 1:C) {
+  for (s in 1:S) {
+    derived_samples[c, s] <- samples4[[paste0('skills[', e1,']')]][c, s] >
+                             samples4[[paste0('skills[', e2,']')]][c, s]
+  }
+}
+
+p <- util$ensemble_mcmc_est(derived_samples)[1]
+
+format_string <- paste0("Probability that entrant %i skill is ",
+                        "larger than entrant %i skill = %.3f.")
+cat(sprintf(format_string, e1, e2, p))
+```
+
+These relative comparisons can also be used to construct another heuristic
+ranking.  For example we could compute the probability that the skill of each
+entrant is larger than all other entrants and assign first place based on the
+highest probability.  Then we could compute the probability that the skill of
+each remaining entrant is larger than all of the other remaining entrants and
+assign second place based on the highest of these probabilities.  Finally we
+could fill out all of the rankings by iterating this procedure until only one
+entrant is left to occupy last place.
+
+```{r}
+best_entrant <- function(entrant_idxs) {
+  C <- 4
+  S <- 1024
+
+  E <- length(entrant_idxs)
+  probs <- c()
+  skills <- array(NA, dim = c(data$N_entrants, C, S))
+  for (e in entrant_idxs)
+    skills[e,,] <- samples4[[paste0('skills[', e,']')]]
+
+  for (e in entrant_idxs) {
+    other_entrant_idxs <- entrant_idxs[-which(entrant_idxs == e)]
+    comps <- matrix(NA, nrow=C, ncol=S)
+    for (c in 1:C) {
+      for (s in 1:S) {
+        pairwise_comps <- sapply(other_entrant_idxs,
+                                 function(eo) skills[e] > skills[eo])
+        comps[c, s] <- Reduce("&", pairwise_comps)
+      }
+    }
+    probs <- c(probs, util$ensemble_mcmc_est(comps)[1])
+  }
+  entrant_idxs[which(probs == max(probs))]
+}
+```
+
+```{r}
+#| cache: true
+entrant_idxs <- 1:data$N_entrants
+e_first <- best_entrant(entrant_idxs)
+cat(sprintf("First Place: Entrant %i", e_first))
+```
+
+```{r}
+#| cache: true
+entrant_idxs <- entrant_idxs[-which(entrant_idxs == e_first)]
+e_second <- best_entrant(entrant_idxs)
+cat(sprintf("Second Place: Entrant %i", e_second))
+```
+
+```{r}
+#| cache: true
+entrant_idxs <- entrant_idxs[-which(entrant_idxs == e_second)]
+e_third <- best_entrant(entrant_idxs)
+cat(sprintf("Third Place: Entrant %i", e_third))
+```
+
+Interestingly this give the same top three as the ranking of entrants by their
+posterior expected skills.  In general, however, this will not always be the
+case.
+
+The practical limitations of this approach is that it requires estimating a lot
+of expectation values.  Moreover if we really wanted to be careful then we would
+need to ensure that the Markov chain Monte Carlo error for each probability
+estimate is smaller than any of the differences between the probability
+estimates so that the resulting ranks are not corrupted by computational
+artifacts.  In practice this might require running more Markov chains than
+usual, longer Markov chains than usual, or both.
+
+## Predicting Race Outcomes
+
+Another common application is to make predictions about the outcomes of future
+races, or even hypothetical races that might never occur.  We can use our
+posterior inferences for the observed seed and entrants to immediately inform
+predictions about how existing entrants would fare if they were able to play
+previous seeds again.  In order to make predictions about the performance of
+entirely new entrants or new seeds we will need to take advantage of the
+hierarchical population models.
+
+Let's rerun our last, hierarchical model only with a new `generated quantities`
+block where we simulate posterior predictive finish statuses and finish times
+for all existing entrants in a hypothetical race using a new seed in the latest
+MapRando version.
+
+```{.stan include="stan_programs/model5.stan" filename="model5.stan"}
+```
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: true
+fit <- stan(file="stan_programs/model5.stan",
+            data=data, seed=8438338,
+            warmup=1000, iter=2024, refresh=0)
+```
+
+Because the `generated quantities` block of Model 5 will consume pseudo-random
+number generate state differently than that of Model 4 there is a chance that
+the realized Markov chains will encounter different pathologies.  Consequently
+we'll need to double check the computational diagnostics.  Fortunately no new
+warnings have arisen.
+
+```{r}
+diagnostics <- util$extract_hmc_diagnostics(fit)
+util$check_all_hmc_diagnostics(diagnostics)
+
+samples <- util$extract_expectands(fit)
+base_samples <- util$filter_expectands(samples,
+                                       c('gamma',
+                                         'eta_difficulties',
+                                         'tau_difficulties',
+                                         'eta_skills',
+                                         'tau_skills',
+                                         'kappas', 'betas',
+                                         'psi'),
+                                       check_arrays=TRUE)
+util$summarize_expectand_diagnostics(base_samples)
+```
+
+The uses of these predictions are endless.
+
+### Single Entrant Predictions
+
+For example some entrants not only live-stream their entrances to their
+communities but also allow viewers to make non-monetary over/under bets on their
+finish time.  If we wanted to take these casual activities a bit too far then we
+could use our predictions to set a betting line where both outcomes are equally
+probable.
+
+Without forfeits the balanced betting line $t_{\mathrm{gamble}}$ would be
+implicitly defined by the condition
+$$
+\pi( \, [ 0, t_{\mathrm{gamble}} ) \, ) = 0.5.
+$$
+In other words $t_{\mathrm{gamble}}$ would just be given by the median of the
+posterior predictive finish time distribution for the hosting entrant, which we
+can estimate with Markov chain Monte Carlo.
+
+To be completely fair, however, we need to account for the fact that the hosting
+entrant might forfeit.  Consequently the relevant condition is actually
+\begin{align*}
+\pi( \, [ 0, t_{\mathrm{gamble}} ) \, , \mathrm{forfeit} = 0 )
+&=
+0.5
+\\
+\pi( \, [ 0, t_{\mathrm{gamble}} ) \, \mid \mathrm{forfeit} = 0 ) \,
+\pi( \mathrm{forfeit} = 0 )
+&=
+0.5
+\\
+\pi( \, [ 0, t_{\mathrm{gamble}} ) \, \mid \mathrm{forfeit} = 0 ) \,
+\left( 1 - \pi( \mathrm{forfeit} = 1 ) \right)
+&=
+0.5,
+\end{align*}
+or
+$$
+\pi( \, [ 0, t_{\mathrm{gamble}} ) \, \mid \mathrm{forfeit} = 0 )
+=
+\frac{0.5}{ 1 - \pi( \mathrm{forfeit} = 1 ) }.
+$$
+
+Fortunately we can readily compute all of these ingredients using our `Stan`
+output.
+
+To demonstrate let's look at entrant 65.  First we can compute the probability
+of forfeit.
+
+```{r}
+e <- 65
+name <- paste0('entrant_statuses_pred[', e, ']')
+p_dnf <- util$ensemble_mcmc_est(samples[[name]])[1]
+cat(sprintf("Probability entrant %i forfeits = %.3f", e, p_dnf))
+```
+
+Because the forfeit probability is so small the balanced probability allocation
+needed to define $t_{\mathrm{gamble}}$ is very close to $\frac{1}{2}$.
+
+```{r}
+p_balanced <- 0.5 / (1 - p_dnf)
+```
+
+Averaging the empirical quantiles within each Markov chain provides a consistent
+estimate of the exact posterior quantile.
+
+```{r}
+q <- 0
+
+name <- paste0('entrant_f_times_pred[', e, ']')
+for (c in 1:C) {
+  q <- q + quantile(samples[[name]][c,], probs=c(p_balanced)) / C
+}
+
+cat(sprintf("t_gamble = %.3f minutes", q / 60))
+```
+
+### Head-to-Head Predictions
+
+We can also predict how two entrants will perform relative to each other in our
+hypothetical race.  Here we'll consider entrant 29 racing against entrant 65.
+
+The marginal posterior distribution for the two entrants' skill parameters
+overlap quite a bit, but that of entrant 29 does favor larger values than that
+of entrant 65.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+e <- 29
+name <- paste0('skills[', e,']')
+
+util$plot_expectand_pushforward(samples[[name]], 25,
+                                flim=c(0.15, 0.55),
+                                ylim=c(0, 15),
+                                display_name="Skill",
+                                col=util$c_light)
+text(0.42, 14, paste("Entrant", e), col=util$c_light)
+
+e <- 65
+name <- paste0('skills[', e,']')
+
+util$plot_expectand_pushforward(samples[[name]], 25,
+                                flim=c(0.15, 0.55),
+                                col=util$c_dark,
+                                border="#BBBBBB88",
+                                add=TRUE)
+text(0.3, 14, paste("Entrant", e), col=util$c_dark)
+```
+
+What really matters for predictive race outcomes, however, are not the latent
+skills but rather the predicted finish times.  The marginal posterior predictive
+distributions for the predicted finish times overlap even more, indicating a
+much closer race than we might expect from the skills alone.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 1, 1))
+
+e <- 29
+name <- paste0('entrant_f_times_pred[', e,']')
+
+util$plot_expectand_pushforward(samples[[name]] / 60, 25,
+                                flim=c(0, 175),
+                                ylim=c(0, 0.03),
+                                display_name="Skill",
+                                col=util$c_light)
+text(25, 0.02, paste("Entrant", e), col=util$c_light)
+
+e <- 65
+name <- paste0('entrant_f_times_pred[', e,']')
+
+util$plot_expectand_pushforward(samples[[name]] / 60, 25,
+                                flim=c(0, 175),
+                                col=util$c_dark,
+                                border="#BBBBBB88",
+                                add=TRUE)
+text(95, 0.02, paste("Entrant", e), col=util$c_dark)
+```
+
+That said the predicted finish times still don't tell the entire story.  To
+accurately predict a winner we also need to take into account the possibility
+that one, or possibly even both, of the entrants forfeits.  Altogether there are
+five possible outcomes that are relevant to whether or not entrant 29 beats
+entrant 65:
+* Entrant 29 forfeits and entrant 65 forfeits,
+* Entrant 29 forfeits and entrant 65 forfeits,
+* Entrant 29 finishes and entrant 65 forfeits,
+* Entrant 29 finishes and entrant finishes and $t_{29} < t_{65}$,
+* Entrant 29 finishes and entrant finishes and $t_{29} > t_{65}$.
+Of these entrant 29 decisively wins only in the third and fourth outcomes.
+
+In order to evaluate the probability that entrant 29 wins we'll need to make
+careful use of conditional probability theory taking into account all of these
+outcomes,
+\begin{align*}
+\pi( &\text{Entrant 29 beats entrant 65 } )
+\\
+&=\quad\;\,
+\pi( \text{Entrant 29 beats entrant 65 } \mid
+     \mathrm{forfeit}_{29} = 1, \mathrm{forfeit}_{65} = 1)
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 1, \mathrm{forfeit}_{65} = 1 )
+\\
+&\quad+ \;\,
+\pi( \text{Entrant 29 beats entrant 65 } \mid
+     \mathrm{forfeit}_{29} = 1, \mathrm{forfeit}_{65} = 0)
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 1, \mathrm{forfeit}_{65} = 0 )
+\\
+&\quad+ \;\,
+\pi( \text{Entrant 29 beats entrant 65 } \mid
+     \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 1)
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 1 )
+\\
+&\quad+ \;\,
+\pi( \text{Entrant 29 beats entrant 65 } \mid
+     \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0, t_{29} < t_{65})
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0,
+                      t_{29} < t_{65})
+\\
+&\quad+ \;\,
+\pi( \text{Entrant 29 beats entrant 65 } \mid
+     \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0, t_{29} > t_{65})
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0,
+                       t_{29} > t_{65})
+\\
+&=\quad\;\,
+\vphantom{\pi( \text{Entrant 29 beats entrant 65 } \mid} 0
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 1, \mathrm{forfeit}_{65} = 1 )
+\\
+&\quad+ \;\,
+\vphantom{\pi( \text{Entrant 29 beats entrant 65 } \mid} 0
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 1, \mathrm{forfeit}_{65} = 0 )
+\\
+&\quad+ \;\,
+\vphantom{\pi( \text{Entrant 29 beats entrant 65 } \mid} 1
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 1 )
+\\
+&\quad+ \;\,
+\vphantom{\pi( \text{Entrant 29 beats entrant 65 } \mid} 1
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0,
+                       t_{29} < t_{65})
+\\
+&\quad+ \;\,
+\vphantom{\pi( \text{Entrant 29 beats entrant 65 } \mid} 0
+\\
+&\quad\quad \cdot \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0,
+                       t_{29} > t_{65}),
+\end{align*}
+or
+\begin{align*}
+\pi( &\text{Entrant 29 beats entrant 65 } )
+\\
+&=\quad \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 1 )
+\\
+&\quad + \pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0,
+              t_{29} < t_{65})
+\\
+&=\quad \;\,
+\pi( \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 1 )
+\\
+&\quad\ + \; \pi( t_{29} < t_{65} \mid
+                  \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0 )
+\\
+&\quad\quad \cdot \pi(\mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0)
+\\
+&=\quad \;\,
+p_{\text{forfeit win}}
+\\
+&\quad\ + \; \pi( t_{29} < t_{65} \mid
+                  \mathrm{forfeit}_{29} = 0, \mathrm{forfeit}_{65} = 0 )
+\cdot p_{\text{no forfeits}}.
+\end{align*}
+
+At that is left is using Markov chain Monte Carlo to estimate the three
+posterior predictive probabilities on the right-hand side and then combine them
+together to give the left-hand side.
+
+```{r}
+e1 <- 29
+status_name1 <- paste0("entrant_statuses_pred[", e1, "]")
+time_name1 <- paste0("entrant_f_times_pred[", e1, "]")
+
+e2 <- 65
+status_name2 <- paste0("entrant_statuses_pred[", e2, "]")
+time_name2 <- paste0("entrant_f_times_pred[", e2, "]")
+
+C <- 4
+S <- 1024
+
+derived_samples <- lapply(1:3, function(k) matrix(NA, nrow=C, ncol=S))
+names(derived_samples) <- c('forfeit_win', 'no_forfeits', 'neg_time_diff')
+
+for (c in 1:C) {
+  for (s in 1:S) {
+    status1 <- samples[[status_name1]][c, s]
+    status2 <- samples[[status_name1]][c, s]
+
+    derived_samples[['forfeit_win']][c, s] <- (status1 == 0 & status2 == 1)
+    derived_samples[['no_forfeits']][c, s] <- (status1 == 0 & status2 == 0)
+
+    derived_samples[['neg_time_diff']][c, s] <- samples[[time_name1]][c, s] <
+                                                samples[[time_name2]][c, s]
+  }
+}
+
+p_forfeit_win <- util$ensemble_mcmc_est(derived_samples[['forfeit_win']])[1]
+p_no_forfeits <- util$ensemble_mcmc_est(derived_samples[['no_forfeits']])[1]
+p_neg_time_diff <- util$ensemble_mcmc_est(derived_samples[['neg_time_diff']])[1]
+
+p <- p_forfeit_win + p_neg_time_diff * p_no_forfeits
+
+cat(sprintf("Probability that entrant %i beats entrant %i = %.3f",
+            e1, e2, p))
+```
+
+Although entrant 29 is definitely favored the outcome is by no means certain!
+
+# Conclusion
+
+Although the domain of this analysis might be a bit obscure the best practices
+that it demonstrates are fundamental.  By understanding the provenance of the
+data we can motivate an initial probabilistic model and then iteratively improve
+it until we can no longer resolve any model inadequacies.  The inferences from
+the final model not only provide a variety of insights about the source of the
+data but also allow inform all kinds of predictions that might be of practical
+relevance.
+
+Being able to wax nostalgic about the glory days of the Super Nintendo
+Entertainment System&reg; and celebrate the capabilities of open source projects
+along the communities they inspire along the way is just a pleasant bonus.
+
+# Acknowledgements {-}
+
+A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
+Adriano Yoshino, Alejandro Navarro-Martínez, Alessandro Varacca, Alex D,
+Alexander Noll, Alexander Rosteck, Andrea Serafino, Andrew Mascioli,
+Andrew Rouillard, Andrew Vigotsky, Ara Winter, Austin Rochford, Avraham Adler,
+Ben Matthews, Ben Swallow, Benoit Essiambre, Bertrand Wilden, Bradley Kolb,
+Brandon Liu, Brendan Galdo, Brynjolfur Gauti Jónsson, Cameron Smith,
+Canaan Breiss, Cat Shark, CG, Charles Naylor, Chase Dwelle, Chris Jones,
+Christopher Mehrvarzi, Colin Carroll, Colin McAuliffe, Damien Mannion,
+dan mackinlay, Dan W Joyce, Dan Waxman, Dan Weitzenfeld,
+Daniel Edward Marthaler, Daniel Saunders, Darshan Pandit, Darthmaluus ,
+David Galley, David Wurtz, Doug Rivers, Dr. Jobo, Dr. Omri Har Shemesh,
+Dylan Maher, Ed Cashin, Edgar Merkle, Eric LaMotte, Ero Carrera, Eugene O'Friel,
+Felipe González, Fergus Chadwick, Finn Lindgren, Florian Wellmann,
+Geoff Rollins, Håkan Johansson, Hamed Bastan-Hagh, Hauke Burde, Hector Munoz,
+Henri Wallen, hs, Hugo Botha, Ian, Ian Costley, idontgetoutmuch, Ignacio Vera,
+Ilaria Prosdocimi, Isaac Vock, Isidor Belic, J, J Michael Burgess, jacob pine,
+Jair Andrade, James C, James Hodgson, James Wade, Janek Berger, Jason Martin,
+Jason Pekos, Jason Wong, jd, Jeff Burnett, Jeff Dotson, Jeff Helzner,
+Jeffrey Erlich, Jessica Graves, Joe Sloan, Joe Wagner, John Flournoy,
+Jonathan H. Morgan, Jonathon Vallejo, Joran Jongerling, JU, June, Justin Bois,
+Kádár András, Karim Naguib, Karim Osman, Kejia Shi, Kristian Gårdhus Wichmann,
+Lars Barquist, lizzie , Logan Sullivan, LOU ODETTE, Luís F, Marcel Lüthi,
+Marek Kwiatkowski, Mark Donoghoe, Markus P., Márton Vaitkus, Matt Moores,
+Matthew, Matthew Kay, Matthieu LEROY, Mattia Arsendi, Maurits van der Meer,
+Michael Colaresi, Michael DeWitt, Michael Dillon, Michael Lerner, Mick Cooney,
+Mike Lawrence, N Sanders, N.S. , Name, Nathaniel Burbank, Nic Fishman,
+Nicholas Clark, Nicholas Cowie, Nick S, Octavio Medina, Ole Rogeberg,
+Oliver Crook, Patrick  Kelley, Patrick Boehnke, Pau Pereira Batlle,
+Peter Johnson, Pieter van den Berg , ptr, Ramiro Barrantes Reynolds,
+Raúl Peralta Lozada, Ravin Kumar, Rémi , Rex Ha, Riccardo Fusaroli,
+Richard Nerland, Robert Frost, Robert Goldman, Robert kohn, Robin Taylor,
+Ryan Grossman, Ryan Kelly, S Hong, Sean Wilson, Sergiy Protsiv, Seth Axen,
+shira, Simon Duane, Simon Lilburn, sssz, Stan_user, Stephen Lienhard,
+Stew Watts, Stone Chen, Susan Holmes, Svilup, Tao Ye, Tate Tunstall,
+Tatsuo Okubo, Teresa Ortiz, Theodore Dasher, Thomas Siegert, Thomas Vladeck,
+Tobychev , Tomáš Frýda, Tony Wuersch, Virginia Fisher, Vladimir Markov,
+Wil Yegelwel, Will Farr, woejozney, yolhaj , yureq , Zach A, Zad Rafi, and
+Zhengchen Cai.
+
+# References {-}
+
+<div id="refs"></div>
+
+# License {-}
+
+A repository containing all of the files used to generate this chapter is
+available on [GitHub](
+https://github.com/betanalpha/quarto_chapters/tree/main/case_studies/racing).
+
+The code in this case study is copyrighted by Michael Betancourt and licensed
+under the new BSD (3-clause) license:
+
+[https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
+
+The text and figures in this chapter are copyrighted by Michael Betancourt
+and licensed under the CC BY-NC 4.0 license:
+
+[https://creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
+
+# Original Computing Environment {-}
+
+```{r, comment=NA}
+writeLines(readLines(file.path(Sys.getenv("HOME"), ".R/Makevars")))
+```
+
+```{r, comment=NA}
+sessionInfo()
+```
