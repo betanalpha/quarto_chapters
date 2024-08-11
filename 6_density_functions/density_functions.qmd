@@ -1141,7 +1141,7 @@ accommodated but the atomic subsets are the most practically relevant.
 
 Given a particular $D$-dimensional real space, that is a particular
 rigid real space or particular parameterization of a flexible real
-space, and a compatible a compatible probability distribution $\pi$ we
+space, and a compatible probability distribution $\pi$ we
 can define a Lebesgue probability density function
 $$
 \frac{ \mathrm{d} \pi \hphantom{ {}^{D} } }{ \mathrm{d} \lambda^{D} } :
