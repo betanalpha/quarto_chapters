@@ -287,7 +287,7 @@ a factory directly.}
 \end{figure}%
 
 At a workshop in January 2023 I was giving away some dice to
-participants when one Will Pierce has the \emph{audacity} to question
+participants when one Will Pearse has the \emph{audacity} to question
 the integrity of the Skew Dice™. Once I had calmed down I realized that
 this challenge raised an interesting question: how exactly can we learn
 how fair a die is in practice?
@@ -580,14 +580,13 @@ empirical entropy function over the individual counts \begin{align*}
 &=
 - \sum_{k = 1}^{6}
 \left( \frac{n_{k}}{N} \right) \log \left( \frac{n_{k}}{N} \right).
-\end{align*} The empirical entropy function is maximized when the
+\end{align*} The empirical entropy function is minimized when the
 observed counts are exactly uniform, \[
 n_{1} = \ldots = n_{6} = \frac{N}{6},
-\] and minimized when we observe one and only one outcome \(k'\), \[
-n_{k'} = N, n_{k \ne k'} = 0.
-\] In a retrodictive check the empirical entropy allows us to
-investigate how well our model captures the uniformity, or lack thereof,
-exhibited by the observed rolls.
+\] and maximized when any of the \(n_{k}\) vanish. In a retrodictive
+check the empirical entropy allows us to investigate how well our model
+captures the uniformity, or lack thereof, exhibited by the observed
+rolls.
 
 \subsection{Implementation}\label{implementation}
 
@@ -932,7 +931,7 @@ function then the optimal decision is simply to take the action with the
 highest utility, \[
 a_{\mathrm{optimal}}
 =
-\underset{a \in A}{\mathrm{argmax}} \, \overline{U}(a).
+\underset{a \in A}{\mathrm{argmax}} \, U(a).
 \] Note that to simplify this discussion I am ignoring the possibility
 of ties, but they are not difficult to accommodate by first identifying
 the set of equally-optimal actions and then introducing a procedure to
@@ -948,9 +947,9 @@ U :\; & A \times \Theta & &\rightarrow& \; & \mathbb{R} &
 \end{alignat*} Because the ordering of the actions by their assigned
 utilities will in general vary with each model configuration \(\theta\),
 \[
-\underset{a \in A}{\mathrm{argmax}} \, \overline{U}(a, \theta)
+\underset{a \in A}{\mathrm{argmax}} \, U(a, \theta)
 \ne
-\underset{a \in A}{\mathrm{argmax}} \, \overline{U}(a, \theta'),
+\underset{a \in A}{\mathrm{argmax}} \, U(a, \theta'),
 \] there is no longer an unambiguous best action.
 
 Bayesian decision theory uses posterior inferences to inform decision
@@ -1147,7 +1146,7 @@ and only if \begin{align*}
 >
 \frac{ u_{21} - u_{12} }{ u_{11} - u_{12} - u_{21} + u_{22} }
 \equiv
-\tau.
+t.
 \] In words we declare that the dice are practically fair only when the
 posterior probability allocated to \(\mathsf{u}\) is sufficiently large.
 
@@ -1187,8 +1186,8 @@ distribution.
 Intuitively the problem here is that the lone simplex configuration in
 \(\mathsf{u} = \{ \upsilon \}\) is overwhelmed by the infinitely many
 simplex configurations just outside of \(\mathsf{u}\). With only a
-finitely many rolls our posterior inferences will never be able to
-distinguish between the two.
+finitely many rolls our posterior inferences will never really be able
+to distinguish between the two.
 
 There are only two circumstances in which we can have \(t > 0\) but
 still might choose \(a_{1}\). Firstly in the asymptotic limit of
@@ -1203,33 +1202,106 @@ distribution with \[
 choose \(a_{1}\) when the dice are exactly uniform and \(a_{2}\) when
 they are not for any value of \(0 < t < 1\), as desired.
 
-Secondly we can use an inflated prior model with the probability
+Secondly we can inflate a Dirichlet prior model \(\rho\) with a Dirac
+probability distribution \(\delta\) to give the prior probability
 allocations \[
-\pi( \mathsf{t} ) =
-  \alpha \, \delta_{ \upsilon }( \mathsf{t} )
-+ (1 - \alpha) \, \rho( \mathsf{t} ).
-\] In this case \[
-\pi( \{ \upsilon \})
-=
-\alpha \, \delta_{ \upsilon }( \upsilon ) + (1 - \alpha) \, \rho( \upsilon ).
-\] The immediate issue here is that for any finite observation the
-posterior probability allocation will be completely determined by the
-strength of the inflation, \begin{align*}
-\pi( \{ \upsilon \})
+\pi( \mathsf{q} ) =
+  \alpha \, \delta_{ \upsilon }( \mathsf{q} )
++ (1 - \alpha) \, \rho( \mathsf{q} ).
+\] In this case the posterior probability allocation to
+\(\mathsf{u} = \{ \upsilon \}\) becomes \begin{align*}
+\pi( \{ \upsilon \} \mid \tilde{y})
 &=
-\alpha \, \delta_{ \upsilon }( \upsilon ) + (1 - \alpha) \, \rho( \upsilon ).
+\int \pi( \mathrm{d} q \mid \tilde{y} ) \,  I_{ \{ \upsilon \} }(q)
 \\
 &=
-\alpha \, 1 + (1 - \alpha) \, 0
+\frac{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) \,
+                                  I_{ \{ \upsilon \} }(q) }
+{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) }
+\\
+&=\quad
+\quad\; \alpha \quad\;
+\frac{ \int \delta_{ \upsilon }( \mathrm{d} q) \,
+            p(\tilde{y} \mid q ) \, I_{ \{ \upsilon \} }(q) }
+{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) }
+\\
+&\quad+
+(1 - \alpha) \,
+\frac{ \int \rho( \mathrm{d} q) \, p(\tilde{y} \mid q ) \,
+                                   I_{ \{ \upsilon \} }(q) }
+{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) }
+\\
+&=\quad
+\quad\; \alpha \quad\;
+\frac{ p(\tilde{y} \mid \upsilon ) }
+{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) }
+\\
+&\quad+
+(1 - \alpha) \,
+\frac{ 0 }
+{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) }
 \\
 &=
-\alpha.
-\end{align*} Consequently the propensity to choose \(a_{1}\) will be
-independent of the actual data we observe!
+\frac{ \alpha \, p(\tilde{y} \mid \upsilon ) }
+{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) }.
+\end{align*} Expanding the denominator then gives \begin{align*}
+\pi( \{ \upsilon \} \mid \tilde{y})
+&=
+\frac{ \alpha \, p(\tilde{y} \mid \upsilon ) }
+{ \int \pi( \mathrm{d} q) \, p(\tilde{y} \mid q ) }
+\\
+&=
+\frac{ \alpha \, p(\tilde{y} \mid \upsilon ) }
+{   \alpha \,
+    \int \delta_{ \{ \upsilon \} }( \mathrm{d} q) \, p(\tilde{y} \mid q )
+  + (1 - \alpha) \,
+    \int \rho( \mathrm{d} q) \, p(\tilde{y} \mid q) }
+\\
+&=
+\frac{ \alpha \, p(\tilde{y} \mid \upsilon ) }
+{ \alpha \, p(\tilde{y} \mid \upsilon )
+ + (1 - \alpha) \, \int \rho( \mathrm{d} q) \, p(\tilde{y} \mid q) }
+\\
+&=
+\frac{ 1 }
+{ 1 + \frac{ 1 - \alpha }{ \alpha } \,
+\frac{ \int \rho( \mathrm{d} q) \, p(\tilde{y} \mid q) }
+     { p(\tilde{y} \mid \upsilon ) } }.
+\end{align*}
 
-In general selecting between non-atomic subsets will be much better
-behaved than attempting to resolve any particular atomic subset from the
-infinitely many alternatives.
+In the asymptotic limit where the posterior distribution concentrates on
+\(\upsilon\) we have \[
+\lim_{N \rightarrow \infty}
+\frac{ \int \rho( \mathrm{d} q) \,
+            p(\tilde{y}_{1}, \ldots, \tilde{y}_{N} \mid q) }
+     { p(\tilde{y}_{1}, \ldots, \tilde{y}_{N} \mid \upsilon ) }
+=
+0
+\] so that \[
+\lim_{N \rightarrow \infty}
+\pi( \{ \upsilon \} \mid \tilde{y}_{1}, \ldots, \tilde{y}_{N}) = 1,
+\] regardless of \(\alpha\). Similarly if \[
+\lim_{N \rightarrow \infty}
+\frac{ \int \rho( \mathrm{d} q) \,
+            p(\tilde{y}_{1}, \ldots, \tilde{y}_{N} \mid q) }
+     { p(\tilde{y}_{1}, \ldots, \tilde{y}_{N} \mid \upsilon ) }
+=
+\infty
+\] then \[
+\lim_{N \rightarrow \infty}
+\pi( \{ \upsilon \} \mid \tilde{y}_{1}, \ldots, \tilde{y}_{N}) = 0,
+\] regardless of \(\alpha\). In other words the asymptotic behavior of
+the inflated model is consistent with that of the un-inflated model.
+
+For any finite observation, however, the posterior probability allocated
+to \(\mathsf{u} = \{ \upsilon \}\), and hence our conviction in claiming
+exact fairness, is extremely sensitive to the precise strength of
+inflation \(\alpha\). Without any principled way to determine \(\alpha\)
+are decision making will be arbitrary!
+
+In general selecting between non-atomic subsets is much better behaved
+than attempting to resolve any particular atomic subset from the
+infinitely many alternatives that behave nearly identically.
 
 \subsubsection{Effective Uniformity From Direct
 Features}\label{sec:effective_direct}
@@ -1382,7 +1454,7 @@ enforcing a relatively strict notion of fairness.
 \end{Shaded}
 
 \begin{verbatim}
-Prior probability allocated to component-wise subset = 0.00115 +/- 0.00021
+Prior probability allocated to component-wise subset = 0.00141 +/- 0.00024
 \end{verbatim}
 
 \begin{Shaded}
@@ -1396,7 +1468,7 @@ Prior probability allocated to component-wise subset = 0.00115 +/- 0.00021
 \end{Shaded}
 
 \begin{verbatim}
-Prior probability allocated to radial subset = 0.00107 +/- 0.00021
+Prior probability allocated to radial subset = 0.00129 +/- 0.00023
 \end{verbatim}
 
 The posterior probability allocated to these subsets can then be
@@ -1610,7 +1682,8 @@ uniform die twice.
 \NormalTok{  name }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}q[\textquotesingle{}}\NormalTok{, k }\SpecialCharTok{+} \DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)}
 \NormalTok{  util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(inferred\_2d6\_simplex[[name]], }\DecValTok{25}\NormalTok{,}
                                   \AttributeTok{display\_name=}\StringTok{"Probability"}\NormalTok{,}
-                                  \AttributeTok{baseline=}\NormalTok{unif\_2d6\_simplex[k])}
+                                  \AttributeTok{baseline=}\NormalTok{unif\_2d6\_simplex[k],}
+                                  \AttributeTok{baseline\_col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_mid\_teal)}
   \FunctionTok{title}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"2d6 Outcome = "}\NormalTok{, k }\SpecialCharTok{+} \DecValTok{1}\NormalTok{))}
 \NormalTok{\}}
 \end{Highlighting}
@@ -1627,6 +1700,7 @@ investigating for any systematic inconsistencies.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(inferred\_2d6\_simplex,}
                                      \FunctionTok{names}\NormalTok{(inferred\_2d6\_simplex),}
                                      \AttributeTok{baseline\_values=}\NormalTok{unif\_2d6\_simplex,}
+                                     \AttributeTok{baseline\_col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_mid\_teal,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{, }\AttributeTok{xticklabs=}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Probability"}\NormalTok{)}
 \end{Highlighting}
@@ -1648,7 +1722,7 @@ their ``cool'' ability score; if
 \begin{itemize}
 \tightlist
 \item
-  \(10 \le s \quad\;\;\;\) the player succeeds,
+  \(10 \le s \quad\;\;\) the player succeeds,
 \item
   \(7  \le s \le 9\) the player flinches, hesitates, or stalls,
 \item
@@ -1725,15 +1799,18 @@ rolling exactly uniform dice.
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_success\textquotesingle{}}\NormalTok{]], }\DecValTok{25}\NormalTok{,}
                                 \AttributeTok{display\_name=}\StringTok{"q\_success"}\NormalTok{,}
-                                \AttributeTok{baseline=}\NormalTok{q\_success\_unif)}
+                                \AttributeTok{baseline=}\NormalTok{q\_success\_unif,}
+                                \AttributeTok{baseline\_col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_mid\_teal)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_flinch\textquotesingle{}}\NormalTok{]], }\DecValTok{25}\NormalTok{,}
                                 \AttributeTok{display\_name=}\StringTok{"q\_flinch"}\NormalTok{,}
-                                \AttributeTok{baseline=}\NormalTok{q\_flinch\_unif)}
+                                \AttributeTok{baseline=}\NormalTok{q\_flinch\_unif,}
+                                \AttributeTok{baseline\_col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_mid\_teal)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_fail\textquotesingle{}}\NormalTok{]], }\DecValTok{25}\NormalTok{,}
                                 \AttributeTok{display\_name=}\StringTok{"q\_fail"}\NormalTok{,}
-                                \AttributeTok{baseline=}\NormalTok{q\_fail\_unif)}
+                                \AttributeTok{baseline=}\NormalTok{q\_fail\_unif,}
+                                \AttributeTok{baseline\_col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_mid\_teal)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1762,11 +1839,11 @@ For example we might consider a multiplicative interval with tolerance
           \FloatTok{1.1} \SpecialCharTok{*}\NormalTok{ q\_success\_unif }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t))}
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_success\textquotesingle{}}\NormalTok{]], }\DecValTok{25}\NormalTok{,}
                                 \AttributeTok{display\_name=}\StringTok{"q\_success"}\NormalTok{, }\AttributeTok{flim=}\NormalTok{flim,}
-                                \AttributeTok{baseline=}\NormalTok{q\_success\_unif)}
+                                \AttributeTok{baseline=}\NormalTok{q\_success\_unif,}
+                                \AttributeTok{baseline\_col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_mid\_teal)}
 
-\NormalTok{c\_mid\_teal }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"\#487575"}\NormalTok{)}
-\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\NormalTok{q\_success\_unif }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t), }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\NormalTok{c\_mid\_teal)}
-\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\NormalTok{q\_success\_unif }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t), }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\NormalTok{c\_mid\_teal)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\NormalTok{q\_success\_unif }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t), }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_light\_teal)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\NormalTok{q\_success\_unif }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t), }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_light\_teal)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1809,6 +1886,53 @@ example depend on how many games we intend to play or just how careful
 the person running the game is. In this case, however, only the
 strictest criteria will reject the extremely large posterior
 probability.
+
+\subsubsection{Avoiding Premature
+Decisions}\label{avoiding-premature-decisions}
+
+Just as Bayesian inference forces us to acknowledge what assumptions we
+need to specify a full Bayesian model, Bayesian decision theory forces
+us to acknowledge what assumptions we need to make an optimal decision.
+In both cases the required assumptions need to be motivated by
+appropriate domain expertise. Unfortunately identifying and eliciting
+that domain expertise often requires extensive effort, resources, and
+time.
+
+On the other hand forcing Bayesian inference with an arbitrary model
+typically results in poorly performing inferences. Similarly forcing
+Bayesian decision making with arbitrary actions and utility functions
+typically results in poorly performing decisions. Sometimes the best
+approach in a practical analysis is to avoid making a decision entirely,
+at least until we're in a better position to make the necessary
+assumptions in a principled manner. Instead of forcing a fragile
+decision it is often much more productive to share whatever information
+might help others make their own decisions.
+
+For example in order to inform an unambiguous decision about die
+fairness we need to specify both an effectively uniform subset
+\(\mathsf{u}\) and a posterior probability threshold \(t\). Without
+either of these assumptions we cannot properly implement Bayesian
+decision theory, and hence cannot benefit from its useful properties.
+That said even if we do not have the domain expertise needed to assume
+an appropriate \(\mathsf{u}\) and \(t\) we still have a wealth of
+information that we can share.
+
+If we are not comfortable in specifying either \(\mathsf{u}\) or \(t\)
+then we can always end our analysis by reporting relevant posterior
+insights. For instance we might summarize the posterior distribution
+over \(5\)-simplex configurations for general applications or even the
+induced posterior distribution over \(10\)-simplex configurations when
+reporting to those specifically interested in Apocalypse World. This
+allows anyone consuming the analysis to use the reported posterior
+inferences to inform their own decisions, whether formal or informal,
+using their own domain expertise.
+
+Similarly if we have the domain expertise to motivate an appropriate
+\(\mathsf{u}\) but not \(t\) then we can always conclude our analysis
+with the posterior probability allocation
+\(\pi(\mathsf{u} \mid \tilde{y})\). This provides all of the information
+needed for individual consumers to inform decisions based on whatever
+thresholds might be relevant to their own applications.
 
 \section{Heterogeneous Simplices}\label{heterogeneous-simplices}
 
@@ -3191,17 +3315,20 @@ values of \(\lambda\).
 
 \NormalTok{q\_baseline }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.3}\NormalTok{, }\FloatTok{0.2}\NormalTok{)}
 
-\FunctionTok{plot\_individual\_samples}\NormalTok{(q\_baseline, }\FloatTok{0.9}\NormalTok{, }\AttributeTok{main=}\StringTok{"lambda = 0.9"}\NormalTok{)}
-\FunctionTok{plot\_individual\_samples}\NormalTok{(q\_baseline, }\FloatTok{0.5}\NormalTok{, }\AttributeTok{main=}\StringTok{"lambda = 0.5"}\NormalTok{)}
 \FunctionTok{plot\_individual\_samples}\NormalTok{(q\_baseline, }\FloatTok{0.1}\NormalTok{, }\AttributeTok{main=}\StringTok{"lambda = 0.1"}\NormalTok{)}
+\FunctionTok{plot\_individual\_samples}\NormalTok{(q\_baseline, }\FloatTok{0.5}\NormalTok{, }\AttributeTok{main=}\StringTok{"lambda = 0.5"}\NormalTok{)}
+\FunctionTok{plot\_individual\_samples}\NormalTok{(q\_baseline, }\FloatTok{0.9}\NormalTok{, }\AttributeTok{main=}\StringTok{"lambda = 0.9"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-68-1.pdf}
 
 Notice that the concentration around \(q_{\mathrm{baseline}}\) isn't
-continuous. Instead increasing \(\lambda\) removes the closer and closer
-simplex configurations entirely.
+continuous. Instead decreasing \(\lambda\) removes further simplex
+configurations entirely. That said any uncertainty in
+\(q_{\mathrm{baseline}}\) and \(\lambda\) will wash out these hard
+boundaries, resulting in more continuous behaviors for the individual
+dice.
 
 We can make comparison to the Dirichlet population model a bit direct by
 working with not \(\lambda\) itself but rather the ratio \[
@@ -4468,7 +4595,7 @@ Even more \(\mathbf{P}\) is equal to its own transpose, \begin{align*}
 \mathbf{P}^{T}
 &=
 \mathbf{P}.
-\end{align*} \% Because of this \(\mathbf{P}\) is an \textbf{orthogonal
+\end{align*} Because of this \(\mathbf{P}\) is an \textbf{orthogonal
 projection matrix} (Trefethen and Bau 1997). Orthogonal projection
 matrices are special because they can always be decomposed into the
 outer product of a \(K \times (K - 1)\) matrix \(\mathbf{Q}\) and its
@@ -5100,7 +5227,7 @@ faces 3, 4, and 5.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples1, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.12}\NormalTok{, }\FloatTok{0.23}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.12}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Dirichlet Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
@@ -5108,7 +5235,7 @@ faces 3, 4, and 5.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples2, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.12}\NormalTok{, }\FloatTok{0.23}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.12}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Convex Addition Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
@@ -5116,7 +5243,7 @@ faces 3, 4, and 5.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples3, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.12}\NormalTok{, }\FloatTok{0.23}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.12}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Latent MultiNormal Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
@@ -5135,17 +5262,18 @@ configurations with both exact homogeneity and strong heterogeneity.
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\FloatTok{0.5}\NormalTok{))}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(samples1[[}\StringTok{\textquotesingle{}omega\textquotesingle{}}\NormalTok{]], }\DecValTok{25}\NormalTok{,}
-                                \AttributeTok{display\_name=}\StringTok{"omega"}\NormalTok{,}
+                                \AttributeTok{display\_name=}\StringTok{"omega"}\NormalTok{, }\AttributeTok{flim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.025}\NormalTok{),}
                                 \AttributeTok{main=}\StringTok{"Dirichlet Population Model"}\NormalTok{)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(samples2[[}\StringTok{\textquotesingle{}zeta\textquotesingle{}}\NormalTok{]], }\DecValTok{25}\NormalTok{,}
-                                \AttributeTok{display\_name=}\StringTok{"zeta"}\NormalTok{,}
+                                \AttributeTok{display\_name=}\StringTok{"zeta"}\NormalTok{, }\AttributeTok{flim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.7}\NormalTok{),}
                                 \AttributeTok{main=}\StringTok{"Convex Addition Population Model"}\NormalTok{)}
 
 \NormalTok{names }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}tau[\textquotesingle{}}\NormalTok{, k, }\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{))}
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples3, names,}
                                      \AttributeTok{xlab=}\StringTok{"Unconstrained Component"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Latent Scales"}\NormalTok{,}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.4}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Latent MultiNormal Population Model"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -5164,21 +5292,21 @@ behaviors we see nearly universal agreement.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples1, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Dirichlet Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples2, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Convex Addition Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples3, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Latent MultiNormal Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
@@ -5194,21 +5322,21 @@ behaviors we see nearly universal agreement.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples1, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Dirichlet Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples2, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Convex Addition Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples3, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.10}\NormalTok{, }\FloatTok{0.25}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Latent MultiNormal Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
@@ -5227,7 +5355,7 @@ within the posterior uncertainties.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples1, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.26}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Dirichlet Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
@@ -5235,7 +5363,7 @@ within the posterior uncertainties.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples2, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.26}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Convex Addition Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 
@@ -5243,7 +5371,7 @@ within the posterior uncertainties.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_disc\_pushforward\_quantiles}\NormalTok{(samples3, names,}
                                      \AttributeTok{xlab=}\StringTok{"Outcome"}\NormalTok{,}
                                      \AttributeTok{ylab=}\StringTok{"Inferred Probability"}\NormalTok{,}
-                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.26}\NormalTok{),}
+                                     \AttributeTok{display\_ylim=}\FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.30}\NormalTok{),}
                                      \AttributeTok{main=}\StringTok{"Latent MultiNormal Population Model"}\NormalTok{)}
 \FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{1}\SpecialCharTok{/}\DecValTok{6}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{, }\AttributeTok{lty=}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
@@ -5934,6 +6062,11 @@ transformation \(\sigma \circ T\) is equivalent to multiplying the
 individual output components and then renormalizing. This simplex
 operation also defines a technique known as \textbf{compositional data
 analysis} (Aitchison 1982).
+
+This means that we can view the transformed multivariate normal
+population model as another algebraic population model, only using this
+multiplicative operation instead of the convex addition operation that
+we initially considered.
 
 \section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
