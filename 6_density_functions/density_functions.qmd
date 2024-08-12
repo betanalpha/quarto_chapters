@@ -1359,7 +1359,7 @@ $$
 
 Integrating a probability density function by eye is not always
 straightforward.  In particular bounds between probability densities do
-not always imply bounds between interval probabilities.  (a)  Here
+not always imply bounds between interval probabilities.  (a)  Here the
 largest probability density in the first interval, $p_{1}$, is smaller
 than the smallest probability density in the second interval, $p_{2}$.
 Because the two intervals are the same length the probability allocated
@@ -1685,7 +1685,7 @@ $$
 $$
 that define expectation values are particularly nice, at least as far as
 integrals go.  That isn't to say that the integrals are easy to evaluate
-but rather that they many of them actually admit closed-form solutions,
+but rather that many of them actually admit closed-form solutions,
 which is pretty miraculous when it comes to integrals.  For those
 twisted individuals who fancy a good integral calculation, myself
 included, I've included those calculations in the
@@ -1787,7 +1787,7 @@ probability distributions,
 \end{align*}
 where
 $$
-\mathrm{erf} (x)
+\mathrm{erf} (x) =
 \frac{2}{\sqrt{\pi}}
 \int_{0}^{ x } \mathrm{d} t \, \exp \left( -t^{2} \right)
 $$
@@ -1795,7 +1795,7 @@ is known as the **error function**.
 
 Conveniently the error function, if not the normal cumulative
 distribution functions themselves, are available in most programming
-languages.  This allows us directly compute interval probabilities by
+languages.  This allows us to directly compute interval probabilities by
 subtracting cumulative probabilities (@fig-normal-interval-prob),
 $$
 \text{normal}( \, (x_{1}, x_{2} ] \, ; \mu, \sigma )
@@ -1816,7 +1816,7 @@ width=90% #fig-normal-interval-prob}
 
 # Other Useful Probability Density Functions
 
-Most of applications of probability theory that we will tackle in this
+Most applications of probability theory that we will tackle in this
 book will use probability distributions that are absolutely continuous
 with respect to a counting measure or a Lebesgue measure and implemented
 with appropriate probability density functions.  There are a few
@@ -1878,7 +1878,7 @@ As they become narrower and narrower normal probability density
 functions start to behave like a hypothetical singular density function.
 (a) In the limit $\sigma \rightarrow 0$ the normal probability density
 functions centered at $\mu = x'$ converge to an infinitely narrow spike
-at $x'$.  (b) At the same the expectation values of all expectands $f$
+at $x'$.  (b) At the same time the expectation values of all expectands $f$
 coverge to the point evaluations $f(x')$.
 :::
 
@@ -2041,12 +2041,12 @@ is often worth the added subtlety.
 Real spaces adequately model many phenomena that arise in practical
 applications, but by no means all of them.  In some cases we will need
 to consider continuous spaces that look like a real spaces _locally_ but
-exhibit different shapes _globally_ (@fig-circle).  These include for
+exhibit different shapes _globally_ (@fig-circle-line).  These include for
 example spheres, torii, and even more foreign spaces.  Mathematically
 these spaces, along with real spaces, are collectively known as
 **manifolds**.
 
-::: {#fig-circle layout="[ [-20, 60, -20], [-20, 60, -20] ]"}
+::: {#fig-circle-line layout="[ [-20, 60, -20], [-20, 60, -20] ]"}
 ![](figures/circle_vs_line/far/far){#fig-circle-far}
 
 ![](figures/circle_vs_line/close/close){#fig-circle-close}
@@ -2111,6 +2111,10 @@ $$
 are not implemented with classic Riemann integration but rather a more
 general **manifold integration** that is not implemented in the same
 way.
+
+<!---
+The setminus Latex instruction is not rendered on pdf for the following paragraphs
+-->
 
 That said sometimes there are work arounds.  For example removing a
 point $x' \in \mathbb{S}^{1}$ from the circle defines a new space
