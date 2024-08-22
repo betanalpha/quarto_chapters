@@ -293,30 +293,6 @@ environment.
     \AttributeTok{xaxs=}\StringTok{"i"}\NormalTok{, }\AttributeTok{yaxs=}\StringTok{"i"}\NormalTok{, }\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{))}
 
 \FunctionTok{library}\NormalTok{(rstan)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Loading required package: StanHeaders
-\end{verbatim}
-
-\begin{verbatim}
-
-rstan version 2.32.6 (Stan version 2.32.2)
-\end{verbatim}
-
-\begin{verbatim}
-For execution on a local, multicore CPU with excess RAM we recommend calling
-options(mc.cores = parallel::detectCores()).
-To avoid recompilation of unchanged Stan programs, we recommend calling
-rstan_options(auto_write = TRUE)
-For within-chain threading using `reduce_sum()` or `map_rect()` Stan functions,
-change `threads_per_chain` option:
-rstan_options(threads_per_chain = 1)
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{rstan\_options}\NormalTok{(}\AttributeTok{auto\_write =} \ConstantTok{TRUE}\NormalTok{)            }\CommentTok{\# Cache compiled Stan programs}
 \FunctionTok{options}\NormalTok{(}\AttributeTok{mc.cores =}\NormalTok{ parallel}\SpecialCharTok{::}\FunctionTok{detectCores}\NormalTok{()) }\CommentTok{\# Parallelize chains}
 \NormalTok{parallel}\SpecialCharTok{:::}\FunctionTok{setDefaultClusterOptions}\NormalTok{(}\AttributeTok{setup\_strategy =} \StringTok{"sequential"}\NormalTok{)}
@@ -396,8 +372,8 @@ repository} for this chapter.
 \end{Highlighting}
 \end{Shaded}
 
-Altogether the data spans 192 races across the first seven and a half
-months of 2024.
+Altogether the data spans 192 races across the first eight months of
+2024.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -574,7 +550,7 @@ each race, is a reasonable approximation to the true race dynamics.
 Now a particularly crude model of independent finish times might assume
 that the finish times across all races concentrate around some common
 baseline value, \[
-\mu = t_{\mathrm{baseline}} = \exp(\gamma).
+\mu = t_{\mathrm{baseline}} = \exp(\gamma) \cdot 1 \text{ second}.
 \] Not all races, however, are the same.
 
 For example some seeds result in map layouts that require traveling
@@ -589,9 +565,10 @@ t_{\mathrm{baseline}} \cdot \delta_{\mathrm{difficulty}, s}
 \\
 &=
 \exp(\gamma) \cdot \exp( \lambda_{\mathrm{difficulty}, s} )
+\cdot 1 \text{ second}
 \\
 &=
-\exp(\gamma + \lambda_{\mathrm{difficulty}, s}).
+\exp(\gamma + \lambda_{\mathrm{difficulty}, s}) \cdot 1 \text{ second}.
 \end{align*}
 
 Similarly not all entrants are the same. The entrants who are more
@@ -609,9 +586,11 @@ t_{\mathrm{baseline}}
 \exp(\gamma)
 \cdot \exp( \lambda_{\mathrm{difficulty}, s} )
 \cdot \frac{1}{\exp( \lambda_{\mathrm{skill}, e} ) }
+\cdot 1 \text{ second}
 \\
 &=
-\exp(\gamma + \lambda_{\mathrm{difficulty}, s} - \lambda_{\mathrm{skill}, e}).
+\exp(\gamma + \lambda_{\mathrm{difficulty}, s} - \lambda_{\mathrm{skill}, e})
+\cdot 1 \text{ second}.
 \end{align*}
 
 Note that this model is an example of an \textbf{adversarial model}
@@ -633,7 +612,8 @@ response theory models, \[
 \exp(
 \gamma
 + \alpha_{s} \cdot (  \lambda_{\mathrm{difficulty}, s}
-                    - \lambda_{\mathrm{skill}, e}) ).
+                    - \lambda_{\mathrm{skill}, e}) )
+\cdot 1 \text{ second}.
 \] The smaller \(\alpha_{s}\) is the less sensitive the finish times for
 the given seed will be to the contrast between seed difficulty and
 entrant skill.
@@ -667,29 +647,37 @@ variables. Here we'll assume that the prior model is built up from
 independent component prior models for each parameter.
 
 To avoid unrealistically fast and slow races let's constrain the
-baseline finish time to \begin{align*}
-1800 \text{ seconds} \lessapprox
-&t_{\mathrm{baseline}} \lessapprox
-5400 \text{ minutes}
+baseline finish time to \begin{alignat*}{5}
+& 1800 \text{ seconds} &
+& \lessapprox &
+& \quad\quad\;\; t_{\mathrm{baseline}} &
+& \lessapprox &
+& \, 5400 \text{ seconds}
 \\
-1800 \text{ seconds} \lessapprox
-&\exp(\gamma) \cdot 1 \text{ second} \lessapprox
-5400 \text{ seconds}
+& 1800 \text{ seconds} &
+& \lessapprox &
+& \, \exp(\gamma) \cdot 1 \text{ second} \, &
+& \lessapprox &
+& \, 5400 \text{ seconds}
 \\
-1800 \lessapprox
-&\exp(\gamma) \lessapprox
-5400
+& 1800 &
+& \lessapprox &
+& \quad\quad\; \exp(\gamma) &
+& \lessapprox &
+& \, 5400
 \\
-\log 1800 \lessapprox
-&\exp(\gamma) \lessapprox
-\log 5400.
-\end{align*} We can ensure that 98\% of the prior probability is
+& \log 1800 &
+& \lessapprox &
+& \quad\quad\quad\;\;\, \gamma &
+& \lessapprox &
+& \log 5400.
+\end{alignat*} We can ensure that 98\% of the prior probability is
 contained within these bounds with the prior model \begin{align*}
 p( \gamma )
 &=
 \text{normal} \left(
-\gamma \mid \frac{\log 5400 + \log 1800}{2},
-            \frac{1}{2.32} \frac{\log 5400 - \log 1800}{2} \right)
+\gamma \;\, \bigg| \;\, \frac{\log 5400 + \log 1800}{2},
+                        \frac{1}{2.32} \frac{\log 5400 - \log 1800}{2} \right)
 \\
 &= \text{normal}( \gamma \mid 8.045, 0.237).
 \end{align*} Note that this prior model doesn't suppress finish times
@@ -706,17 +694,17 @@ modified the baseline by more than a factor of two, \begin{align*}
 - \log 2 \lessapprox &\lambda \lessapprox \log 2.
 \end{align*} A reasonable prior that achieves this soft containment is
 then \begin{align*}
-p( \delta )
+p( \lambda )
 &=
 \text{normal} \left(
-\gamma \mid \frac{\log 2 + (-\log 2)}{2},
-            \frac{1}{2.32} \frac{\log 2 - (-\log 2)}{2} \right)
+\lambda \;\, \bigg| \;\, \frac{\log 2 + (-\log 2)}{2},
+                         \frac{1}{2.32} \frac{\log 2 - (-\log 2)}{2} \right)
 \\
 &=
 \text{normal} \left(
-\gamma \mid 0, \frac{1}{2.32} \, \log 2\right)
+\lambda \;\, \bigg| \;\, 0, \frac{1}{2.32} \, \log 2\right)
 \\
-&= \text{normal}( \gamma \mid 0, 0.299).
+&= \text{normal}( \lambda \mid 0, 0.299).
 \end{align*}
 
 Lastly we need to consider the dispersion strength \(\psi\). Here let's
@@ -730,8 +718,8 @@ squared mean, \begin{align*}
 \end{align*} One way to achieve this soft containment is with the prior
 model \[
 p( \psi )
-= \text{half-normal} \left( \psi \mid 0, \frac{1}{2.57} \right)
-= \text{half-normal} \left( \psi \mid 0, 0.389 \right).
+= \text{half-normal} \left( \psi \;\, \bigg| \;\, 0, \frac{1}{2.57} \right)
+= \text{half-normal} \left( \psi \;\, \bigg| \;\, 0, 0.389 \right).
 \]
 
 We can now implement our full Bayesian model as a Stan program, plug in
@@ -902,10 +890,39 @@ effective sample size is too small then Markov chain Monte Carlo
 estimation may be unreliable even when a central limit theorem holds.
 \end{verbatim}
 
+Fortunately the auto-correlations are not large enough to compromise the
+accuracy of our Markov chain Monte Carlo estimators, just limit their
+precision. It's only when the empirical effective sample sizes dip below
+ten or so that we really need to be worried.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+                    \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+                                \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in check_bin_containment(bin_min, bin_max, values): 212 values (70.4%)
+fell below the binning.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\DecValTok{100}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-13-1.pdf}
+
 This behavior is unfortunately not uncommon with adversarial models.
-Without enough data the model is vulnerable a degeneracies where some of
-the additive terms vary without changing their sum, tracing out a narrow
-plane of consistent model configurations that can be difficult to
+Without enough data the model is vulnerable to degeneracies where some
+of the additive terms vary without changing their sum, tracing out a
+narrow plane of consistent model configurations that can be difficult to
 explore efficiently.
 
 Indeed we see that the consistent values of \(\gamma\) are negatively
@@ -922,7 +939,7 @@ the seed difficulties decrease at the same time.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-13-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-14-1.pdf}
 
 On the other hand \(\gamma\) is positively correlated with the
 individual skill parameters. In this case increases to \(\gamma\) and
@@ -937,7 +954,7 @@ all of the entrant skills cancel to give the same baseline finish times.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-14-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-15-1.pdf}
 
 If we wanted to be careful then we could run longer Markov chains to
 compensate for the large auto-correlations and ensure more well-behaved
@@ -962,7 +979,7 @@ posterior predictive distribution can accommodate.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-15-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-16-1.pdf}
 
 This tension could be due to inadequacy of the gamma observational
 model, but it could also be a consequence of poorly modeling the
@@ -1001,7 +1018,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 108 predictive values (0.2%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-16-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-17-1.pdf}
 
 Similarly the finish time behaviors for a few spot-checked entrants are
 consistent between the observed data and our posterior predictions. One
@@ -1037,7 +1054,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 11 predictive values (0.0%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-17-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-18-1.pdf}
 
 If we really wanted to be thorough then we would need to examine the
 behavior of the hundreds of finish time histograms across all of the
@@ -1051,12 +1068,13 @@ issue.
 The gamma family of probability density functions are naturally
 complemented with the inverse gamma family of probability density
 functions. Because the gamma probability density functions exhibit
-heavier tails towards zero and lighter tails towards infinity they skew
-towards larger values. On the other hand the inverse gamma probability
-density functions exhibit lighter tails towards zero and heavier tails
-towards infinity, resulting in a skew towards smaller values. This
-conveniently contrasting behavior might be exactly what we need to
-address the retrodictive tension in our first model.
+heavier tails towards zero and lighter tails towards infinity their
+\emph{peaks} skew towards larger values. On the other hand the inverse
+gamma probability density functions exhibit lighter tails towards zero
+and heavier tails towards infinity, resulting in \emph{peaks} that skew
+towards smaller values. This conveniently contrasting behavior might be
+exactly what we need to address the retrodictive tension in our first
+model.
 
 In order to build an inverse gamma observational model we need to
 engineer a location-dispersion parameterization. The inverse gamma
@@ -1244,6 +1262,33 @@ effective sample size is too small then Markov chain Monte Carlo
 estimation may be unreliable even when a central limit theorem holds.
 \end{verbatim}
 
+Again the auto-correlations are not strong enough to undermine our
+Markov chain Monte Carlo estimators entirely.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+                    \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+                                \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in check_bin_containment(bin_min, bin_max, values): 214 values (71.1%)
+fell below the binning.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\DecValTok{100}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-21-1.pdf}
+
 It looks like this may have done the trick. The observed and posterior
 predictive behavior of the aggregate finish time histogram is a bit more
 consistent than it was in our first model.
@@ -1259,7 +1304,7 @@ consistent than it was in our first model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-20-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-22-1.pdf}
 
 The retrodictive agreement in the individual race finish time histograms
 is similar to what we saw above. In particular no new retrodictive
@@ -1298,7 +1343,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 4 predictive values (0.0%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-21-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-23-1.pdf}
 
 Interestingly the heavier tail of the inverse gamma family appears to
 allow the posterior predictive behavior for entrant 93 to spread out
@@ -1337,7 +1382,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 11 predictive values (0.0%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-22-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-24-1.pdf}
 
 With no immediate reason to doubt our modeling assumptions we can
 finally move on to investigating our posterior inferences. The marginal
@@ -1356,7 +1401,7 @@ with both strongly contracting within the prior model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-23-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-25-1.pdf}
 
 While the values of the individual seed difficulties all seem reasonable
 there does appear to be an unexpected pattern across the races.
@@ -1374,7 +1419,7 @@ Initially the difficulties systematically decay before flatting out.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-24-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-26-1.pdf}
 
 On the other hand the entrant skills exhibit both reasonable values and
 no systematic patterns.
@@ -1391,7 +1436,7 @@ no systematic patterns.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-25-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-27-1.pdf}
 
 Let's go back to the difficulties and consider why we might see a
 pattern like that. Notice that the seeds for each race are ordered by
@@ -1458,7 +1503,7 @@ with the version numbers.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-26-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-28-1.pdf}
 
 Indeed many of the prominent patterns in seed difficulty over time
 perfectly line up with the transition from one version to another. In
@@ -1491,7 +1536,7 @@ scale with the number of race entrances.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-27-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-29-1.pdf}
 
 The most striking pattern that we see is that the \emph{uncertainty} in
 the entrant skill inferences decreases with increasing participation,
@@ -1552,7 +1597,7 @@ Here let's look at entrant 65.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-28-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-30-1.pdf}
 
 While there might be a small reduction in the \emph{variation} of finish
 times there doesn't seem to be any systematic increase or decrease in
@@ -1807,9 +1852,7 @@ of forfeits in each race.
 \end{Shaded}
 
 The diagnostics continue to complain about strong auto-correlations but
-no new problems have arisen. In particular the \(\hat{\xi}\) warnings
-are not a concern so long as we don't try to summarize the \(\kappa\)
-parameters with a component mean.
+no new problems have arisen.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1862,6 +1905,30 @@ effective sample size is too small then Markov chain Monte Carlo
 estimation may be unreliable even when a central limit theorem holds.
 \end{verbatim}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+                    \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+                                \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in check_bin_containment(bin_min, bin_max, values): 446 values (86.6%)
+fell below the binning.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\DecValTok{100}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-33-1.pdf}
+
 The retrodictive agreement between the observed and posterior predictive
 finish time histograms continues.
 
@@ -1876,7 +1943,7 @@ finish time histograms continues.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-31-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-34-1.pdf}
 
 Now we can also consider the number of forfeits in each race.
 Fortunately the behavior of this statistic is also reasonably
@@ -1895,7 +1962,7 @@ consistent.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-32-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-35-1.pdf}
 
 To make the comparison more clear we can always visualize the residuals
 and then compare to zero.
@@ -1914,7 +1981,7 @@ and then compare to zero.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-33-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-36-1.pdf}
 
 Finally the finish time histograms separated by selected races and
 entrants also show no signs of retrodictive tension.
@@ -1952,7 +2019,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 3 predictive values (0.0%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-34-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-37-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1987,7 +2054,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 10 predictive values (0.0%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-35-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-38-1.pdf}
 
 Without any concerns about our modeling assumptions we can move on to
 examining the resulting posterior inferences. Inferences for the
@@ -2007,7 +2074,7 @@ second model; we'll make a more direct comparison in
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-36-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-39-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2021,7 +2088,7 @@ second model; we'll make a more direct comparison in
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-37-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-40-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2035,7 +2102,7 @@ second model; we'll make a more direct comparison in
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-38-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-41-1.pdf}
 
 More interesting here are the posterior inferences for the new,
 forfeit-related parameters. Overall the uncertainties are relatively
@@ -2053,7 +2120,7 @@ large but we can pick out a few exceptional behaviors
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-39-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-42-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2067,7 +2134,7 @@ large but we can pick out a few exceptional behaviors
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-40-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-43-1.pdf}
 
 For example posterior inferences of the forfeit thresholds for entrants
 37 and 38 both concentrate on negative values.
@@ -2090,7 +2157,7 @@ For example posterior inferences of the forfeit thresholds for entrants
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-41-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-44-1.pdf}
 
 Both of these entrants forfeited every race they entered.
 
@@ -2159,7 +2226,7 @@ entrant 65 concentrates on positive values.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-44-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-47-1.pdf}
 
 This entrant forfeited only once out of 64 total entrances.
 
@@ -2196,7 +2263,7 @@ pushing the consistent forfeit threshold behaviors to larger values.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-46-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-49-1.pdf}
 
 Finally the posterior inferences of the forfeit threshold for entrant 44
 mostly concentrates on values between \(0\) and \(1\).
@@ -2213,7 +2280,7 @@ mostly concentrates on values between \(0\) and \(1\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-47-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-50-1.pdf}
 
 While entrant 44 finishes most of their entrances forfeits are not
 uncommon.
@@ -2478,10 +2545,7 @@ sophisticated parameterizations.
 \end{Shaded}
 
 Fortunately we don't see any of the tell-tale signs of problematic
-hierarchical geometries, such as divergences and E-FMI warnings. Even
-better the auto-correlations are consistently weaker than before! This
-suggests that the hierarchical coupling is indeed reducing the posterior
-uncertainties and improving the overall posterior geometry.
+hierarchical geometries, such as divergences and E-FMI warnings.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2535,6 +2599,42 @@ effective sample size is too small then Markov chain Monte Carlo
 estimation may be unreliable even when a central limit theorem holds.
 \end{verbatim}
 
+In fact the empirical effective sample sizes are consistently larger,
+and hence the auto-correlations consistently weaker, than before! This
+suggests that the hierarchical coupling is indeed reducing the posterior
+uncertainties and improving the overall posterior geometry.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples3,}
+                                       \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{,}
+                                         \StringTok{\textquotesingle{}difficulties\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}skills\textquotesingle{}}\NormalTok{,}
+                                         \StringTok{\textquotesingle{}kappas\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}betas\textquotesingle{}}\NormalTok{,}
+                                         \StringTok{\textquotesingle{}psi\textquotesingle{}}\NormalTok{),}
+                                       \AttributeTok{check\_arrays=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{min\_eesss3 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+
+\NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples4,}
+                                       \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{,}
+                                         \StringTok{\textquotesingle{}difficulties\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}skills\textquotesingle{}}\NormalTok{,}
+                                         \StringTok{\textquotesingle{}kappas\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}betas\textquotesingle{}}\NormalTok{,}
+                                         \StringTok{\textquotesingle{}psi\textquotesingle{}}\NormalTok{),}
+                                       \AttributeTok{check\_arrays=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{min\_eesss4 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\FunctionTok{plot}\NormalTok{(min\_eesss3, min\_eesss4, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark, }\AttributeTok{pch=}\DecValTok{16}\NormalTok{,}
+     \AttributeTok{main=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+                 \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{),}
+     \AttributeTok{xlab=}\StringTok{"Model 3"}\NormalTok{, }\AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1100}\NormalTok{),}
+     \AttributeTok{ylab=}\StringTok{"Model 4"}\NormalTok{, }\AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1100}\NormalTok{))}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{a=}\DecValTok{0}\NormalTok{, }\AttributeTok{b=}\DecValTok{1}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-55-1.pdf}
+
 A review of our visual retrodictive checks doesn't show any indications
 that the introduction of the hierarchical coupling compromised the
 adequacy of our modeling assumptions.
@@ -2550,7 +2650,7 @@ adequacy of our modeling assumptions.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-52-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-56-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2566,7 +2666,7 @@ adequacy of our modeling assumptions.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-53-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-57-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2600,7 +2700,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 5 predictive values (0.0%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-54-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-58-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2634,7 +2734,7 @@ Warning in check_bin_containment(bin_min, bin_max, collapsed_values,
 "predictive value"): 9 predictive values (0.0%) fell below the binning.
 \end{verbatim}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-55-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-59-1.pdf}
 
 Now we can explore the posterior inferences for not just the individual
 behaviors but also the hierarchical populations from which those
@@ -2664,17 +2764,17 @@ later versions that have been played the most.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-56-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-60-1.pdf}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-56-2.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-60-2.pdf}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-56-3.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-60-3.pdf}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-56-4.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-60-4.pdf}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-56-5.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-60-5.pdf}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-56-6.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-60-6.pdf}
 
 Subject to the posterior uncertainties all of the version population
 behaviors are consistent with each other. For example both versions 112
@@ -2705,7 +2805,7 @@ the population scale concentrating just under \(0.3\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-57-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-61-1.pdf}
 
 \subsection{Inferential Comparison}\label{sec:inf-comp}
 
@@ -2739,7 +2839,7 @@ Markov chain Monte Carlo estimators.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-58-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-62-1.pdf}
 
 On the other hand incorporating forfeits results in a substantial shift
 of the entire marginal posterior distribution up to larger values,
@@ -2764,7 +2864,7 @@ more optimistic outcomes.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-59-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-63-1.pdf}
 
 The introduction of the seed difficulty and entrant skill hierarchies
 has no impact on smaller values of \(\gamma\) but it does suppress
@@ -2790,7 +2890,7 @@ coupling the individuals behaviors together can give.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-60-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-64-1.pdf}
 
 \subsubsection{Entrant 29 Skill}\label{entrant-29-skill}
 
@@ -2847,7 +2947,7 @@ computational artifact.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-63-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-67-1.pdf}
 
 Interestingly the introduction of forfeits into the model has a much
 stronger impact on the marginal skill posterior distribution, shifting
@@ -2873,7 +2973,7 @@ inferences for all entrant skills.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-64-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-68-1.pdf}
 
 The introduction of the skill hierarchy has a similar, albeit weaker,
 influence on the entrant 29 skill parameter as it did on \(\gamma\).
@@ -2898,7 +2998,7 @@ distribution.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-65-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-69-1.pdf}
 
 \subsubsection{Entrant 44 Skill}\label{entrant-44-skill}
 
@@ -2947,7 +3047,7 @@ the marginal posterior inferences.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-68-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-72-1.pdf}
 
 Somewhat surprisingly incorporating forfeits shifts the entrant 44 skill
 parameter to larger values!
@@ -2969,7 +3069,7 @@ parameter to larger values!
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-69-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-73-1.pdf}
 
 This suggests that entrant 44 forfeiting for only particularly difficult
 races. Indeed examining the seed difficulty inferences it appears that
@@ -3013,7 +3113,7 @@ seeds.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-70-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-74-1.pdf}
 
 Because the entrant 44 skill parameter concentrates on smaller values
 than the entrant 29 skill parameter the influence of the hierarchical
@@ -3039,7 +3139,7 @@ slightly.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-71-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-75-1.pdf}
 
 \subsubsection{Entrant 83 Skill}\label{entrant-83-skill}
 
@@ -3088,7 +3188,7 @@ models has little impact on the marginal skill inferences.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-74-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-78-1.pdf}
 
 Incorporating forfeits pushes the skill marginal posterior distribution
 to larger values, but only slightly.
@@ -3120,7 +3220,7 @@ Warning in util$plot_expectand_pushforward(samples3[[name]], 20, flim = c(-0.6,
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-75-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-79-1.pdf}
 
 It's hard to say if the hierarchical coupling has any substantial
 impact. There is perhaps a very weak suppression of more negative skill
@@ -3165,7 +3265,7 @@ Warning in util$plot_expectand_pushforward(samples4[[name]], 20, flim = c(-0.6,
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-76-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-80-1.pdf}
 
 In hindsight we shouldn't expect any substantial impact from the
 introduction of the hierarchical modeling components given that the
@@ -3363,7 +3463,7 @@ In analogy to a posterior mean we might consider a distance function
 summary that minimizes the expected distance, \[
 \mu_{R}
 =
-\underset{r \in R}{\mathrm{argmax}} \; \mathbb{E}_{o_{*} \pi}[ d( \cdot, r) ].
+\underset{r \in R}{\mathrm{argmin}} \; \mathbb{E}_{o_{*} \pi}[ d( \cdot, r) ].
 \] Conveniently there are a variety of useful distance functions on
 \(R\) that we could use here. and the expectation values can be readily
 estimated with Markov chain Monte Carlo. The minimization over all
@@ -3479,7 +3579,7 @@ exact skill of entrant 70.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-79-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-83-1.pdf}
 
 If we want to compare only two entrants at a time then instead of
 comparing their expected skills we can compute the posterior probability
@@ -3829,6 +3929,30 @@ effective sample size is too small then Markov chain Monte Carlo
 estimation may be unreliable even when a central limit theorem holds.
 \end{verbatim}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+
+\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+                    \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+                                \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in check_bin_containment(bin_min, bin_max, values): 492 values (94.3%)
+fell below the binning.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\DecValTok{100}\NormalTok{, }\AttributeTok{col=}\StringTok{"\#DDDDDD"}\NormalTok{, }\AttributeTok{lty=}\DecValTok{3}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-91-1.pdf}
+
 The uses of these predictions are endless.
 
 \subsubsection{Single Entrant
@@ -3954,7 +4078,7 @@ values than that of entrant 65.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-90-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-95-1.pdf}
 
 What really matters for predictive race outcomes, however, are not the
 latent skills but rather the predicted finish times. The marginal
@@ -3988,18 +4112,30 @@ from the skills alone.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{racing_files/figure-pdf/unnamed-chunk-91-1.pdf}
+\includegraphics{racing_files/figure-pdf/unnamed-chunk-96-1.pdf}
 
 That said the predicted finish times still don't tell the entire story.
 To accurately predict a winner we also need to take into account the
 possibility that one, or possibly even both, of the entrants forfeits.
 Altogether there are five possible outcomes that are relevant to whether
-or not entrant 29 beats entrant 65: * Entrant 29 forfeits and entrant 65
-forfeits, * Entrant 29 forfeits and entrant 65 forfeits, * Entrant 29
-finishes and entrant 65 forfeits, * Entrant 29 finishes and entrant
-finishes and \(t_{29} < t_{65}\), * Entrant 29 finishes and entrant
-finishes and \(t_{29} > t_{65}\). Of these entrant 29 decisively wins
-only in the third and fourth outcomes.
+or not entrant 29 beats entrant 65:
+
+\begin{itemize}
+\tightlist
+\item
+  Entrant 29 forfeits and entrant 65 forfeits,
+\item
+  Entrant 29 forfeits and entrant 65 finishes,
+\item
+  Entrant 29 finishes and entrant 65 forfeits,
+\item
+  Entrant 29 finishes and entrant finishes and \(t_{29} < t_{65}\),
+\item
+  Entrant 29 finishes and entrant finishes and \(t_{29} > t_{65}\).
+\end{itemize}
+
+Of these entrant 29 decisively wins only in the third and fourth
+outcomes.
 
 In order to evaluate the probability that entrant 29 wins we'll need to
 make careful use of conditional probability theory taking into account
@@ -4156,6 +4292,8 @@ pleasant bonus.
 
 \section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
+
+I thank jd for helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alejandro Navarro-Martínez, Alessandro

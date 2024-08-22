@@ -91,6 +91,8 @@ skill of those entrants and predict the outcome of future races.
 Before exploring that data we'll need to set up our local `R` environment.
 
 ```{r}
+#| warning: false
+#| message: false
 par(family="serif", las=1, bty="l",
     cex.axis=1, cex.lab=1, cex.main=1,
     xaxs="i", yaxs="i", mar = c(5, 5, 3, 1))
@@ -164,8 +166,7 @@ data <- list("N_races" = nrow(race_info),
              "N_entrances_dnfs" = length(race_entrant_dnf_info$race_entrant_dnf_idxs))
 ```
 
-Altogether the data spans 192 races across the first seven and a half months of
-2024.
+Altogether the data spans 192 races across the first eight months of 2024.
 
 ```{r}
 cat(sprintf('%i total races', data$N_races))
@@ -290,7 +291,7 @@ the true race dynamics.
 Now a particularly crude model of independent finish times might assume that the
 finish times across all races concentrate around some common baseline value,
 $$
-\mu = t_{\mathrm{baseline}} = \exp(\gamma).
+\mu = t_{\mathrm{baseline}} = \exp(\gamma) \cdot 1 \text{ second}.
 $$
 Not all races, however, are the same.
 
@@ -306,9 +307,10 @@ t_{\mathrm{baseline}} \cdot \delta_{\mathrm{difficulty}, s}
 \\
 &=
 \exp(\gamma) \cdot \exp( \lambda_{\mathrm{difficulty}, s} )
+\cdot 1 \text{ second}
 \\
 &=
-\exp(\gamma + \lambda_{\mathrm{difficulty}, s}).
+\exp(\gamma + \lambda_{\mathrm{difficulty}, s}) \cdot 1 \text{ second}.
 \end{align*}
 
 
@@ -328,9 +330,11 @@ t_{\mathrm{baseline}}
 \exp(\gamma)
 \cdot \exp( \lambda_{\mathrm{difficulty}, s} )
 \cdot \frac{1}{\exp( \lambda_{\mathrm{skill}, e} ) }
+\cdot 1 \text{ second}
 \\
 &=
-\exp(\gamma + \lambda_{\mathrm{difficulty}, s} - \lambda_{\mathrm{skill}, e}).
+\exp(\gamma + \lambda_{\mathrm{difficulty}, s} - \lambda_{\mathrm{skill}, e})
+\cdot 1 \text{ second}.
 \end{align*}
 
 Note that this model is an example of an **adversarial model** where the result
@@ -353,7 +357,8 @@ $$
 \exp(
 \gamma
 + \alpha_{s} \cdot (  \lambda_{\mathrm{difficulty}, s}
-                    - \lambda_{\mathrm{skill}, e}) ).
+                    - \lambda_{\mathrm{skill}, e}) )
+\cdot 1 \text{ second}.
 $$
 The smaller $\alpha_{s}$ is the less sensitive the finish times for the given
 seed will be to the contrast between seed difficulty and entrant skill.
@@ -391,31 +396,39 @@ models for each parameter.
 
 To avoid unrealistically fast and slow races let's constrain the baseline finish
 time to
-\begin{align*}
-1800 \text{ seconds} \lessapprox
-&t_{\mathrm{baseline}} \lessapprox
-5400 \text{ minutes}
+\begin{alignat*}{5}
+& 1800 \text{ seconds} &
+& \lessapprox &
+& \quad\quad\;\; t_{\mathrm{baseline}} &
+& \lessapprox &
+& \, 5400 \text{ seconds}
 \\
-1800 \text{ seconds} \lessapprox
-&\exp(\gamma) \cdot 1 \text{ second} \lessapprox
-5400 \text{ seconds}
+& 1800 \text{ seconds} &
+& \lessapprox &
+& \, \exp(\gamma) \cdot 1 \text{ second} \, &
+& \lessapprox &
+& \, 5400 \text{ seconds}
 \\
-1800 \lessapprox
-&\exp(\gamma) \lessapprox
-5400
+& 1800 &
+& \lessapprox &
+& \quad\quad\; \exp(\gamma) &
+& \lessapprox &
+& \, 5400
 \\
-\log 1800 \lessapprox
-&\exp(\gamma) \lessapprox
-\log 5400.
-\end{align*}
+& \log 1800 &
+& \lessapprox &
+& \quad\quad\quad\;\;\, \gamma &
+& \lessapprox &
+& \log 5400.
+\end{alignat*}
 We can ensure that 98% of the prior probability is contained within these bounds
 with the prior model
 \begin{align*}
 p( \gamma )
 &=
 \text{normal} \left(
-\gamma \mid \frac{\log 5400 + \log 1800}{2},
-            \frac{1}{2.32} \frac{\log 5400 - \log 1800}{2} \right)
+\gamma \;\, \bigg| \;\, \frac{\log 5400 + \log 1800}{2},
+                        \frac{1}{2.32} \frac{\log 5400 - \log 1800}{2} \right)
 \\
 &= \text{normal}( \gamma \mid 8.045, 0.237).
 \end{align*}
@@ -434,17 +447,17 @@ the baseline by more than a factor of two,
 \end{align*}
 A reasonable prior that achieves this soft containment is then
 \begin{align*}
-p( \delta )
+p( \lambda )
 &=
 \text{normal} \left(
-\gamma \mid \frac{\log 2 + (-\log 2)}{2},
-            \frac{1}{2.32} \frac{\log 2 - (-\log 2)}{2} \right)
+\lambda \;\, \bigg| \;\, \frac{\log 2 + (-\log 2)}{2},
+                         \frac{1}{2.32} \frac{\log 2 - (-\log 2)}{2} \right)
 \\
 &=
 \text{normal} \left(
-\gamma \mid 0, \frac{1}{2.32} \, \log 2\right)
+\lambda \;\, \bigg| \;\, 0, \frac{1}{2.32} \, \log 2\right)
 \\
-&= \text{normal}( \gamma \mid 0, 0.299).
+&= \text{normal}( \lambda \mid 0, 0.299).
 \end{align*}
 
 Lastly we need to consider the dispersion strength $\psi$.  Here let's suppress
@@ -459,8 +472,8 @@ model configurations where the variance would exceed the squared mean,
 One way to achieve this soft containment is with the prior model
 $$
 p( \psi )
-= \text{half-normal} \left( \psi \mid 0, \frac{1}{2.57} \right)
-= \text{half-normal} \left( \psi \mid 0, 0.389 \right).
+= \text{half-normal} \left( \psi \;\, \bigg| \;\, 0, \frac{1}{2.57} \right)
+= \text{half-normal} \left( \psi \;\, \bigg| \;\, 0, 0.389 \right).
 $$
 
 
@@ -496,8 +509,24 @@ base_samples <- util$filter_expectands(samples1,
 util$summarize_expectand_diagnostics(base_samples)
 ```
 
+Fortunately the empirical effective sample sizes are not quite small enough, and
+hence the auto-correlations are not quite large enough, to compromise the
+accuracy of our Markov chain Monte Carlo estimators, just limit their precision.
+It's only when the empirical effective sample sizes dip below ten or so that we
+really need to be worried.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 2, 1))
+
+min_eesss <- util$compute_min_eesss(base_samples)
+util$plot_line_hist(min_eesss, 0, 150, 10, col=util$c_dark,
+                    xlab=paste0("Smallest Empirical Effective Sample Size\n",
+                                "Across All Markov Chains For Each Expectand"))
+abline(v=100, col="#DDDDDD", lty=3, lwd=3)
+```
+
 This behavior is unfortunately not uncommon with adversarial models.  Without
-enough data the model is vulnerable a degeneracies where some of the additive
+enough data the model is vulnerable to degeneracies where some of the additive
 terms vary without changing their sum, tracing out a narrow plane of consistent
 model configurations that can be difficult to explore efficiently.
 
@@ -601,11 +630,11 @@ observational model addresses the issue.
 The gamma family of probability density functions are naturally complemented
 with the inverse gamma family of probability density functions.  Because the
 gamma probability density functions exhibit heavier tails towards zero and
-lighter tails towards infinity they skew towards larger values.  On the other
-hand the inverse gamma probability density functions exhibit lighter tails
-towards zero and heavier tails towards infinity, resulting in a skew towards
-smaller values.  This conveniently contrasting behavior might be exactly what we
-need to address the retrodictive tension in our first model.
+lighter tails towards infinity their _peaks_ skew towards larger values.  On the
+other hand the inverse gamma probability density functions exhibit lighter tails
+towards zero and heavier tails towards infinity, resulting in _peaks_ that skew
+towards smaller values.  This conveniently contrasting behavior might be exactly
+what we need to address the retrodictive tension in our first model.
 
 In order to build an inverse gamma observational model we need to engineer a
 location-dispersion parameterization.  The inverse gamma family, like the gamma
@@ -657,6 +686,20 @@ base_samples <- util$filter_expectands(samples2,
                                          'skills', 'psi'),
                                        check_arrays=TRUE)
 util$summarize_expectand_diagnostics(base_samples)
+```
+
+Again the auto-correlations are not strong enough to undermine our Markov chain
+Monte Carlo estimators entirely.  Indeed they seem to be a bit better than
+before.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 2, 1))
+
+min_eesss <- util$compute_min_eesss(base_samples)
+util$plot_line_hist(min_eesss, 0, 150, 10, col=util$c_dark,
+                    xlab=paste0("Smallest Empirical Effective Sample Size\n",
+                                "Across All Markov Chains For Each Expectand"))
+abline(v=100, col="#DDDDDD", lty=3, lwd=3)
 ```
 
 It looks like this may have done the trick.  The observed and posterior
@@ -989,9 +1032,7 @@ fit <- stan(file="stan_programs/model3.stan",
 ```
 
 The diagnostics continue to complain about strong auto-correlations but no new
-problems have arisen.  In particular the $\hat{\xi}$ warnings are not a concern
-so long as we don't try to summarize the $\kappa$ parameters with a component
-mean.
+problems have arisen.
 
 ```{r}
 diagnostics3 <- util$extract_hmc_diagnostics(fit)
@@ -1004,6 +1045,18 @@ base_samples <- util$filter_expectands(samples3,
                                          'betas', 'psi'),
                                        check_arrays=TRUE)
 util$summarize_expectand_diagnostics(base_samples)
+```
+
+Perhaps surprisingly the worst auto-correlations continue to slightly improve.
+
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 2, 1))
+
+min_eesss <- util$compute_min_eesss(base_samples)
+util$plot_line_hist(min_eesss, 0, 150, 10, col=util$c_dark,
+                    xlab=paste0("Smallest Empirical Effective Sample Size\n",
+                                "Across All Markov Chains For Each Expectand"))
+abline(v=100, col="#DDDDDD", lty=3, lwd=3)
 ```
 
 The retrodictive agreement between the observed and posterior predictive finish
@@ -1311,10 +1364,7 @@ fit <- stan(file="stan_programs/model4.stan",
 ```
 
 Fortunately we don't see any of the tell-tale signs of problematic hierarchical
-geometries, such as divergences and E-FMI warnings.  Even better the
-auto-correlations are consistently weaker than before!  This suggests that the
-hierarchical coupling is indeed reducing the posterior uncertainties and
-improving the overall posterior geometry.
+geometries, such as divergences and E-FMI warnings.
 
 ```{r}
 diagnostics4 <- util$extract_hmc_diagnostics(fit)
@@ -1331,6 +1381,38 @@ base_samples <- util$filter_expectands(samples4,
                                          'psi'),
                                        check_arrays=TRUE)
 util$summarize_expectand_diagnostics(base_samples)
+```
+
+In fact the empirical effective sample sizes are consistently larger, and hence
+the auto-correlations consistently weaker, than before!  This suggests that the
+hierarchical coupling is indeed reducing the posterior uncertainties and
+improving the overall posterior geometry.
+
+```{r}
+base_samples <- util$filter_expectands(samples3,
+                                       c('gamma',
+                                         'difficulties', 'skills',
+                                         'kappas', 'betas',
+                                         'psi'),
+                                       check_arrays=TRUE)
+min_eesss3 <- util$compute_min_eesss(base_samples)
+
+base_samples <- util$filter_expectands(samples4,
+                                       c('gamma',
+                                         'difficulties', 'skills',
+                                         'kappas', 'betas',
+                                         'psi'),
+                                       check_arrays=TRUE)
+min_eesss4 <- util$compute_min_eesss(base_samples)
+
+par(mfrow=c(1, 1), mar=c(5, 5, 3, 1))
+
+plot(min_eesss3, min_eesss4, col=util$c_dark, pch=16,
+     main=paste0("Smallest Empirical Effective Sample Size\n",
+                 "Across All Markov Chains For Each Expectand"),
+     xlab="Model 3", xlim=c(0, 1100),
+     ylab="Model 4", ylim=c(0, 1100))
+abline(a=0, b=1, col="#DDDDDD", lty=3, lwd=3)
 ```
 
 A review of our visual retrodictive checks doesn't show any indications that the
@@ -1969,7 +2051,7 @@ minimizes the expected distance,
 $$
 \mu_{R}
 =
-\underset{r \in R}{\mathrm{argmax}} \; \mathbb{E}_{o_{*} \pi}[ d( \cdot, r) ].
+\underset{r \in R}{\mathrm{argmin}} \; \mathbb{E}_{o_{*} \pi}[ d( \cdot, r) ].
 $$
 Conveniently there are a variety of useful distance functions on $R$ that we
 could use here. and the expectation values can be readily estimated with Markov
@@ -2197,6 +2279,16 @@ base_samples <- util$filter_expectands(samples,
 util$summarize_expectand_diagnostics(base_samples)
 ```
 
+```{r}
+par(mfrow=c(1, 1), mar=c(5, 5, 2, 1))
+
+min_eesss <- util$compute_min_eesss(base_samples)
+util$plot_line_hist(min_eesss, 0, 150, 10, col=util$c_dark,
+                    xlab=paste0("Smallest Empirical Effective Sample Size\n",
+                                "Across All Markov Chains For Each Expectand"))
+abline(v=100, col="#DDDDDD", lty=3, lwd=3)
+```
+
 The uses of these predictions are endless.
 
 ### Single Entrant Predictions
@@ -2341,11 +2433,13 @@ accurately predict a winner we also need to take into account the possibility
 that one, or possibly even both, of the entrants forfeits.  Altogether there are
 five possible outcomes that are relevant to whether or not entrant 29 beats
 entrant 65:
+
 * Entrant 29 forfeits and entrant 65 forfeits,
-* Entrant 29 forfeits and entrant 65 forfeits,
+* Entrant 29 forfeits and entrant 65 finishes,
 * Entrant 29 finishes and entrant 65 forfeits,
 * Entrant 29 finishes and entrant finishes and $t_{29} < t_{65}$,
 * Entrant 29 finishes and entrant finishes and $t_{29} > t_{65}$.
+
 Of these entrant 29 decisively wins only in the third and fourth outcomes.
 
 In order to evaluate the probability that entrant 29 wins we'll need to make
@@ -2497,6 +2591,8 @@ Entertainment System&reg; and celebrate the capabilities of open source projects
 along the communities they inspire along the way is just a pleasant bonus.
 
 # Acknowledgements {-}
+
+I thank jd for helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
 Adriano Yoshino, Alejandro Navarro-Martínez, Alessandro Varacca, Alex D,

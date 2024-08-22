@@ -1719,7 +1719,7 @@ filter_expectands <- function(expectand_samples, requested_names,
     bad_names <- c()
     for (name in requested_names) {
       # Search for array suffix
-      array_names <- grep(paste0(name, '\\['),
+      array_names <- grep(paste0('^', name, '\\['),
                           names(expectand_samples),
                           value=TRUE)
       
@@ -1941,7 +1941,7 @@ mcmc_est <- function(fs) {
   return(c(summary[1], sqrt(summary[2] / eess), eess))
 }
 
-# Estimate expectand exectation value from a Markov chain ensemble.
+# Estimate expectand expectation value from a Markov chain ensemble.
 # @param samples A two-dimensional array of expectand values with the 
 #                first dimension indexing the Markov chains and the 
 #                second dimension indexing the sequential states within 
@@ -1986,6 +1986,27 @@ ensemble_mcmc_est <- function(samples) {
   
   c(mean, sqrt(var / total_ess), total_ess)
 }
+
+# Estimate quantile from a Markov chain ensemble.
+# @param samples A two-dimensional array of expectand values with the
+#                first dimension indexing the Markov chains and the
+#                second dimension indexing the sequential states within
+#                each Markov chain.
+# @param probs A list of target probabilities.
+# @return The ensemble Markov chain Monte Carlo estimate, its estimated
+#         standard error, and empirical effective sample size.
+ensemble_mcmc_quantile_est <- function(samples, probs) {
+  if (length(dim(samples)) != 2) {
+    cat('Input variable `samples` has the wrong dimension')
+    return (c(NaN, NaN, NaN))
+  }
+
+  if (!is.vector(probs)) {
+    stop('Input variable `probs` is not a vector!')
+  }
+
+}
+
 
 # Visualize pushforward distribution of a given expectand as a sequence of
 # bin probabilities weighted by bin widths that approximates the pushforward
