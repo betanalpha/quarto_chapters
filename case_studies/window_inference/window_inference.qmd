@@ -468,7 +468,7 @@ options(mc.cores = parallel::detectCores()) # Parallelize chains
 parallel:::setDefaultClusterOptions(setup_strategy = "sequential")
 
 util <- new.env()
-source('stan_utility_rstan.R', local=util)
+source('mcmc_analysis_tools_rstan.R', local=util)
 ```
 
 ## Explore Data
@@ -731,7 +731,7 @@ infidelity.
 diagnostics <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples,
                                        c('left', 'right',
                                          'bottom', 'top'))
@@ -934,7 +934,22 @@ A repository containing all of the files used to generate this chapter is
 available on [GitHub](
 https://github.com/betanalpha/quarto_chapters/tree/main/case_studies/window_inference).
 
-The text and figures in this chapter are copyrighted by Michael Betancourt
+The code in this case study is copyrighted by Michael Betancourt and licensed
+under the new BSD (3-clause) license:
+
+[https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
+
+The text and figures in this case study are copyrighted by Michael Betancourt
 and licensed under the CC BY-NC 4.0 license:
 
-https://creativecommons.org/licenses/by-nc/4.0/
+[https://creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
+
+# Original Computing Environment {-}
+
+```{r, comment=NA}
+writeLines(readLines(file.path(Sys.getenv("HOME"), ".R/Makevars")))
+```
+
+```{r, comment=NA}
+sessionInfo()
+```
