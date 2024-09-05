@@ -850,7 +850,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples1 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples1 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples1,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}difficulties\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}skills\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}psi\textquotesingle{}}\NormalTok{),}
@@ -884,23 +884,22 @@ skills[83], skills[84], skills[88], skills[90], skills[91], skills[93],
 skills[94], skills[95], skills[96], skills[98], skills[99],
 skills[100], skills[105], skills[107] triggered hat{ESS} warnings.
 
-Small empirical effective sample sizes indicate strong empirical
-autocorrelations in the realized Markov chains. If the empirical
-effective sample size is too small then Markov chain Monte Carlo
-estimation may be unreliable even when a central limit theorem holds.
+Small empirical effective sample sizes result in imprecise Markov chain
+Monte Carlo estimators.
 \end{verbatim}
 
-Fortunately the auto-correlations are not large enough to compromise the
-accuracy of our Markov chain Monte Carlo estimators, just limit their
-precision. It's only when the empirical effective sample sizes dip below
-ten or so that we really need to be worried.
+Fortunately the empirical effective sample sizes are not quite small
+enough, and hence the auto-correlations are not quite large enough, to
+compromise the accuracy of our Markov chain Monte Carlo estimators, just
+limit their precision. It's only when the empirical effective sample
+sizes dip below ten or so that we really need to be worried.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
 
-\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
-\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+\NormalTok{min\_ess\_hats }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_ess\_hats}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_ess\_hats, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
                     \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
                                 \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
 \end{Highlighting}
@@ -1222,7 +1221,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples2 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples2 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples2,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}difficulties\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}skills\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}psi\textquotesingle{}}\NormalTok{),}
@@ -1256,21 +1255,20 @@ skills[81], skills[88], skills[90], skills[91], skills[93], skills[94],
 skills[95], skills[96], skills[98], skills[99], skills[100],
 skills[105], skills[107] triggered hat{ESS} warnings.
 
-Small empirical effective sample sizes indicate strong empirical
-autocorrelations in the realized Markov chains. If the empirical
-effective sample size is too small then Markov chain Monte Carlo
-estimation may be unreliable even when a central limit theorem holds.
+Small empirical effective sample sizes result in imprecise Markov chain
+Monte Carlo estimators.
 \end{verbatim}
 
 Again the auto-correlations are not strong enough to undermine our
-Markov chain Monte Carlo estimators entirely.
+Markov chain Monte Carlo estimators entirely. Indeed they seem to be a
+bit better than before.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
 
-\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
-\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+\NormalTok{min\_ess\_hats }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_ess\_hats}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_ess\_hats, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
                     \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
                                 \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
 \end{Highlighting}
@@ -1868,7 +1866,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples3 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples3 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples3,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}difficulties\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}skills\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}kappas\textquotesingle{}}\NormalTok{,}
@@ -1899,18 +1897,19 @@ skills[91], skills[93], skills[94], skills[95], skills[96],
 skills[100], skills[105], skills[107], kappas[44] triggered hat{ESS}
 warnings.
 
-Small empirical effective sample sizes indicate strong empirical
-autocorrelations in the realized Markov chains. If the empirical
-effective sample size is too small then Markov chain Monte Carlo
-estimation may be unreliable even when a central limit theorem holds.
+Small empirical effective sample sizes result in imprecise Markov chain
+Monte Carlo estimators.
 \end{verbatim}
+
+Perhaps surprisingly the worst auto-correlations continue to slightly
+improve.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
 
-\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
-\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+\NormalTok{min\_ess\_hats }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_ess\_hats}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_ess\_hats, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
                     \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
                                 \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
 \end{Highlighting}
@@ -2561,7 +2560,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples4 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples4 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples4,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}eta\_difficulties\textquotesingle{}}\NormalTok{,}
@@ -2593,10 +2592,8 @@ eta_skills[70], eta_skills[90], eta_skills[91], eta_skills[93],
 eta_skills[94], eta_skills[95], eta_skills[96], eta_skills[100],
 eta_skills[105], kappas[44] triggered hat{ESS} warnings.
 
-Small empirical effective sample sizes indicate strong empirical
-autocorrelations in the realized Markov chains. If the empirical
-effective sample size is too small then Markov chain Monte Carlo
-estimation may be unreliable even when a central limit theorem holds.
+Small empirical effective sample sizes result in imprecise Markov chain
+Monte Carlo estimators.
 \end{verbatim}
 
 In fact the empirical effective sample sizes are consistently larger,
@@ -2612,7 +2609,7 @@ uncertainties and improving the overall posterior geometry.
                                          \StringTok{\textquotesingle{}kappas\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}betas\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}psi\textquotesingle{}}\NormalTok{),}
                                        \AttributeTok{check\_arrays=}\ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{min\_eesss3 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+\NormalTok{min\_ess\_hats3 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_ess\_hats}\NormalTok{(base\_samples)}
 
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples4,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{,}
@@ -2620,11 +2617,11 @@ uncertainties and improving the overall posterior geometry.
                                          \StringTok{\textquotesingle{}kappas\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}betas\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}psi\textquotesingle{}}\NormalTok{),}
                                        \AttributeTok{check\_arrays=}\ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{min\_eesss4 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
+\NormalTok{min\_ess\_hats4 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_ess\_hats}\NormalTok{(base\_samples)}
 
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{))}
 
-\FunctionTok{plot}\NormalTok{(min\_eesss3, min\_eesss4, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark, }\AttributeTok{pch=}\DecValTok{16}\NormalTok{,}
+\FunctionTok{plot}\NormalTok{(min\_ess\_hats3, min\_ess\_hats4, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark, }\AttributeTok{pch=}\DecValTok{16}\NormalTok{,}
      \AttributeTok{main=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
                  \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{),}
      \AttributeTok{xlab=}\StringTok{"Model 3"}\NormalTok{, }\AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1100}\NormalTok{),}
@@ -3206,16 +3203,6 @@ to larger values, but only slightly.
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(samples3[[name]], }\DecValTok{20}\NormalTok{,}
                                 \AttributeTok{flim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.6}\NormalTok{, }\FloatTok{0.1}\NormalTok{),}
                                 \AttributeTok{border=}\StringTok{"\#BBBBBB88"}\NormalTok{, }\AttributeTok{add=}\ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Warning in util$plot_expectand_pushforward(samples3[[name]], 20, flim = c(-0.6,
-: 1 samples (0.0%) fell above the histogram binning.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{text}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.05}\NormalTok{, }\DecValTok{3}\NormalTok{, }\StringTok{"Model 3"}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark)}
 \end{Highlighting}
 \end{Shaded}
@@ -3236,31 +3223,11 @@ Carlo estimator errors.
                                 \AttributeTok{ylim=}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{5.5}\NormalTok{),}
                                 \AttributeTok{display\_name=}\NormalTok{xname,}
                                 \AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_light)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Warning in util$plot_expectand_pushforward(samples3[[name]], 20, flim = c(-0.6,
-: 1 samples (0.0%) fell above the histogram binning.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{text}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\StringTok{"Model 3"}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_light)}
 
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_expectand\_pushforward}\NormalTok{(samples4[[name]], }\DecValTok{20}\NormalTok{,}
                                 \AttributeTok{flim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.6}\NormalTok{, }\FloatTok{0.1}\NormalTok{),}
                                 \AttributeTok{border=}\StringTok{"\#BBBBBB88"}\NormalTok{, }\AttributeTok{add=}\ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Warning in util$plot_expectand_pushforward(samples4[[name]], 20, flim = c(-0.6,
-: 2 samples (0.0%) fell above the histogram binning.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{text}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.05}\NormalTok{, }\DecValTok{3}\NormalTok{, }\StringTok{"Model 4"}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark)}
 \end{Highlighting}
 \end{Shaded}
@@ -3588,19 +3555,19 @@ accounts for inferential coupling between the two skill parameters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{C }\OtherTok{\textless{}{-}} \DecValTok{4}
-\NormalTok{S }\OtherTok{\textless{}{-}} \DecValTok{1024}
+\NormalTok{skill\_comp }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(s1, s2) \{}
+\NormalTok{  s1 }\SpecialCharTok{\textgreater{}}\NormalTok{ s2}
+\NormalTok{\}}
 
 \NormalTok{e1 }\OtherTok{\textless{}{-}}\NormalTok{ ranked\_entrants[data}\SpecialCharTok{$}\NormalTok{N\_entrants }\SpecialCharTok{+} \DecValTok{1} \SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]}
 \NormalTok{e2 }\OtherTok{\textless{}{-}}\NormalTok{ ranked\_entrants[data}\SpecialCharTok{$}\NormalTok{N\_entrants }\SpecialCharTok{+} \DecValTok{1} \SpecialCharTok{{-}} \DecValTok{2}\NormalTok{]}
-\NormalTok{derived\_samples }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow=}\NormalTok{C, }\AttributeTok{ncol=}\NormalTok{S)}
+\NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}s1\textquotesingle{}} \OtherTok{=} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e1,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{),}
+                 \StringTok{\textquotesingle{}s2\textquotesingle{}} \OtherTok{=} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e2,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{))}
 
-\ControlFlowTok{for}\NormalTok{ (c }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{C) \{}
-  \ControlFlowTok{for}\NormalTok{ (s }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{S) \{}
-\NormalTok{    derived\_samples[c, s] }\OtherTok{\textless{}{-}}\NormalTok{ samples4[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e1,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)]][c, s] }\SpecialCharTok{\textgreater{}}
-\NormalTok{                             samples4[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e2,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)]][c, s]}
-\NormalTok{  \}}
-\NormalTok{\}}
+\NormalTok{derived\_samples }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples4,}
+                                  \ControlFlowTok{function}\NormalTok{(s1, s2) }\FunctionTok{as.numeric}\NormalTok{(s1 }\SpecialCharTok{\textgreater{}}\NormalTok{ s2),}
+\NormalTok{                                  var\_repl)}
 
 \NormalTok{p }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(derived\_samples)[}\DecValTok{1}\NormalTok{]}
 
@@ -3626,28 +3593,31 @@ occupy last place.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{best\_entrant }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(entrant\_idxs) \{}
-\NormalTok{  C }\OtherTok{\textless{}{-}} \DecValTok{4}
-\NormalTok{  S }\OtherTok{\textless{}{-}} \DecValTok{1024}
+\NormalTok{skill\_comp }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(active\_skill, ...) \{}
+\NormalTok{  other\_skills }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(...)}
+\NormalTok{  pairwise\_comps }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(other\_skills,}
+                           \ControlFlowTok{function}\NormalTok{(other\_skill)}
+\NormalTok{                           active\_skill }\SpecialCharTok{\textgreater{}}\NormalTok{ other\_skill)}
+  \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{Reduce}\NormalTok{(}\StringTok{"\&"}\NormalTok{, pairwise\_comps))}
+\NormalTok{\}}
 
-\NormalTok{  E }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(entrant\_idxs)}
+\NormalTok{best\_entrant }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(entrant\_idxs) \{}
 \NormalTok{  probs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
-\NormalTok{  skills }\OtherTok{\textless{}{-}} \FunctionTok{array}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{dim =} \FunctionTok{c}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{N\_entrants, C, S))}
-  \ControlFlowTok{for}\NormalTok{ (e }\ControlFlowTok{in}\NormalTok{ entrant\_idxs)}
-\NormalTok{    skills[e,,] }\OtherTok{\textless{}{-}}\NormalTok{ samples4[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)]]}
 
   \ControlFlowTok{for}\NormalTok{ (e }\ControlFlowTok{in}\NormalTok{ entrant\_idxs) \{}
 \NormalTok{    other\_entrant\_idxs }\OtherTok{\textless{}{-}}\NormalTok{ entrant\_idxs[}\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(entrant\_idxs }\SpecialCharTok{==}\NormalTok{ e)]}
-\NormalTok{    comps }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow=}\NormalTok{C, }\AttributeTok{ncol=}\NormalTok{S)}
-    \ControlFlowTok{for}\NormalTok{ (c }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{C) \{}
-      \ControlFlowTok{for}\NormalTok{ (s }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{S) \{}
-\NormalTok{        pairwise\_comps }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(other\_entrant\_idxs,}
-                                 \ControlFlowTok{function}\NormalTok{(eo) skills[e] }\SpecialCharTok{\textgreater{}}\NormalTok{ skills[eo])}
-\NormalTok{        comps[c, s] }\OtherTok{\textless{}{-}} \FunctionTok{Reduce}\NormalTok{(}\StringTok{"\&"}\NormalTok{, pairwise\_comps)}
-\NormalTok{      \}}
-\NormalTok{    \}}
+\NormalTok{    var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}active\_skill\textquotesingle{}} \OtherTok{=} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{),}
+                     \StringTok{\textquotesingle{}...\textquotesingle{}} \OtherTok{=} \FunctionTok{sapply}\NormalTok{(other\_entrant\_idxs,}
+                                    \ControlFlowTok{function}\NormalTok{(oe)}
+                                    \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, oe,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)))}
+
+\NormalTok{    comps }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples4,}
+\NormalTok{                                             skill\_comp,}
+\NormalTok{                                             var\_repl)}
+
 \NormalTok{    probs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(probs, util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(comps)[}\DecValTok{1}\NormalTok{])}
 \NormalTok{  \}}
+
 \NormalTok{  entrant\_idxs[}\FunctionTok{which}\NormalTok{(probs }\SpecialCharTok{==} \FunctionTok{max}\NormalTok{(probs))]}
 \NormalTok{\}}
 \end{Highlighting}
@@ -3897,7 +3867,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}gamma\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}eta\_difficulties\textquotesingle{}}\NormalTok{,}
@@ -3923,18 +3893,16 @@ eta_skills[44], eta_skills[58], eta_skills[60], eta_skills[65],
 eta_skills[90], eta_skills[91], eta_skills[100], eta_skills[105],
 kappas[94] triggered hat{ESS} warnings.
 
-Small empirical effective sample sizes indicate strong empirical
-autocorrelations in the realized Markov chains. If the empirical
-effective sample size is too small then Markov chain Monte Carlo
-estimation may be unreliable even when a central limit theorem holds.
+Small empirical effective sample sizes result in imprecise Markov chain
+Monte Carlo estimators.
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
 
-\NormalTok{min\_eesss }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_eesss}\NormalTok{(base\_samples)}
-\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_eesss, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
+\NormalTok{min\_ess\_hats }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{compute\_min\_ess\_hats}\NormalTok{(base\_samples)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{plot\_line\_hist}\NormalTok{(min\_ess\_hats, }\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{10}\NormalTok{, }\AttributeTok{col=}\NormalTok{util}\SpecialCharTok{$}\NormalTok{c\_dark,}
                     \AttributeTok{xlab=}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Smallest Empirical Effective Sample Size}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
                                 \StringTok{"Across All Markov Chains For Each Expectand"}\NormalTok{))}
 \end{Highlighting}
@@ -4027,14 +3995,11 @@ consistent estimate of the exact posterior quantile.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{q }\OtherTok{\textless{}{-}} \DecValTok{0}
-
 \NormalTok{name }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}entrant\_f\_times\_pred[\textquotesingle{}}\NormalTok{, e, }\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)}
-\ControlFlowTok{for}\NormalTok{ (c }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{C) \{}
-\NormalTok{  q }\OtherTok{\textless{}{-}}\NormalTok{ q }\SpecialCharTok{+} \FunctionTok{quantile}\NormalTok{(samples[[name]][c,], }\AttributeTok{probs=}\FunctionTok{c}\NormalTok{(p\_balanced)) }\SpecialCharTok{/}\NormalTok{ C}
-\NormalTok{\}}
+\NormalTok{t\_gamble }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_quantile\_est}\NormalTok{(samples[[name]],}
+                                            \FunctionTok{c}\NormalTok{(p\_balanced))}
 
-\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"t\_gamble = \%.3f minutes"}\NormalTok{, q }\SpecialCharTok{/} \DecValTok{60}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"t\_gamble = \%.3f minutes"}\NormalTok{, t\_gamble }\SpecialCharTok{/} \DecValTok{60}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -4238,38 +4203,45 @@ combine them together to give the left-hand side.
 \NormalTok{status\_name2 }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"entrant\_statuses\_pred["}\NormalTok{, e2, }\StringTok{"]"}\NormalTok{)}
 \NormalTok{time\_name2 }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"entrant\_f\_times\_pred["}\NormalTok{, e2, }\StringTok{"]"}\NormalTok{)}
 
-\NormalTok{C }\OtherTok{\textless{}{-}} \DecValTok{4}
-\NormalTok{S }\OtherTok{\textless{}{-}} \DecValTok{1024}
-
-\NormalTok{derived\_samples }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow=}\NormalTok{C, }\AttributeTok{ncol=}\NormalTok{S))}
-\FunctionTok{names}\NormalTok{(derived\_samples) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}forfeit\_win\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}no\_forfeits\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}neg\_time\_diff\textquotesingle{}}\NormalTok{)}
-
-\ControlFlowTok{for}\NormalTok{ (c }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{C) \{}
-  \ControlFlowTok{for}\NormalTok{ (s }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{S) \{}
-\NormalTok{    status1 }\OtherTok{\textless{}{-}}\NormalTok{ samples[[status\_name1]][c, s]}
-\NormalTok{    status2 }\OtherTok{\textless{}{-}}\NormalTok{ samples[[status\_name1]][c, s]}
-
-\NormalTok{    derived\_samples[[}\StringTok{\textquotesingle{}forfeit\_win\textquotesingle{}}\NormalTok{]][c, s] }\OtherTok{\textless{}{-}}\NormalTok{ (status1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ status2 }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)}
-\NormalTok{    derived\_samples[[}\StringTok{\textquotesingle{}no\_forfeits\textquotesingle{}}\NormalTok{]][c, s] }\OtherTok{\textless{}{-}}\NormalTok{ (status1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ status2 }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
-
-\NormalTok{    derived\_samples[[}\StringTok{\textquotesingle{}neg\_time\_diff\textquotesingle{}}\NormalTok{]][c, s] }\OtherTok{\textless{}{-}}\NormalTok{ samples[[time\_name1]][c, s] }\SpecialCharTok{\textless{}}
-\NormalTok{                                                samples[[time\_name2]][c, s]}
-\NormalTok{  \}}
+\NormalTok{eval\_forfeit\_win }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(status1, status2) \{}
+  \FunctionTok{as.numeric}\NormalTok{(status1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ status2 }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)}
 \NormalTok{\}}
+\NormalTok{forfeit\_win\_samples }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
+\NormalTok{                                  eval\_forfeit\_win,}
+                                  \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}status1\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name1,}
+                                       \StringTok{\textquotesingle{}status2\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name2))}
+\NormalTok{p\_forfeit\_win }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(forfeit\_win\_samples)[}\DecValTok{1}\NormalTok{]}
 
-\NormalTok{p\_forfeit\_win }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(derived\_samples[[}\StringTok{\textquotesingle{}forfeit\_win\textquotesingle{}}\NormalTok{]])[}\DecValTok{1}\NormalTok{]}
-\NormalTok{p\_no\_forfeits }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(derived\_samples[[}\StringTok{\textquotesingle{}no\_forfeits\textquotesingle{}}\NormalTok{]])[}\DecValTok{1}\NormalTok{]}
-\NormalTok{p\_neg\_time\_diff }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(derived\_samples[[}\StringTok{\textquotesingle{}neg\_time\_diff\textquotesingle{}}\NormalTok{]])[}\DecValTok{1}\NormalTok{]}
+\NormalTok{eval\_no\_forfeits }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(status1, status2) \{}
+  \FunctionTok{as.numeric}\NormalTok{(status1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ status2 }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{no\_forfeits\_samples }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
+\NormalTok{                                  eval\_no\_forfeits,}
+                                  \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}status1\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name1,}
+                                       \StringTok{\textquotesingle{}status2\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name2))}
+\NormalTok{p\_no\_forfeits }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(no\_forfeits\_samples)[}\DecValTok{1}\NormalTok{]}
+
+\NormalTok{time\_comp }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(t1, t2) \{}
+  \FunctionTok{as.numeric}\NormalTok{(t1 }\SpecialCharTok{\textless{}}\NormalTok{ t2)}
+\NormalTok{\}}
+\NormalTok{neg\_time\_diff\_samples }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
+\NormalTok{                                  time\_comp,}
+                                  \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}t1\textquotesingle{}} \OtherTok{=}\NormalTok{ time\_name1,}
+                                       \StringTok{\textquotesingle{}t2\textquotesingle{}} \OtherTok{=}\NormalTok{ time\_name2))}
+\NormalTok{p\_neg\_time\_diff }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(neg\_time\_diff\_samples)[}\DecValTok{1}\NormalTok{]}
+
 
 \NormalTok{p }\OtherTok{\textless{}{-}}\NormalTok{ p\_forfeit\_win }\SpecialCharTok{+}\NormalTok{ p\_neg\_time\_diff }\SpecialCharTok{*}\NormalTok{ p\_no\_forfeits}
-
 \FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"Probability that entrant \%i beats entrant \%i = \%.3f"}\NormalTok{,}
 \NormalTok{            e1, e2, p))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-Probability that entrant 29 beats entrant 65 = 0.730
+Probability that entrant 29 beats entrant 65 = 0.734
 \end{verbatim}
 
 Although entrant 29 is definitely favored the outcome is by no means
