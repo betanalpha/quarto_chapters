@@ -372,7 +372,7 @@ fit <- stan(file="stan_programs/uniform_simplex.stan",
             algorithm="Fixed_param", data=data, seed=8438338,
             warmup=1000, iter=2024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 As we're not running Markov chain Monte Carlo here there are no computational
@@ -503,7 +503,7 @@ distribution.
 diagnostics <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples, 'q', check_arrays=TRUE)
 util$check_all_expectand_diagnostics(base_samples)
 ```
@@ -1118,21 +1118,25 @@ directly in `R`, as we have done here, or in the `generated quantities` block of
 a new Stan program. Here we'll stay within `R`.
 
 ```{r}
-C <- 4
-S <- 1024
+var_repl <- lapply(1:6, function(k) paste0("q[", k, "]"))
+names(var_repl) <- sapply(1:6, function(k) paste0("q", k))
 
-I_c_samples <- matrix(NA, nrow=C, ncol=S)
-I_r_samples <- matrix(NA, nrow=C, ncol=S)
-
-for (c in 1:C) {
-  for (s in 1:S) {
-    q <- sapply(1:6, function(k)
-                     samples[[paste0("q[", k, "]")]][c, s])
-
-    I_c_samples[c, s] <- componentwise_indicator(q, t)
-    I_r_samples[c, s] <- radial_indicator(q, R)
-  }
+cw_ind_partial_eval <- function(q1, q2, q3, q4, q5, q6) {
+  as.numeric(componentwise_indicator(c(q1, q2, q3, q4, q5, q6), t))
 }
+
+
+I_c_samples <- util$eval_expectand_pushforward(samples,
+                                               cw_ind_partial_eval,
+                                               var_repl)
+
+r_ind_partial_eval <- function(q1, q2, q3, q4, q5, q6) {
+  as.numeric(radial_indicator(c(q1, q2, q3, q4, q5, q6), R))
+}
+
+I_r_samples <- util$eval_expectand_pushforward(samples,
+                                               r_ind_partial_eval,
+                                               var_repl)
 ```
 
 ```{r}
@@ -1216,18 +1220,32 @@ We can use this mathematical result to immediately derive the consequences from
 not only an idealized, exactly uniform die but also the real Skew Dice&trade;.
 
 ```{r}
+pushforward_simplex_comps <- c(function(q1, q2, q3, q4, q5, q6)
+                                   q1 * q1,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q1 * q2,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q1 * q3 +     q2 * q2,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q1 * q4 + 2 * q2 * q3,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q1 * q5 + 2 * q2 * q4 +     q3 * q3,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q1 * q6 + 2 * q2 * q5 + 2 * q3 * q4,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q2 * q6 + 2 * q3 * q5 +     q4 * q4,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q3 * q6 + 2 * q4 * q5,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q4 * q6 +     q5 * q5,
+                               function(q1, q2, q3, q4, q5, q6)
+                               2 * q5 * q6,
+                               function(q1, q2, q3, q4, q5, q6)
+                                   q6 * q6)
+
 pushforward_simplex <- function(q) {
-  c(    q[1] * q[1],
-    2 * q[1] * q[2],
-    2 * q[1] * q[3] +     q[2] * q[2],
-    2 * q[1] * q[4] + 2 * q[2] * q[3],
-    2 * q[1] * q[5] + 2 * q[2] * q[4] +     q[3] * q[3],
-    2 * q[1] * q[6] + 2 * q[2] * q[5] + 2 * q[3] * q[4],
-    2 * q[2] * q[6] + 2 * q[3] * q[5] +     q[4] * q[4],
-    2 * q[3] * q[6] + 2 * q[4] * q[5],
-    2 * q[4] * q[6] +     q[5] * q[5],
-    2 * q[5] * q[6],
-        q[6] * q[6])
+  sapply(1:11,
+         function(k) do.call(pushforward_simplex_comps[[k]], as.list(q)))
 }
 ```
 
@@ -1236,24 +1254,16 @@ unif_2d6_simplex <- pushforward_simplex(upsilon)
 ```
 
 ```{r}
-inferred_2d6_simplex <- lapply(1:11,
-                               function(k) matrix(NA, nrow=C, ncol=S))
-names(inferred_2d6_simplex) <- sapply(1:11,
-                                      function(k) paste0('q[', k + 1, ']'))
+inferred_2d6_simplex <- lapply(2:12,
+                               function(k) 0 * samples[['q[1]']])
+names(inferred_2d6_simplex) <- sapply(2:12,
+                                      function(k) paste0('q[', k, ']'))
 
-C <- 4
-S <- 1024
-
-for (c in 1:C) {
-  for (s in 1:S) {
-    q <- sapply(1:6, function(k)
-                     samples[[paste0("q[", k, "]")]][c, s])
-    qs <- pushforward_simplex(q)
-    for (k in 1:11) {
-      inferred_2d6_simplex[[paste0('q[', k + 1, ']')]][c, s] <- qs[k]
-    }
-  }
-}
+for (k in 2:12)
+  inferred_2d6_simplex[[paste0('q[', k, ']')]] <-
+    util$eval_expectand_pushforward(samples,
+                                    pushforward_simplex_comps[[k - 1]],
+                                    var_repl)
 ```
 
 Overall the inferred behavior of rolling a Skew Dice&trade; twice is reasonably
@@ -1347,20 +1357,38 @@ q_fail_unif <- sum(unif_2d6_simplex[1:3])
 ```
 
 ```{r}
-inferred_outcomes <- lapply(1:3, function(n) matrix(NA, nrow=C, ncol=S))
+var_repl <- lapply(2:12, function(k) paste0("q[", k, "]"))
+names(var_repl) <- sapply(2:12, function(k) paste0("q", k))
+
+inferred_outcomes <- lapply(1:3, function(n) 0 * samples[['q[1]']])
 names(inferred_outcomes) <- c('q_success', 'q_flinch', 'q_fail')
 
-for (c in 1:C) {
-  for (s in 1:S) {
-    q <- sapply(1:6, function(k)
-      samples[[paste0("q[", k, "]")]][c, s])
-    q_2d6 <- pushforward_simplex(q)
-
-    inferred_outcomes[['q_success']][c, s] <- sum(q_2d6[7:11])
-    inferred_outcomes[['q_flinch']][c, s] <- sum(q_2d6[4:6])
-    inferred_outcomes[['q_fail']][c, s] <- sum(q_2d6[1:3])
-  }
+eval_q_success <- function(q2, q3, q4, q5, q6, q7,
+                           q8, q9, q10, q11, q12) {
+  q8 + q9 + q10 + q11 + q12
 }
+inferred_outcomes[['q_success']] <-
+  util$eval_expectand_pushforward(inferred_2d6_simplex,
+                                  eval_q_success,
+                                  var_repl)
+
+eval_q_flinch <- function(q2, q3, q4, q5, q6, q7,
+                          q8, q9, q10, q11, q12) {
+  q5 + q6 + q7
+}
+inferred_outcomes[['q_flinch']] <-
+  util$eval_expectand_pushforward(inferred_2d6_simplex,
+                                  eval_q_flinch,
+                                  var_repl)
+
+eval_q_fail <- function(q2, q3, q4, q5, q6, q7,
+                        q8, q9, q10, q11, q12) {
+  q2 + q3 + q4
+}
+inferred_outcomes[['q_fail']] <-
+  util$eval_expectand_pushforward(inferred_2d6_simplex,
+                                  eval_q_fail,
+                                  var_repl)
 ```
 
 Here the probabilities of these game outcomes that we have inferred from rolling
@@ -1414,18 +1442,14 @@ abline(v=q_success_unif * (1 + t), lwd=2, col=util$c_light_teal)
 ```
 
 ```{r}
-C <- 4
-S <- 1024
-
-I_samples <- matrix(NA, nrow=C, ncol=S)
-
-for (c in 1:C) {
-  for (s in 1:S) {
-    q <- inferred_outcomes[['q_success']][c, s]
-    I_samples[c, s] <- q_success_unif / (1 + t) < q &
-                       q < q_success_unif * (1 + t)
-  }
+indicator <- function(q) {
+  as.numeric(q_success_unif / (1 + t) < q &
+                                        q < q_success_unif * (1 + t))
 }
+
+I_samples <- util$eval_expectand_pushforward(inferred_outcomes,
+                                             indicator,
+                                             list("q" = "q_success"))
 ```
 
 ```{r}
@@ -1613,7 +1637,7 @@ fit <- stan(file="stan_programs/homogeneous_simplex_heterogeneous_retro.stan",
 diagnostics <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples, 'q', check_arrays=TRUE)
 util$check_all_expectand_diagnostics(base_samples)
 ```
@@ -1747,7 +1771,7 @@ This more sophisticated model hasn't introduced any computational complications.
 diagnostics <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples, 'q', check_arrays=TRUE)
 util$check_all_expectand_diagnostics(base_samples)
 ```
@@ -2076,7 +2100,7 @@ fit <- stan(file="stan_programs/hierarchical_simplex_prior_1.stan",
             algorithm="Fixed_param", seed=8438338,
             warmup=0, iter=1024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 A principled population prior model requires that we elicit domain expertise
@@ -2154,7 +2178,7 @@ There are no signs of inaccurate posterior quantification.
 diagnostics <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics)
 
-samples1 <- util$extract_expectands(fit)
+samples1 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples1,
                                        c('q', 'q_baseline', 'omega'),
                                        check_arrays=TRUE)
@@ -2504,7 +2528,7 @@ fit <- stan(file="stan_programs/hierarchical_simplex_prior_2.stan",
             algorithm="Fixed_param", seed=8438338,
             warmup=0, iter=1024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 ```{r}
@@ -2555,7 +2579,7 @@ The computational diagnostics are clean.
 diagnostics <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics)
 
-samples2 <- util$extract_expectands(fit)
+samples2 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples2,
                                        c('q_baseline', 'delta', 'zeta'),
                                        check_arrays=TRUE)
@@ -2887,7 +2911,7 @@ fit <- stan(file="stan_programs/simu_softmax_1.stan",
             algorithm="Fixed_param", seed=8438338,
             warmup=0, iter=1024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 ```{r}
@@ -3146,7 +3170,7 @@ fit <- stan(file="stan_programs/simu_softmax_2.stan",
             algorithm="Fixed_param", seed=8438338,
             warmup=0, iter=1024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 ```{r}
@@ -3373,7 +3397,7 @@ fit <- stan(file="stan_programs/simu_softmax_3.stan",
             algorithm="Fixed_param", seed=8438338,
             warmup=0, iter=1024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 ```{r}
@@ -3586,7 +3610,7 @@ fit <- stan(file="stan_programs/simu_softmax_4.stan",
             algorithm="Fixed_param", seed=8438338,
             warmup=0, iter=1024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 ```{r}
@@ -3713,7 +3737,7 @@ fit <- stan(file="stan_programs/hierarchical_simplex_prior_3.stan",
             algorithm="Fixed_param", seed=8438338,
             warmup=0, iter=1024, refresh=0)
 
-samples <- util$extract_expectands(fit)
+samples <- util$extract_expectand_vals(fit)
 ```
 
 ```{r}
@@ -3762,7 +3786,7 @@ fit <- stan(file="stan_programs/hierarchical_simplex_3.stan",
 diagnostics <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics)
 
-samples3 <- util$extract_expectands(fit)
+samples3 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples3,
                                        c('eta', 'mu', 'tau', 'L'),
                                        check_arrays=TRUE)
@@ -4752,7 +4776,22 @@ A repository containing all of the files used to generate this chapter is
 available on [GitHub](
 https://github.com/betanalpha/quarto_chapters/tree/main/case_studies/die_fairness).
 
-The text and figures in this chapter are copyrighted by Michael Betancourt
+The code in this case study is copyrighted by Michael Betancourt and licensed
+under the new BSD (3-clause) license:
+
+[https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
+
+The text and figures in this case study are copyrighted by Michael Betancourt
 and licensed under the CC BY-NC 4.0 license:
 
-https://creativecommons.org/licenses/by-nc/4.0/
+[https://creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
+
+# Original Computing Environment {-}
+
+```{r, comment=NA}
+writeLines(readLines(file.path(Sys.getenv("HOME"), ".R/Makevars")))
+```
+
+```{r, comment=NA}
+sessionInfo()
+```
