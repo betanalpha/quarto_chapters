@@ -288,7 +288,7 @@ tools; this code and supporting documentation are both available on
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{source}\NormalTok{(}\StringTok{\textquotesingle{}mcmc\_visualization\_tools.R\textquotesingle{}}\NormalTok{, }\AttributeTok{local=}\NormalTok{util)}
+\FunctionTok{source}\NormalTok{(}\StringTok{\textquotesingle{}mcmc\_analysis\_tools\_rstan.R\textquotesingle{}}\NormalTok{, }\AttributeTok{local=}\NormalTok{util)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -299,7 +299,7 @@ and supporting documentation are available on
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{source}\NormalTok{(}\StringTok{\textquotesingle{}mcmc\_analysis\_tools\_rstan.R\textquotesingle{}}\NormalTok{, }\AttributeTok{local=}\NormalTok{util)}
+\FunctionTok{source}\NormalTok{(}\StringTok{\textquotesingle{}mcmc\_visualization\_tools.R\textquotesingle{}}\NormalTok{, }\AttributeTok{local=}\NormalTok{util)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -556,7 +556,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples1 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples1 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples1, }\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}theta\textquotesingle{}}\NormalTok{))}
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{check\_all\_expectand\_diagnostics}\NormalTok{(base\_samples)}
 \end{Highlighting}
@@ -895,7 +895,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples2 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples2 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples2,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}psi1\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}psi2\textquotesingle{}}\NormalTok{))}
 \NormalTok{util}\SpecialCharTok{$}\FunctionTok{check\_all\_expectand\_diagnostics}\NormalTok{(base\_samples)}
@@ -1152,7 +1152,7 @@ transitions.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples3 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples3 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples3,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}psi1\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}psi2\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}lambda\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}theta\_VIP\textquotesingle{}}\NormalTok{))}
@@ -1238,7 +1238,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples3\_99 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples3\_99 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples3\_99,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}psi1\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}psi2\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}lambda\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}theta\_VIP\textquotesingle{}}\NormalTok{))}
@@ -1578,7 +1578,7 @@ Markov chain Monte Carlo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{samples4 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
+\NormalTok{samples4 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
 \NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples4,}
                                        \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}psi1\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}psi2\textquotesingle{}}\NormalTok{,}
                                          \StringTok{\textquotesingle{}lambda\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}theta\_VIP\textquotesingle{}}\NormalTok{))}
@@ -1886,14 +1886,43 @@ information.
 \NormalTok{fit }\OtherTok{\textless{}{-}} \FunctionTok{stan}\NormalTok{(}\AttributeTok{file=}\StringTok{"stan\_programs/model5.stan"}\NormalTok{,}
             \AttributeTok{data=}\NormalTok{data, }\AttributeTok{seed=}\DecValTok{8438338}\NormalTok{,}
             \AttributeTok{warmup=}\DecValTok{1000}\NormalTok{, }\AttributeTok{iter=}\DecValTok{2024}\NormalTok{, }\AttributeTok{refresh=}\DecValTok{0}\NormalTok{)}
-
-\NormalTok{samples5 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectands}\NormalTok{(fit)}
 \end{Highlighting}
 \end{Shaded}
 
-Because we are effectively rerunning the same computation we don't need
-to check the computational diagnostics nor the posterior retrodictive
-checks.
+Although of \texttt{model} block is the same as Model 4 the
+\texttt{generated\ quantities} block of Model 5 is different. While
+running this different code will consume pseudo-random number generate
+state differently than that of Model 4 and, consequently, there is a
+chance that the realized Markov chains will encounter different
+pathologies. Because of this we'll need to double check the
+computational diagnostics. Fortunately no new warnings have arisen.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diagnostics5 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_hmc\_diagnostics}\NormalTok{(fit)}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{check\_all\_hmc\_diagnostics}\NormalTok{(diagnostics5)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  All Hamiltonian Monte Carlo diagnostics are consistent with reliable
+Markov chain Monte Carlo.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samples5 }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{extract\_expectand\_vals}\NormalTok{(fit)}
+\NormalTok{base\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{filter\_expectands}\NormalTok{(samples5,}
+                                       \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}psi1\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}psi2\textquotesingle{}}\NormalTok{,}
+                                         \StringTok{\textquotesingle{}lambda\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}theta\_VIP\textquotesingle{}}\NormalTok{))}
+\NormalTok{util}\SpecialCharTok{$}\FunctionTok{check\_all\_expectand\_diagnostics}\NormalTok{(base\_samples)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+All expectands checked appear to be behaving well enough for reliable
+Markov chain Monte Carlo estimation.
+\end{verbatim}
 
 As expected our predictions for the new circumstances don't look like
 any of our retrodictions. The hypothetical data generating process
@@ -1967,7 +1996,7 @@ value"): 6 conditioning values (0.4%) fell above the binning.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{customer_conversion_files/figure-pdf/unnamed-chunk-47-1.pdf}
+\includegraphics{customer_conversion_files/figure-pdf/unnamed-chunk-48-1.pdf}
 
 \section{Conclusion}\label{conclusion}
 
@@ -2001,6 +2030,8 @@ generating processes do our analyses implicitly assume.
 
 \section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
+
+I thank jd for helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alessandro Varacca, Alexander Noll,
@@ -2052,12 +2083,12 @@ is available on
 The code in this case study is copyrighted by Michael Betancourt and
 licensed under the new BSD (3-clause) license:
 
-https://opensource.org/licenses/BSD-3-Clause
+\url{https://opensource.org/licenses/BSD-3-Clause}
 
-The text and figures in this chapter are copyrighted by Michael
+The text and figures in this case study are copyrighted by Michael
 Betancourt and licensed under the CC BY-NC 4.0 license:
 
-https://creativecommons.org/licenses/by-nc/4.0/
+\url{https://creativecommons.org/licenses/by-nc/4.0/}
 
 \section*{Original Computing
 Environment}\label{original-computing-environment}

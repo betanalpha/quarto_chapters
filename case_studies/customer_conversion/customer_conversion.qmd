@@ -129,7 +129,7 @@ this code and supporting documentation are both available on
 [GitHub](https://github.com/betanalpha/mcmc_diagnostics).
 
 ```{r}
-source('mcmc_visualization_tools.R', local=util)
+source('mcmc_analysis_tools_rstan.R', local=util)
 ```
 
 Second is a suite of posterior and posterior predictive visualization functions
@@ -138,7 +138,7 @@ documentation are available on
 [GitHub](https://github.com/betanalpha/mcmc_visualization_tools).
 
 ```{r}
-source('mcmc_analysis_tools_rstan.R', local=util)
+source('mcmc_visualization_tools.R', local=util)
 ```
 
 # Data Exploration
@@ -296,7 +296,7 @@ posterior quantification here.
 diagnostics1 <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics1)
 
-samples1 <- util$extract_expectands(fit)
+samples1 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples1, c('theta'))
 util$check_all_expectand_diagnostics(base_samples)
 ```
@@ -548,7 +548,7 @@ Fortunately the computational diagnostics are clean.
 diagnostics2 <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics2)
 
-samples2 <- util$extract_expectands(fit)
+samples2 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples2,
                                        c('psi1', 'psi2'))
 util$check_all_expectand_diagnostics(base_samples)
@@ -693,7 +693,7 @@ dealing with divergences see my chapter on
 diagnostics3 <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics3)
 
-samples3 <- util$extract_expectands(fit)
+samples3 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples3,
                                        c('psi1', 'psi2',
                                          'lambda', 'theta_VIP'))
@@ -754,7 +754,7 @@ warnings.
 diagnostics3_99 <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics3_99)
 
-samples3_99 <- util$extract_expectands(fit)
+samples3_99 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples3_99,
                                        c('psi1', 'psi2',
                                          'lambda', 'theta_VIP'))
@@ -949,7 +949,7 @@ have improved the posterior uncertainties.
 diagnostics4 <- util$extract_hmc_diagnostics(fit)
 util$check_all_hmc_diagnostics(diagnostics4)
 
-samples4 <- util$extract_expectands(fit)
+samples4 <- util$extract_expectand_vals(fit)
 base_samples <- util$filter_expectands(samples4,
                                        c('psi1', 'psi2',
                                          'lambda', 'theta_VIP'))
@@ -1138,12 +1138,25 @@ just what we do with that information.
 fit <- stan(file="stan_programs/model5.stan",
             data=data, seed=8438338,
             warmup=1000, iter=2024, refresh=0)
-
-samples5 <- util$extract_expectands(fit)
 ```
 
-Because we are effectively rerunning the same computation we don't need to check
-the computational diagnostics nor the posterior retrodictive checks.
+Although of `model` block is the same as Model 4 the `generated quantities`
+block of Model 5 is different.  While running this different code will consume
+pseudo-random number generate state differently than that of Model 4 and,
+consequently, there is a chance that the realized Markov chains will encounter
+different pathologies.  Because of this we'll need to double check the
+computational diagnostics.  Fortunately no new warnings have arisen.
+
+```{r}
+diagnostics5 <- util$extract_hmc_diagnostics(fit)
+util$check_all_hmc_diagnostics(diagnostics5)
+
+samples5 <- util$extract_expectand_vals(fit)
+base_samples <- util$filter_expectands(samples5,
+                                       c('psi1', 'psi2',
+                                         'lambda', 'theta_VIP'))
+util$check_all_expectand_diagnostics(base_samples)
+```
 
 As expected our predictions for the new circumstances don't look like any of our
 retrodictions.  The hypothetical data generating process yields conversion
@@ -1236,6 +1249,8 @@ implicitly assume.
 
 # Acknowledgements {-}
 
+I thank jd for helpful comments.
+
 A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
 Adriano Yoshino, Alessandro Varacca, Alexander Noll, Alexander Rosteck,
 Andrea Serafino, Andrew Mascioli, Andrew Rouillard, Andrew Vigotsky, Ara Winter,
@@ -1282,12 +1297,12 @@ https://github.com/betanalpha/quarto_chapters/tree/main/case_studies/customer_co
 The code in this case study is copyrighted by Michael Betancourt and licensed
 under the new BSD (3-clause) license:
 
-https://opensource.org/licenses/BSD-3-Clause
+[https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 
-The text and figures in this chapter are copyrighted by Michael Betancourt
+The text and figures in this case study are copyrighted by Michael Betancourt
 and licensed under the CC BY-NC 4.0 license:
 
-https://creativecommons.org/licenses/by-nc/4.0/
+[https://creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
 
 # Original Computing Environment {-}
 
