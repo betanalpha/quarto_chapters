@@ -2170,8 +2170,7 @@ could fill out all of the rankings by iterating this procedure until only one
 entrant is left to occupy last place.
 
 ```{r}
-skill_comp <- function(active_skill, ...) {
-  other_skills <- c(...)
+skill_comp <- function(active_skill, other_skills) {
   pairwise_comps <- sapply(other_skills,
                            function(other_skill)
                            active_skill > other_skill)
@@ -2184,9 +2183,9 @@ best_entrant <- function(entrant_idxs) {
   for (e in entrant_idxs) {
     other_entrant_idxs <- entrant_idxs[-which(entrant_idxs == e)]
     var_repl <- list('active_skill' = paste0('skills[', e,']'),
-                     '...' = sapply(other_entrant_idxs,
-                                    function(oe)
-                                    paste0('skills[', oe,']')))
+                     'other_skills' = array(sapply(other_entrant_idxs,
+                                                   function(oe)
+                                                   paste0('skills[', oe,']'))))
 
     comps <- util$eval_expectand_pushforward(samples4,
                                              skill_comp,
@@ -2545,32 +2544,24 @@ e2 <- 65
 status_name2 <- paste0("entrant_statuses_pred[", e2, "]")
 time_name2 <- paste0("entrant_f_times_pred[", e2, "]")
 
-eval_forfeit_win <- function(status1, status2) {
-  as.numeric(status1 == 0 & status2 == 1)
-}
 forfeit_win_samples <-
   util$eval_expectand_pushforward(samples,
-                                  eval_forfeit_win,
-                                  list('status1' = status_name1,
-                                       'status2' = status_name2))
+                                  function(s1, s2) s1 == 0 & s2 == 1,
+                                  list('s1' = status_name1,
+                                       's2' = status_name2))
 p_forfeit_win <- util$ensemble_mcmc_est(forfeit_win_samples)[1]
 
-eval_no_forfeits <- function(status1, status2) {
-  as.numeric(status1 == 0 & status2 == 0)
-}
+
 no_forfeits_samples <-
   util$eval_expectand_pushforward(samples,
-                                  eval_no_forfeits,
-                                  list('status1' = status_name1,
-                                       'status2' = status_name2))
+                                  function(s1, s2) s1 == 0 & s2 == 0,
+                                  list('s1' = status_name1,
+                                       's2' = status_name2))
 p_no_forfeits <- util$ensemble_mcmc_est(no_forfeits_samples)[1]
 
-time_comp <- function(t1, t2) {
-  as.numeric(t1 < t2)
-}
 neg_time_diff_samples <-
   util$eval_expectand_pushforward(samples,
-                                  time_comp,
+                                  function(t1, t2) t1 < t2,
                                   list('t1' = time_name1,
                                        't2' = time_name2))
 p_neg_time_diff <- util$ensemble_mcmc_est(neg_time_diff_samples)[1]

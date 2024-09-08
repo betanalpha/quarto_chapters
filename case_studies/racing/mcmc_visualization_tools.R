@@ -90,10 +90,10 @@ check_bin_containment <- function(bin_min, bin_max, values, name="value") {
   N_high <- sum(bin_max < values)
   if (N_high > 0)
     if (N_high == 1)
-      warning(sprintf('%i %s (%.1f%%) fell below the binning.',
+      warning(sprintf('%i %s (%.1f%%) fell above the binning.',
                       N_high, name, 100 * N_high / N))
     else
-      warning(sprintf('%i %ss (%.1f%%) fell below the binning.',
+      warning(sprintf('%i %ss (%.1f%%) fell above the binning.',
                       N_high, name, 100 * N_high / N))
 }
 
