@@ -1118,22 +1118,18 @@ directly in `R`, as we have done here, or in the `generated quantities` block of
 a new Stan program. Here we'll stay within `R`.
 
 ```{r}
-var_repl <- lapply(1:6, function(k) paste0("q[", k, "]"))
-names(var_repl) <- sapply(1:6, function(k) paste0("q", k))
+var_repl <- list('q'=util$name_array('q', c(6)))
 
-cw_ind_partial_eval <- function(q1, q2, q3, q4, q5, q6) {
-  as.numeric(componentwise_indicator(c(q1, q2, q3, q4, q5, q6), t))
+cw_ind_partial_eval <- function(q) {
+  as.numeric(componentwise_indicator(q, t))
 }
-
-
 I_c_samples <- util$eval_expectand_pushforward(samples,
                                                cw_ind_partial_eval,
                                                var_repl)
 
-r_ind_partial_eval <- function(q1, q2, q3, q4, q5, q6) {
-  as.numeric(radial_indicator(c(q1, q2, q3, q4, q5, q6), R))
+r_ind_partial_eval <- function(q) {
+  as.numeric(radial_indicator(q, R))
 }
-
 I_r_samples <- util$eval_expectand_pushforward(samples,
                                                r_ind_partial_eval,
                                                var_repl)
@@ -1220,32 +1216,33 @@ We can use this mathematical result to immediately derive the consequences from
 not only an idealized, exactly uniform die but also the real Skew Dice&trade;.
 
 ```{r}
-pushforward_simplex_comps <- c(function(q1, q2, q3, q4, q5, q6)
-                                   q1 * q1,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q1 * q2,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q1 * q3 +     q2 * q2,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q1 * q4 + 2 * q2 * q3,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q1 * q5 + 2 * q2 * q4 +     q3 * q3,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q1 * q6 + 2 * q2 * q5 + 2 * q3 * q4,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q2 * q6 + 2 * q3 * q5 +     q4 * q4,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q3 * q6 + 2 * q4 * q5,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q4 * q6 +     q5 * q5,
-                               function(q1, q2, q3, q4, q5, q6)
-                               2 * q5 * q6,
-                               function(q1, q2, q3, q4, q5, q6)
-                                   q6 * q6)
+pushforward_simplex_comps <-
+  c(function(q)
+         q[1] * q[1],
+    function(q)
+     2 * q[1] * q[2],
+    function(q)
+     2 * q[1] * q[3] +     q[2] * q[2],
+    function(q)
+     2 * q[1] * q[4] + 2 * q[2] * q[3],
+    function(q)
+     2 * q[1] * q[5] + 2 * q[2] * q[4] +     q[3] * q[3],
+    function(q)
+     2 * q[1] * q[6] + 2 * q[2] * q[5] + 2 * q[3] * q[4],
+    function(q)
+     2 * q[2] * q[6] + 2 * q[3] * q[5] +     q[4] * q[4],
+    function(q)
+     2 * q[3] * q[6] + 2 * q[4] * q[5],
+    function(q)
+     2 * q[4] * q[6] +     q[5] * q[5],
+    function(q)
+     2 * q[5] * q[6],
+    function(q)
+         q[6] * q[6])
 
 pushforward_simplex <- function(q) {
   sapply(1:11,
-         function(k) do.call(pushforward_simplex_comps[[k]], as.list(q)))
+         function(k) do.call(pushforward_simplex_comps[[k]], list(q)))
 }
 ```
 
@@ -1357,37 +1354,24 @@ q_fail_unif <- sum(unif_2d6_simplex[1:3])
 ```
 
 ```{r}
-var_repl <- lapply(2:12, function(k) paste0("q[", k, "]"))
-names(var_repl) <- sapply(2:12, function(k) paste0("q", k))
+var_repl <- list('q'=array(sapply(2:12,
+                                  function(k) paste0("q[", k, "]"))))
 
-inferred_outcomes <- lapply(1:3, function(n) 0 * samples[['q[1]']])
-names(inferred_outcomes) <- c('q_success', 'q_flinch', 'q_fail')
+inferred_outcomes <- list()
 
-eval_q_success <- function(q2, q3, q4, q5, q6, q7,
-                           q8, q9, q10, q11, q12) {
-  q8 + q9 + q10 + q11 + q12
-}
 inferred_outcomes[['q_success']] <-
   util$eval_expectand_pushforward(inferred_2d6_simplex,
-                                  eval_q_success,
+                                  function(q) sum(q[7:11]),
                                   var_repl)
 
-eval_q_flinch <- function(q2, q3, q4, q5, q6, q7,
-                          q8, q9, q10, q11, q12) {
-  q5 + q6 + q7
-}
 inferred_outcomes[['q_flinch']] <-
   util$eval_expectand_pushforward(inferred_2d6_simplex,
-                                  eval_q_flinch,
+                                  function(q) sum(q[4:6]),
                                   var_repl)
 
-eval_q_fail <- function(q2, q3, q4, q5, q6, q7,
-                        q8, q9, q10, q11, q12) {
-  q2 + q3 + q4
-}
 inferred_outcomes[['q_fail']] <-
   util$eval_expectand_pushforward(inferred_2d6_simplex,
-                                  eval_q_fail,
+                                  function(q) sum(q[1:3]),
                                   var_repl)
 ```
 

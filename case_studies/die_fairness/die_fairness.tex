@@ -425,6 +425,25 @@ faces, both in aggregate and individually for each die.
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+Loading required package: StanHeaders
+\end{verbatim}
+
+\begin{verbatim}
+
+rstan version 2.32.6 (Stan version 2.32.2)
+\end{verbatim}
+
+\begin{verbatim}
+For execution on a local, multicore CPU with excess RAM we recommend calling
+options(mc.cores = parallel::detectCores()).
+To avoid recompilation of unchanged Stan programs, we recommend calling
+rstan_options(auto_write = TRUE)
+For within-chain threading using `reduce_sum()` or `map_rect()` Stan functions,
+change `threads_per_chain` option:
+rstan_options(threads_per_chain = 1)
+\end{verbatim}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{mar=}\FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{))}
@@ -1454,7 +1473,7 @@ enforcing a relatively strict notion of fairness.
 \end{Shaded}
 
 \begin{verbatim}
-Prior probability allocated to component-wise subset = 0.00119 +/- 0.00022
+Prior probability allocated to component-wise subset = 0.00101 +/- 0.00020
 \end{verbatim}
 
 \begin{Shaded}
@@ -1468,7 +1487,7 @@ Prior probability allocated to component-wise subset = 0.00119 +/- 0.00022
 \end{Shaded}
 
 \begin{verbatim}
-Prior probability allocated to radial subset = 0.00104 +/- 0.00020
+Prior probability allocated to radial subset = 0.00110 +/- 0.00021
 \end{verbatim}
 
 The posterior probability allocated to these subsets can then be
@@ -1479,22 +1498,18 @@ Here we'll stay within \texttt{R}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{"q["}\NormalTok{, k, }\StringTok{"]"}\NormalTok{))}
-\FunctionTok{names}\NormalTok{(var\_repl) }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{"q"}\NormalTok{, k))}
+\NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}q\textquotesingle{}}\OtherTok{=}\NormalTok{util}\SpecialCharTok{$}\FunctionTok{name\_array}\NormalTok{(}\StringTok{\textquotesingle{}q\textquotesingle{}}\NormalTok{, }\FunctionTok{c}\NormalTok{(}\DecValTok{6}\NormalTok{)))}
 
-\NormalTok{cw\_ind\_partial\_eval }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6) \{}
-  \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{componentwise\_indicator}\NormalTok{(}\FunctionTok{c}\NormalTok{(q1, q2, q3, q4, q5, q6), t))}
+\NormalTok{cw\_ind\_partial\_eval }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) \{}
+  \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{componentwise\_indicator}\NormalTok{(q, t))}
 \NormalTok{\}}
-
-
 \NormalTok{I\_c\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
 \NormalTok{                                               cw\_ind\_partial\_eval,}
 \NormalTok{                                               var\_repl)}
 
-\NormalTok{r\_ind\_partial\_eval }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6) \{}
-  \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{radial\_indicator}\NormalTok{(}\FunctionTok{c}\NormalTok{(q1, q2, q3, q4, q5, q6), R))}
+\NormalTok{r\_ind\_partial\_eval }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) \{}
+  \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{radial\_indicator}\NormalTok{(q, R))}
 \NormalTok{\}}
-
 \NormalTok{I\_r\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
 \NormalTok{                                               r\_ind\_partial\_eval,}
 \NormalTok{                                               var\_repl)}
@@ -1627,32 +1642,33 @@ the real Skew Dice™.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{pushforward\_simplex\_comps }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-\NormalTok{                                   q1 }\SpecialCharTok{*}\NormalTok{ q1,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q1 }\SpecialCharTok{*}\NormalTok{ q2,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q1 }\SpecialCharTok{*}\NormalTok{ q3 }\SpecialCharTok{+}\NormalTok{     q2 }\SpecialCharTok{*}\NormalTok{ q2,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q1 }\SpecialCharTok{*}\NormalTok{ q4 }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q2 }\SpecialCharTok{*}\NormalTok{ q3,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q1 }\SpecialCharTok{*}\NormalTok{ q5 }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q2 }\SpecialCharTok{*}\NormalTok{ q4 }\SpecialCharTok{+}\NormalTok{     q3 }\SpecialCharTok{*}\NormalTok{ q3,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q1 }\SpecialCharTok{*}\NormalTok{ q6 }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q2 }\SpecialCharTok{*}\NormalTok{ q5 }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q3 }\SpecialCharTok{*}\NormalTok{ q4,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q2 }\SpecialCharTok{*}\NormalTok{ q6 }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q3 }\SpecialCharTok{*}\NormalTok{ q5 }\SpecialCharTok{+}\NormalTok{     q4 }\SpecialCharTok{*}\NormalTok{ q4,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q3 }\SpecialCharTok{*}\NormalTok{ q6 }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q4 }\SpecialCharTok{*}\NormalTok{ q5,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q4 }\SpecialCharTok{*}\NormalTok{ q6 }\SpecialCharTok{+}\NormalTok{     q5 }\SpecialCharTok{*}\NormalTok{ q5,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-                               \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q5 }\SpecialCharTok{*}\NormalTok{ q6,}
-                               \ControlFlowTok{function}\NormalTok{(q1, q2, q3, q4, q5, q6)}
-\NormalTok{                                   q6 }\SpecialCharTok{*}\NormalTok{ q6)}
+\NormalTok{pushforward\_simplex\_comps }\OtherTok{\textless{}{-}}
+  \FunctionTok{c}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(q)}
+\NormalTok{         q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{],}
+    \ControlFlowTok{function}\NormalTok{(q)}
+\NormalTok{         q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{])}
 
 \NormalTok{pushforward\_simplex }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) \{}
   \FunctionTok{sapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{11}\NormalTok{,}
-         \ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{do.call}\NormalTok{(pushforward\_simplex\_comps[[k]], }\FunctionTok{as.list}\NormalTok{(q)))}
+         \ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{do.call}\NormalTok{(pushforward\_simplex\_comps[[k]], }\FunctionTok{list}\NormalTok{(q)))}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -1782,37 +1798,24 @@ uniform die.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{"q["}\NormalTok{, k, }\StringTok{"]"}\NormalTok{))}
-\FunctionTok{names}\NormalTok{(var\_repl) }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{"q"}\NormalTok{, k))}
+\NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}q\textquotesingle{}}\OtherTok{=}\FunctionTok{array}\NormalTok{(}\FunctionTok{sapply}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{,}
+                                  \ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{"q["}\NormalTok{, k, }\StringTok{"]"}\NormalTok{))))}
 
-\NormalTok{inferred\_outcomes }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\ControlFlowTok{function}\NormalTok{(n) }\DecValTok{0} \SpecialCharTok{*}\NormalTok{ samples[[}\StringTok{\textquotesingle{}q[1]\textquotesingle{}}\NormalTok{]])}
-\FunctionTok{names}\NormalTok{(inferred\_outcomes) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}q\_success\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}q\_flinch\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}q\_fail\textquotesingle{}}\NormalTok{)}
+\NormalTok{inferred\_outcomes }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
 
-\NormalTok{eval\_q\_success }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q2, q3, q4, q5, q6, q7,}
-\NormalTok{                           q8, q9, q10, q11, q12) \{}
-\NormalTok{  q8 }\SpecialCharTok{+}\NormalTok{ q9 }\SpecialCharTok{+}\NormalTok{ q10 }\SpecialCharTok{+}\NormalTok{ q11 }\SpecialCharTok{+}\NormalTok{ q12}
-\NormalTok{\}}
 \NormalTok{inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_success\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}}
 \NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(inferred\_2d6\_simplex,}
-\NormalTok{                                  eval\_q\_success,}
+                                  \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{7}\SpecialCharTok{:}\DecValTok{11}\NormalTok{]),}
 \NormalTok{                                  var\_repl)}
 
-\NormalTok{eval\_q\_flinch }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q2, q3, q4, q5, q6, q7,}
-\NormalTok{                          q8, q9, q10, q11, q12) \{}
-\NormalTok{  q5 }\SpecialCharTok{+}\NormalTok{ q6 }\SpecialCharTok{+}\NormalTok{ q7}
-\NormalTok{\}}
 \NormalTok{inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_flinch\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}}
 \NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(inferred\_2d6\_simplex,}
-\NormalTok{                                  eval\_q\_flinch,}
+                                  \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{]),}
 \NormalTok{                                  var\_repl)}
 
-\NormalTok{eval\_q\_fail }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q2, q3, q4, q5, q6, q7,}
-\NormalTok{                        q8, q9, q10, q11, q12) \{}
-\NormalTok{  q2 }\SpecialCharTok{+}\NormalTok{ q3 }\SpecialCharTok{+}\NormalTok{ q4}
-\NormalTok{\}}
 \NormalTok{inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_fail\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}}
 \NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(inferred\_2d6\_simplex,}
-\NormalTok{                                  eval\_q\_fail,}
+                                  \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{]),}
 \NormalTok{                                  var\_repl)}
 \end{Highlighting}
 \end{Shaded}
