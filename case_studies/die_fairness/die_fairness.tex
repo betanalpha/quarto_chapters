@@ -1415,7 +1415,7 @@ function introduced in the \href{@sec:appendixa}{Appendix A}.
 \NormalTok{upsilon }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(u, K)}
 
 \CommentTok{\# Component{-}wise subset indicator function}
-\NormalTok{componentwise\_indicator }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q, t) \{}
+\NormalTok{cwise\_indicator }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q, t) \{}
 \NormalTok{  component\_inclusion }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{K, }\ControlFlowTok{function}\NormalTok{(k) u }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t) }\SpecialCharTok{\textless{}}\NormalTok{ q[k] }\SpecialCharTok{\&}
 \NormalTok{                                                 q[k] }\SpecialCharTok{\textless{}}\NormalTok{ u }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t) )}
   \FunctionTok{Reduce}\NormalTok{(}\StringTok{"\&"}\NormalTok{, component\_inclusion)}
@@ -1456,7 +1456,7 @@ enforcing a relatively strict notion of fairness.
 \NormalTok{  m }\OtherTok{\textless{}{-}} \FunctionTok{rgamma}\NormalTok{(K, alpha, }\DecValTok{1}\NormalTok{)}
 \NormalTok{  q }\OtherTok{\textless{}{-}}\NormalTok{ m }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(m)}
 
-\NormalTok{  I\_c\_samples[s] }\OtherTok{\textless{}{-}} \FunctionTok{componentwise\_indicator}\NormalTok{(q, t)}
+\NormalTok{  I\_c\_samples[s] }\OtherTok{\textless{}{-}} \FunctionTok{cwise\_indicator}\NormalTok{(q, t)}
 \NormalTok{  I\_r\_samples[s] }\OtherTok{\textless{}{-}} \FunctionTok{radial\_indicator}\NormalTok{(q, R)}
 \NormalTok{\}}
 \end{Highlighting}
@@ -1473,7 +1473,7 @@ enforcing a relatively strict notion of fairness.
 \end{Shaded}
 
 \begin{verbatim}
-Prior probability allocated to component-wise subset = 0.00101 +/- 0.00020
+Prior probability allocated to component-wise subset = 0.00119 +/- 0.00022
 \end{verbatim}
 
 \begin{Shaded}
@@ -1487,7 +1487,7 @@ Prior probability allocated to component-wise subset = 0.00101 +/- 0.00020
 \end{Shaded}
 
 \begin{verbatim}
-Prior probability allocated to radial subset = 0.00110 +/- 0.00021
+Prior probability allocated to radial subset = 0.00122 +/- 0.00022
 \end{verbatim}
 
 The posterior probability allocated to these subsets can then be
@@ -1500,30 +1500,11 @@ Here we'll stay within \texttt{R}.
 \begin{Highlighting}[]
 \NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}q\textquotesingle{}}\OtherTok{=}\NormalTok{util}\SpecialCharTok{$}\FunctionTok{name\_array}\NormalTok{(}\StringTok{\textquotesingle{}q\textquotesingle{}}\NormalTok{, }\FunctionTok{c}\NormalTok{(}\DecValTok{6}\NormalTok{)))}
 
-\NormalTok{cw\_ind\_partial\_eval }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) \{}
-  \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{componentwise\_indicator}\NormalTok{(q, t))}
-\NormalTok{\}}
-\NormalTok{I\_c\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
-\NormalTok{                                               cw\_ind\_partial\_eval,}
-\NormalTok{                                               var\_repl)}
-
-\NormalTok{r\_ind\_partial\_eval }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) \{}
-  \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{radial\_indicator}\NormalTok{(q, R))}
-\NormalTok{\}}
-\NormalTok{I\_r\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
-\NormalTok{                                               r\_ind\_partial\_eval,}
-\NormalTok{                                               var\_repl)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{est }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(I\_c\_samples)}
-\NormalTok{pi\_c }\OtherTok{\textless{}{-}}\NormalTok{ est[}\DecValTok{1}\NormalTok{]}
-\NormalTok{delta\_c }\OtherTok{\textless{}{-}} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ est[}\DecValTok{2}\NormalTok{]}
-
+\NormalTok{pi\_est }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(samples,}
+                                    \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{cwise\_indicator}\NormalTok{(q, t),}
+\NormalTok{                                    var\_repl)}
 \FunctionTok{cat}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Posterior probability allocated to component{-}wise subset = "}\NormalTok{,}
-           \FunctionTok{sprintf}\NormalTok{(}\StringTok{"\%.5f +/{-} \%.5f"}\NormalTok{, pi\_c, delta\_c)))}
+           \FunctionTok{sprintf}\NormalTok{(}\StringTok{"\%.5f +/{-} \%.5f"}\NormalTok{, pi\_est[}\DecValTok{1}\NormalTok{], }\DecValTok{2} \SpecialCharTok{*}\NormalTok{ pi\_est[}\DecValTok{2}\NormalTok{])))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1533,12 +1514,11 @@ Posterior probability allocated to component-wise subset = 0.99779 +/- 0.00146
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{est }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(I\_r\_samples)}
-\NormalTok{pi\_r }\OtherTok{\textless{}{-}}\NormalTok{ est[}\DecValTok{1}\NormalTok{]}
-\NormalTok{delta\_r }\OtherTok{\textless{}{-}} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ est[}\DecValTok{2}\NormalTok{]}
-
+\NormalTok{pi\_est }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(samples,}
+                                    \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{radial\_indicator}\NormalTok{(q, R),}
+\NormalTok{                                    var\_repl)}
 \FunctionTok{cat}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Posterior probability allocated to radial subset = "}\NormalTok{,}
-           \FunctionTok{sprintf}\NormalTok{(}\StringTok{"\%.5f +/{-} \%.5f"}\NormalTok{, pi\_r, delta\_r)))}
+           \FunctionTok{sprintf}\NormalTok{(}\StringTok{"\%.5f +/{-} \%.5f"}\NormalTok{, pi\_est[}\DecValTok{1}\NormalTok{], }\DecValTok{2} \SpecialCharTok{*}\NormalTok{ pi\_est[}\DecValTok{2}\NormalTok{])))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1643,28 +1623,30 @@ the real Skew Dice™.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{pushforward\_simplex\_comps }\OtherTok{\textless{}{-}}
-  \FunctionTok{c}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(q)}
-\NormalTok{         q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-     \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{],}
-    \ControlFlowTok{function}\NormalTok{(q)}
-\NormalTok{         q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{])}
+  \FunctionTok{list}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(q)}
+\NormalTok{             q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{+}\NormalTok{     q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+         \DecValTok{2} \SpecialCharTok{*}\NormalTok{ q[}\DecValTok{5}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{],}
+       \ControlFlowTok{function}\NormalTok{(q)}
+\NormalTok{             q[}\DecValTok{6}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ q[}\DecValTok{6}\NormalTok{])}
+\FunctionTok{names}\NormalTok{(pushforward\_simplex\_comps) }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{,}
+                                           \ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}q[\textquotesingle{}}\NormalTok{, k, }\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{))}
 
 \NormalTok{pushforward\_simplex }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) \{}
   \FunctionTok{sapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{11}\NormalTok{,}
@@ -1681,16 +1663,10 @@ the real Skew Dice™.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{inferred\_2d6\_simplex }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{,}
-                               \ControlFlowTok{function}\NormalTok{(k) }\DecValTok{0} \SpecialCharTok{*}\NormalTok{ samples[[}\StringTok{\textquotesingle{}q[1]\textquotesingle{}}\NormalTok{]])}
-\FunctionTok{names}\NormalTok{(inferred\_2d6\_simplex) }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{,}
-                                      \ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}q[\textquotesingle{}}\NormalTok{, k, }\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{))}
-
-\ControlFlowTok{for}\NormalTok{ (k }\ControlFlowTok{in} \DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{)}
-\NormalTok{  inferred\_2d6\_simplex[[}\FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}q[\textquotesingle{}}\NormalTok{, k, }\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)]] }\OtherTok{\textless{}{-}}
-\NormalTok{    util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
-\NormalTok{                                    pushforward\_simplex\_comps[[k }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]],}
-\NormalTok{                                    var\_repl)}
+\NormalTok{inferred\_2d6\_simplex }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforwards}\NormalTok{(samples,}
+\NormalTok{                                   pushforward\_simplex\_comps,}
+\NormalTok{                                   var\_repl)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1715,7 +1691,7 @@ uniform die twice.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-29-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-27-1.pdf}
 
 Once again the nested quantile intervals are particularly useful for
 investigating for any systematic inconsistencies.
@@ -1732,7 +1708,7 @@ investigating for any systematic inconsistencies.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-30-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-28-1.pdf}
 
 Here we see a \emph{slight} reduction in the inferred probability of
 \(s = 2\) and \(s = 3\) relative to the exactly uniform baseline and a
@@ -1790,9 +1766,14 @@ uniform die.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{q\_success\_unif }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(unif\_2d6\_simplex[}\DecValTok{7}\SpecialCharTok{:}\DecValTok{11}\NormalTok{])}
-\NormalTok{q\_flinch\_unif }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(unif\_2d6\_simplex[}\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{])}
-\NormalTok{q\_fail\_unif }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(unif\_2d6\_simplex[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{])}
+\NormalTok{condition\_comps }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
+\NormalTok{condition\_comps[[}\StringTok{\textquotesingle{}q\_success\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{7}\SpecialCharTok{:}\DecValTok{11}\NormalTok{])}
+\NormalTok{condition\_comps[[}\StringTok{\textquotesingle{}q\_flinch\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{])}
+\NormalTok{condition\_comps[[}\StringTok{\textquotesingle{}q\_fail\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{])}
+
+\NormalTok{q\_success\_unif }\OtherTok{\textless{}{-}}\NormalTok{ condition\_comps[[}\StringTok{\textquotesingle{}q\_success\textquotesingle{}}\NormalTok{]](unif\_2d6\_simplex)}
+\NormalTok{q\_flinch\_unif }\OtherTok{\textless{}{-}}\NormalTok{ condition\_comps[[}\StringTok{\textquotesingle{}q\_flinch\textquotesingle{}}\NormalTok{]](unif\_2d6\_simplex)}
+\NormalTok{q\_fail\_unif }\OtherTok{\textless{}{-}}\NormalTok{ condition\_comps[[}\StringTok{\textquotesingle{}q\_fail\textquotesingle{}}\NormalTok{]](unif\_2d6\_simplex)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1801,22 +1782,10 @@ uniform die.
 \NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}q\textquotesingle{}}\OtherTok{=}\FunctionTok{array}\NormalTok{(}\FunctionTok{sapply}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{12}\NormalTok{,}
                                   \ControlFlowTok{function}\NormalTok{(k) }\FunctionTok{paste0}\NormalTok{(}\StringTok{"q["}\NormalTok{, k, }\StringTok{"]"}\NormalTok{))))}
 
-\NormalTok{inferred\_outcomes }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()}
-
-\NormalTok{inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_success\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}}
-\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(inferred\_2d6\_simplex,}
-                                  \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{7}\SpecialCharTok{:}\DecValTok{11}\NormalTok{]),}
-\NormalTok{                                  var\_repl)}
-
-\NormalTok{inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_flinch\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}}
-\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(inferred\_2d6\_simplex,}
-                                  \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{4}\SpecialCharTok{:}\DecValTok{6}\NormalTok{]),}
-\NormalTok{                                  var\_repl)}
-
-\NormalTok{inferred\_outcomes[[}\StringTok{\textquotesingle{}q\_fail\textquotesingle{}}\NormalTok{]] }\OtherTok{\textless{}{-}}
-\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(inferred\_2d6\_simplex,}
-                                  \ControlFlowTok{function}\NormalTok{(q) }\FunctionTok{sum}\NormalTok{(q[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{]),}
-\NormalTok{                                  var\_repl)}
+\NormalTok{inferred\_outcomes }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforwards}\NormalTok{(inferred\_2d6\_simplex,}
+\NormalTok{                                   condition\_comps,}
+\NormalTok{                                   var\_repl)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1845,7 +1814,7 @@ rolling exactly uniform dice.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-33-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-31-1.pdf}
 
 We can then use these inferences to inform explicit decisions about
 fairness. If we take the most relevant notion fairness in Apocalypse
@@ -1878,7 +1847,7 @@ For example we might consider a multiplicative interval with tolerance
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-34-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-32-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1887,18 +1856,12 @@ For example we might consider a multiplicative interval with tolerance
 \NormalTok{                                        q }\SpecialCharTok{\textless{}}\NormalTok{ q\_success\_unif }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ t))}
 \NormalTok{\}}
 
-\NormalTok{I\_samples }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(inferred\_outcomes,}
-\NormalTok{                                             indicator,}
-                                             \FunctionTok{list}\NormalTok{(}\StringTok{"q"} \OtherTok{=} \StringTok{"q\_success"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{est }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(I\_samples)}
+\NormalTok{pi\_est }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(inferred\_outcomes,}
+\NormalTok{                                    indicator,}
+                                    \FunctionTok{list}\NormalTok{(}\StringTok{"q"} \OtherTok{=} \StringTok{"q\_success"}\NormalTok{))}
 
 \FunctionTok{cat}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"Posterior probability allocated to component{-}wise subset = "}\NormalTok{,}
-           \FunctionTok{sprintf}\NormalTok{(}\StringTok{"\%.5f +/{-} \%.5f"}\NormalTok{, est[}\DecValTok{1}\NormalTok{], }\DecValTok{2} \SpecialCharTok{*}\NormalTok{ est[}\DecValTok{2}\NormalTok{])))}
+           \FunctionTok{sprintf}\NormalTok{(}\StringTok{"\%.5f +/{-} \%.5f"}\NormalTok{, pi\_est[}\DecValTok{1}\NormalTok{], }\DecValTok{2} \SpecialCharTok{*}\NormalTok{ pi\_est[}\DecValTok{2}\NormalTok{])))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2057,7 +2020,7 @@ entropies are nearly identical.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-37-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-34-1.pdf}
 
 Visual comparisons between summary statistics evaluated on the data from
 individual die are typically the most informative, but at the same time
@@ -2217,7 +2180,7 @@ retrodictive performance is the same.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-40-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-37-1.pdf}
 
 Now we can start hunting for signs of heterogeneity. Interestingly the
 outcome frequencies exhibit different patterns not only across the
@@ -2246,9 +2209,9 @@ heterogeneous posterior predictive uncertainties from die to die.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-41-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-38-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-41-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-38-2.pdf}
 
 Likewise the small variation in the empirical entropies across the dice
 is consistent with the posterior predictive uncertainty.
@@ -2268,9 +2231,9 @@ is consistent with the posterior predictive uncertainty.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-42-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-39-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-42-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-39-2.pdf}
 
 The empirical variance of the individual outcome frequencies and
 empirical entropies reinforces the adequacy of the homogeneous model.
@@ -2307,7 +2270,7 @@ empirical entropies reinforces the adequacy of the homogeneous model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-43-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-40-1.pdf}
 
 \subsection{Inferring Heterogeneity}\label{inferring-heterogeneity}
 
@@ -2463,7 +2426,7 @@ statistics nor the heterogeneous summary statistics.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-46-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-43-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2484,9 +2447,9 @@ statistics nor the heterogeneous summary statistics.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-47-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-44-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-47-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-44-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2503,7 +2466,7 @@ statistics nor the heterogeneous summary statistics.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-48-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-45-1.pdf}
 
 \begin{verbatim}
 Warning in util$plot_expectand_pushforward(samples[[name]], 20, flim = c(1.4, :
@@ -2525,7 +2488,7 @@ Warning in util$plot_expectand_pushforward(samples[[name]], 20, flim = c(1.4, :
 0 values (0.0%) fell above the histogram binning.
 \end{verbatim}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-48-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-45-2.pdf}
 
 We have to be careful with interpreting the retrodictive checks based on
 variance summary statistics. The added flexibility of the heterogeneous
@@ -2557,7 +2520,7 @@ predictive values they are still very much consistent.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-49-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-46-1.pdf}
 
 This completely heterogeneous model results in independent inferences
 for each die.
@@ -2578,9 +2541,9 @@ for each die.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-50-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-47-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-50-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-47-2.pdf}
 
 These individual inferences are clearly drawn to the pattern of relative
 frequencies in each die, although none of them completely exclude the
@@ -2790,7 +2753,7 @@ directly quantifies the strength of the population \emph{heterogeneity}.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-54-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-51-1.pdf}
 
 \subsubsection{Implementation}\label{implementation-1}
 
@@ -2871,7 +2834,7 @@ prior model for \(q_{\mathrm{baseline}}\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-56-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-53-1.pdf}
 
 The excess variation in the reasonable individual simplex configurations
 then implicitly informs a prior model for \(\omega\).
@@ -2892,7 +2855,7 @@ then implicitly informs a prior model for \(\omega\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-57-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-54-1.pdf}
 
 With an informative prior model established we can incorporate the
 observed data and estimate posterior inferences.
@@ -3048,7 +3011,7 @@ of which look clean.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-60-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-57-1.pdf}
 
 Next we investigate the retrodictive checks that isolate heterogeneous
 behavior in the observed data. Once again everything look reasonable.
@@ -3072,9 +3035,9 @@ behavior in the observed data. Once again everything look reasonable.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-61-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-58-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-61-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-58-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3091,9 +3054,9 @@ behavior in the observed data. Once again everything look reasonable.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-62-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-59-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-62-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-59-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3118,7 +3081,7 @@ behavior in the observed data. Once again everything look reasonable.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-63-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-60-1.pdf}
 
 Without any indication that our modeling assumptions are inadequate we
 can move on to analyzing posterior inferences. Each die exhibits its own
@@ -3140,9 +3103,9 @@ ideosyncratic behavior, but none are too far off from uniformity.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-64-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-61-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-64-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-61-2.pdf}
 
 The heterogeneity in the die behavior is really characterized in the
 inferred population behavior.
@@ -3164,7 +3127,7 @@ inferred population behavior.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-65-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-62-1.pdf}
 
 For example here we see that the consistent baseline simplex behaviors
 are very similar to what we observed with the homogeneous model.
@@ -3195,7 +3158,7 @@ hypothetical dice.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-66-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-63-1.pdf}
 
 For example we could use this to model the dice that weren't included in
 the data collection but might be used by others in the future. We could
@@ -3358,7 +3321,7 @@ values of \(\lambda\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-68-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-65-1.pdf}
 
 Notice that the concentration around \(q_{\mathrm{baseline}}\) isn't
 continuous. Instead decreasing \(\lambda\) removes further simplex
@@ -3432,7 +3395,7 @@ simplex component behaviors.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-70-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-67-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3450,7 +3413,7 @@ simplex component behaviors.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-71-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-68-1.pdf}
 
 We can now build our posterior inferences on top of this principled
 prior foundation.
@@ -3611,7 +3574,7 @@ checks, all of which look reasonable.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-74-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-71-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3632,9 +3595,9 @@ checks, all of which look reasonable.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-75-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-72-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-75-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-72-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3651,9 +3614,9 @@ checks, all of which look reasonable.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-76-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-73-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-76-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-73-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3678,7 +3641,7 @@ checks, all of which look reasonable.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-77-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-74-1.pdf}
 
 Because our retrodictive checks don't suggest any model inadequacies we
 now finally ready to investigate our posterior inferences. Each die once
@@ -3701,9 +3664,9 @@ uniformity.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-78-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-75-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-78-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-75-2.pdf}
 
 The inferred population behavior also quantifies these heterogeneities.
 
@@ -3724,7 +3687,7 @@ The inferred population behavior also quantifies these heterogeneities.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-79-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-76-1.pdf}
 
 Interestingly the inferences for \(q_{\mathrm{baseline}}\) in this
 population model are noticeable different from those in the Dirichlet
@@ -3756,7 +3719,7 @@ simulate new simplex configurations from the population model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-80-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-77-1.pdf}
 
 These inferences are much closer to what we saw with the Dirichlet
 population model. While the hierarchical models were constructed in
@@ -3971,7 +3934,7 @@ probability distribution on the simplex.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-82-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-79-1.pdf}
 
 In order for the full mapping from \(\mathbb{R}^{K - 1}\) to
 \(\Delta^{K - 1}\) to respect exchangeability we just need to ensure
@@ -4258,7 +4221,7 @@ multivariate normal hierarchical model first to \(X\) and then to
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-84-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-81-1.pdf}
 
 \subsubsection{Naive Zero Sum
 Constraint}\label{naive-zero-sum-constraint}
@@ -4518,7 +4481,7 @@ components.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-87-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-84-1.pdf}
 
 \subsubsection{Balanced Zero Sum
 Constraints}\label{balanced-zero-sum-constraints}
@@ -4773,7 +4736,7 @@ QR decomposition of the previous map \(\mathbf{T}_{2}\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-89-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-86-1.pdf}
 
 The only downside to this approach is that
 \(y = T^{*} \circ \sigma^{-1}(q)\) will not generally give a clean
@@ -4814,7 +4777,7 @@ different couplings between simplex components.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-90-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-87-1.pdf}
 
 If we don't have sufficiently informative data then we may have to take
 care to choose a transformation that results in reasonable couplings
@@ -4914,7 +4877,7 @@ the latent locations, \(\boldsymbol{\mu}\), and scales,
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-92-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-89-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4932,7 +4895,7 @@ the latent locations, \(\boldsymbol{\mu}\), and scales,
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-93-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-90-1.pdf}
 
 Next is the posterior computation. Here we'll use a non-centered
 parameterization of the latent multivariate normal population model.
@@ -5100,7 +5063,7 @@ Posterior retrodictive checks follow.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-96-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-93-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5121,9 +5084,9 @@ Posterior retrodictive checks follow.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-97-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-94-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-97-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-94-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5140,9 +5103,9 @@ Posterior retrodictive checks follow.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-98-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-95-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-98-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-95-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5167,7 +5130,7 @@ Posterior retrodictive checks follow.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-99-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-96-1.pdf}
 
 Finally we can analyze our estimated posterior inferences, starting with
 the inferences for each individual die.
@@ -5188,9 +5151,9 @@ the inferences for each individual die.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-100-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-97-1.pdf}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-100-2.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-97-2.pdf}
 
 More relevant to the discussion of heterogeneity are the inferences for
 the population model.
@@ -5215,7 +5178,7 @@ the population model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-101-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-98-1.pdf}
 
 The qualitative shape of these inferences is very similar to those from
 the Dirichlet population model and not too dissimilar to those from the
@@ -5239,7 +5202,7 @@ model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-102-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-99-1.pdf}
 
 \subsection{Inferential Comparison}\label{inferential-comparison}
 
@@ -5286,7 +5249,7 @@ faces 3, 4, and 5.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-103-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-100-1.pdf}
 
 The marginal posterior distributions for the scale parameters all
 concentrate on different numerical values but their qualitative
@@ -5315,7 +5278,7 @@ configurations with both exact homogeneity and strong heterogeneity.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-104-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-101-1.pdf}
 
 None of these population behaviors, however, are directly observable.
 When we look at the posterior inferences for the individual die
@@ -5349,7 +5312,7 @@ behaviors we see nearly universal agreement.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-105-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-102-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5379,7 +5342,7 @@ behaviors we see nearly universal agreement.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-106-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-103-1.pdf}
 
 The same is true for the inferences of new die behaviors, at least
 within the posterior uncertainties.
@@ -5414,7 +5377,7 @@ within the posterior uncertainties.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-107-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-104-1.pdf}
 
 \section{Next Steps}\label{next-steps}
 
@@ -5741,7 +5704,7 @@ Let's start by plotting the functions themselves.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-113-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-110-1.pdf}
 
 The potential subset geometries are easier to see if we plot level sets
 of these functions instead their full output.
@@ -5800,7 +5763,7 @@ of these functions instead their full output.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-115-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-112-1.pdf}
 
 The geometric consequences of these choices are pretty striking. The
 level sets of the total variation distance function exhibit a hexagonal
@@ -5880,7 +5843,7 @@ examine the particular subsets we get for the radius \(R = 0.25\).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-118-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-115-1.pdf}
 
 Here the size of the subset defined by the geodesic distance function is
 noticeably smaller than the others. Because the radius can have
@@ -5940,7 +5903,7 @@ subset defined by interval constraints on the individual components.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-120-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-117-1.pdf}
 
 This subset exhibits the similar corners as the the subset defined by
 the total variation distance function but not the same symmetry. Instead
@@ -6011,7 +5974,7 @@ considered in \hyperref[sec:effective_pushforward]{Section 3.2.6}.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-123-1.pdf}
+\includegraphics{die_fairness_files/figure-pdf/unnamed-chunk-120-1.pdf}
 
 This subset exhibits a much more complicated shape corresponding to the
 fact that there are may ways for the simplex to contort itself in order

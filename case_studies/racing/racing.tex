@@ -3555,30 +3555,24 @@ accounts for inferential coupling between the two skill parameters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{skill\_comp }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(s1, s2) \{}
-\NormalTok{  s1 }\SpecialCharTok{\textgreater{}}\NormalTok{ s2}
-\NormalTok{\}}
-
 \NormalTok{e1 }\OtherTok{\textless{}{-}}\NormalTok{ ranked\_entrants[data}\SpecialCharTok{$}\NormalTok{N\_entrants }\SpecialCharTok{+} \DecValTok{1} \SpecialCharTok{{-}} \DecValTok{1}\NormalTok{]}
 \NormalTok{e2 }\OtherTok{\textless{}{-}}\NormalTok{ ranked\_entrants[data}\SpecialCharTok{$}\NormalTok{N\_entrants }\SpecialCharTok{+} \DecValTok{1} \SpecialCharTok{{-}} \DecValTok{2}\NormalTok{]}
 \NormalTok{var\_repl }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}s1\textquotesingle{}} \OtherTok{=} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e1,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{),}
                  \StringTok{\textquotesingle{}s2\textquotesingle{}} \OtherTok{=} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, e2,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{))}
 
-\NormalTok{derived\_samples }\OtherTok{\textless{}{-}}
-\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples4,}
-                                  \ControlFlowTok{function}\NormalTok{(s1, s2) }\FunctionTok{as.numeric}\NormalTok{(s1 }\SpecialCharTok{\textgreater{}}\NormalTok{ s2),}
-\NormalTok{                                  var\_repl)}
+\NormalTok{p\_est }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(samples4,}
+                            \ControlFlowTok{function}\NormalTok{(s1, s2) s1 }\SpecialCharTok{\textgreater{}}\NormalTok{ s2,}
+\NormalTok{                            var\_repl)}
 
-\NormalTok{p }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(derived\_samples)[}\DecValTok{1}\NormalTok{]}
-
-\NormalTok{format\_string }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"Probability that entrant \%i skill is "}\NormalTok{,}
-                        \StringTok{"larger than entrant \%i skill = \%.3f."}\NormalTok{)}
-\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(format\_string, e1, e2, p))}
+\NormalTok{format\_string }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"Posterior probability that entrant \%i \textgreater{} "}\NormalTok{,}
+                        \StringTok{"entrant \%i skill = \%.3f +/{-} \%.3f."}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(format\_string, e1, e2, p\_est[}\DecValTok{1}\NormalTok{], }\DecValTok{2} \SpecialCharTok{*}\NormalTok{ p\_est[}\DecValTok{2}\NormalTok{]))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-Probability that entrant 70 skill is larger than entrant 29 skill = 0.941.
+Posterior probability that entrant 70 > entrant 29 skill = 0.941 +/- 0.008.
 \end{verbatim}
 
 These relative comparisons can also be used to construct another
@@ -3610,11 +3604,10 @@ occupy last place.
                                                    \ControlFlowTok{function}\NormalTok{(oe)}
                                                    \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}skills[\textquotesingle{}}\NormalTok{, oe,}\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{))))}
 
-\NormalTok{    comps }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples4,}
-\NormalTok{                                             skill\_comp,}
-\NormalTok{                                             var\_repl)}
-
-\NormalTok{    probs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(probs, util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(comps)[}\DecValTok{1}\NormalTok{])}
+\NormalTok{    prob\_est }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(samples4,}
+\NormalTok{                                          skill\_comp,}
+\NormalTok{                                          var\_repl)}
+\NormalTok{    probs }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(probs, prob\_est[}\DecValTok{1}\NormalTok{])}
 \NormalTok{  \}}
 
 \NormalTok{  entrant\_idxs[}\FunctionTok{which}\NormalTok{(probs }\SpecialCharTok{==} \FunctionTok{max}\NormalTok{(probs))]}
@@ -3971,12 +3964,12 @@ probability of forfeit.
 \NormalTok{e }\OtherTok{\textless{}{-}} \DecValTok{65}
 \NormalTok{name }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}entrant\_statuses\_pred[\textquotesingle{}}\NormalTok{, e, }\StringTok{\textquotesingle{}]\textquotesingle{}}\NormalTok{)}
 \NormalTok{p\_dnf }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(samples[[name]])[}\DecValTok{1}\NormalTok{]}
-\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"Probability entrant \%i forfeits = \%.3f"}\NormalTok{, e, p\_dnf))}
+\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"Probability entrant \%i forfeits = \%.3f."}\NormalTok{, e, p\_dnf))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-Probability entrant 65 forfeits = 0.018
+Probability entrant 65 forfeits = 0.018.
 \end{verbatim}
 
 Because the forfeit probability is so small the balanced probability
@@ -4202,37 +4195,33 @@ combine them together to give the left-hand side.
 \NormalTok{status\_name2 }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"entrant\_statuses\_pred["}\NormalTok{, e2, }\StringTok{"]"}\NormalTok{)}
 \NormalTok{time\_name2 }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"entrant\_f\_times\_pred["}\NormalTok{, e2, }\StringTok{"]"}\NormalTok{)}
 
-\NormalTok{forfeit\_win\_samples }\OtherTok{\textless{}{-}}
-\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
-                                  \ControlFlowTok{function}\NormalTok{(s1, s2) s1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ s2 }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
-                                  \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}s1\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name1,}
-                                       \StringTok{\textquotesingle{}s2\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name2))}
-\NormalTok{p\_forfeit\_win }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(forfeit\_win\_samples)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{p\_forfeit\_win\_est }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(samples,}
+                            \ControlFlowTok{function}\NormalTok{(s1, s2) s1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ s2 }\SpecialCharTok{==} \DecValTok{1}\NormalTok{,}
+                            \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}s1\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name1,}
+                                 \StringTok{\textquotesingle{}s2\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name2))}
+
+\NormalTok{p\_no\_forfeits\_est }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(samples,}
+                            \ControlFlowTok{function}\NormalTok{(s1, s2) s1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ s2 }\SpecialCharTok{==} \DecValTok{0}\NormalTok{,}
+                            \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}s1\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name1,}
+                                 \StringTok{\textquotesingle{}s2\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name2))}
+
+\NormalTok{p\_neg\_time\_diff\_est }\OtherTok{\textless{}{-}}
+\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{implicit\_subset\_prob}\NormalTok{(samples,}
+                            \ControlFlowTok{function}\NormalTok{(t1, t2) t1 }\SpecialCharTok{\textless{}}\NormalTok{ t2,}
+                            \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}t1\textquotesingle{}} \OtherTok{=}\NormalTok{ time\_name1,}
+                                 \StringTok{\textquotesingle{}t2\textquotesingle{}} \OtherTok{=}\NormalTok{ time\_name2))}
 
 
-\NormalTok{no\_forfeits\_samples }\OtherTok{\textless{}{-}}
-\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
-                                  \ControlFlowTok{function}\NormalTok{(s1, s2) s1 }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ s2 }\SpecialCharTok{==} \DecValTok{0}\NormalTok{,}
-                                  \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}s1\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name1,}
-                                       \StringTok{\textquotesingle{}s2\textquotesingle{}} \OtherTok{=}\NormalTok{ status\_name2))}
-\NormalTok{p\_no\_forfeits }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(no\_forfeits\_samples)[}\DecValTok{1}\NormalTok{]}
-
-\NormalTok{neg\_time\_diff\_samples }\OtherTok{\textless{}{-}}
-\NormalTok{  util}\SpecialCharTok{$}\FunctionTok{eval\_expectand\_pushforward}\NormalTok{(samples,}
-                                  \ControlFlowTok{function}\NormalTok{(t1, t2) t1 }\SpecialCharTok{\textless{}}\NormalTok{ t2,}
-                                  \FunctionTok{list}\NormalTok{(}\StringTok{\textquotesingle{}t1\textquotesingle{}} \OtherTok{=}\NormalTok{ time\_name1,}
-                                       \StringTok{\textquotesingle{}t2\textquotesingle{}} \OtherTok{=}\NormalTok{ time\_name2))}
-\NormalTok{p\_neg\_time\_diff }\OtherTok{\textless{}{-}}\NormalTok{ util}\SpecialCharTok{$}\FunctionTok{ensemble\_mcmc\_est}\NormalTok{(neg\_time\_diff\_samples)[}\DecValTok{1}\NormalTok{]}
-
-
-\NormalTok{p }\OtherTok{\textless{}{-}}\NormalTok{ p\_forfeit\_win }\SpecialCharTok{+}\NormalTok{ p\_neg\_time\_diff }\SpecialCharTok{*}\NormalTok{ p\_no\_forfeits}
-\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"Probability that entrant \%i beats entrant \%i = \%.3f"}\NormalTok{,}
+\NormalTok{p }\OtherTok{\textless{}{-}}\NormalTok{ p\_forfeit\_win\_est[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ p\_neg\_time\_diff\_est[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ p\_no\_forfeits\_est[}\DecValTok{1}\NormalTok{]}
+\FunctionTok{cat}\NormalTok{(}\FunctionTok{sprintf}\NormalTok{(}\StringTok{"Probability that entrant \%i beats entrant \%i = \%.3f."}\NormalTok{,}
 \NormalTok{            e1, e2, p))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-Probability that entrant 29 beats entrant 65 = 0.734
+Probability that entrant 29 beats entrant 65 = 0.734.
 \end{verbatim}
 
 Although entrant 29 is definitely favored the outcome is by no means

@@ -7,6 +7,8 @@
 # For more information see
 #  https://github.com/betanalpha/mcmc_visualization_tools.
 #
+# Requires https://github.com/betanalpha/mcmc_diagnostics.
+#
 ################################################################################
 
 # Load required libraries
@@ -23,6 +25,18 @@ c_dark_highlight <- c("#7C0000")
 c_light_teal <- c("#6B8E8E")
 c_mid_teal <- c("#487575")
 c_dark_teal <- c("#1D4F4F")
+
+util <- new.env()
+if (file.exists('mcmc_analysis_tools_rstan.R')) {
+  source('mcmc_analysis_tools_rstan.R', local=util)
+} else if (file.exists('mcmc_analysis_tools_other.R')) {
+  source('mcmc_analysis_tools_other.R', local=util)
+} else {
+  stop(print0('mcmc_visualization_tools.R requires that ',
+              'mcmc_analysis_tools_[rstan/other].R from ',
+              'https://github.com/betanalpha/mcmc_diagnostics ',
+              'is available.'))
+}
 
 ################################################################################
 # Utility Functions
@@ -301,7 +315,8 @@ plot_hist_quantiles <- function(samples, val_name_prefix,
                                 xlab="", display_ylim=NULL, main="") {
   # Construct relevant variable names and format corresponding values.
   # Order of the variables does not affect the shape of the histogram.
-  names <- grep(paste0(val_name_prefix, '\\['), names(samples), value=TRUE)
+  names <- grep(paste0('^', val_name_prefix, '\\['),
+                names(samples), value=TRUE)
   collapsed_values <- c(sapply(names, function(name) c(t(samples[[name]]),
                                                        recursive=TRUE)))
 
@@ -331,22 +346,38 @@ plot_hist_quantiles <- function(samples, val_name_prefix,
 
   # Construct quantiles for bin contents
   B <- length(breaks) - 1
-  N <- length(names)
-  C <- dim(samples[[names[1]]])[1]
-  S <- dim(samples[[names[1]]])[2]
   probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 
+  counts <- rep(NA, B)
   quantiles <- matrix(0, nrow=9, ncol=B)
-  for (c in 1:C) {
-    values <- sapply(names, function(name) samples[[name]][c,])
-    counts <- sapply(1:S,
-                     function(s) hist(values[s, bin_min <= values[s,] &
-                                             values[s,] <= bin_max],
-                                      breaks=breaks,
-                                      plot=FALSE)$counts)
-    quantiles <- quantiles +
-                 sapply(1:B, function(b) quantile(counts[b,], probs=probs)) / C
+
+  bin_count <- function(x, b_low, b_high) {
+    sum(b_low <= x & x < b_high)
   }
+
+  bin_counters <- list()
+  for (b in 1:B) {
+    bin_counters[[b]] <-
+      local({
+        b_low <- breaks[b];
+        b_high <- breaks[b + 1];
+        function(x) bin_count(x, b_low, b_high)
+      })
+
+    if (!is.null(baseline_values))
+      counts[b] = bin_counters[[b]](baseline_values)
+  }
+
+  bin_count_samples <-
+    util$eval_expectand_pushforwards(samples,
+                                     bin_counters,
+                                     list('x'=array(names)))
+
+  probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+  quantiles <- sapply(bin_count_samples,
+                      function(s)
+                      util$ensemble_mcmc_quantile_est(s, probs))
+
   plot_quantiles <- do.call(cbind, lapply(plot_idxs,
                                           function(n) quantiles[1:9, n]))
 
@@ -356,9 +387,6 @@ plot_hist_quantiles <- function(samples, val_name_prefix,
       display_ylim <- c(0, max(quantiles[9,]))
     }
     else {
-      counts <- hist(baseline_values[bin_min <= baseline_values &
-                                     baseline_values <= bin_max],
-                     breaks=breaks, plot=FALSE)$counts
       display_ylim <- c(0, max(max(quantiles[9,]), max(counts)))
     }
   }
@@ -387,9 +415,6 @@ plot_hist_quantiles <- function(samples, val_name_prefix,
   }
 
   if (!is.null(baseline_values)) {
-    counts <- hist(baseline_values[bin_min <= baseline_values &
-                                     baseline_values <= bin_max],
-                   breaks=breaks, plot=FALSE)$counts
     plot_counts <- do.call(cbind,
                            lapply(plot_idxs, function(n) counts[n]))
 
@@ -448,25 +473,25 @@ plot_disc_pushforward_quantiles <- function(samples, names,
   plot_xs <- plot_config[[2]]
 
   # Construct marginal quantiles
-  C <- dim(samples[[names[1]]])[1]
   probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 
-  quantiles <- matrix(0, nrow=9, ncol=N)
-  for (c in 1:C) {
-    values <- t(sapply(names, function(name) samples[[name]][c,]))
-    if(!is.null(baseline_values) & residual) {
-      quantiles <- quantiles +
-                   sapply(1:N, function(n)
-                               quantile(values[n,] - baseline_values[n],
-                                        probs=probs)) / C
-    } else {
-      quantiles <- quantiles +
-                   sapply(1:N, function(n)
-                               quantile(values[n,], probs=probs)) / C
+  if(!is.null(baseline_values) & residual) {
+    calc <- function(n) {
+      util$ensemble_mcmc_quantile_est(samples[[names[n]]] -
+                                      baseline_values[n],
+                                      probs)
     }
+    quantiles <- sapply(1:N, calc)
+  } else {
+    calc <- function(n) {
+      util$ensemble_mcmc_quantile_est(samples[[names[n]]], probs)
+    }
+    quantiles <- sapply(1:N, calc)
   }
+
   plot_quantiles <- do.call(cbind, lapply(plot_idxs,
                                           function(n) quantiles[1:9, n]))
+
   # Plot
   if (is.null(display_ylim)) {
     if (is.null(baseline_values)) {
@@ -595,22 +620,20 @@ plot_conn_pushforward_quantiles <- function(samples, names, plot_xs,
 
   # Construct quantiles for bin contents
   N <- length(names)
-  C <- dim(samples[[names[1]]])[1]
   probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 
-  plot_quantiles <- matrix(0, nrow=9, ncol=N)
-  for (c in 1:C) {
-    values <- t(sapply(names, function(name) samples[[name]][c,]))
-    if((!is.null(baseline_values)) & residual) {
-      plot_quantiles <- plot_quantiles +
-                        sapply(1:N, function(n)
-                                    quantile(values[n,] - baseline_values[n],
-                                             probs=probs)) / C
-    } else {
-      plot_quantiles <- plot_quantiles +
-                        sapply(1:N, function(n)
-                                    quantile(values[n,], probs=probs)) / C
+  if(!is.null(baseline_values) & residual) {
+    calc <- function(n) {
+      util$ensemble_mcmc_quantile_est(samples[[names[n]]] -
+                                      baseline_values[n],
+                                      probs)
     }
+    plot_quantiles <- sapply(1:N, calc)
+  } else {
+    calc <- function(n) {
+      util$ensemble_mcmc_quantile_est(samples[[names[n]]], probs)
+    }
+    plot_quantiles <- sapply(1:N, calc)
   }
 
   # Plot
@@ -842,53 +865,82 @@ plot_conditional_mean_quantiles <- function(samples, names, obs_xs,
   check_bin_containment(bin_min, bin_max, obs_xs,
                         "conditioning value")
 
-  # Construct quantiles for predictive bin contents
+  # Construct quantiles for each conditional mean
   B <- length(breaks) - 1
-  N <- length(names)
-  C <- dim(samples[[names[1]]])[1]
-  S <- dim(samples[[names[1]]])[2]
-  probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+  nonempty_bins <- sapply(1:B,
+                          function(b)
+                          sum(breaks[b] <= obs_xs & obs_xs < breaks[b + 1]) > 0)
 
-  obs_means <- rep(NA, B)
-  mean_quantiles <- matrix(0, nrow=9, ncol=B)
-  for (b in 1:B) {
-    bin_idx <- which(breaks[b] <= obs_xs & obs_xs < breaks[b + 1])
-    if (length(bin_idx) > 0) {
-      if (!is.null(baseline_values))
-        obs_means[b] <- mean(baseline_values[bin_idx])
+  baseline_cond_means <- rep(NA, B)
 
-      for (c in 1:C) {
-        values <- t(sapply(names, function(name) samples[[name]][c,]))
+  cond_mean <- function(y, x, b_low, b_high) {
+    bin_idx <- which(b_low <= x & x < b_high)
+    if (length(bin_idx))
+      return(mean(y[bin_idx]))
+    else
+      return(mean(y))
+  }
 
-        if((!is.null(baseline_values)) & residual)
-          means <- sapply(1:S, function(s) mean(values[bin_idx, s] -
-                                                obs_means[b]))
-        else
-          means <- sapply(1:S, function(s) mean(values[bin_idx, s]))
-
-        mean_quantiles[, b] <- mean_quantiles[, b] +
-                               quantile(means, probs=probs) / C
-      }
+  if (!is.null(baseline_values)) {
+    for (b in 1:B) {
+      baseline_cond_means[b] <- cond_mean(baseline_values, obs_xs,
+                                          breaks[b], breaks[b + 1])
     }
   }
+
+  if (is.null(baseline_values) | !residual) {
+    expectands <- list()
+    for (b in 1:B) {
+      expectands[[b]] <-
+        local({
+          x <- obs_xs;
+          b_low <- breaks[b];
+          b_high <- breaks[b + 1];
+          function(y) cond_mean(y, x, b_low, b_high)
+        })
+    }
+  } else {
+    expectands <- list()
+    for (b in 1:B) {
+      expectands[[b]] <-
+        local({
+          x <- obs_xs;
+          b_low <- breaks[b];
+          b_high <- breaks[b + 1];
+          baseline <- baseline_cond_means[b];
+          function(y) cond_mean(y, x, b_low, b_high) - baseline
+        })
+    }
+  }
+
+  cond_mean_samples <-
+    util$eval_expectand_pushforwards(samples,
+                                     expectands,
+                                     list('y'=array(names)))
+
+  probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+  mean_quantiles <- sapply(cond_mean_samples,
+                           function(s)
+                           util$ensemble_mcmc_quantile_est(s, probs))
+
   plot_quantiles <- do.call(cbind, lapply(plot_idxs,
                                           function(n) mean_quantiles[1:9, n]))
 
   # Plot
   if (is.null(display_ylim)) {
     if (is.null(baseline_values)) {
-      display_ylim <- c(min(mean_quantiles[1,], na.rm=TRUE),
-                        max(mean_quantiles[9,], na.rm=TRUE))
+      display_ylim <- c(min(mean_quantiles[1, nonempty_bins]),
+                        max(mean_quantiles[9, nonempty_bins]))
     }
     else {
       if (residual) {
-        display_ylim <- c(min(c(0, mean_quantiles[1,]), na.rm=TRUE),
-                          max(c(0, mean_quantiles[9,]), na.rm=TRUE))
+        display_ylim <- c(min(c(0, mean_quantiles[1, nonempty_bins])),
+                          max(c(0, mean_quantiles[9, nonempty_bins])))
       } else {
-        display_ylim <- c(min(min(mean_quantiles[1,], na.rm=TRUE),
-                              min(obs_means, na.rm=TRUE)),
-                          max(max(mean_quantiles[9,], na.rm=TRUE),
-                              max(obs_means, na.rm=TRUE)))
+        display_ylim <- c(min(min(mean_quantiles[1, nonempty_bins]),
+                              min(baseline_cond_means[nonempty_bins])),
+                          max(max(mean_quantiles[9, nonempty_bins]),
+                              max(baseline_cond_means[nonempty_bins])))
       }
     }
     delta <- 0.05 * (display_ylim[2] - display_ylim[1])
@@ -922,7 +974,7 @@ plot_conditional_mean_quantiles <- function(samples, names, obs_xs,
   for (b in 1:B) {
     idx1 <- 2 * b - 1
     idx2 <- 2 * b
-    if (length(which(breaks[b] <= obs_xs & obs_xs < breaks[b + 1]))) {
+    if (nonempty_bins[b]) {
       lines(plot_xs[idx1:idx2], plot_quantiles[5, idx1:idx2],
             col=c_dark, lwd=2)
     } else {
@@ -938,12 +990,12 @@ plot_conditional_mean_quantiles <- function(samples, names, obs_xs,
       abline(h=0, col="#DDDDDD", lwd=2, lty=3)
     } else {
       for (b in 1:B) {
-        idx1 <- 2 * b - 1
-        idx2 <- 2 * b
-        if (length(which(breaks[b] <= obs_xs & obs_xs < breaks[b + 1]))) {
-          lines(plot_xs[idx1:idx2], c(obs_means[b], obs_means[b]),
+        if (nonempty_bins[b]) {
+          idx1 <- 2 * b - 1
+          idx2 <- 2 * b
+          lines(plot_xs[idx1:idx2], rep(baseline_cond_means[b], 2),
                 col="white", lwd=4)
-          lines(plot_xs[idx1:idx2], c(obs_means[b], obs_means[b]),
+          lines(plot_xs[idx1:idx2], rep(baseline_cond_means[b], 2),
                 col=baseline_col, lwd=2)
         }
       }
@@ -1014,53 +1066,82 @@ plot_conditional_median_quantiles <- function(samples, names, obs_xs,
   check_bin_containment(bin_min, bin_max, obs_xs,
                         "conditioning value")
 
-  # Construct quantiles for predictive bin contents
+  # Construct quantiles for each conditional mean
   B <- length(breaks) - 1
-  N <- length(names)
-  C <- dim(samples[[names[1]]])[1]
-  S <- dim(samples[[names[1]]])[2]
-  probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+  nonempty_bins <- sapply(1:B,
+                          function(b)
+                          sum(breaks[b] <= obs_xs & obs_xs < breaks[b + 1]) > 0)
 
-  obs_medians <- rep(NA, B)
-  median_quantiles <- matrix(0, nrow=9, ncol=B)
-  for (b in 1:B) {
-    bin_idx <- which(breaks[b] <= obs_xs & obs_xs < breaks[b + 1])
-    if (length(bin_idx) > 0) {
-      if (!is.null(baseline_values))
-        obs_medians[b] <- median(baseline_values[bin_idx])
+  baseline_cond_medians <- rep(NA, B)
 
-      for (c in 1:C) {
-        values <- t(sapply(names, function(name) samples[[name]][c,]))
+  cond_median <- function(y, x, b_low, b_high) {
+    bin_idx <- which(b_low <= x & x < b_high)
+    if (length(bin_idx))
+      return(median(y[bin_idx]))
+    else
+      return(median(y))
+  }
 
-        if((!is.null(baseline_values)) & residual)
-          medians <- sapply(1:S, function(s) median(values[bin_idx, s] -
-                                                    obs_medians[b]))
-        else
-          medians <- sapply(1:S, function(s) median(values[bin_idx, s]))
-
-        median_quantiles[, b] <- median_quantiles[, b] +
-                                 quantile(medians, probs=probs) / C
-      }
+  if (!is.null(baseline_values)) {
+    for (b in 1:B) {
+      baseline_cond_medians[b] <- cond_median(baseline_values, obs_xs,
+                                              breaks[b], breaks[b + 1])
     }
   }
+
+  if (is.null(baseline_values) | !residual) {
+    expectands <- list()
+    for (b in 1:B) {
+      expectands[[b]] <-
+        local({
+          x <- obs_xs;
+          b_low <- breaks[b];
+          b_high <- breaks[b + 1];
+          function(y) cond_median(y, x, b_low, b_high)
+        })
+    }
+  } else {
+    expectands <- list()
+    for (b in 1:B) {
+      expectands[[b]] <-
+        local({
+          x <- obs_xs;
+          b_low <- breaks[b];
+          b_high <- breaks[b + 1];
+          baseline <- baseline_cond_medians[b];
+          function(y) cond_median(y, x, b_low, b_high) - baseline
+        })
+    }
+  }
+
+  cond_median_samples <-
+    util$eval_expectand_pushforwards(samples,
+                                     expectands,
+                                     list('y'=array(names)))
+
+  probs <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+  median_quantiles <- sapply(cond_median_samples,
+                             function(s)
+                             util$ensemble_mcmc_quantile_est(s, probs))
+
   plot_quantiles <- do.call(cbind, lapply(plot_idxs,
                                           function(n) median_quantiles[1:9, n]))
 
   # Plot
   if (is.null(display_ylim)) {
     if (is.null(baseline_values)) {
-      display_ylim <- c(min(median_quantiles[1,], na.rm=TRUE),
-                        max(median_quantiles[9,], na.rm=TRUE))
+      display_ylim <- c(min(median_quantiles[1, nonempty_bins]),
+                        max(median_quantiles[9, nonempty_bins]))
     }
     else {
       if (residual) {
-        display_ylim <- c(min(c(0, median_quantiles[1,]), na.rm=TRUE),
-                          max(c(0, median_quantiles[9,]), na.rm=TRUE))
+        display_ylim <- c(min(c(0, median_quantiles[1, nonempty_bins])),
+                          max(c(0, median_quantiles[9, nonempty_bins])))
       } else {
-        display_ylim <- c(min(min(median_quantiles[1,], na.rm=TRUE),
-                              min(obs_medians, na.rm=TRUE)),
-                          max(max(median_quantiles[9,], na.rm=TRUE),
-                              max(obs_medians, na.rm=TRUE)))
+        display_ylim <- c(min(min(median_quantiles[1, nonempty_bins]),
+                              min(baseline_cond_medians[nonempty_bins])),
+                          max(max(median_quantiles[9, nonempty_bins]),
+                              max(baseline_cond_medians[nonempty_bins])))
       }
     }
     delta <- 0.05 * (display_ylim[2] - display_ylim[1])
@@ -1094,7 +1175,7 @@ plot_conditional_median_quantiles <- function(samples, names, obs_xs,
   for (b in 1:B) {
     idx1 <- 2 * b - 1
     idx2 <- 2 * b
-    if (length(which(breaks[b] <= obs_xs & obs_xs < breaks[b + 1]))) {
+    if (nonempty_bins[b]) {
       lines(plot_xs[idx1:idx2], plot_quantiles[5, idx1:idx2],
             col=c_dark, lwd=2)
     } else {
@@ -1110,12 +1191,12 @@ plot_conditional_median_quantiles <- function(samples, names, obs_xs,
       abline(h=0, col="#DDDDDD", lwd=2, lty=3)
     } else {
       for (b in 1:B) {
-        idx1 <- 2 * b - 1
-        idx2 <- 2 * b
-        if (length(which(breaks[b] <= obs_xs & obs_xs < breaks[b + 1]))) {
-          lines(plot_xs[idx1:idx2], c(obs_medians[b], obs_medians[b]),
+        if (nonempty_bins[b]) {
+          idx1 <- 2 * b - 1
+          idx2 <- 2 * b
+          lines(plot_xs[idx1:idx2], rep(baseline_cond_medians[b], 2),
                 col="white", lwd=4)
-          lines(plot_xs[idx1:idx2], c(obs_medians[b], obs_medians[b]),
+          lines(plot_xs[idx1:idx2], rep(baseline_cond_medians[b], 2),
                 col=baseline_col, lwd=2)
         }
       }

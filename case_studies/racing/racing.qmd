@@ -2139,25 +2139,19 @@ surpasses the other.  In particular this latter comparison accounts for
 inferential coupling between the two skill parameters.
 
 ```{r}
-skill_comp <- function(s1, s2) {
-  s1 > s2
-}
-
 e1 <- ranked_entrants[data$N_entrants + 1 - 1]
 e2 <- ranked_entrants[data$N_entrants + 1 - 2]
 var_repl <- list('s1' = paste0('skills[', e1,']'),
                  's2' = paste0('skills[', e2,']'))
 
-derived_samples <-
-  util$eval_expectand_pushforward(samples4,
-                                  function(s1, s2) as.numeric(s1 > s2),
-                                  var_repl)
+p_est <-
+  util$implicit_subset_prob(samples4,
+                            function(s1, s2) s1 > s2,
+                            var_repl)
 
-p <- util$ensemble_mcmc_est(derived_samples)[1]
-
-format_string <- paste0("Probability that entrant %i skill is ",
-                        "larger than entrant %i skill = %.3f.")
-cat(sprintf(format_string, e1, e2, p))
+format_string <- paste0("Posterior probability that entrant %i skill ",
+                        "> entrant %i skill = %.3f +/- %.3f.")
+cat(sprintf(format_string, e1, e2, p_est[1], 2 * p_est[2]))
 ```
 
 These relative comparisons can also be used to construct another heuristic
@@ -2187,11 +2181,10 @@ best_entrant <- function(entrant_idxs) {
                                                    function(oe)
                                                    paste0('skills[', oe,']'))))
 
-    comps <- util$eval_expectand_pushforward(samples4,
-                                             skill_comp,
-                                             var_repl)
-
-    probs <- c(probs, util$ensemble_mcmc_est(comps)[1])
+    prob_est <- util$implicit_subset_prob(samples4,
+                                          skill_comp,
+                                          var_repl)
+    probs <- c(probs, prob_est[1])
   }
 
   entrant_idxs[which(probs == max(probs))]
@@ -2344,7 +2337,7 @@ of forfeit.
 e <- 65
 name <- paste0('entrant_statuses_pred[', e, ']')
 p_dnf <- util$ensemble_mcmc_est(samples[[name]])[1]
-cat(sprintf("Probability entrant %i forfeits = %.3f", e, p_dnf))
+cat(sprintf("Probability entrant %i forfeits = %.3f.", e, p_dnf))
 ```
 
 Because the forfeit probability is so small the balanced probability allocation
@@ -2544,31 +2537,27 @@ e2 <- 65
 status_name2 <- paste0("entrant_statuses_pred[", e2, "]")
 time_name2 <- paste0("entrant_f_times_pred[", e2, "]")
 
-forfeit_win_samples <-
-  util$eval_expectand_pushforward(samples,
-                                  function(s1, s2) s1 == 0 & s2 == 1,
-                                  list('s1' = status_name1,
-                                       's2' = status_name2))
-p_forfeit_win <- util$ensemble_mcmc_est(forfeit_win_samples)[1]
+p_forfeit_win_est <-
+  util$implicit_subset_prob(samples,
+                            function(s1, s2) s1 == 0 & s2 == 1,
+                            list('s1' = status_name1,
+                                 's2' = status_name2))
+
+p_no_forfeits_est <-
+  util$implicit_subset_prob(samples,
+                            function(s1, s2) s1 == 0 & s2 == 0,
+                            list('s1' = status_name1,
+                                 's2' = status_name2))
+
+p_neg_time_diff_est <-
+  util$implicit_subset_prob(samples,
+                            function(t1, t2) t1 < t2,
+                            list('t1' = time_name1,
+                                 't2' = time_name2))
 
 
-no_forfeits_samples <-
-  util$eval_expectand_pushforward(samples,
-                                  function(s1, s2) s1 == 0 & s2 == 0,
-                                  list('s1' = status_name1,
-                                       's2' = status_name2))
-p_no_forfeits <- util$ensemble_mcmc_est(no_forfeits_samples)[1]
-
-neg_time_diff_samples <-
-  util$eval_expectand_pushforward(samples,
-                                  function(t1, t2) t1 < t2,
-                                  list('t1' = time_name1,
-                                       't2' = time_name2))
-p_neg_time_diff <- util$ensemble_mcmc_est(neg_time_diff_samples)[1]
-
-
-p <- p_forfeit_win + p_neg_time_diff * p_no_forfeits
-cat(sprintf("Probability that entrant %i beats entrant %i = %.3f",
+p <- p_forfeit_win_est[1] + p_neg_time_diff_est[1] * p_no_forfeits_est[1]
+cat(sprintf("Probability that entrant %i beats entrant %i = %.3f.",
             e1, e2, p))
 ```
 

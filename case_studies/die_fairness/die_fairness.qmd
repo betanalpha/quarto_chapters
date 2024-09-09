@@ -1052,7 +1052,7 @@ u <- 1 / 6
 upsilon <- rep(u, K)
 
 # Component-wise subset indicator function
-componentwise_indicator <- function(q, t) {
+cwise_indicator <- function(q, t) {
   component_inclusion <- sapply(1:K, function(k) u / (1 + t) < q[k] &
                                                  q[k] < u * (1 + t) )
   Reduce("&", component_inclusion)
@@ -1091,7 +1091,7 @@ for (s in 1:S) {
   m <- rgamma(K, alpha, 1)
   q <- m / sum(m)
 
-  I_c_samples[s] <- componentwise_indicator(q, t)
+  I_c_samples[s] <- cwise_indicator(q, t)
   I_r_samples[s] <- radial_indicator(q, R)
 }
 ```
@@ -1120,37 +1120,18 @@ a new Stan program. Here we'll stay within `R`.
 ```{r}
 var_repl <- list('q'=util$name_array('q', c(6)))
 
-cw_ind_partial_eval <- function(q) {
-  as.numeric(componentwise_indicator(q, t))
-}
-I_c_samples <- util$eval_expectand_pushforward(samples,
-                                               cw_ind_partial_eval,
-                                               var_repl)
-
-r_ind_partial_eval <- function(q) {
-  as.numeric(radial_indicator(q, R))
-}
-I_r_samples <- util$eval_expectand_pushforward(samples,
-                                               r_ind_partial_eval,
-                                               var_repl)
-```
-
-```{r}
-est <- util$ensemble_mcmc_est(I_c_samples)
-pi_c <- est[1]
-delta_c <- 2 * est[2]
-
+pi_est <- util$implicit_subset_prob(samples,
+                                    function(q) cwise_indicator(q, t),
+                                    var_repl)
 cat(paste0("Posterior probability allocated to component-wise subset = ",
-           sprintf("%.5f +/- %.5f", pi_c, delta_c)))
-```
+           sprintf("%.5f +/- %.5f", pi_est[1], 2 * pi_est[2])))
 
-```{r}
-est <- util$ensemble_mcmc_est(I_r_samples)
-pi_r <- est[1]
-delta_r <- 2 * est[2]
 
+pi_est <- util$implicit_subset_prob(samples,
+                                    function(q) radial_indicator(q, R),
+                                    var_repl)
 cat(paste0("Posterior probability allocated to radial subset = ",
-           sprintf("%.5f +/- %.5f", pi_r, delta_r)))
+           sprintf("%.5f +/- %.5f", pi_est[1], 2 * pi_est[2])))
 ```
 
 We cannot make a final Bayesian decision, however, without specifying a
@@ -1217,28 +1198,30 @@ not only an idealized, exactly uniform die but also the real Skew Dice&trade;.
 
 ```{r}
 pushforward_simplex_comps <-
-  c(function(q)
-         q[1] * q[1],
-    function(q)
-     2 * q[1] * q[2],
-    function(q)
-     2 * q[1] * q[3] +     q[2] * q[2],
-    function(q)
-     2 * q[1] * q[4] + 2 * q[2] * q[3],
-    function(q)
-     2 * q[1] * q[5] + 2 * q[2] * q[4] +     q[3] * q[3],
-    function(q)
-     2 * q[1] * q[6] + 2 * q[2] * q[5] + 2 * q[3] * q[4],
-    function(q)
-     2 * q[2] * q[6] + 2 * q[3] * q[5] +     q[4] * q[4],
-    function(q)
-     2 * q[3] * q[6] + 2 * q[4] * q[5],
-    function(q)
-     2 * q[4] * q[6] +     q[5] * q[5],
-    function(q)
-     2 * q[5] * q[6],
-    function(q)
-         q[6] * q[6])
+  list(function(q)
+             q[1] * q[1],
+       function(q)
+         2 * q[1] * q[2],
+       function(q)
+         2 * q[1] * q[3] +     q[2] * q[2],
+       function(q)
+         2 * q[1] * q[4] + 2 * q[2] * q[3],
+       function(q)
+         2 * q[1] * q[5] + 2 * q[2] * q[4] +     q[3] * q[3],
+       function(q)
+         2 * q[1] * q[6] + 2 * q[2] * q[5] + 2 * q[3] * q[4],
+       function(q)
+         2 * q[2] * q[6] + 2 * q[3] * q[5] +     q[4] * q[4],
+       function(q)
+         2 * q[3] * q[6] + 2 * q[4] * q[5],
+       function(q)
+         2 * q[4] * q[6] +     q[5] * q[5],
+       function(q)
+         2 * q[5] * q[6],
+       function(q)
+             q[6] * q[6])
+names(pushforward_simplex_comps) <- sapply(2:12,
+                                           function(k) paste0('q[', k, ']'))
 
 pushforward_simplex <- function(q) {
   sapply(1:11,
@@ -1251,16 +1234,10 @@ unif_2d6_simplex <- pushforward_simplex(upsilon)
 ```
 
 ```{r}
-inferred_2d6_simplex <- lapply(2:12,
-                               function(k) 0 * samples[['q[1]']])
-names(inferred_2d6_simplex) <- sapply(2:12,
-                                      function(k) paste0('q[', k, ']'))
-
-for (k in 2:12)
-  inferred_2d6_simplex[[paste0('q[', k, ']')]] <-
-    util$eval_expectand_pushforward(samples,
-                                    pushforward_simplex_comps[[k - 1]],
-                                    var_repl)
+inferred_2d6_simplex <-
+  util$eval_expectand_pushforwards(samples,
+                                   pushforward_simplex_comps,
+                                   var_repl)
 ```
 
 Overall the inferred behavior of rolling a Skew Dice&trade; twice is reasonably
@@ -1348,31 +1325,24 @@ We can reduce this even further by considering how close just
 $q_{\mathrm{success}}$ is to what we would expect from an exactly uniform die.
 
 ```{r}
-q_success_unif <- sum(unif_2d6_simplex[7:11])
-q_flinch_unif <- sum(unif_2d6_simplex[4:6])
-q_fail_unif <- sum(unif_2d6_simplex[1:3])
+condition_comps <- list()
+condition_comps[['q_success']] <- function(q) sum(q[7:11])
+condition_comps[['q_flinch']] <- function(q) sum(q[4:6])
+condition_comps[['q_fail']] <- function(q) sum(q[1:3])
+
+q_success_unif <- condition_comps[['q_success']](unif_2d6_simplex)
+q_flinch_unif <- condition_comps[['q_flinch']](unif_2d6_simplex)
+q_fail_unif <- condition_comps[['q_fail']](unif_2d6_simplex)
 ```
 
 ```{r}
 var_repl <- list('q'=array(sapply(2:12,
                                   function(k) paste0("q[", k, "]"))))
 
-inferred_outcomes <- list()
-
-inferred_outcomes[['q_success']] <-
-  util$eval_expectand_pushforward(inferred_2d6_simplex,
-                                  function(q) sum(q[7:11]),
-                                  var_repl)
-
-inferred_outcomes[['q_flinch']] <-
-  util$eval_expectand_pushforward(inferred_2d6_simplex,
-                                  function(q) sum(q[4:6]),
-                                  var_repl)
-
-inferred_outcomes[['q_fail']] <-
-  util$eval_expectand_pushforward(inferred_2d6_simplex,
-                                  function(q) sum(q[1:3]),
-                                  var_repl)
+inferred_outcomes <-
+  util$eval_expectand_pushforwards(inferred_2d6_simplex,
+                                   condition_comps,
+                                   var_repl)
 ```
 
 Here the probabilities of these game outcomes that we have inferred from rolling
@@ -1431,16 +1401,12 @@ indicator <- function(q) {
                                         q < q_success_unif * (1 + t))
 }
 
-I_samples <- util$eval_expectand_pushforward(inferred_outcomes,
-                                             indicator,
-                                             list("q" = "q_success"))
-```
-
-```{r}
-est <- util$ensemble_mcmc_est(I_samples)
+pi_est <- util$implicit_subset_prob(inferred_outcomes,
+                                    indicator,
+                                    list("q" = "q_success"))
 
 cat(paste0("Posterior probability allocated to component-wise subset = ",
-           sprintf("%.5f +/- %.5f", est[1], 2 * est[2])))
+           sprintf("%.5f +/- %.5f", pi_est[1], 2 * pi_est[2])))
 ```
 
 The only remaining step is to choose a probability threshold $t$ for how large
