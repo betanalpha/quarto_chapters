@@ -36,7 +36,7 @@ sophisticated sets but also sets that are equipped with additional structure.
 These combinations of sets and structure are also known as _spaces_.
 
 In this chapter we will discuss the basic conceptual features of general spaces
-before reviewing some of prototypical spaces that are particularly common in
+before reviewing some of the prototypical spaces that are particularly common in
 practical applications.  This presentation will include not only the properties
 of sets with an arbitrary number of elements but also a survey of some of the
 most fundamental structures that we can endow onto those sets.
@@ -104,7 +104,7 @@ In many circumstances we will need to distinguish between variables that refer
 to _arbitrary_ elements and variables that refer to _particular_ but unspecified
 elements.  Following the computer science canon I will refer to these as
 **unbound variables** and **bound variables**, respectively.  To distinguish
-between the two I will decorate bound variables with a tilde; in words $x$
+between the two I will decorate bound variables with a tilde; in other words $x$
 denotes any element of the space $X$ while $\tilde{x}$ denotes a fixed but
 unspecified element.
 
@@ -154,7 +154,7 @@ single element, and a **full set** consisting of the entire set (@fig-subsets).
 Most subsets, however, contain an intermediate number of elements.  One of the
 key features of uncountable spaces is that most subsets also contain an
 uncountable number of elements.  To visually represent subsets containing an
-uncountable number of elements I will used filled shapes to contrast against
+uncountable number of elements I will use filled shapes to contrast against
 individual points.
 
 ::: {#fig-subsets layout="[ [-5, 45, 45, -5], [-5, 45, 45, -5]]"}
@@ -787,7 +787,7 @@ most subsets will be neither open nor closed.
 
 Unlike open balls these metric-derived open subsets are _closed_ under unions
 and intersections.  If $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ are both open
-subsets then $\mathsf{x}_{1} \cup \mathsf{x}_{2}$ will also an open subset.  In
+subsets then $\mathsf{x}_{1} \cup \mathsf{x}_{2}$ will also be an open subset.  In
 fact the union of _any_ number of open subsets will be open.  Likewise if
 $\mathsf{x}_{1}$ and $\mathsf{x}_{2}$ are both open subsets then
 $\mathsf{x}_{1} \cap \mathsf{x}_{2}$ will also be an open subset.  Indeed the
@@ -964,7 +964,7 @@ figures/structures/general_topology/convergence/convergence){
 width=90% #fig-general-convergence}
 
 A subtle benefit of this topological definition of convergence is that because
-it doesn't require a metric is also doesn't require us to define the positive
+it doesn't require a metric, it also doesn't require us to define the positive
 real numbers.  This can be helpful for avoiding circular logic in more technical
 mathematical analyses.
 
@@ -1021,10 +1021,10 @@ algebra, or metric just builds on top of that foundation.
 Mathematically it is much easier to work with structures that are _compatible_
 with each other.  For example if we want to equip a set with both a topology
 and a metric then the resulting space will be particularly well-behaved if
-the we use a metric topology.  At the same time ambient structure can also
+we use a metric topology.  At the same time ambient structure can also
 distinguish certain compatible subsets.
 
-For example is a set is equipped with an ordering then we can define **interval**
+For example if a set is equipped with an ordering then we can define **interval**
 subsets that contain all elements above and below two boundary elements.  An
 **open interval** excludes both boundary elements,
 $$
@@ -1045,7 +1045,7 @@ intervals that contain only one boundary,
 \end{align*}
 Note that these notions of "open" and "closed" subsets are in general distinct
 from the open and closed subsets defined by a topology.  Only when an ordering
-is compatible with a topology will these the open and closed intervals also be
+is compatible with a topology will these open and closed intervals also be
 topologically open and closed.
 
 As we saw in [Section 1.2.4.1](@sec:open-balls) a metric distinguishes subsets
@@ -1086,8 +1086,8 @@ $\mathsf{x}_{1} \subset X$ is smaller than a subset $\mathsf{x}_{2} \subset X$
 if $\mathsf{x}_{1} \subset \mathsf{x}_{2}$, and larger if
 $\mathsf{x}_{2} \subset \mathsf{x}_{1}$.  Two subsets that only partially
 overlap are incomparable, and hence fall into the same place in the sequential
-ordering.  For any set the empty set will always the smallest subset and the
-full set will always the largest.
+ordering.  For any set the empty set will always be the smallest subset and the
+full set will always be the largest.
 
 The union and intersection operations introduce algebraic structure, known as a
 **Boolean algebraic structure**, to the power set.  They are both commutative,
@@ -1310,6 +1310,10 @@ equally long intervals that communicates the metric structure.](
 figures/real_line_grid/real_line_grid){width=50% #fig-real-line-grid}
 
 ## Extended Real Lines
+
+<!---
+Two weird formulations in the next 2 sentences.
+-->
 
 One limitation of a real line is that it does not contains points that
 _approach_ either negative or positive infinity, but not points that represent
@@ -1567,7 +1571,7 @@ Using this notation we can define an inverse function a bit more compactly as
 $$
 \text{Id} = f^{-1} \circ f.
 $$
-In words the composition of a bijective function with its inverse function is
+In other words the composition of a bijective function with its inverse function is
 the identify function.
 
 ## Relating Structures
@@ -1852,7 +1856,7 @@ Pushforward and pullback functions allow us to _lift_ a transformation between
 sets into a transformation between spaces.  For structure that can be pushed
 forward along the function $f : X \rightarrow Y$ any input space
 $(X, \mathfrak{x})$ automatically defines a compatible output space
-$(Y, f_{*}(\mathfrak{x}))$.  Similarly for structure that can be pulled back
+$(Y, f_{*}(\mathfrak{x}))$.  Similarly for a structure that can be pulled back
 against $f$ any output space $(Y, \mathfrak{y})$ automatically defines a
 compatible input space $(X, f^{*}(\mathfrak{y}))$.
 
@@ -1923,7 +1927,7 @@ latter not (@fig-monoticity).
 
 Monotonically increasing functions preserve orderings so that larger inputs
 always imply larger outputs. The function (a) $f_{1} : x \mapsto x^{3}$ is
-monotonic but the function (b) $f_{1} : x \mapsto -x^{3}$ is not.
+monotonic but the function (b) $f : x \mapsto -x^{2}$ is not.
 :::
 
 #### Algebra-Preserving Relations

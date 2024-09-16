@@ -181,7 +181,7 @@ $X_{2}$.
 
 Each element of the product set is uniquely specified by one element of $X_{1}$
 and one element of $X_{2}$.  Consequently every variable taking values in the
-product set $x \in X_{1} \times X_{2}$ is compromised of an ordered pair of
+product set $x \in X_{1} \times X_{2}$ is comprised of an ordered pair of
 variables from each component space,
 $$
 x = (x_{1}, x_{2}),
@@ -282,7 +282,7 @@ X_{1} \times \ldots \times X_{i} \times \ldots \times X_{I}
 =
 \times_{i = 1}^{I} X_{i}
 $$
-where every product variable $x \in \times_{i = 1}^{I} X_{i}$ is compromised of
+where every product variable $x \in \times_{i = 1}^{I} X_{i}$ is comprised of
 a ordered collection of component variables
 $$
 x = ( x_{1}, \ldots, x_{i}, \ldots, x_{I})
@@ -609,7 +609,7 @@ component full sets we will always be able to construct the product empty set
 and product full set from this procedure.
 
 Moreover because the component open subsets are finite intersections these
-productsubsets will be as well.  For example given any finite collection of open
+product subsets will be as well.  For example given any finite collection of open
 component subsets
 $$
 \{ \mathsf{x}_{1, i}, \ldots, \mathsf{x}_{j, i}, \ldots \mathsf{x}_{J, i} \}
@@ -870,7 +870,7 @@ $$
 ( 1, \ldots, i_{1} - 1, i_{1} + 1, \ldots, i_{J} - 1, i_{J} + 1, \ldots, J )
 $$
 define yet another product set.  Replicating this second product set once for
-each element of first product set defines a collection of **cross sections sets**
+each element of the first product set defines a collection of **cross sections sets**
 (@fig-conditioning),
 \begin{align*}
 \times_{i' = 1}^{I} X_{i'} \mid (x_{i_{1}}, \ldots, x_{i_{J}})
