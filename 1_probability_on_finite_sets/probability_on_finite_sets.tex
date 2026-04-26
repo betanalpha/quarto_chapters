@@ -80,10 +80,6 @@
 
 \KOMAoption{captions}{tableheading}
 \makeatletter
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
@@ -119,23 +115,16 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
-\makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -154,7 +143,6 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, interior hidden, frame hidden, enhanced, breakable, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -162,67 +150,66 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
-Despite its infamous reputation the foundations of probability theory
-are quite straightforward. Much of the mathematical difficulty arises
-only when we implement probability theory on elaborate sets like the
-real numbers, and most of the philosophical difficulty arises only when
-trying to assign an interpretation to the mathematics. In this chapter
-we will avoid this baggage by introducing the basics of abstract
-probability theory on the simplest, nontrivial set: a collection of a
-finite number of elements.
+Despite its infamous reputation, the foundations of probability theory
+are straightforward. Much of the mathematical distress arises only when
+we implement probability theory on elaborate sets like the real numbers.
+Similarly, most of the philosophical awkwardness arises only when trying
+to assign an interpretation to the mathematics. In this chapter we will
+avoid this baggage by introducing the basics of abstract probability
+theory on the simplest nontrivial set: a collection of a finite number
+of elements.
 
-\hypertarget{finite-sets}{%
-\section{Finite Sets}\label{finite-sets}}
+\section{Finite Sets}\label{finite-sets}
 
 A \textbf{finite set} contains a finite number of distinct elements, \[
-X = \{x_1, ..., x_N\}.
+X = \{ x_1, ..., x_N \}.
 \] The numerical index here allows us to differentiate the between the
-\(N\) individual elements but it does not necessarily imply that the
+\(N\) individual elements, but it does not necessarily imply that the
 elements have any particular ordering to them. To avoid any assumption
-of ordering I'll use the five element set (Figure~\ref{fig-ambient_set})
-\[
+of ordering, I'll use the five element set
+(Figure~\ref{fig-ambient_set}) \[
 X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}
 \] for demonstration.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/ambient_set/ambient_set.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/ambient_set/ambient_set.pdf}
 
 }
 
 \caption{\label{fig-ambient_set}A finite set contains a finite number of
 elements. This particular set contains five elements.}
 
-\end{figure}
+\end{figure}%
 
-In practical applications of probability theory the abstract elements
-\(x_{n}\) will model meaningful objects, but in this chapter I will
-avoid any particular interpretation and instead focus on the
-mathematical concepts. That said when \(X\) is intended to capture
+In practical applications of probability theory, the abstract elements
+\(x_{n}\) will model meaningful objects. In this chapter, however, I
+will avoid any particular interpretation and instead focus on the basic
+mathematical concepts. That said, when \(X\) is intended to capture
 \emph{all} of the objects of interest in a given application I will
 refer to it as the \textbf{ambient set}.
 
-Once we've defined an ambient set we have various ways of organizing its
-individual elements and manipulating those organizations.
+Once we've defined an ambient set, we have various ways of organizing
+its individual elements and manipulating those organizations.
 
-\hypertarget{subsets}{%
-\subsection{Subsets}\label{subsets}}
+\subsection{Subsets}\label{subsets}
 
 A \textbf{subset} of \(X\) is any collection of elements in \(X\). To
-avoid any ambiguity I will exclusively use lowercase roman letters \(x\)
-to denote a variable element in the ambient set \(X\) and lowercase san
-serif letters \(\mathsf{x}\) to denote a variable subset.
-
-For example \(\mathsf{x} = \{\Box, \diamondsuit, \heartsuit\}\) is a
+avoid any ambiguity, I will exclusively use lowercase roman letters
+\(x\) to denote a variable element in the ambient set \(X\) and
+lowercase sans serif letters \(\mathsf{x}\) to denote a variable subset.
+For example, \(\mathsf{x} = \{\Box, \diamondsuit, \heartsuit\}\) is a
 subset of
 \(X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}\)
-(Figure~\ref{fig-subset}). Importantly there is no notion of
-multiplicity in the concept of a subset, just membership: a subset can
-include an element \(x_{n}\) but it cannot include it multiple times.
+(Figure~\ref{fig-subset}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/subset/subset.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/subset/subset.pdf}
 
 }
 
@@ -232,30 +219,35 @@ collection of elements from the ambient set \(X\). Here
 of the five elements in
 \(X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}\).}
 
-\end{figure}
+\end{figure}%
 
-If \(\mathsf{x}\) is a subset of the ambient set \(X\) then we write
+Importantly, a subset implies a notion of \emph{membership} but not a
+notion of \emph{multiplicity}. While a subset might include an element
+\(x_{n}\), it cannot include it multiple times.
+
+If \(\mathsf{x}\) is a subset of the ambient set \(X\), then we write
 \(\mathsf{x} \subset X\). When \(\mathsf{x}\) might contain all of the
 elements of \(X\), in which case \(\mathsf{x} = X\), then we write
-\(\mathsf{x} \subseteq X\). Note that some authors use \(\subset\) to
-refer to both circumstances, but I prefer the more precise notation.
+\(\mathsf{x} \subseteq X\). Some authors use \(\subset\) to refer to
+both circumstances, but I prefer the more precise notation that
+distinguishes between the two.
 
 Subsets are \emph{recursive} objects. Selecting any elements from a
 subset yields a new subset. For example the collection
 \(\{\diamondsuit, \heartsuit\}\) is a subset of both the previously
 introduced subset, \[
 \{ \diamondsuit, \heartsuit \} \subset \{ \Box, \diamondsuit, \heartsuit \},
-\] and the full ambient set, \[
+\] as well as the full ambient set, \[
 \{ \diamondsuit, \heartsuit \} \subset X.
-\] More formally a subset \(\mathsf{x}'\) is a subset of another subset
+\] More formally, a subset \(\mathsf{x}'\) is a subset of another subset
 \(\mathsf{x}\) if and only if all of the elements in \(\mathsf{x}'\) are
 also in \(\mathsf{x}\).
 
-Regardless of how many elements a finite set \(X\) contains we can
+Regardless of how many elements a finite set \(X\) contains, we can
 always construct three special types of subsets. The \textbf{empty set}
-\(\emptyset = \{\}\) contains no elements at all. On the other hand the
+\(\emptyset = \{\}\) contains no elements at all. On the other hand, the
 entire set itself can be considered a subset containing all of the
-elements. A subset containing a single element is denoted
+elements. Lastly, a subset containing a single element is denoted
 \(\{ x_{n} \}\) and referred to as an \textbf{atomic set}.
 
 There are \[
@@ -269,49 +261,50 @@ contains all of the elements, \[
 {N \choose N} = \frac{ N! }{ N! (N - N)!} = \frac{ N! }{ N! } = 1,
 \] which is just the full set itself. On the other hand there are \[
 {N \choose 1} = \frac{ N! }{ 1! (N - 1)!} = N
-\] distinct atomics sets that contain a single element, one for each
+\] distinct atomic sets that contain a single element, one for each
 element in \(X\).
 
 Counting all of the subsets of all possible sizes gives \[
 \sum_{n = 0}^{N} {N \choose n} = 2^{N}
 \] possible subsets that we can construct from a finite set with \(N\)
-elements. Those from a computer science background might recognize that
-this is equivalent to needed \(N\) bits to specify each subset, one bit
-for the inclusion or exclusion of each element.
+elements. Those familiar with computer science might recognize that this
+is equivalent to needing \(N\) bits to specify each distinct subset, one
+bit for the inclusion or exclusion of each element.
 
 The collection of all subsets is itself a finite set with \(2^{N}\)
-elements.\\
-We refer to this set as the \textbf{power set} of \(X\) and denote it
-\(2^{X}\).
+elements. We refer to this set as the \textbf{power set} of \(X\) and
+denote it \(2^{X}\).
 
 When the ambient set, and hence all of the possible elements that any
-subset might contain, is fixed the prefix ``sub'' is sometimes dropped,
-with all subsets simply referred to as sets. For example collections of
-elements might be denoted ``sets'' when one takes the ambient set for
-granted and ``subsets'' when one wants to explicitly acknowledge the
-context of the ambient set. Precise terminology, however, can vary
-strongly between disciplines and even individuals.
+subset might contain, is fixed, the prefix ``sub'' is sometimes dropped.
+In this case all subsets are simply referred to as sets. For example,
+collections of elements might be denoted ``sets'' when one takes the
+ambient set for granted and ``subsets'' when one wants to explicitly
+acknowledge the context of a particular ambient set. Precise
+terminology, however, can vary strongly between disciplines and even
+individuals.
 
-\hypertarget{subset-operations}{%
-\subsection{Subset Operations}\label{subset-operations}}
+\subsection{Subset Operations}\label{subset-operations}
 
-We can always construct subsets element by element, but we can also
-construct them by manipulating existing subsets.
+We can always construct subsets element by element. That said, we can
+also construct them by manipulating existing subsets.
 
-For example given a subset \(\mathsf{x} \subset X\) we can construct its
-\textbf{complement} by collecting all of the elements in \(X\) that are
-not already in \(\mathsf{x}\). The atomic set
+For example, given a subset \(\mathsf{x} \subset X\) we can construct
+its \textbf{complement} by collecting all of the elements in \(X\) that
+are not already in \(\mathsf{x}\). The atomic set
 \(\mathsf{x} = \{ \diamondsuit \}\) contains the lone element
 \(\diamondsuit\) and its complement contains the remaining elements
 (Figure~\ref{fig-complement}) \[
 \mathsf{x}^{c} = \{ \Box, \clubsuit, \heartsuit, \spadesuit \}.
-\] By construction the complement of the empty set is the entire set,
+\] By construction, the complement of the empty set is the entire set,
 \(\emptyset^{c} = X\), and the complement of the full set is the empty
 set, \(X^{c} = \emptyset\).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{figures/complement/complement.pdf}
+\centering{
+
+\includegraphics[width=0.75\textwidth,height=\textheight]{figures/complement/complement.pdf}
 
 }
 
@@ -319,9 +312,9 @@ set, \(X^{c} = \emptyset\).
 is the subset \(\mathsf{x}^{c}\) consisting of all elements in the
 ambient set that are not in \(\mathsf{x}\).}
 
-\end{figure}
+\end{figure}%
 
-More formally the construction of complementary subsets defines a
+More formally, the construction of complementary subsets defines a
 \emph{unary} operation that takes in a subset as input and outputs the
 complementary subset, \begin{alignat*}{6}
 \cdot^c :\; & 2^X & &\rightarrow& \; & 2^X &
@@ -330,15 +323,16 @@ complementary subset, \begin{alignat*}{6}
 \end{alignat*} The top line of this notation denotes the collection of
 all possible inputs and outputs, here both the power set, while the
 bottom line denotes the action on a particular input, here a subset
-mapped into its complement. For example applying the complement operator
-to the subset \(\mathsf{x} = \{ \clubsuit, \spadesuit \}\) gives \[
+mapped into its complement. For instance, applying the complement
+operator to the subset \(\mathsf{x} = \{ \clubsuit, \spadesuit \}\)
+gives \[
 \mathsf{x}^{c}
 = \{ \clubsuit, \spadesuit \}^{c}
 = \{ \Box, \diamondsuit, \heartsuit \}.
 \]
 
-We can also construct subsets from more than one subset. Consider, for
-example, two subsets \(\mathsf{x}_1 = \{ \Box, \heartsuit \}\) and
+We can also construct new subsets from two existing subset. Consider,
+for example, two subsets \(\mathsf{x}_1 = \{ \Box, \heartsuit \}\) and
 \(\mathsf{x}_2 = \{ \Box, \spadesuit \}\) (Figure~\ref{fig-subsets}).
 The collection of all elements that are contained in \emph{either}
 subset is itself a subset, \[
@@ -354,9 +348,11 @@ subset is itself a subset, \[
 \mathsf{x}_1 \cap \mathsf{x}_2
 = \{ \Box, \heartsuit \} \cap \{ \Box, \spadesuit \}
 = \{ \Box \},
-\] respectively (Figure~\ref{fig-ui}). Note that the union and
-intersection are both symmetric in the sense that either order of the
-input subsets results in the same output subset, \[
+\] respectively (Figure~\ref{fig-ui}).
+
+The union and intersection operations are both symmetric in the sense
+that either ordering of the two input subsets results in the same output
+subset, \[
 \mathsf{x}_1 \cup \mathsf{x}_2 = \mathsf{x}_2 \cup \mathsf{x}_1
 \] and \[
 \mathsf{x}_1 \cap \mathsf{x}_2 = \mathsf{x}_2 \cap \mathsf{x}_1.
@@ -364,41 +360,59 @@ input subsets results in the same output subset, \[
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{figures/overlapping_subsets/overlapping_subsets.pdf}
+\centering{
+
+\includegraphics[width=0.75\textwidth,height=\textheight]{figures/overlapping_subsets/overlapping_subsets.pdf}
 
 }
 
-\caption{\label{fig-subsets}We can manipulate two subsets into a new
-subset in various ways.}
+\caption{\label{fig-subsets}Two existing subsets can always be
+manipulated into two new subsets.}
 
-\end{figure}
+\end{figure}%
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{figures/overlapping_subsets_ui/overlapping_subsets_ui.pdf}
+\centering{
+
+\includegraphics[width=0.75\textwidth,height=\textheight]{figures/overlapping_subsets_ui/overlapping_subsets_ui.pdf}
 
 }
 
 \caption{\label{fig-ui}The union of two subsets,
 \(\mathsf{x}_1 \cup \mathsf{x}_2\), is a subset containing all of the
-elements in either input subset. On the other hand the intersection of
+elements in either input subset. On the other hand, the intersection of
 two subsets, \(\mathsf{x}_1 \cap \mathsf{x}_2\), is a subset containing
 just the elements that occur in both input subsets.}
 
-\end{figure}
+\end{figure}%
 
-Two subsets are \textbf{disjoint} if they don't share any elements; in
-this case their intersection is the empty set, \[
+Two subsets are \textbf{disjoint} if they don't share any elements. In
+this case, their intersection is the empty set, \[
 \mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset.
-\] The union and intersection of a subset with itself returns that
-subset, \[
-\mathsf{x} \cup \mathsf{x} = \mathsf{x} \cap \mathsf{x} = \mathsf{x}.
-\] Because the empty set does not contain any elements its union with
+\] Because the empty set does not contain any elements, its union with
 any subset returns back that subset, \[
-\mathsf{x} \cup \emptyset = \emptyset \cup \mathsf{x} = \mathsf{x},
+\mathsf{x} \cup \emptyset
+=
+\emptyset \cup \mathsf{x}
+=
+\mathsf{x},
 \] and its intersection with any subset returns the empty set, \[
-\mathsf{x} \cap \emptyset = \emptyset \cap \mathsf{x} = \emptyset.
-\] Similarly the union of any subset with the full set returns the full
+\mathsf{x} \cap \emptyset
+=
+\emptyset \cap \mathsf{x}
+=
+\emptyset.
+\]
+
+The union and intersection of a subset with itself always returns that
+subset, \[
+\mathsf{x} \cup \mathsf{x}
+=
+\mathsf{x} \cap \mathsf{x}
+=
+\mathsf{x}.
+\] Similarly, the union of any subset with the full set returns the full
 set, \[
 \mathsf{x} \cup X = X \cup \mathsf{x} = X,
 \] and the intersection of any subset with the full set returns back the
@@ -406,7 +420,7 @@ subset, \[
 \mathsf{x} \cap X = X \cap \mathsf{x} = \mathsf{x}.
 \]
 
-Because they require two inputs the union and intersection define
+Because they require two inputs, the union and intersection define
 \emph{binary} operations that consume \emph{two} input subsets and
 return a single output subset, \begin{alignat*}{6}
 \cdot \cup \cdot :\; & 2^{X} \times 2^{X}& &\rightarrow& \; & 2^{X} &
@@ -419,207 +433,186 @@ return a single output subset, \begin{alignat*}{6}
 \end{alignat*} Here \(2^{X} \times 2^{X}\) denotes the collection of all
 \emph{pairs} of subsets.
 
-\hypertarget{measure-and-probability-over-elements}{%
 \section{Measure and Probability Over
-Elements}\label{measure-and-probability-over-elements}}
+Elements}\label{measure-and-probability-over-elements}
 
 Measure theory, and its special case of probability theory, is often
 burdened with intricate if not mysterious interpretations. From a
 mathematical perspective, however, measure theory simply concerns the
-consistent \textbf{allocation} of some abstract quantity across the
+consistent \textbf{allocation} of some abstract quantity across an
 ambient set.
 
-Consider a \emph{reservoir} of some positive, continuous, and
+Consider a \emph{reservoir} of some positive, real-valued, and
 \emph{conserved} quantity, \(M \in [0, \infty]\)
-(Figure~\ref{fig-reservoir}). Because \(M\) is conserved any amount
+(Figure~\ref{fig-reservoir}). Because \(M\) is conserved, any amount
 \(m_{n}\) that is allocated to the element \(x_{n} \in X\) has to be
-\emph{depleted} from the reservoir, leaving less to be allocated to the
-remaining elements.
-
-We have to be careful if the total content of the reservoir \(M\) is
-infinite. In this case we can allocate an infinite amount from the
-reservoir while still having an infinite quantify left. At the same time
-allocating an infinite amount can depleting the reservoir completely or
-even leave any finite quantity. Infinity is, at the very least,
-mathematically awkward.
+\emph{depleted} from the total reservoir, leaving less to be allocated
+to the remaining elements.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/allocations/0/0.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/allocations/0/0.pdf}
 
 }
 
 \caption{\label{fig-reservoir}Measure theory concerns the allocation of
-some continuous and positive quantity \(M\) over the individual elements
-of the ambient set.}
+some positive real-valued quantity \(M\) over the individual elements of
+the ambient set.}
 
-\end{figure}
+\end{figure}%
 
-To make the mathematics as useful as possible we will avoid endowing
+We have to be careful if the total content of the reservoir \(M\) is
+infinite. In this case we can allocate an infinite amount from the
+reservoir while still having an infinite quantify left. At the same
+time, allocating an infinite amount can deplete the reservoir
+completely, but it can also leave any finite quantity. Infinity is, at
+the very least, mathematically subtle.
+
+To make the mathematics as useful as possible, we will avoid endowing
 \(M\) with any particular meaning for the time being. Instead
 interpretations will arise only when we use these allocations to
 \emph{model} meaningful systems.
 
 An \emph{exhaustive} allocation of \(M\) across the ambient set ensures
-that the reservoir is completely emptied. In another words all of \(M\)
+that the reservoir is completely emptied. In another words, all of \(M\)
 has to be allocated to the elements \(x_{n} \in X\).
 
 For example consider our demonstrative ambient set
-\(X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit \}\). If
-we allocate \(m_\Box\) to \(\Box\) then that leaves \(M - m_\Box\)
-remaining to allocate to the other four elements
-(Figure~\ref{fig-allocationa}). Allocating \(m_\clubsuit\) to
-\(\clubsuit\) depletes the reservoir a bit more
-(Figure~\ref{fig-allocationb}). At the end we have to allocate all \[
+\(X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit \}\).
+Allocating \(m_\Box\) to \(\Box\) leaves \(M - m_\Box\) remaining to
+allocate to the other four elements (Figure~\ref{fig-allocationa}).
+Allocating \(m_\clubsuit\) to \(\clubsuit\) depletes the reservoir a bit
+more (Figure~\ref{fig-allocationb}). At the end we have to allocate all
+\[
 M - m_{\Box} - m_{\clubsuit} - m_{\diamondsuit} - m_{\heartsuit}
 \] that remains to \(\spadesuit\) to completely empty the reservoir
 (Figure~\ref{fig-allocatione}).
 
 \begin{figure}
 
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/allocations/1/1.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/allocations/1/1.pdf}
 
 }
 
 \subcaption{\label{fig-allocationa}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/allocations/2/2.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/allocations/2/2.pdf}
 
 }
 
 \subcaption{\label{fig-allocationb}}
+
 \end{minipage}%
 \newline
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/allocations/3/3.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/allocations/3/3.pdf}
 
 }
 
 \subcaption{\label{fig-allocationc}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/allocations/4/4.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/allocations/4/4.pdf}
 
 }
 
 \subcaption{\label{fig-allocationd}}
+
 \end{minipage}%
 \newline
-\begin{minipage}[t]{0.25\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.25\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/allocations/5/5.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/allocations/5/5.pdf}
 
 }
 
 \subcaption{\label{fig-allocatione}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.25\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.25\linewidth}
+~\end{minipage}%
 
 \caption{\label{fig-allocation}Because the total quantity \(M\) is
-conserved every allocation \(m_{n}\) to an element \(x_{n} \in X\)
+conserved, every allocation \(m_{n}\) to an element \(x_{n} \in X\)
 depletes the amount available for the allocation to the remaining
-elements. An exhaustive allocation leaves nothing left in the initial
-reservoir after each element has received its allocation.}
+elements. An exhaustive allocation leaves nothing left in the reservoir
+after each element has received its allocation.}
 
-\end{figure}
+\end{figure}%
 
 A \textbf{measure} is any consistent allocation of the quantity \(M\) to
-the elements of an ambient set. Mathematically any measure over a finite
-set can be characterized by \(N\) numbers (Figure~\ref{fig-measure}) \[
+the elements of an ambient set. Mathematically, any measure over a
+finite set can be characterized by \(N\) positive real numbers
+(Figure~\ref{fig-measure}) \[
 \mu = \{ m_{1}, \ldots, m_{N} \}
 \] that satisfy \[
 0 \le m_{n}
 \] and \[
 \sum_{n = 1}^{N} m_{n} = M.
-\] For example any measure over the five-element set
+\] For example, any measure over the five-element set
 \(X = \{\Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit\}\) is
-specified by any five positive numbers
+specified by any five positive real numbers
 \(\{ m_\Box, m_\clubsuit, m_\diamondsuit, m_\heartsuit, m_\spadesuit \}\)
 satisfying \[
-m_\Box + m_\clubsuit + m_\diamondsuit + m_\heartsuit + m_\spadesuit = M.
+  m_\Box + m_\clubsuit + m_\diamondsuit
++ m_\heartsuit + m_\spadesuit
+=
+M.
 \]
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/measure/measure.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/measure/measure.pdf}
 
 }
 
 \caption{\label{fig-measure}A measure \(\mu\) over the finite set \(X\)
 is any consistent allocation of \(M\) to the elements \(x_{n} \in X\).
-Every measure can be characterized by \(N\) numbers \(m_{n}\) that sum
-to \(M\), or equivalently a function that maps each element \(x_{n}\) to
-its allocated measure \(m_{n}\).}
+Every measure can be characterized by \(N\) positive real numbers
+\(m_{n}\) that sum to \(M\), or equivalently a function that maps each
+element \(x_{n}\) to its allocated measure \(m_{n}\).}
 
-\end{figure}
+\end{figure}%
 
 The larger \(m_{n}\) the more of \(M\) is allocated to the element
-\(x_{n}\). Following this terminology we will also refer to \(M\) as the
-\textbf{total measure} and \(m_{n}\) as the \textbf{measure allocated to
-\(x_{n}\)}.
+\(x_{n}\). Following this terminology, we will also refer to \(M\) as
+the \textbf{total measure} and \(m_{n}\) as the \textbf{measure
+allocated to \(x_{n}\)}.
 
-If the total measure is infinite, \(M = \infty\), then at least one of
-the elements in \(X\) \emph{has} to receive an infinite allocation in
-order to empty the reservoir. We can also consistently allocate infinite
-measure to multiple elements, or even all of the elements, at the same
-time. Infinite measures can be very generous in their allocations.
+If the total measure is infinite, \(M = \infty\), then \emph{at least
+one} of the elements in \(X\) has to receive an infinite allocation in
+order to empty the reservoir. That said, we can consistently allocate
+infinite measure to multiple elements, or even all of the elements, at
+the same time. Infinite measures can be very generous in their
+allocations!
 
 The allocation \(\{ x_{n}, m_{n} \}\) defined by a measure \(\mu\) can
 also be organized into a function that maps each element to its
@@ -632,85 +625,81 @@ is that instead of thinking about the global allocation
 \(m_1, \ldots, m_N\) all at once we can isolate local allocations by
 evaluating \(\mu\) at only a single input \(m_{n} = \mu(x_{n})\).
 
-In general there are an infinite number of ways to allocate a total
+In general, there are an infinite number of ways to allocate a total
 measure to the elements of a finite set, and hence an infinite number of
 measures that we can define over that set. I will denote the collection
 of all possible measures over \(X\) as \(\mathcal{M}(X)\).
 
-Within this collection there are a few notable examples. For example a
-\textbf{singular measure} allocates the total measure \(M\) to a single
-element, leaving the rest with nothing
-(Figure~\ref{fig-types_of_measurea}). On the other hand a
+There are a few exceptional measures within this collection worth
+mentioning. A \textbf{singular measure} allocates the total measure
+\(M\) to a single element, leaving the rest with nothing
+(Figure~\ref{fig-types_of_measurea}). On the other hand, a
 \textbf{uniform measure} allocates the same measure \(M / N\) to each
-element (Figure~\ref{fig-types_of_measureb}). On finite sets there are
+element (Figure~\ref{fig-types_of_measureb}). On finite sets, there are
 \(N\) distinct singular measures, one for each distinct element, and a
 single unique uniform measure.
 
 \begin{figure}
 
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/singular_measure/singular_measure.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/singular_measure/singular_measure.pdf}
 
 }
 
 \subcaption{\label{fig-types_of_measurea}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/uniform_measure/uniform_measure.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/uniform_measure/uniform_measure.pdf}
 
 }
 
 \subcaption{\label{fig-types_of_measureb}}
+
 \end{minipage}%
 
 \caption{\label{fig-types_of_measure}A singular measure (a) allocates
 the total measure to a single element while the uniform measure (b)
 spreads the total measure to each element evenly.}
 
-\end{figure}
+\end{figure}%
 
-Perhaps the most important class of measures, however, are measures
-where the total measure is finite, \(0 < M < \infty\). Appropriately
-enough we refer to these as \textbf{finite measures}.
+Perhaps the most important types of measures are those whose total
+measure is finite, \(0 < M < \infty\). Appropriately enough, we refer to
+these as \textbf{finite measures}.
 
 What makes finite measures so special is that we can always reframe the
 allocation they define into a \emph{relative} one. Instead of
-considering the absolute measure allocated to each element \(m_{n}\) we
+considering the absolute measure allocated to each element \(m_{n}\), we
 can consider the \emph{proportion} of the total measure allocated to
 each element, (Figure~\ref{fig-proportional}) \[
 p_{n} = m_{n} / M.
-\] By construction proportions are confined to the unit interval
-\([0, 1]\). As with any quantity taking values in \([0, 1]\) we can
+\] By construction, proportions are confined to the unit interval
+\([0, 1]\). As with any quantity taking values in \([0, 1]\), we can
 represent proportions equally well with decimals, for example
 \(p_{n} = 0.2\), and percentages, \(p_{n} = 20\%\).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/proportional_measure/proportional_measure.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/proportional_measure/proportional_measure.pdf}
 
 }
 
 \caption{\label{fig-proportional}Every finite measure can be
 characterized by a proportional allocation.}
 
-\end{figure}
+\end{figure}%
 
-In other words a proportional measure defines the function
+In other words, a proportional measure defines the function
 (Figure~\ref{fig-probability}) \begin{alignat*}{6}
 \pi :\; & X & &\rightarrow& \; & [0, 1] &
 \\
@@ -724,22 +713,24 @@ these properties is referred to as a \textbf{simplex}.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/probability_distribution/probability_distribution.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/probability_distribution/probability_distribution.pdf}
 
 }
 
 \caption{\label{fig-probability}A proportional allocation is also known
 as a probability distribution.}
 
-\end{figure}
+\end{figure}%
 
-More importantly a proportional measure \(\pi\) is also known as a
-\textbf{probability distribution} with the proportional allocations
-\(p_{n}\) denoted \textbf{probabilities}. While the term ``probability''
-is often encumbered with all kinds of interpretational and philosophical
-baggage its mathematical structure is really quite straightforward: on a
-finite set a probability is just the proportion of some finite quantity
-that is allocated to an individual element!
+A proportional measure \(\pi\) is also known as a \textbf{probability
+distribution}, with the proportional allocations \(p_{n}\) denoted
+\textbf{probabilities}. While the term ``probability'' is often
+encumbered with all kinds of interpretational and philosophical baggage,
+its mathematical structure is really quite straightforward. On a finite
+set, a probability is just the proportion of some finite quantity that
+is allocated to an individual element!
 
 Philosophical tension arises only when we try to assign some meaning to
 these proportional allocations. This isn't a question of mathematics but
@@ -750,66 +741,68 @@ probability itself, in
 \href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html}{Chapter
 4}.
 
-While we're on the topic of terminological issues the word
-``distribution'' is not without its own problems. In mathematics the
+While we're on the topic of terminological issues, the word
+``distribution'' is not without its own problems. In mathematics, the
 term ``distribution'' is heavily overloaded and can be used to refer to
 a variety of related but formally distinct concepts. One way to avoid
 confusion is to always refer to proportional measures as ``probability
 distributions'' and never just ``distributions'' alone.
 
-\hypertarget{measure-and-probability-over-subsets}{%
 \section{Measure and Probability Over
-Subsets}\label{measure-and-probability-over-subsets}}
+Subsets}\label{measure-and-probability-over-subsets}
 
-On finite sets any allocation, absolute or proportional, over the
-individual elements \(x \in X\) also defines an allocation over entire
-subsets \(\mathsf{x} \in 2^{X}\). The measure allocated to a subset is
-just the sum of the measures allocated to the elements in that subset.
-For example the measure allocated to
+Regardless of whether is is absolute or proportional, any allocation
+over the individual elements \(x \in X\) of a finite set also defines an
+allocation over entire subsets \(\mathsf{x} \in 2^{X}\). The measure
+allocated to a subset is just the sum of the measures allocated to the
+elements in that subset. For example, the measure allocated to
 \(\mathsf{x} = \{ \Box, \clubsuit, \heartsuit \}\) is
 \(m_{\Box} + m_{\clubsuit} + m_{\heartsuit}\)
 (Figure~\ref{fig-subset_measure}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/subset_measure/subset_measure.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/subset_measure/subset_measure.pdf}
 
 }
 
-\caption{\label{fig-subset_measure}On a finite set an allocation over
+\caption{\label{fig-subset_measure}On a finite set, an allocation over
 individual elements also defines an allocation over any subset.}
 
-\end{figure}
+\end{figure}%
 
-In other words a measure over individual elements
+In other words, a measure over individual elements
 \(\mu : X \rightarrow [0, \infty]\) implicitly defines a measure over
-subsets \(\mu : 2^{X} \rightarrow [0, \infty]\). Similarly a probability
-distribution over individual elements \(\pi : X \rightarrow [0, 1]\)
-implicitly defines a probability distribution over subsets
-\(\pi : 2^{X} \rightarrow [0, 1]\).
+subsets \(\mu : 2^{X} \rightarrow [0, \infty]\). Similarly, a
+probability distribution over individual elements
+\(\pi : X \rightarrow [0, 1]\) implicitly defines a probability
+distribution over subsets \(\pi : 2^{X} \rightarrow [0, 1]\).
 
-Note that we have made the cardinal sin of \emph{overloading} our
-notation so that \(\mu\) refers to both types of measures, and the only
+In this last step we have made the cardinal sin of \emph{overloading}
+our notation so that \(\mu\) refers to both types of measures. The only
 way to differentiate them is through their different inputs; \(\mu(x)\)
 denotes the element-wise measure allocated to \(x \in X\) and
 \(\mu( \mathsf{x} )\) denotes the subset-wise measure allocated to
 \(\mathsf{x} \in 2^X\). Maintaining different typographical conventions
-for elements and subsets is critical to avoid any confusion when
+for elements and subsets is critical to avoid any confusion when we have
 overloading notation like this.
 
-By construction any subset measure and probability distribution satisfy
-a wealth of useful properties. For example for any measure \[
+By construction, every subset measure and probability distribution
+satisfies a wealth of useful properties. For instance, for any measure
+\[
 \mu( \emptyset ) = 0
 \] and \[
-\mu( X ) = \sum_{n = 1}^{N} \mu(x_{n}) = M,
-\] while for any probability distribution we have
+\mu( X ) = \sum_{n = 1}^{N} \mu(x_{n}) = M.
+\] Similarly, for any probability distribution we have
 \(\pi( \emptyset ) = 0\) and \(\pi( X ) = 1\).
 
-Even better the subset allocations play well with the subset operations.
-Consider for example the two disjoint subsets
+Even better, subset allocations play well with the subset operations.
+Consider, for example, the two disjoint subsets
 \(\mathsf{x}_{1} = \{ \Box, \diamondsuit \}\) and
 \(\mathsf{x}_{2} = \{ \clubsuit, \spadesuit \}\). Because the two
-subsets are disjoint their union simply combines all of their elements,
+subsets are disjoint, their union simply combines all of their elements,
 \[
 \mathsf{x}_{1} \cup \mathsf{x}_{2}
 =
@@ -832,7 +825,7 @@ m_{\Box} + m_{\clubsuit} + m_{\diamondsuit} + m_{\spadesuit}
 \mu( \mathsf{x}_{1} ) + \mu( \mathsf{x}_{2} ).
 \end{align*}
 
-More generally for any collection of subsets \[
+More generally, for any collection of subsets \[
 \mathsf{x}_{1}, \ldots, \mathsf{x}_{K}
 \] that are mutually disjoint, \[
 \mathsf{x}_{k} \cap \mathsf{x}_{k'} = \emptyset
@@ -840,15 +833,15 @@ More generally for any collection of subsets \[
 \mu ( \cup_{k = 1}^{K} \mathsf{x}_{k} )
 =
 \sum_{k = 1}^{K} \mu ( \mathsf{x}_{k} ).
-\] In words if we can decompose a subset into a disjoint collection of
+\] In words, if we can decompose a subset into a disjoint collection of
 smaller subsets then we can also decompose the measure allocated to that
 initial subset into measures allocated to the component subsets. This
 consistency property is known as \textbf{additivity}.
 
 A subset \(\mathsf{x}\) and its complement \(\mathsf{x}^{c}\) are always
 disjoint, \(\mathsf{x} \cap \mathsf{x}^{c} = \emptyset\). At the same
-time their union covers the entire set,
-\(\mathsf{x} \cup \mathsf{x}^{c} = X\). Consequently additivity implies
+time, their union covers the entire set,
+\(\mathsf{x} \cup \mathsf{x}^{c} = X\). Consequently, additivity implies
 that \begin{align*}
 M
 &=
@@ -860,24 +853,25 @@ M
 &= \mu ( \mathsf{x} ) + \mu ( \mathsf{x}^{c} ),
 \end{align*} or \[
 \mu ( \mathsf{x}^{c} ) = M - \mu ( \mathsf{x} ).
-\] In words the measure allocated to the complement of a subset is the
-total measure less the measure allocated to that subset. For probability
-distributions this becomes even cleaner, \[
+\] In words, the measure allocated to the complement of a subset is the
+total measure less the measure allocated to that subset. The
+corresponding result for probability distributions is even cleaner, \[
 \pi ( \mathsf{x}^{c} ) = 1 - \pi ( \mathsf{x} ).
 \]
 
-When two subsets overlap we have to take into consideration that the sum
+When two subsets overlap, we have to account for the fact that the sum
 of their measures \(\mu ( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )\)
-double counts the allocations to any elements shared between them. For
-example if \(\mathsf{x}_{1} = \{ \Box, \heartsuit \}\) and
+double counts the allocations to common elements. For instance, if
+\(\mathsf{x}_{1} = \{ \Box, \heartsuit \}\) and
 \(\mathsf{x}_{2} = \{ \Box, \spadesuit \}\) then the union includes the
-overlapping element \(\Box\) only once, \[
+overlapping element \(\Box\) once, \[
 \mathsf{x}_{1} \cup \mathsf{x}_{2}
 =
 \{ \Box, \heartsuit \} \cup \{ \Box, \spadesuit \}
 =
 \{ \Box, \heartsuit, \spadesuit \}.
-\] Consequently \begin{align*}
+\] Consequently, the measure allocated to the union is given by
+\begin{align*}
 \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
 &=
 \mu( \{ \Box, \heartsuit, \spadesuit \} )
@@ -885,7 +879,7 @@ overlapping element \(\Box\) only once, \[
 &=
 m_{\Box} + m_{\heartsuit} + m_{\spadesuit}.
 \end{align*} Adding the measures allocated to the two subsets
-individually, however, gives \begin{align*}
+individually, however, includes \(m_{\Box}\) twice, \begin{align*}
 \mu( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )
 &=
 (m_{\Box} + m_{\heartsuit} ) + ( m_{\Box} + m_{\spadesuit} )
@@ -897,77 +891,86 @@ m_{\Box} + m_{\Box} + m_{\heartsuit} + m_{\spadesuit}
 m_{\Box} + \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} ).
 \end{align*}
 
-The element that is double counted here, however, is exactly the lone
-element in the intersection of the two subsets
+Conveniently, the element that is double counted here is exactly the
+lone element in the intersection of the two initial subsets
 (Figure~\ref{fig-overlapping_subsets_measures}), \[
-m_{\Box} = \mu( \{ \Box \} ) = \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} ).
-\] In other words we can write \[
+m_{\Box} = \mu( \{ \Box \} )
+=
+\mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} ).
+\] This allows us to write \[
 \mu( \mathsf{x}_{1} ) + \mu ( \mathsf{x}_{2} )
 =
   \mu( \mathsf{x}_{1} \cap \mathsf{x}_{2} )
 + \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} ).
-\] This relationship is quite general and holds for \emph{any} two
+\] This relationship turns out to be general, holding for \emph{any} two
 subsets regardless of their overlap.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{figures/overlapping_subsets_measures/overlapping_subsets_measures.pdf}
+\centering{
+
+\includegraphics[width=0.75\textwidth,height=\textheight]{figures/overlapping_subsets_measures/overlapping_subsets_measures.pdf}
 
 }
 
 \caption{\label{fig-overlapping_subsets_measures}When two subsets
-overlap the measure allocated to each double counts the measure
-allocated to any overlapping elements, here \(\Box\), but the measure
-allocated to their union does not. This results in an important
-relationship between the measures allocated to the two subsets, the
-measure allocated to their union, and the measure allocated to their
-intersection.}
+overlap, the measure allocated to each double counts the measure
+allocated to any overlapping elements, here \(\Box\). The measure
+allocated to their union, however, does not. This results in an
+important relationship between the measures allocated to the two
+subsets, the measure allocated to their union, and the measure allocated
+to their intersection.}
 
-\end{figure}
+\end{figure}%
 
-These subset properties allow us to build up a given measure in many
-different ways, each of which can useful in different circumstances.
-This provides convenient flexibility when trying to apply measure theory
-and probability theory in practice.
+These subset properties allow us to build up a measure in many different
+ways, each of which can useful in different circumstances. This provides
+convenient flexibility when trying to apply measure theory and
+probability theory in practice.
 
-For example we can always specify a measure \emph{globally} by
+For example, we can always specify a measure \emph{globally} by
 specifying the individual allocations at the same time
-(Figure~\ref{fig-all_at_once}). Alternatively we can specify the
+(Figure~\ref{fig-all_at_once}). Alternatively, we can specify the
 allocation \emph{locally} by allocating measure to each element one at a
 time (Figure~\ref{fig-one_at_a_time}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.33\textwidth,height=\textheight]{figures/decompositions/all_at_once/all_at_once.pdf}
+\centering{
+
+\includegraphics[width=0.33\textwidth,height=\textheight]{figures/decompositions/all_at_once/all_at_once.pdf}
 
 }
 
 \caption{\label{fig-all_at_once}Measures can be constructed by
 specifying the individual element allocations all at once.}
 
-\end{figure}
+\end{figure}%
 
 \begin{figure}
 
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{figures/decompositions/one_at_a_time/one_at_a_time.pdf}
+\centering{
+
+\includegraphics[width=1\textwidth,height=\textheight]{figures/decompositions/one_at_a_time/one_at_a_time.pdf}
 
 }
 
-\caption{\label{fig-one_at_a_time}At the same time measures can be
-constructed by specifying the individual element allocations one by
-one.}
+\caption{\label{fig-one_at_a_time}Measures can also be constructed by
+specifying the individual element allocations one by one.}
 
-\end{figure}
+\end{figure}%
 
-Critically we do not always need to start with individual allocations.
-Instead we can always start by allocating the total measure to disjoint
-subsets and then iteratively \emph{refining} that allocation to smaller
-and smaller subsets until we reach the individual elements
+Critically, we do not always need to start with individual allocations.
+We can always start by allocating the total measure to disjoint subsets
+and then iteratively \emph{refining} that allocation to smaller and
+smaller subsets until we reach the individual elements
 (Figure~\ref{fig-refinement}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=1\textwidth,height=\textheight]{figures/decompositions/refinement/refinement.pdf}
+\centering{
+
+\includegraphics[width=1\textwidth,height=\textheight]{figures/decompositions/refinement/refinement.pdf}
 
 }
 
@@ -975,19 +978,18 @@ and smaller subsets until we reach the individual elements
 allocating the total measure to disjoint subsets and then iteratively
 refining that allocation to smaller and smaller subsets.}
 
-\end{figure}
+\end{figure}%
 
-In addition to providing flexible constructions the subset definition of
-a measure \(\mu : 2^{X} \rightarrow [0, \infty]\) is also critical for
-generalizing measure theory beyond finite sets. Specifically it becomes
-\emph{necessary} when trying to consistently define measures on more
-mathematically complicated sets like the real line. This will be the
-topic of
+In addition to providing flexible constructions, the subset definition
+of a measure \(\mu : 2^{X} \rightarrow [0, \infty]\) is also important
+for generalizing measure theory beyond finite sets. Specifically, it
+becomes \emph{necessary} when trying to consistently define measures on
+more mathematically complicated sets like the real line. This will be
+discussed in detail in
 \href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html}{Chapter
 4}.
 
-\hypertarget{acknowledgements}{%
-\section{Acknowledgements}\label{acknowledgements}}
+\section{Acknowledgements}\label{acknowledgements}
 
 I thank Simon Duane, Edgar Merkle, and Florian Pargent for helpful
 comments.
@@ -1043,8 +1045,7 @@ Tom McEwen, Tomáš Frýda, Tony Wuersch, Virginia Fisher, Vitaly Druker,
 Vladimir Markov, Wil Yegelwel, Will Farr, Will Kurt, Will Tudor-Evans,
 woejozney, yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
 
-\hypertarget{license}{%
-\section*{License}\label{license}}
+\section*{License}\label{license}
 \addcontentsline{toc}{section}{License}
 
 A repository containing all of the files used to generate this chapter
