@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -48,7 +50,7 @@
     \foreach \x in {-2.5, -1.5, ..., 2.5} {
       \foreach \y in {-2, -1, ..., 2} {
         \fill[black] (\x, \y) circle (0.05);
-        \draw[dark, dashed, line width=1]
+        \draw[midteal, dashed, line width=1]
           plot [smooth cycle, tension=0.75] coordinates { \randpoints{\x}{\y}{0.35} } -- cycle;
       }
     }

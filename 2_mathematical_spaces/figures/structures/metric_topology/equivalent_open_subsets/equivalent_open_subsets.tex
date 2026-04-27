@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -24,35 +26,35 @@
 
 \begin{document}
 
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.9]
 
   \begin{scope}[shift={(0, 0)}]
     \draw[white] (-3.5, -3) rectangle (3.5, 2);
   
     \begin{scope}
       \clip (-3.5, -3) rectangle (1, 1);
-      \draw[rounded corners=3, dark, dashed, line width=1] (-3, -2) rectangle (3, 2);
+      \draw[rounded corners=3, darkteal, dashed, line width=1] (-3, -2) rectangle (3, 2);
     \end{scope}
     
     \begin{scope}
       \clip[rounded corners=3] (-3, -2) rectangle (3, 2);
-      \fill[dark, line width=1] (-3, -2) --
+      \fill[darkteal, line width=1] (-3, -2) --
                                 (-3, 1) .. controls (-2, 1) and (-1.5, 1.5) .. 
                                 (0, 1.5) .. controls (1.5, 1.5) and (2, 0.5) .. 
                                 (2, -0.5) .. controls (2, -1.5) and (1, -1.5) .. 
                                 (1, -2) -- cycle;
-      \draw[dark, line width=1, dashed] (-3, -2) --
+      \draw[darkteal, line width=1, dashed] (-3, -2) --
                           (-3, 1) .. controls (-2, 1) and (-1.5, 1.5) .. 
                           (0, 1.5) .. controls (1.5, 1.5) and (2, 0.5) .. 
                           (2, -0.5) .. controls (2, -1.5) and (1, -1.5) .. 
                           (1, -2) -- cycle;
     \end{scope}
     
-    \filldraw[light, dashed, line width=1] (1.2, 0.5) circle (0.48);
-    \node[light] at (0.2, 0.5) { $\mathsf{b}_{\epsilon}(x)$ };
-    \fill[dark] (1.2, 0.5) circle (0.035) node[below, dark] { $x$ };
+    \filldraw[lightteal, dashed, line width=1] (1.2, 0.5) circle (0.48);
+    \node[lightteal] at (0.2, 0.5) { $\mathsf{b}_{\epsilon}(x)$ };
+    \fill[darkteal] (1.2, 0.5) circle (0.035) node[below, darkteal] { $x$ };
     
-    \node[dark] at (0, -2.5) { $\mathsf{x}$ };
+    \node[darkteal] at (0, -2.5) { $\mathsf{x}$ };
   \end{scope}
   
   \begin{scope}[shift={(7, 0)}]
@@ -60,28 +62,28 @@
   
     \begin{scope}
       \clip (-3.5, -3) rectangle (1, 1);
-      \draw[rounded corners=3, dark, dashed, line width=1] (-3, -2) rectangle (3, 2);
+      \draw[rounded corners=3, darkteal, dashed, line width=1] (-3, -2) rectangle (3, 2);
     \end{scope}
     
     \begin{scope}
       \clip[rounded corners=3] (-3, -2) rectangle (3, 2);
-      \fill[dark, line width=1] (-3, -2) --
+      \fill[darkteal, line width=1] (-3, -2) --
                                 (-3, 1) .. controls (-2, 1) and (-1.5, 1.5) .. 
                                 (0, 1.5) .. controls (1.5, 1.5) and (2, 0.5) .. 
                                 (2, -0.5) .. controls (2, -1.5) and (1, -1.5) .. 
                                 (1, -2) -- cycle;
-      \draw[dark, line width=1, dashed] (-3, -2) --
+      \draw[darkteal, line width=1, dashed] (-3, -2) --
                           (-3, 1) .. controls (-2, 1) and (-1.5, 1.5) .. 
                           (0, 1.5) .. controls (1.5, 1.5) and (2, 0.5) .. 
                           (2, -0.5) .. controls (2, -1.5) and (1, -1.5) .. 
                           (1, -2) -- cycle;
     \end{scope}
     
-    \filldraw[light, dashed, line width=1] (0.925, 0.5) circle (0.8 and 0.4);
-    \node[light] at (0.925, -0.25) { $\mathsf{b}'_{\epsilon}(x)$ };
-    \fill[dark] (1.2, 0.5) circle (0.035) node[below, dark] { $x$ };
+    \filldraw[lightteal, dashed, line width=1] (0.925, 0.5) circle (0.8 and 0.4);
+    \node[lightteal] at (0.925, -0.25) { $\mathsf{b}'_{\epsilon}(x)$ };
+    \fill[darkteal] (1.2, 0.5) circle (0.035) node[below, darkteal] { $x$ };
     
-    \node[dark] at (0, -2.5) { $\mathsf{x}$ };
+    \node[darkteal] at (0, -2.5) { $\mathsf{x}$ };
   \end{scope}
     
   \begin{scope}[shift={(14, 0)}]
@@ -89,28 +91,28 @@
   
     \begin{scope}
       \clip (-3.5, -3) rectangle (1, 1);
-      \draw[rounded corners=3, dark, dashed, line width=1] (-3, -2) rectangle (3, 2);
+      \draw[rounded corners=3, darkteal, dashed, line width=1] (-3, -2) rectangle (3, 2);
     \end{scope}
     
     \begin{scope}
       \clip[rounded corners=3] (-3, -2) rectangle (3, 2);
-      \fill[dark, line width=1] (-3, -2) --
+      \fill[darkteal, line width=1] (-3, -2) --
                                 (-3, 1) .. controls (-2, 1) and (-1.5, 1.5) .. 
                                 (0, 1.5) .. controls (1.5, 1.5) and (2, 0.5) .. 
                                 (2, -0.5) .. controls (2, -1.5) and (1, -1.5) .. 
                                 (1, -2) -- cycle;
-      \draw[dark, line width=1, dashed] (-3, -2) --
+      \draw[darkteal, line width=1, dashed] (-3, -2) --
                           (-3, 1) .. controls (-2, 1) and (-1.5, 1.5) .. 
                           (0, 1.5) .. controls (1.5, 1.5) and (2, 0.5) .. 
                           (2, -0.5) .. controls (2, -1.5) and (1, -1.5) .. 
                           (1, -2) -- cycle;
     \end{scope}
     
-    \filldraw[light, dashed, line width=1, rotate=-45] (1.2 - 0.85, 0.5 + 0.775) circle (0.8 and 0.4);
-    \node[light] at (0.3, 0.25) { $\mathsf{b}''_{\epsilon}(x)$ };
-    \fill[dark] (1.2, 0.5) circle (0.035) node[below, dark] { $x$ };
+    \filldraw[lightteal, dashed, line width=1, rotate=-45] (1.2 - 0.85, 0.5 + 0.775) circle (0.8 and 0.4);
+    \node[lightteal] at (0.3, 0.25) { $\mathsf{b}''_{\epsilon}(x)$ };
+    \fill[darkteal] (1.2, 0.5) circle (0.035) node[below, darkteal] { $x$ };
     
-    \node[dark] at (0, -2.5) { $\mathsf{x}$ };
+    \node[darkteal] at (0, -2.5) { $\mathsf{x}$ };
   \end{scope}
   
 \end{tikzpicture}

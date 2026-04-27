@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -59,7 +61,7 @@
 
   \foreach [count=\n] \r in {0.5, 1.25, ..., 3} {
     \pgfmathsetmacro{\prop}{100 * \n / 2.5}
-    \colorlet{custom}{dark!\prop!light}; 
+    \colorlet{custom}{darkteal!\prop!lightteal}; 
     \draw[custom, dashed, line width=1] 
       plot [smooth cycle, tension=0.75] coordinates { \randpoints{0}{0}{\r} } -- cycle;
   }

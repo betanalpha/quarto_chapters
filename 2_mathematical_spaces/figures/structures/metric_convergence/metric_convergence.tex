@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -41,13 +43,13 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n>\m
-        \colorlet{pointcolor}{dark}; 
+        \colorlet{pointcolor}{darkteal}; 
       \else
-        \colorlet{pointcolor}{light};
+        \colorlet{pointcolor}{lightteal};
       \fi
       
       \ifnum \n>1
-        \draw[color=light, -{Stealth[length=3, width=4]}, 
+        \draw[color=lightteal, -{Stealth[length=3, width=4]}, 
               line width=1, shorten >=1.25] (A) -- (\x, \y);
         \fill[color=pointcolor] (A) circle (0.05);
       \fi
@@ -58,7 +60,7 @@
       \coordinate (A) at (\x, \y);
     }
     
-    \fill[dark] (0, 0) circle (0.05) node[right] { $x$ };
+    \fill[darkteal] (0, 0) circle (0.05) node[right] { $x$ };
   \end{scope} 
 
   \begin{scope}[shift={(7, 0)}]
@@ -66,7 +68,7 @@
 
     \draw[gray90, dashed, line width=1] (-2.5, {1.4 * \eps - 2}) -- (2.65, {1.4 * \eps - 2});
     \draw[gray90, dashed, line width=1] ({\m * 5.25 / 26 - 2.5}, -2) -- ({\m * 5.25 / 26 - 2.5}, {1.4 * \eps - 2});
-    \fill[gray95] ({\m * 5.25 / 26 - 2.5}, -2.015) rectangle (2.65, {1.4 * \eps - 2});
+    \fill[gray90] ({\m * 5.25 / 26 - 2.5}, -2.015) rectangle (2.65, {1.4 * \eps - 2});
     \node at (3, {1.4 * \eps - 2}) { $\epsilon_{1}$ };
   
     \draw[->, >=stealth, line width=1.25] (-2.5, -2.015) -- +(0, 4);
@@ -81,9 +83,9 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n<\m
-        \colorlet{pointcolor}{light}; 
+        \colorlet{pointcolor}{lightteal}; 
       \else
-        \colorlet{pointcolor}{dark};
+        \colorlet{pointcolor}{darkteal};
       \fi
       \pgfmathsetmacro{\r}{sqrt(\x * \x + \y * \y)}
       \fill[color=pointcolor] ({\n * 5.25 / 26 - 2.5}, {1.4 * \r - 2}) circle (0.05);
@@ -106,13 +108,13 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n>\m
-        \colorlet{pointcolor}{dark}; 
+        \colorlet{pointcolor}{darkteal}; 
       \else
-        \colorlet{pointcolor}{light};
+        \colorlet{pointcolor}{lightteal};
       \fi
       
       \ifnum \n>1
-        \draw[color=light, -{Stealth[length=3, width=4]}, 
+        \draw[color=lightteal, -{Stealth[length=3, width=4]}, 
               line width=1, shorten >=1.25] (A) -- (\x, \y);
         \fill[color=pointcolor] (A) circle (0.05);
       \fi
@@ -123,15 +125,16 @@
       \coordinate (A) at (\x, \y);
     }
     
-    \fill[dark] (0, 0) circle (0.05) node[right] { $x$ };
+    \fill[darkteal] (0, 0) circle (0.05) node[right] { $x$ };
   \end{scope} 
 
   \begin{scope}[shift={(7, -5.75)}]
     \draw[white] (-3.5, -3) rectangle (3.5, 2.75);
 
+    \draw[gray90, dashed, line width=1] (-2.5, {1.4 * 1.95 - 2}) -- (2.65, {1.4 * 1.95 - 2});
     \draw[gray90, dashed, line width=1] (-2.5, {1.4 * \eps - 2}) -- (2.65, {1.4 * \eps - 2});
     \draw[gray90, dashed, line width=1] ({\m * 5.25 / 26 - 2.5}, -2) -- ({\m * 5.25 / 26 - 2.5}, {1.4 * \eps - 2});
-    \fill[gray95] ({\m * 5.25 / 26 - 2.5}, -2.015) rectangle (2.65, {1.4 * \eps - 2});
+    \fill[gray90] ({\m * 5.25 / 26 - 2.5}, -2.015) rectangle (2.65, {1.4 * \eps - 2});
     \node at (3, {1.4 * \eps - 2}) { $\epsilon_{2}$ };
   
     \draw[->, >=stealth, line width=1.25] (-2.5, -2.015) -- +(0, 4);
@@ -146,9 +149,9 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n<\m
-        \colorlet{pointcolor}{light}; 
+        \colorlet{pointcolor}{lightteal}; 
       \else
-        \colorlet{pointcolor}{dark};
+        \colorlet{pointcolor}{darkteal};
       \fi
       \pgfmathsetmacro{\r}{sqrt(\x * \x + \y * \y)}
       \fill[color=pointcolor] ({\n * 5.25 / 26 - 2.5}, {1.4 * \r - 2}) circle (0.05);
@@ -171,13 +174,13 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n>\m
-        \colorlet{pointcolor}{dark}; 
+        \colorlet{pointcolor}{darkteal}; 
       \else
-        \colorlet{pointcolor}{light};
+        \colorlet{pointcolor}{lightteal};
       \fi
       
       \ifnum \n>1
-        \draw[color=light, -{Stealth[length=3, width=4]}, 
+        \draw[color=lightteal, -{Stealth[length=3, width=4]}, 
               line width=1, shorten >=1.25] (A) -- (\x, \y);
         \fill[color=pointcolor] (A) circle (0.05);
       \fi
@@ -188,12 +191,14 @@
       \coordinate (A) at (\x, \y);
     }
     
-    \fill[dark] (0, 0) circle (0.05) node[right] { $x$ };
+    \fill[darkteal] (0, 0) circle (0.05) node[right] { $x$ };
   \end{scope} 
 
   \begin{scope}[shift={(7, -11.5)}]
     \draw[white] (-3.5, -3) rectangle (3.5, 2.75);
 
+    \draw[gray90, dashed, line width=1] (-2.5, {1.4 * 1.95 - 2}) -- (2.65, {1.4 * 1.95 - 2});
+    \draw[gray90, dashed, line width=1] (-2.5, {1.4 * 1.15 - 2}) -- (2.65, {1.4 * 1.15 - 2});
     \draw[gray90, dashed, line width=1] (-2.5, {1.4 * \eps - 2}) -- (2.65, {1.4 * \eps - 2});
     \draw[gray90, dashed, line width=1] ({\m * 5.25 / 26 - 2.5}, -2) -- ({\m * 5.25 / 26 - 2.5}, {1.4 * \eps - 2});
     \fill[gray95] ({\m * 5.25 / 26 - 2.5}, -2.015) rectangle (2.65, {1.4 * \eps - 2});
@@ -211,9 +216,9 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n<\m
-        \colorlet{pointcolor}{light}; 
+        \colorlet{pointcolor}{lightteal}; 
       \else
-        \colorlet{pointcolor}{dark};
+        \colorlet{pointcolor}{darkteal};
       \fi
       \pgfmathsetmacro{\r}{sqrt(\x * \x + \y * \y)}
       \fill[color=pointcolor] ({\n * 5.25 / 26 - 2.5}, {1.4 * \r - 2}) circle (0.05);

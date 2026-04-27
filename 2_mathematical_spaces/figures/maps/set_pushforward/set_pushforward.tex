@@ -9,6 +9,8 @@
 \definecolor{light}{RGB}{220, 188, 188}
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{highlight}{RGB}{180, 31, 180}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
@@ -38,23 +40,23 @@
     \node at (0, -2.5) { $Y$ };
   \end{scope}
 
-  \fill[light] (-0.05, 1.56) -- (9 + -0.4, 1.1) -- (9 + -0.6, -1.55) -- (0.5, -1.1)  -- cycle;
+  \fill[lightteal] (-0.05, 1.56) -- (9 + -0.4, 1.1) -- (9 + -0.6, -1.55) -- (0.5, -1.1)  -- cycle;
   
   \begin{scope}[shift=({0, 0})]
-    \fill[dark] plot [smooth cycle, tension=0.65] coordinates { 
+    \fill[darkteal] plot [smooth cycle, tension=0.65] coordinates { 
       (-0.85, 0.35) (-0.25, 1.5) (0.5, 1.4) (1.45, 1.35) 
       (1.85, 0.35) (1.25, -0.5) (0.5, -1.1) (-0.25, -0.6) } -- cycle;
     \node[white] at (0.5, 0.25) {$\mathsf{x}$ };
   \end{scope}
 
   \begin{scope}[shift=({9, 0})]
-    \fill[dark] plot [smooth cycle, tension=0.75] coordinates { 
+    \fill[darkteal] plot [smooth cycle, tension=0.75] coordinates { 
       (-1.65, -0.25) (-1.55, 0.75) (-0.4, 1.1) (0.3, 0.5) 
       (0.85, -0.35) (-0.3, -1.5) (-1.6, -1.15) } -- cycle; 
     \node[white] at (-0.5, -0.25) {$\mathsf{y} = f_{*} (\mathsf{x})$};
   \end{scope}
   
-  \node at (4.5, -2.5) { $f : X \rightarrow Y$ };
+  \node[lightteal] at (4.5, -2.5) { $f : X \rightarrow Y$ };
   
 \end{tikzpicture}
 

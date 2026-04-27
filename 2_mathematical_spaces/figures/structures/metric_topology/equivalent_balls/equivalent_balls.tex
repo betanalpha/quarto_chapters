@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -35,11 +37,11 @@
     \foreach \n in {0, 1, ..., 10} {
       \pgfmathsetmacro{\r}{1.75 - \n * 1.4 / 10}
       \pgfmathsetmacro{\prop}{100 * \n / 10}
-      \colorlet{custom}{dark!\prop!light}; 
+      \colorlet{custom}{darkteal!\prop!lightteal}; 
       \filldraw[custom, dashed, line width=1] (0.25, 0) circle (\r); 
     }
   
-    \fill[light] (0.25, 0) circle (0.05) node[below] { $x$ };
+    \fill[white] (0.25, 0) circle (0.05) node[below] { $x$ };
   \end{scope} 
 
   \begin{scope}[shift={(7, 0)}]
@@ -51,11 +53,11 @@
     \foreach \n in {0, 1, ..., 10} {
       \pgfmathsetmacro{\r}{1.75 - \n * 1.4 / 10}
       \pgfmathsetmacro{\prop}{100 * \n / 10}
-      \colorlet{custom}{dark!\prop!light}; 
+      \colorlet{custom}{darkteal!\prop!lightteal}; 
       \filldraw[custom, dashed, line width=1] (0.25, 0) circle ({1.5 * \r} and \r); 
     }
   
-    \fill[light] (0.25, 0) circle (0.05) node[below] { $x$ };
+    \fill[white] (0.25, 0) circle (0.05) node[below] { $x$ };
   \end{scope} 
   
   \begin{scope}[shift={(14, 0)}]
@@ -67,12 +69,12 @@
     \foreach \n in {0, 1, ..., 10} {
       \pgfmathsetmacro{\r}{1.75 - \n * 1.4 / 10}
       \pgfmathsetmacro{\prop}{100 * \n / 10}
-      \colorlet{custom}{dark!\prop!light}; 
+      \colorlet{custom}{darkteal!\prop!lightteal}; 
       \filldraw[custom, dashed, line width=1, rotate=45] 
         (0.25 - 0.075, 0 - 0.175) circle ({1.25 * \r} and {0.75 * \r}); 
     }
   
-    \fill[light] (0.25, 0) circle (0.05) node[below] { $x$ };
+    \fill[white] (0.25, 0) circle (0.05) node[below] { $x$ };
   \end{scope} 
       
 \end{tikzpicture}

@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -24,7 +26,7 @@
 
 \begin{document}
 
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.95]
   
   \pgfmathsetmacro{\m}{7}
   \pgfmathsetmacro{\eps}{1.95}
@@ -35,8 +37,8 @@
     \draw[rounded corners=3, color=black, line width=1] (-3, -2) rectangle (3, 2);
     \node at (0, -2.5) { $X$ };
 
-    \filldraw[dark, dashed, line width=1] (0, 0) circle(\eps);
-    \node[dark] at (1.8, -1.7) { $\mathsf{b}_{\epsilon_{1}}(x)$ };
+    \filldraw[darkteal, dashed, line width=1] (0, 0) circle(\eps);
+    \node[darkteal] at (1.8, -1.7) { $\mathsf{b}_{\epsilon_{1}}(x)$ };
   
     \foreach [count=\n] \x/\y in {-2.177/-1.092, -2.310/-0.325, -2.207/0.368, -1.858/0.955, -1.178/1.463, 
                                   -0.891/1.780, -0.295/1.687, 0.244/1.431, 0.651/1.105, 1.066/1.167, 
@@ -44,13 +46,13 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n>\m
-        \colorlet{pointcolor}{light}; 
+        \colorlet{pointcolor}{lightteal}; 
       \else
-        \colorlet{pointcolor}{mid};
+        \colorlet{pointcolor}{midteal};
       \fi
       
       \ifnum \n>1
-        \draw[color=mid, -{Stealth[length=3, width=4]}, 
+        \draw[color=midteal, -{Stealth[length=3, width=4]}, 
               line width=1, shorten >=1.25] (A) -- (\x, \y);
         \fill[color=pointcolor] (A) circle (0.05);
       \fi
@@ -61,7 +63,7 @@
       \coordinate (A) at (\x, \y);
     }
     
-    \fill[light] (0, 0) circle (0.05) node[right] { $x$ };
+    \fill[white] (0, 0) circle (0.05) node[right] { $x$ };
   \end{scope}
     
   \pgfmathsetmacro{\m}{14}
@@ -72,9 +74,10 @@
   
     \draw[rounded corners=3, color=black, line width=1] (-3, -2) rectangle (3, 2);
     \node at (0, -2.5) { $X$ };
-      
-    \filldraw[dark, dashed, line width=1] (0, 0) circle(\eps);
-    \node[dark] at (1.4, -0.95) { $\mathsf{b}_{\epsilon_{2}}(x)$ };
+    
+    \draw[gray90, dashed, line width=1] (0, 0) circle(1.95);  
+    \filldraw[darkteal, dashed, line width=1] (0, 0) circle(\eps);
+    \node[darkteal] at (1.4, -0.95) { $\mathsf{b}_{\epsilon_{2}}(x)$ };
   
     \foreach [count=\n] \x/\y in {-2.177/-1.092, -2.310/-0.325, -2.207/0.368, -1.858/0.955, -1.178/1.463, 
                                   -0.891/1.780, -0.295/1.687, 0.244/1.431, 0.651/1.105, 1.066/1.167, 
@@ -82,13 +85,13 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n>\m
-        \colorlet{pointcolor}{light}; 
+        \colorlet{pointcolor}{lightteal}; 
       \else
-        \colorlet{pointcolor}{mid};
+        \colorlet{pointcolor}{midteal};
       \fi
       
       \ifnum \n>1
-        \draw[color=mid, -{Stealth[length=3, width=4]}, 
+        \draw[color=midteal, -{Stealth[length=3, width=4]}, 
               line width=1, shorten >=1.25] (A) -- (\x, \y);
         \fill[color=pointcolor] (A) circle (0.05);
       \fi
@@ -99,7 +102,7 @@
       \coordinate (A) at (\x, \y);
     }
     
-    \fill[light] (0, 0) circle (0.05) node[right] { $x$ };
+    \fill[white] (0, 0) circle (0.05) node[right] { $x$ };
   \end{scope}
 
   \pgfmathsetmacro{\m}{22}
@@ -111,8 +114,10 @@
     \draw[rounded corners=3, color=black, line width=1] (-3, -2) rectangle (3, 2);
     \node at (0, -2.5) { $X$ };
       
-    \filldraw[dark, dashed, line width=1] (0, 0) circle(\eps);
-    \node[dark] at (0.5, 0.7) { $\mathsf{b}_{\epsilon_{3}}(x)$ };
+    \draw[gray90, dashed, line width=1] (0, 0) circle(1.95);  
+    \draw[gray90, dashed, line width=1] (0, 0) circle(1.15);  
+    \filldraw[darkteal, dashed, line width=1] (0, 0) circle(\eps);
+    \node[darkteal] at (0.5, 0.7) { $\mathsf{b}_{\epsilon_{3}}(x)$ };
   
     \foreach [count=\n] \x/\y in {-2.177/-1.092, -2.310/-0.325, -2.207/0.368, -1.858/0.955, -1.178/1.463, 
                                   -0.891/1.780, -0.295/1.687, 0.244/1.431, 0.651/1.105, 1.066/1.167, 
@@ -120,13 +125,13 @@
                                   0.394/-0.874, 0.095/-0.908, -0.132/-0.901, -0.266/-0.434, -0.447/-0.503, 
                                   -0.553/-0.235, -0.304/-0.147, -0.488/0.065, -0.402/0.322, -0.201/0.373} {
       \ifnum \n>\m
-        \colorlet{pointcolor}{light}; 
+        \colorlet{pointcolor}{lightteal}; 
       \else
-        \colorlet{pointcolor}{mid};
+        \colorlet{pointcolor}{midteal};
       \fi
       
       \ifnum \n>1
-        \draw[color=mid, -{Stealth[length=3, width=4]}, 
+        \draw[color=midteal, -{Stealth[length=3, width=4]}, 
               line width=1, shorten >=1.25] (A) -- (\x, \y);
         \fill[color=pointcolor] (A) circle (0.05);
       \fi
@@ -137,7 +142,7 @@
       \coordinate (A) at (\x, \y);
     }
     
-    \fill[light] (0, 0) circle (0.05) node[right] { $x$ };
+    \fill[white] (0, 0) circle (0.05) node[right] { $x$ };
   \end{scope}
     
 \end{tikzpicture}

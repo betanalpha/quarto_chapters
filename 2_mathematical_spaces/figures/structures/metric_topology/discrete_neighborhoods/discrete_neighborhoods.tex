@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -38,17 +40,17 @@
     \foreach \n in {2, 3, 4} {
       \pgfmathsetmacro{\r}{2.25 - \n * 1.75 / 10}
       \pgfmathsetmacro{\prop}{100 * \n / 10}
-      \colorlet{custom}{dark!\prop!light}; 
+      \colorlet{custom}{darkteal!\prop!light}; 
       \draw[custom, dashed, line width=1] (-0.5, 0) circle (\r); 
     }
     
     \foreach \x in {-1.5, -0.5, +0.5} {
       \foreach \y in {-1, 0, +1} {
-        \fill[dark] (\x, \y) circle (0.05);
+        \fill[darkteal] (\x, \y) circle (0.05);
       }
     }
   
-    \fill[dark] (-0.5, 0) circle (0.05) node[below] { $x$ };
+    \fill[darkteal] (-0.5, 0) circle (0.05) node[below] { $x$ };
   \end{scope} 
 
   \begin{scope}[shift={(7, 0)}]
@@ -63,16 +65,16 @@
     \foreach \n in {5, 6, 7} {
       \pgfmathsetmacro{\r}{2.25 - \n * 1.75 / 10}
       \pgfmathsetmacro{\prop}{100 * \n / 10}
-      \colorlet{custom}{dark!\prop!light}; 
+      \colorlet{custom}{darkteal!\prop!light}; 
       \draw[custom, dashed, line width=1] (-0.5, 0) circle (\r); 
     }
   
-    \fill[dark] (-0.5, +1) circle (0.05);
-    \fill[dark] (-0.5, -1) circle (0.05);
-    \fill[dark] (-1.5, 0) circle (0.05);
-    \fill[dark] (+0.5, 0) circle (0.05);
+    \fill[darkteal] (-0.5, +1) circle (0.05);
+    \fill[darkteal] (-0.5, -1) circle (0.05);
+    \fill[darkteal] (-1.5, 0) circle (0.05);
+    \fill[darkteal] (+0.5, 0) circle (0.05);
     
-    \fill[dark] (-0.5, 0) circle (0.05) node[below] { $x$ };
+    \fill[darkteal] (-0.5, 0) circle (0.05) node[below] { $x$ };
   \end{scope} 
   
   \begin{scope}[shift={(14, 0)}]
@@ -87,11 +89,11 @@
     \foreach \n in {8, 9, ..., 10} {
       \pgfmathsetmacro{\r}{2.25 - \n * 1.75 / 10}
       \pgfmathsetmacro{\prop}{100 * \n / 10}
-      \colorlet{custom}{dark!\prop!light}; 
+      \colorlet{custom}{darkteal!\prop!light}; 
       \draw[custom, dashed, line width=1] (-0.5, 0) circle (\r); 
     }
   
-    \fill[dark] (-0.5, 0) circle (0.05) node[below] { $x$ };
+    \fill[darkteal] (-0.5, 0) circle (0.05) node[below] { $x$ };
   \end{scope} 
     
 \end{tikzpicture}

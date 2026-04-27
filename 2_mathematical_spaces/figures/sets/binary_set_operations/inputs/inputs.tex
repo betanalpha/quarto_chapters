@@ -10,6 +10,8 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -36,12 +38,12 @@
       (-0.85, 0.35) (-0.25, 1.5) (0.5, 1.4) (1.45, 1.35) 
       (1.85, 0.35) (1.25, -0.5) (0.5, -1.1) (-0.25, -0.6) } -- cycle;
 
-    \fill[dark] plot [smooth cycle, tension=0.75] coordinates { 
+    \fill[midteal] plot [smooth cycle, tension=0.75] coordinates { 
       (-1.65, -0.25) (-1.55, 0.75) (-0.4, 1.1) (0.3, 0.5) 
       (0.85, -0.35) (-0.3, -1.5) (-1.6, -1.15) } -- cycle; 
     \node[white] at (-0.5, -0.25) {$\mathsf{x}_{1} \subset X$};
     
-    \fill[dark] plot [smooth cycle, tension=0.75] coordinates { 
+    \fill[midteal] plot [smooth cycle, tension=0.75] coordinates { 
       (1.25, 0.5) (2.25, 0) (2, -1) (1.75, -0.25)} -- cycle; 
     
   \end{scope}
@@ -56,7 +58,7 @@
       (-1.65, -0.25) (-1.55, 0.75) (-0.4, 1.1) (0.3, 0.5) 
       (0.85, -0.35) (-0.3, -1.5) (-1.6, -1.15) } -- cycle; 
   
-    \fill[dark] plot [smooth cycle, tension=0.65] coordinates { 
+    \fill[midteal] plot [smooth cycle, tension=0.65] coordinates { 
       (-0.85, 0.35) (-0.25, 1.5) (0.5, 1.4) (1.45, 1.35) 
       (1.85, 0.35) (1.25, -0.5) (0.5, -1.1) (-0.25, -0.6) } -- cycle;
     \node[white] at (0.5, 0.25) {$\mathsf{x}_{2} \subset X$};

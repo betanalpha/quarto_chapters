@@ -11,6 +11,8 @@
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{darker}{RGB}{124, 0, 0}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
 \definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
@@ -56,13 +58,13 @@
     \foreach \n in {0, 1, ..., 150} {
     \pgfmathsetmacro{\x}{2 * (\n / 75 - 1)}
     \pgfmathsetmacro{\prop}{100 * \n / 150}
-    \colorlet{custom}{darker!\prop!light};
+    \colorlet{custom}{darkteal!\prop!lightteal};
     \draw[custom, line width=1.75] (\dx * \x, -1) -- (\dx * \x, +1.25);
   }
   \end{scope}
   
   \pgfmathsetseed{12}
-  \draw[darker, line width=1]
+  \draw[darkteal, line width=1]
     plot [smooth cycle, tension=0.75] coordinates { \randpoints{0}{0}{1}{1.5 * \dx}{1 * \dy} } -- cycle;
   
   

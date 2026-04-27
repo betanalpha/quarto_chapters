@@ -11,9 +11,9 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
-\definecolor{light_teal}{RGB}{107, 142, 142}
-\definecolor{mid_teal}{RGB}{72, 117, 117}
-\definecolor{dark_teal}{RGB}{29, 79, 79}
+\definecolor{lightteal}{RGB}{107, 142, 142}
+\definecolor{midteal}{RGB}{72, 117, 117}
+\definecolor{darkteal}{RGB}{29, 79, 79}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -46,7 +46,7 @@
   \draw [<->, >=stealth, line width=1.25] (0, -3) -- +(0, 6);
   \draw [<->, >=stealth, line width=1.25] (-3, 0) -- +(6, 0);
   
-  \draw[domain={-1:1}, smooth, samples=150, line width=1.25, variable=\x, color=dark] 
+  \draw[domain={-1:1}, smooth, samples=150, line width=1.25, variable=\x, color=lightteal] 
     plot ({3 * \x},{\ys * \x * \x * \x});
   
  
