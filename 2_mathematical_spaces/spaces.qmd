@@ -154,15 +154,22 @@ chapter.
 When a set contains only a small number of elements, we can
 readily define each subset by _explicitly_ specifying the
 elements it contains.  For larger sets this quickly becomes
-impractical, if not outright impossible.  In these cases subsets
-are more easily defined _implicitly_ as the elements satisfying a
-certain condition.  These implicit definitions are neatly
-encapsulated in the **set-builder notation**,
+impractical, if not outright impossible.
+
+In these cases subsets are more easily defined _implicitly_ as
+the elements satisfying a certain condition.  These implicit
+definitions are neatly encapsulated in the
+**set-builder notation**,
 $$
 \mathsf{x} = \{ x \in X \mid \text{ condition(x) } \}
 $$
 which we can read as "the elements of $X$ such that the
-element-wise condition is satisfied".
+element-wise condition is satisfied".  When there is no ambiguity
+about the ambient set, the set-builder notation can be simplified
+to
+$$
+\mathsf{x} = \{ \text{ condition(x) } \}
+$$
 
 If, for example, the real-valued function
 $f : X \rightarrow \mathbb{R}$ assigns to each element $x$ a
