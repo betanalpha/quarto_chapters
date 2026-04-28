@@ -11,6 +11,10 @@
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{darker}{RGB}{124, 0, 0}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -76,7 +80,7 @@
     \foreach \n in {0, 1, ..., 32} {
       \pgfmathsetmacro{\eta}{1 * (\n / 16 - 1)}
       \pgfmathsetmacro{\prop}{100 * \n / 32}
-      \colorlet{custom}{darker!\prop!light}; 
+      \colorlet{custom}{darkerteal!\prop!lightteal}; 
       \fill[custom] 
            ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
         -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -128,7 +132,7 @@
     \foreach \n in {0, 1, ..., 32} {
       \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
       \pgfmathsetmacro{\prop}{100 * \n / 32}
-      \colorlet{custom}{darker!\prop!light};
+      \colorlet{custom}{darkerteal!\prop!lightteal};
       \fill[custom] 
            ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
         -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -138,7 +142,7 @@
         -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
         -- cycle; 
       
-      \colorlet{custom}{darker!140!light};
+      \colorlet{custom}{darkerteal!140!lightteal};
       \draw[custom, line width=0.25]
            ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
         -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -180,7 +184,7 @@
     \foreach \n in {0, 1, ..., 18} {
       \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
       \pgfmathsetmacro{\prop}{100 * \n / 32}
-      \colorlet{custom}{darker!\prop!light};
+      \colorlet{custom}{darkerteal!\prop!lightteal};
       \fill[custom, opacity=0.15] 
            ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
         -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -190,7 +194,7 @@
         -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
         -- cycle; 
       
-      \colorlet{custom}{darker!140!light};
+      \colorlet{custom}{darkerteal!140!lightteal};
       \draw[custom, line width=0.25, opacity=0.15]
            ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
         -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -228,7 +232,7 @@
     \pgfmathsetmacro{\n}{19}
     \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
     \pgfmathsetmacro{\prop}{100 * \n / 32}
-    \colorlet{custom}{darker!\prop!light};
+    \colorlet{custom}{darkerteal!\prop!lightteal};
     \fill[custom] 
          ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
       -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -238,7 +242,7 @@
       -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
       -- cycle; 
     
-    \colorlet{custom}{darker!140!light};
+    \colorlet{custom}{darkerteal!140!lightteal};
     \draw[custom, line width=0.25]
          ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
       -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -275,7 +279,7 @@
     \foreach \n in {20, 21, ..., 32} {
       \pgfmathsetmacro{\eta}{2.25 * (\n / 16 - 1)}
       \pgfmathsetmacro{\prop}{100 * \n / 32}
-      \colorlet{custom}{darker!\prop!light};
+      \colorlet{custom}{darkerteal!\prop!lightteal};
       \fill[custom, opacity=0.15] 
            ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
         -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})
@@ -285,7 +289,7 @@
         -- ({x(-\x, \eta - \delta, -\z, \theta, \phi)}, {y(-\x, \eta - \delta, -\z, \theta, \phi)}) 
         -- cycle; 
       
-      \colorlet{custom}{darker!140!light};
+      \colorlet{custom}{darkerteal!140!lightteal};
       \draw[custom, line width=0.25, opacity=0.15]
            ({x(-\x, \eta, -\z, \theta, \phi)}, {y(-\x, \eta, -\z, \theta, \phi)})
         -- ({x(-\x, \eta, +\z, \theta, \phi)}, {y(-\x, \eta, +\z, \theta, \phi)})

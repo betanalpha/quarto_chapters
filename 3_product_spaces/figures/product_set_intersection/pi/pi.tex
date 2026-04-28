@@ -11,9 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
-\definecolor{light_teal}{RGB}{107, 142, 142}
-\definecolor{mid_teal}{RGB}{72, 117, 117}
-\definecolor{dark_teal}{RGB}{29, 79, 79}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -31,73 +32,73 @@
   \begin{scope}[shift={(-2.5, 0)}]
     \draw[white] (-2.25, -2.75) rectangle (2.25, 2.25);
     
-    \fill[light] (-2, -2) rectangle (2, 2);
+    \fill[lightteal] (-2, -2) rectangle (2, 2);
     
-    \fill[mid] (-1, -2) rectangle (0.5, 2);
+    \fill[midteal] (-1, -2) rectangle (0.5, 2);
     
-    \node[dark] at (0, -2.5) { $\mathsf{x}_{1} \times X_{2}$ };
+    \node[darkteal] at (0, -2.5) { $\mathsf{x}_{1} \times X_{2}$ };
   \end{scope}
   
     \begin{scope}[shift={(+2.5, 0)}]
     \draw[white] (-2.25, -2.75) rectangle (2.25, 2.25);
     
-    \fill[light] (-2, -2) rectangle (2, 2);
+    \fill[lightteal] (-2, -2) rectangle (2, 2);
     
-    \fill[mid] (-2, -1.5) rectangle (2, 0);
+    \fill[midteal] (-2, -1.5) rectangle (2, 0);
     
-    \node[dark] at (0, -2.5) { $X_{1} \times \mathsf{x}_{2}$ };
+    \node[darkteal] at (0, -2.5) { $X_{1} \times \mathsf{x}_{2}$ };
   \end{scope}
   
   \begin{scope}[shift={(11 -2.5, 0)}]
     \draw[white] (-2.25, -2.75) rectangle (2.25, 2.25);
     
-    \fill[light] (-2, -2) rectangle (2, 2);
+    \fill[lightteal] (-2, -2) rectangle (2, 2);
     
-    \fill[mid] (0, -2) rectangle (1, 2);
+    \fill[midteal] (0, -2) rectangle (1, 2);
     
-    \node[dark] at (0, -2.5) { $\mathsf{x}_{1}' \times X_{2}$ };
+    \node[darkteal] at (0, -2.5) { $\mathsf{x}_{1}' \times X_{2}$ };
   \end{scope}
   
   \begin{scope}[shift={(11 + 2.5, 0)}]
     \draw[white] (-2.25, -2.75) rectangle (2.25, 2.25);
     
-    \fill[light] (-2, -2) rectangle (2, 2);
+    \fill[lightteal] (-2, -2) rectangle (2, 2);
     
-    \fill[mid] (-2, -0.5) rectangle (2, 1.5);
+    \fill[midteal] (-2, -0.5) rectangle (2, 1.5);
     
-    \node[dark] at (0, -2.5) { $X_{1} \times \mathsf{x}_{2}'$ };
+    \node[darkteal] at (0, -2.5) { $X_{1} \times \mathsf{x}_{2}'$ };
   \end{scope}
 
   \begin{scope}[shift={(0, -6)}]
     \draw[white] (-2.25, -2.75) rectangle (2.25, 2.75);
     
-    \fill[light] (-2, -2) rectangle (2, 2);
+    \fill[lightteal] (-2, -2) rectangle (2, 2);
     
-    \fill[mid] (-1, -1.5) rectangle (0.5, 0);
+    \fill[midteal] (-1, -1.5) rectangle (0.5, 0);
     
-    \node[dark] at (0, -2.5) { $\mathsf{x}_{1} \times \mathsf{x}_{2}$ };
+    \node[darkteal] at (0, -2.5) { $\mathsf{x}_{1} \times \mathsf{x}_{2}$ };
   \end{scope}
   
   \begin{scope}[shift={(11, -6)}]
     \draw[white] (-2.25, -2.75) rectangle (2.25, 2.75);
     
-    \fill[light] (-2, -2) rectangle (2, 2);
+    \fill[lightteal] (-2, -2) rectangle (2, 2);
     
-    \fill[mid] (0, -0.5) rectangle (1, 1.5);
+    \fill[midteal] (0, -0.5) rectangle (1, 1.5);
     
-    \node[dark] at (0, -2.5) { $\mathsf{x}_{1}' \times \mathsf{x}_{2}'$ };
+    \node[darkteal] at (0, -2.5) { $\mathsf{x}_{1}' \times \mathsf{x}_{2}'$ };
   \end{scope}
 
   \begin{scope}[shift={(5.5, -11.5)}]
     \draw[white] (-5, -3) rectangle (5, 2.25);
     
-    \fill[light] (-2, -2) rectangle (2, 2);
+    \fill[lightteal] (-2, -2) rectangle (2, 2);
     
-    \fill[mid] (-1, -1.5) rectangle (0.5, 0);
-    \fill[mid] (0, -0.5) rectangle (1, 1.5);
-    \fill[dark] (0, -0.5) rectangle (0.5, 0);
+    \fill[midteal] (-1, -1.5) rectangle (0.5, 0);
+    \fill[midteal] (0, -0.5) rectangle (1, 1.5);
+    \fill[darkteal] (0, -0.5) rectangle (0.5, 0);
     
-    \node[dark] at (0, -2.5) { $(\mathsf{x}_{1} \times \mathsf{x}_{2}) \cap (\mathsf{x}_{1}' \times \mathsf{x}_{2}')$ };
+    \node[darkteal] at (0, -2.5) { $(\mathsf{x}_{1} \times \mathsf{x}_{2}) \cap (\mathsf{x}_{1}' \times \mathsf{x}_{2}')$ };
   \end{scope}
   
 \end{tikzpicture}

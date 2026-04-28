@@ -11,6 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -34,7 +38,7 @@
     \pgfmathsetmacro{\tilt}{0.4}
     
     \begin{scope}[shift={(-2 - \tilt * 0.75, 0.15 + 0.75)}]
-      \node[light] at (0, 0) { $(\Box)$ };
+      \node[lightteal] at (0, 0) { $(\Box)$ };
       \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
@@ -42,7 +46,7 @@
     \end{scope}
   
     \begin{scope}[shift={(+0 - \tilt * 0.75, -0.15 + 0.75)}]
-      \node[mid] at (0, 0) { $(\clubsuit)$ };
+      \node[midteal] at (0, 0) { $(\clubsuit)$ };
       \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
@@ -50,7 +54,7 @@
     \end{scope}
   
     \begin{scope}[shift={(+2 - \tilt * 0.75, +0.05 + 0.75)}]
-      \node[dark] at (0, 0) { $(\diamondsuit)$ };
+      \node[darkteal] at (0, 0) { $(\diamondsuit)$ };
       \draw[black]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
@@ -104,48 +108,48 @@
     \pgfmathsetmacro{\tilt}{0.4}
     
     \begin{scope}[shift={(-2 - \tilt * 0.75, 0.15 + 0.75)}]
-      \node[light] at (0, 0) { $(\Box, \heartsuit)$ };
-      \draw[light]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+      \node[lightteal] at (0, 0) { $(\Box, \heartsuit)$ };
+      \draw[lightteal]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
                    -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
     \end{scope}
   
     \begin{scope}[shift={(+0 - \tilt * 0.75, -0.15 + 0.75)}]
-      \node[mid] at (0, 0) { $(\clubsuit, \heartsuit)$ };
-      \draw[mid]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+      \node[midteal] at (0, 0) { $(\clubsuit, \heartsuit)$ };
+      \draw[midteal]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
                    -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
     \end{scope}
   
     \begin{scope}[shift={(+2 - \tilt * 0.75, +0.05 + 0.75)}]
-      \node[dark] at (0, 0) { $(\diamondsuit, \heartsuit)$ };
-      \draw[dark]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+      \node[darkteal] at (0, 0) { $(\diamondsuit, \heartsuit)$ };
+      \draw[darkteal]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
                    -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
     \end{scope}
   
     \begin{scope}[shift={(-2 + \tilt * 0.75, 0.15 - 0.75)}]
-      \node[light] at (0, 0) { $(\Box, \spadesuit)$ };
-      \draw[light]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+      \node[lightteal] at (0, 0) { $(\Box, \spadesuit)$ };
+      \draw[lightteal]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
                    -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
     \end{scope}
   
     \begin{scope}[shift={(+0 + \tilt * 0.75, -0.15 - 0.75)}]
-      \node[mid] at (0, 0) { $(\clubsuit, \spadesuit)$ };
-      \draw[mid]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+      \node[midteal] at (0, 0) { $(\clubsuit, \spadesuit)$ };
+      \draw[midteal]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
                    -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
     \end{scope}
   
     \begin{scope}[shift={(+2 + \tilt * 0.75, +0.05 - 0.75)}]
-      \node[dark] at (0, 0) { $(\diamondsuit, \spadesuit)$ };
-      \draw[dark]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
+      \node[darkteal] at (0, 0) { $(\diamondsuit, \spadesuit)$ };
+      \draw[darkteal]    ({-(1 - \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- (+{(1 + \tilt * \dy / \dx) * \dx}, -\dy) 
                    -- ({+(1 - \tilt * \dy / \dx) * \dx}, +\dy) 
                    -- ({-(1 + \tilt * \dy / \dx) * \dx}, +\dy) -- cycle;
@@ -179,13 +183,13 @@
     \end{scope}
     
     \node[black] at (\tilt * 2.25 - 2, -2.25) { $ \{ \Box \} \times X_{2}$ };
-    \node[light] at (-1.53925, -2.2505) { $\Box$ };
+    \node[lightteal] at (-1.53925, -2.2505) { $\Box$ };
     
     \node[black] at (\tilt * 2.25 + 0, -2.25) { $ \{ \clubsuit \} \times X_{2}$ };
-    \node[mid] at (0.46075, -2.2386) { $\clubsuit$ };
+    \node[midteal] at (0.46075, -2.2386) { $\clubsuit$ };
     
     \node[black] at (\tilt * 2.25 + 2, -2.25) { $ \{ \diamondsuit \} \times X_{2}$ };
-    \node[dark] at (+2.4605, -2.2385) { $\diamondsuit$ };
+    \node[darkteal] at (+2.4605, -2.2385) { $\diamondsuit$ };
   \end{scope}
   
   \begin{scope}[shift={(20.5, 0)}]
