@@ -671,9 +671,10 @@ We refer to this topology as a **product topology**.
 
 The most common product spaces we will encounter in practice are
 built up from the prototypical spaces that we reviewed in
-[Chapter 2, Section 2](@sec:proto-spaces), combining various
-integers and real lines together into larger spaces.  That said,
-there are a few product spaces worth particular note.
+[Chapter 2, Section 2](https://betanalpha.github.io/assets/chapters_html/spaces.html#sec:proto-spaces),
+combining various integers and real lines together into larger
+spaces.  That said, there are a few product spaces worth
+particular note.
 
 ## Replicated Product Spaces
 

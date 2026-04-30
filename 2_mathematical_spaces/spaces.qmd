@@ -1049,7 +1049,7 @@ element can be contained in a neighborhood by itself, allowing us
 to zoom into each element individually and isolate it from every
 other element in $X$ (@fig-general-discrete-neighborhoods).  This
 generalizes the behavior of discrete metric spaces that we
-encountered in [Section 1.2.4.1](@sec:open-balls).
+encountered in [Section 1.2.4.1](#sec:open-balls).
 
 ![The discrete topology contains all of the atomic sets, each of
 which defines a neighborhood that completely isolates an element
@@ -1074,7 +1074,7 @@ figures/structures/general_topology/separation/separation){
 width=50% #fig-general-separation}
 
 The continuous metric spaces discussed in
-[Section 1.2.4.1](@sec:open-balls) are generalized by topologies
+[Section 1.2.4.1](#sec:open-balls) are generalized by topologies
 that fall in between the extreme trivial and discrete topologies.
 They contain enough subsets to be Hausdorff, but not so many to
 be discrete.  This allows us to zoom in arbitrary close to each
@@ -1179,7 +1179,7 @@ elements by neighborhoods and uniqueness of convergent sequence
 limits.
 
 Some metric spaces have even more topological similarities.  In
-[Section 1.2.4.2](@sec:open-sets) we saw that different metrics
+[Section 1.2.4.2](#sec:open-sets) we saw that different metrics
 on the same set can define the same open sets, and hence the same
 metric topology.  Different metric spaces that induce the same
 metric topology are particularly alike, sharing every property
@@ -1188,7 +1188,7 @@ metric spaces with the same topology convergent sequences will
 not only enjoy unique limits, they will share the _same_ limits.
 
 Similarly, all sets equipped with the topology of a line that we
-explored in [Section 1.2.4.3](@sec:general-topology) will share
+explored in [Section 1.2.4.3](#sec:general-topology) will share
 the same basic linear "shape" regardless of any compatible metric
 structure we introduce.  At the same time, sets equipped with the
 topology of a circle will exhibit the same circular "shape".
@@ -1241,7 +1241,7 @@ topology.  Only when an ordering is compatible with a topology
 will these open and closed intervals also be topologically open
 and closed.
 
-As we saw in [Section 1.2.4.1](@sec:open-balls), a metric
+As we saw in [Section 1.2.4.1](#sec:open-balls), a metric
 distinguishes subsets of elements surrounding a given element.
 This includes both open balls,
 $$
@@ -1925,7 +1925,7 @@ functions that map an input set into an output set often induce
 mappings from objects defined over that input set to objects
 defined over that output set or vice versa.  This includes not
 only subsets but also all of the structures that elevate a set
-into a space that we introduced in [Section 1.2](@sec:structures).
+into a space that we introduced in [Section 1.2](#sec:structures).
 
 To be a bit more formal, let $X$ be the set defining an input
 space and $\mathfrak{x}$ the particular structure, or structures,
@@ -2379,7 +2379,7 @@ other, preserving notions of continuity of the space.
 Consequently, homeomorphisms are also known as invertible
 **continuous** functions.
 
-In [Section 1.2.4.3](@sec:general-topology), we saw that lines
+In [Section 1.2.4.3](#sec:general-topology), we saw that lines
 and circles can be constructed from a common set equipped with
 different topologies.  We can construct bijections between the
 underlying set elements, but any homeomorphism will preserve the
