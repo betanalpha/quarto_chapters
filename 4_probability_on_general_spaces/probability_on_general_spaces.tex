@@ -77,35 +77,41 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
 \setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
   % turn on hanging indent if param 1 is 1
   \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
   \fi
   % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
 \usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \KOMAoption{captions}{tableheading}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -142,23 +148,16 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
-\makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -177,7 +176,6 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -185,20 +183,20 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
-Previously in
+In
 \href{https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html}{Chapter
-One} we introduced measure and probability theory over sets with only a
+One} we discussed measure and probability theory over sets with only a
 finite number of elements. We saw in
 \href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
-Two}, however, that many of the most mathematical spaces we encounter in
+Two}, however, that many of the mathematical spaces we encounter in
 practical applications, like the integers and the real line, feature not
-a finite number of elements but rather countably infinite and even
-uncountably infinite numbers of elements. Unfortunately extending
-measure and probability theory to more general spaces like these is not
-always straightforward.
+a finite number of elements but rather countably infinite, and even
+uncountably infinite, numbers of elements. Unfortunately, extending
+measure and probability theory to more general spaces like these is
+surprisingly subtle.
 
-In this chapter we will investigate the difficulties in defining measure
-and probability theory on general mathematical spaces, with a focus on
+Here we will investigate the difficulties in defining measure and
+probability theory on general mathematical spaces, with a focus on
 concepts instead of technical details. We will first discuss why
 measures allocated to individual elements does not, in general, provide
 enough information to define a consistent allocation for all subsets.
@@ -206,16 +204,15 @@ Then we will consider how certain pathological subsets on some spaces
 can obstruct consistent allocations over the full power set, and how we
 can systematically remove these obstructions in practice. Finally we
 will present the most general form of measure and probability theory
-that can be applied to any mathematical space and then discuss some
-common applications.
+that can be applied to any mathematical space and discuss some common
+applications.
 
-\hypertarget{allocation-over-elements}{%
-\section{Allocation Over Elements}\label{allocation-over-elements}}
+\section{Allocation Over Elements}\label{allocation-over-elements}
 
 Recall that in
 \href{https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html}{Chapter
 One} we first defined measures and probability distributions as
-allocations over the individual elements in a finite set. More formally
+allocations to the individual elements in a finite set. More formally,
 we were able to define a measure as a function that mapped each element
 to its allocation of the total measure, \begin{alignat*}{6}
 \mu :\; & X & &\rightarrow& \; & [0, \infty] &
@@ -223,8 +220,8 @@ to its allocation of the total measure, \begin{alignat*}{6}
 & x & &\mapsto& & \mu(x) &.
 \end{alignat*}
 
-This element-wise allocation then allowed us to define the measure
-allocated to subsets. In particular the measure allocated to a subset
+This element-wise allocations then allowed us to define the measure
+allocated to subsets. Specifically, the measure allocated to a subset
 \(\mathsf{x} \subset X\) was unambiguously determined by summing up the
 measures allocated to the included elements, \[
 \mu(\mathsf{x}) = \sum_{x \in \mathsf{x}} \mu(x).
@@ -232,9 +229,9 @@ measures allocated to the included elements, \[
 allocation in the sense that the total measure is always preserved no
 matter how we might decompose the ambient set into subsets.
 
-Conveniently this construction does extend to spaces with countably
+Conveniently, this construction does extend to spaces with countably
 infinite numbers of elements, such as the integers. In these spaces
-every subset contains at most a countably infinite number of elements
+every subset contains at most a countably infinite number of elements,
 and sums of measures will always converge to well-defined values.
 Element-wise measure allocations on finite and countably infinite spaces
 are also known as \textbf{mass functions}, with element-wise probability
@@ -248,7 +245,9 @@ allocations with a sequence of vertical bars stacked next to each other
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/mass_function/mass_function.pdf}
+\centering{
+
+\includegraphics[width=0.8\textwidth,height=\textheight]{figures/mass_function/mass_function.pdf}
 
 }
 
@@ -256,33 +255,31 @@ allocations with a sequence of vertical bars stacked next to each other
 visualize mass functions with a sequence of vertical bars representing
 the amount of measure allocated to each individual element.}
 
-\end{figure}
+\end{figure}%
 
-Unfortunately the element-wise construction does not extend any further.
-Once we consider spaces with uncountably infinite numbers of elements,
-such as the real numbers, we have to confront subsets with uncountably
-infinite numbers of elements where sums start to misbehave.
+Unfortunately, the element-wise construction does not extend any
+further. Once we consider spaces with uncountably infinite numbers of
+elements, such as the real numbers, we have to confront subsets with
+uncountably infinite numbers of elements where sums start to misbehave.
 
-Consider for example a subset \(\mathsf{x}\) where each of the included
-elements has been allocated exactly zero measure. If \(\mathsf{x}\)
-contains only a finite or countably infinite number of elements then the
-sum of these zero measures \emph{always} yields zero.
+Consider, for example, a subset \(\mathsf{x}\) where each of the
+included elements has been allocated exactly zero measure. If
+\(\mathsf{x}\) contains only a finite or countably infinite number of
+elements, then the sum of these zero measures \emph{always} yields zero.
 
 When \(\mathsf{x}\) contains an uncountably infinite number of elements,
 however, the sum of the individual element measures is not necessarily
-zero. In fact it can give \emph{any} value between zero and infinity;
-uncountably infinite spaces have so many elements that we can very much
+zero. In fact, it can give \emph{any} value between zero and infinity.
+Uncountably infinite spaces have so many elements that we can very much
 get something from nothing!
 
-Ultimately this means that on general spaces the allocation of measure
-to individual elements \emph{does not provide enough information} to
-uniquely determine what measure should be allocated to every combination
-of those elements. In order to completely define a measure we need to
-specify what those subset allocations are ourselves.
+Ultimately, the allocation of measure to individual elements \emph{does
+not generally provide enough information} to uniquely determine what
+measure should be allocated to every combination of those elements. In
+order to completely define a measure, we need to specify what those
+subset allocations are ourselves.
 
-\hypertarget{allocation-over-all-subsets}{%
-\section{Allocation Over All
-Subsets}\label{allocation-over-all-subsets}}
+\section{Allocation Over All Subsets}\label{allocation-over-all-subsets}
 
 In
 \href{https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html}{Chapter
@@ -291,52 +288,53 @@ each subset in the power set, \begin{alignat*}{6}
 \mu :\; & 2^{X} & &\rightarrow& \; & [0, \infty] &
 \\
 & \mathsf{x} & &\mapsto& & \mu(\mathsf{x}) &.
-\end{alignat*} Importantly these subsets allocations needed to be
-consistent with each other to match the behavior of those derived from
-individual element allocations. For any finite collection of
-\emph{disjoint} subsets we should have \[
+\end{alignat*} Importantly, these subsets allocations needed to be
+consistent with each other to match the behavior derived from summing
+over individual element allocations. In particular, for any finite
+collection of \emph{disjoint} subsets we should have \[
 \mu( \cup_{i = 1}^{I} \mathsf{x} )
 =
 \sum_{i = 1}^{I} \mu( \mathsf{x}_{i}).
 \]
 
-For finite spaces this construction is excessive; the subset allocations
-contain an abundance of redundant information. Because we also can
+This construction is excessive for finite spaces; the subset allocations
+contain an abundance of redundant information. Because we can also
 derive subset allocations from element-wise allocations on countably
 infinite spaces, this construction is unnecessary there as well.
 
-On the other hand at least some subset allocation is strictly necessary
-for fully defining measures on uncountably infinite spaces, and hence
-mathematical spaces in general. The only question is whether or not
-\emph{consistent} subset allocations are even possible on these more
-sophisticated spaces.
+On the other hand, the specification of at least some subset allocations
+is strictly necessary for fully defining measures on uncountably
+infinite spaces, and hence mathematical spaces in general. The only
+question is whether or not \emph{consistent} subset allocations are even
+possible on these more sophisticated spaces.
 
-\hypertarget{consistent-allocations}{%
-\subsection{Consistent Allocations}\label{consistent-allocations}}
+\subsection{Consistent Allocations}\label{consistent-allocations}
 
-Before answering this question let's take a second to define exactly
-what kind of consistency we need. Because finite spaces feature only a
-finite number of subsets we only ever have to consider the consistency
-of a finite collection of subsets at a time. More formally if \[
-\{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots, \mathsf{x}_{I} \}
+Before answering this question, let's take a second to define exactly
+what kind of consistency we need.
+
+Because finite spaces feature only a finite number of subsets, we only
+ever have to consider the consistency of a finite collection of subsets
+at a time. More formally, if \[
+\{
+  \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots, \mathsf{x}_{I}
+\}
 \] is any finite collection of disjoint subsets, \[
 \mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset,
 \] then a consistent measure should give \[
 \mu( \cup_{i = 1}^{I} \mathsf{x} )
 =
 \sum_{i = 1}^{I} \mu( \mathsf{x}_{i}).
-\] Regardless of how many elements the ambient space contains,
-consistency of a measure over any finite collection of subsets is known
-as \textbf{finite additivity}.
+\] This property is known as \textbf{finite additivity}.
 
 More general spaces can feature infinitely many subsets, and hence
-different possible notions of additive consistency. For example on a
+different possible notions of additive consistency. For example, on a
 countably infinite space the subset allocations derived from a mass
 function are consistent across countably infinite collections of
 subsets. If \[
 \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots \}
 \] is any countably infinite collection of disjoint subsets with with \[
-\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset
+\mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset,
 \] then \[
 \mu( \cup_{i} \mathsf{x} )
 =
@@ -344,176 +342,173 @@ subsets. If \[
 \] This is known as \textbf{countable additivity}.
 
 The question is then whether measures with finite additivity are
-sufficiently useful for practical application or if we need to consider
-countably additive measures, let alone measures that might be additive
-over even larger collections of subsets.
+sufficiently useful for practical application, if we need to consider
+countably additive measures, or even more general notions of additivity.
 
-For example a common problem that arises is practice is reconstructing
+For example, a common problem that arises in practice is reconstructing
 the measure allocated to a general subset from the measures allocated to
 particularly nice subsets that are easier with which to work. If we
 could always decompose a generic subset into the disjoint union of a
-finite number of nice subsets then finite additivity would be sufficient
-for this task. On the other hand if we could decompose a generic subset
-into the disjoint union of only a countably infinite number of nice
-subsets then countable additivity would be sufficient. Potentially some
-subsets might be decomposable only into an uncountably infinite number
-of subsets in which case we would need even stronger notions of
-additivity!
+finite number of nice subsets, then finite additivity would be
+sufficient for this task. On the other hand, if we could always
+decompose a generic subset into the disjoint union of a countably
+infinite number of nice subsets, then countable additivity would be
+sufficient. At the extreme, if some subsets could be decomposed into
+only an uncountably infinite number of subsets then we would need even
+stronger notions of additivity!
 
-Fortunately for us we don't have to go to that last extreme. In turns
-out that on most spaces that we'll encounter in practice, and typical
-notions of ``nice'' subsets, countable additivity is sufficient for
+Fortunately, we don't have to go to that last extreme. It turns out that
+on the spaces that we'll encounter in practice, and a reasonable notion
+of ``nice'' subset, countable additivity is sufficient for
 reconstructing the measure allocated to more general subsets.
 
-To demonstrate let's consider the two-dimensional real plane
+To demonstrate, let's consider the two-dimensional real plane
 \(\mathbb{R}^{2}\) and a measure that is partially defined through it's
 allocations to \textbf{rectangular} subsets
-(Figure~\ref{fig-disk-decomposition}). In general a non-rectangular
+(Figure~\ref{fig-disk-decomposition}). In general, a non-rectangular
 subset, in this case a disk, can be crudely approximated by a single
 rectangular subset. The disk can be approximated more precisely as the
-disjoint union of many different rectangular subsets, but that will
-never exact reconstruct the disk. Only when we incorporate a countably
-infinite number of rectangular subsets can be reconstruct the disk
-without any error.
+disjoint union of finitely many rectangular subsets, but there will
+always be some residual error. Only when we incorporate a countably
+infinite number of rectangular subsets can we reconstruct the disk
+exactly.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/disk_decomposition/disk_decomposition.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/disk_decomposition/disk_decomposition.pdf}
 
 }
 
 \caption{\label{fig-disk-decomposition}On a two-dimensional real plane
-\(\mathbb{R}^{2}\) a non-rectangular disc can be approximated, but not
+\(\mathbb{R}^{2}\), a non-rectangular disc can be approximated, but not
 exactly reconstructed, by the finite union of different rectangular
-subsets. In order to exactly reconstruct a non-rectangular subset we
+subsets. In order to exactly reconstruct a non-rectangular subset, we
 need to include a countably infinite number of rectangular subsets. If
 measures are countably additive then we can use this decomposition to
 reconstruct the measure allocated to the disk by adding up the measures
 allocated to the infinitely many rectangular subsets in the
 reconstruction.}
 
-\end{figure}
+\end{figure}%
 
-Ultimately countable additive measures give us the mathematical
-flexibility we need for many practical applications.
+Ultimately, countable additive measures give us the mathematical
+flexibility we need for practical calculation.
 
-\hypertarget{sub-additivity-and-super-additivity}{%
 \subsection{Sub-Additivity and
-Super-Additivity}\label{sub-additivity-and-super-additivity}}
+Super-Additivity}\label{sub-additivity-and-super-additivity}
 
-Ideally we would be able to define measures that are additive over any
+Ideally, we would be able to define measures that are additive over any
 countably infinite collection of disjoint subsets on any space.
-Unfortunately mathematics is not always kind, and many seemingly
-well-behaved space feature pathological subsets that obstruct countable
+Unfortunately, mathematics is not always kind; many seemingly
+well-behaved spaces feature pathological subsets that obstruct countable
 additivity.
 
-Specifically many uncountably infinite spaces feature disjoint subsets
+Specifically, many uncountably infinite spaces feature disjoint subsets
 that will always behave \textbf{sub-additivity}, \begin{align*}
-\mathsf{x}_{1} \cup \mathsf{x}_{2} &= \emptyset
+\mathsf{x}_{1} \cap \mathsf{x}_{2} &= \emptyset
 \\
 \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
 &<
 \mu( \mathsf{x}_{1}) + \mu( \mathsf{x}_{2} )
-\end{align*} no matter how we try to define the allocation! In other
-words the power set will always be infiltrated by certain subsets that
-are always less than the sum of their parts and obstruct a consistent
-definition of measure.
+\end{align*} no matter how we try to define the allocations! In other
+words, the power set will always be contaminated by certain subsets that
+are always less than the sum of their parts. This contamination obstruct
+a fully consistent definition of measure.
 
-At the same time we can generally show that there exist disjoint subsets
-that are \textbf{super-additive}, \begin{align*}
-\mathsf{x}_{1} \cup \mathsf{x}_{2} &= \emptyset
+At the same time, we can generally prove the existence of disjoint
+subsets that are \textbf{super-additive}, \begin{align*}
+\mathsf{x}_{1} \cap \mathsf{x}_{2} &= \emptyset
 \\
 \mu( \mathsf{x}_{1} \cup \mathsf{x}_{2} )
 &>
 \mu( \mathsf{x}_{1}) + \mu( \mathsf{x}_{2} ).
-\end{align*} In other words if the measure allocated to these subsets
-and the measure allocated to their union then we will always appear to
-end up with measure than what had been initially allocated.
+\end{align*} If we compare the measure allocated to these subsets to the
+measure allocated to their union, then we will always appear to end up
+with more measure than what had been initially allocated.
 
 What makes these pathological subsets even more awkward is that we can't
 actually construct them from explicit conditions. Given typical
-assumptions about infinity all we can do is prove that these subsets
+assumptions about infinity, all we can do is prove that these subsets
 exist. These phantom subsets are known as \textbf{non-constructive}
 objects.
 
-That said because the misbehaving subsets are non-constructive we don't
-really need to consider them in any practical application of measure
-theory. If we could consistently filter them out of the full power set
-then we would be able to define consistent measures over the remaining
-subsets, and that would be sufficient for any practical application.
+That said, because the misbehaving subsets are non-constructive, we
+don't really need to consider them in any practical application of
+measure theory. If we could consistently filter them out of the full
+power set, then we would be able to define consistent measures over the
+remaining subsets, and that would be completely sufficient for any
+practical application.
 
-\hypertarget{sigma-algebras}{%
-\section{\texorpdfstring{{\(\sigma\)}-Algebras}{\textbackslash sigma-Algebras}}\label{sigma-algebras}}
+\section{\texorpdfstring{{\(\sigma\)}-Algebras}{\textbackslash sigma-Algebras}}\label{sigma-algebras}
 
 Because the term ``\(\sigma\)-algebra'' is often thrown around in
-measure and probability theory without much explanation it is often seen
-as an impenetrable concept that defies explanation. In reality, however,
-\(\sigma\)-algebra are simply a way to consistently filter out subsets
-from the power set.
+measure and probability theory without much explanation, it is often
+seen as an impenetrable concept that defies explanation. In reality,
+however, \(\sigma\)-algebras are simply a way to consistently filter out
+undesired subsets from the power set.
 
-\hypertarget{filtering-subsets}{%
-\subsection{Filtering Subsets}\label{filtering-subsets}}
+\subsection{Filtering Subsets}\label{filtering-subsets}
 
 We can always filter the power set by removing certain subsets. The
 difficultly is ensuring that no application of the three set operations
-would ever lead us back to the excised subsets and reveal a ``hole'' in
-the remaining collection of subsets. In other words we need our filtered
-collection of subsets to be \emph{closed} under the three set operations
-so that there is no risk of accidentally recreating a subset outside of
-the collection.
+would ever lead us back to any of the excised subsets. More formally, we
+need our filtered collection of subsets to be \emph{closed} under the
+three set operations so that there is no risk of accidentally recreating
+a subset outside of the collection.
 
-In particular if the subset \(\mathsf{x} \subset X\) is in our filtered
+For instance, if the subset \(\mathsf{x} \subset X\) is in our filtered
 collection then so too should be the complement \(\mathsf{x}^{c}\). If
-this is true then anytime we apply the complement operator to a subset
-in our collection we are guaranteed to always see another subset in our
-collection.
+this is true, then anytime we apply the complement operator to a subset
+in our collection we are guaranteed to always end up with another subset
+in our collection.
 
-Similarly for every pair of subsets \(\mathsf{x}_{1} \subset X\) and
+Similarly, for every pair of subsets \(\mathsf{x}_{1} \subset X\) and
 \(\mathsf{x}_{2} \subset X\) in a filtered collection the union
 \(\mathsf{x}_{1} \cup \mathsf{x}_{2}\) and intersection
 \(\mathsf{x}_{1} \cap \mathsf{x}_{2}\) should also be in the collection.
 In order to ensure closure under repeated applications of the union and
-intersection operators we need the union and intersection of any
-countably infinite sequences of subsets to also be in the filtered
+intersection operators, we also need the union and intersection of any
+countably infinite sequence of subsets to also be in the filtered
 collection.
 
 A \textbf{\(\sigma\)-algebra} is any collection of subsets that is
 closed under complements, countable unions, and countable intersections.
-In other words a \(\sigma\)-algebra is just any consistent filtering of
+In other words, a \(\sigma\)-algebra is just any consistent filtering of
 the power set. I will use a calligraphic font to refer to
-\(\sigma\)-algebras so that if \(X\) is a space then
+\(\sigma\)-algebras, so that if \(X\) is a space then
 \(\mathcal{X} \subset 2^{X}\) will denote a \(\sigma\)-algebra defined
 on that space.
 
 A set equipped with a \(\sigma\)-algebra, \((X, \mathcal{X})\) is known
 as a \textbf{measurable space}. I will refer to \(X\) as the
 \textbf{ambient set}, or the \textbf{ambient space} if it is also
-equipped with additional structure. Similarly the elements of a
-\(\sigma\)-algebra are known as \textbf{measurable subsets} while any
-subsets in the power set but not in the \(\sigma\)-algebra are referred
-to as \textbf{non-measurable} subsets.
+equipped with additional structure. Similarly, the elements of a
+distinguished \(\sigma\)-algebra are known as \textbf{measurable
+subsets}, while any subsets in the power set but not in
+\(\sigma\)-algebra are referred to as \textbf{non-measurable} subsets.
 
-When non-measurable subsets are misbehaving subsets they reveals the
-subtle, and often counterintuitive, pathologies inherent to that space.
-By working with \(\sigma\)-algebras directly we can avoid these awkward
-pathologies entirely.
+Non-measurable subsets typically probe the subtle, and often
+counterintuitive, pathologies inherent to a given space. By working with
+\(\sigma\)-algebras directly, we can avoid these awkward pathologies
+entirely.
 
-\hypertarget{generating-sigma-algebras}{%
 \subsection{\texorpdfstring{Generating
-{\(\sigma\)}-Algebras}{Generating \textbackslash sigma-Algebras}}\label{generating-sigma-algebras}}
+{\(\sigma\)}-Algebras}{Generating \textbackslash sigma-Algebras}}\label{generating-sigma-algebras}
 
 Now that we've defined how a consistent sub-collection of subsets
-behaves we need to consider how to construct these \(\sigma\)-algebras
+behaves, we need to consider how to construct these \(\sigma\)-algebras
 in practice. One particularly useful way to build up \(\sigma\)-algebras
 is to \emph{generate} them by repeatedly applying the three set
 operations to an initial collection of subsets.
 
-For example consider an initial collection of two subsets \[
+For example, consider an initial collection of two subsets \[
 \{ \mathsf{x}_1, \mathsf{x}_2 \}.
 \] Applying the complement operator gives us two subsets that fall
 outside of the initial collection, \[
 \{ \mathsf{x}_1^c, \mathsf{x}_2^c \},
-\] Similarly applying the union operator gives \[
+\] Similarly, applying the union operator gives, \[
 \{ \mathsf{x}_1 \cup \mathsf{x}_2 \}
 \] while applying the intersection operator gives \[
 \{ \mathsf{x}_1 \cap \mathsf{x}_2 \}.
@@ -523,87 +518,85 @@ initial collection, \[
    \mathsf{x}_1 \cup \mathsf{x}_2, \mathsf{x}_1 \cap \mathsf{x}_2 \}.
 \] At this point we iterate, applying the complement operator to every
 subset and the union and intersection operators to every finite and
-countably infinite sub-collection of subsets to generate an even larger
-collection of subsets. When the set operations no longer return new
-subsets the final collection of subsets defines a \(\sigma\)-algebra.
+countably infinite sub-collection of subsets. This generates increasing
+larger collections of subsets. When the set operations no longer return
+new subsets, the final collection of subsets defines a
+\(\sigma\)-algebra.
 
 A convenient feature of this procedure is that if we start with a
 collection of constructive subsets then we will \emph{always} end up
-with a \(\sigma\)-algebra that is free of any non-constructive subsets
+with a \(\sigma\)-algebra that is free of any non-constructive subsets,
 and their pathological behaviors. To ensure that we don't filter out any
-well-behaved subsets in the process we just have to make sure that our
+well-behaved subsets in the process, we just have to make sure that our
 initial collection is sufficiently large.
 
-Conveniently when working on a topological space we already have a
+Conveniently, when working on a topological space we already have a
 natural collection of subsets that we can use to generate a
 \(\sigma\)-algebra -- the defining topology itself! The
 \(\sigma\)-algebra generated by repeatedly applying all three set
 operations to the subsets in a topology is known as a \textbf{Borel}
-\(\sigma\)-algebra. In other words a Borel \(\sigma\)-algebra is the
+\(\sigma\)-algebra. In other words, a Borel \(\sigma\)-algebra is the
 unique \(\sigma\)-algebra comprised of all of the open and closed
-subsets. If \(X\) is a topological space then I will denote the
+subsets. If \(X\) is a topological space, then I will denote the
 corresponding Borel \(\sigma\)-algebra by \(\mathcal{B}_{X}\).
 
 Every space that we will consider in this book will be a topological
-space. Consequently we can always use the corresponding Borel
+space. Consequently, we can always use the corresponding Borel
 \(\sigma\)-algebra to remove any undesired subsets that might obstruct
 the definition of a consistent measures and probability distributions.
-Indeed Borel \(\sigma\)-algebras are so common that they are often take
-for granted, with any reference to a ``measurable space'' implicitly
-assuming a topological space and its corresponding Borel
+Indeed, Borel \(\sigma\)-algebras are so common that they are often
+taken for granted, with any reference to a ``measurable space''
+implicitly assuming a topological space and its corresponding Borel
 \(\sigma\)-algebras to filter out any inconsistent behavior.
 
-For example finite and countably infinite spaces are almost always
+For example, finite and countably infinite spaces are almost always
 equipped with discrete topologies. Because discrete topologies contain
-all of the atomic sets the \(\sigma\)-algebras derived from them will
+all of the atomic sets, the \(\sigma\)-algebras derived from them will
 always be the full power set. In these cases there are no pathological
 behaviors that we have to avoid at all! I will refer to any measurable
-space \((X, 2^{X})\) compatible with a discrete topology as
-\textbf{discrete measurable spaces}.
+space \((X, 2^{X})\) compatible with a discrete topology as a
+\textbf{discrete measurable space}.
 
-On the the other hand the Borel \(\sigma\)-algebra derived from the
+On the other hand, the Borel \(\sigma\)-algebra derived from the
 topology that defines the real line filters out all of the
 non-constructive subsets and their undesired behaviors while keeping all
 of the interval subsets and the subsets that we can derive from them.
 This results in a \(\sigma\)-algebra that is strictly smaller than the
 full power set of the real line.
 
-\hypertarget{measurability-is-not-recursive}{%
 \subsection{Measurability Is Not
-Recursive}\label{measurability-is-not-recursive}}
+Recursive}\label{measurability-is-not-recursive}
 
 A potentially counterintuitive feature of general \(\sigma\)-algebras is
 that the subsets of a measurable subset need not themselves be
-measurable. For example the intervals that are measurable with respect
+measurable. For example, the intervals that are measurable with respect
 to the Borel \(\sigma\)-algebra over a real line contain many non-Borel
 measurable subsets.
 
 This behavior doesn't really have any practical consequence, but it can
-frustrate many formal proofs and derivations. Consequently when engaging
-in more technical calculations it can be helpful to expand a given
-\(\sigma\)-algebra so that the subsets of certain measurable subsets are
-always guaranteed to be measurable as well; see for example the
-discussions at the end of \href{@sec:null}{Section 4.3} and
-\href{@sec:lebesgue}{Section 5.2}.
+frustrate many formal proofs and derivations. Consequently, when
+engaging in more technical calculations it can be helpful to expand a
+given \(\sigma\)-algebra so that the subsets of certain measurable
+subsets are always guaranteed to be measurable as well; see for example
+the discussions at the end of \hyperref[sec:null]{Section 4.3} and
+\hyperref[sec:lebesgue]{Section 5.2}.
 
-If we add subsets to a \(\sigma\)-algebra then we also have to add the
+If we add subsets to a \(\sigma\)-algebra, then we also have to add the
 subsets that are generated from complements, unions, and intersections.
-Fortunately there is a systematic construction for this process that
-ensures a valid \(\sigma\)-algebra. This means that in more applied
-practice we can always safely assume a Borel \(\sigma\)-algebra or any
-extension of that \(\sigma\)-algebra that might be needed to resolve any
-technical issues.
+Fortunately, there is a systematic construction for this process that
+ensures a valid \(\sigma\)-algebra. All of this is to say that, in more
+applied practice, we can always safely assume a Borel \(\sigma\)-algebra
+or any extension of that \(\sigma\)-algebra that might be needed to
+resolve any technical issues.
 
-\hypertarget{measures-and-probability-distributions}{%
 \section{Measures and Probability
-Distributions}\label{measures-and-probability-distributions}}
+Distributions}\label{measures-and-probability-distributions}
 
-With all of that work we are finally ready to define a theory for
+With all of that work, we are finally ready to define a theory for
 allocating any conserved, but not necessarily finite, quantity across a
 general mathematical space.
 
-\hypertarget{formal-definitions}{%
-\subsection{Formal Definitions}\label{formal-definitions}}
+\subsection{Formal Definitions}\label{formal-definitions}
 
 A \textbf{measure} on any measurable space \((X, \mathcal{X})\) is a
 function from the \(\sigma\)-algebra \(\mathcal{X}\) to the extended
@@ -619,18 +612,18 @@ positive real line, \begin{alignat*}{6}
 \mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset.
 \]
 
-On finite and countably infinite spaces we can always take
+On finite and countably infinite spaces, we can always take
 \(\mathcal{X} = 2^{X}\) and ensure countable additivity by allocating
 measure to individual elements and then deriving the measure allocated
-to subsets by summing over the measure allocated to the included
+to subsets by summing over the individual allocations to the included
 elements. When working with more sophisticated ambient spaces, however,
 the pair \((X, 2^{X})\) may not admit \emph{any} consistent measures. In
 these cases we have to consider smaller \(\sigma\)-algebras in order for
-measures to exist.
+well-behaved measures to exist.
 
 A set equipped with not only a \(\sigma\)-algebra but also a measure, in
-other words the triple \((X, \mathcal{X}, \mu)\) is known as a
-\textbf{measure space}. Again I will refer to \(X\) as the ambient set
+other words a triple \((X, \mathcal{X}, \mu)\) is known as a
+\textbf{measure space}. Again, I will refer to \(X\) as the ambient set
 or ambient space as appropriate.
 
 If the total measure is finite, \(\mu(X) < \infty\), then \(\mu\) is
@@ -652,62 +645,94 @@ any measurable space \((X, \mathcal{X})\) is a function from the
 \{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{i}, \ldots \}
 \] that are mutually disjoint, \[
 \mathsf{x}_{i} \cap \mathsf{x}_{i' \ne i} = \emptyset.
-\] These properties are also known collectively as the
-\textbf{Kolmogorov axioms}.
+\]
+
+Collectively, these properties are also known as the \textbf{Kolmogorov
+axioms}. On a historical note, however, Kolmogorov first axiomized
+probability theory slightly using slightly different properties
+(Kolmogorov 1950). That said, that initial construction and the more
+contemporary construction shown here are mathematically equivalent.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.75\textwidth,height=\textheight]{figures/distribution/distribution.pdf}
+\centering{
+
+\includegraphics[width=0.75\textwidth,height=\textheight]{figures/distribution/distribution.pdf}
 
 }
 
 \caption{\label{fig-distribution}A probability distribution defines a
-proportional allocation across a measurable space such that no matter
-how we slice up the ambient set \(X\) into measurable subsets the total
+proportional allocation across a measurable space such that, no matter
+how we slice up the ambient set \(X\) into measurable subsets, the total
 probability is always preserved.}
 
-\end{figure}
+\end{figure}%
+
+In practical applications, subsets implicitly defined with the
+set-builder notation are sufficiently common that more a compact
+notation for their allocations will be useful. When there is no risk of
+ambiguity, we can write the probability allocated to the subset
+\begin{align*}
+\mathsf{x}
+&=
+\{ x \in X \mid \text{ condition(x) } \}
+\\
+&=
+\{ \text{ condition(x) } \}
+\end{align*} as \begin{align*}
+\pi( \mathsf{x} )
+&=
+\pi( \{ x \in X \mid \text{ condition(x) } \} )
+\\
+&=
+\pi( \{ \text{ condition(x) } \} )
+\\
+&=
+\pi[ \text{ condition(x) } ].
+\end{align*} For example, the probability allocated to the interval \[
+I[a, b] = \{ x \in \mathbb{R} \mid a \le x \le b \}
+\] can be written as \[
+\pi( I[a, b] ) = \pi[ a \le x \le b ].
+\]
 
 A set equipped with a \(\sigma\)-algebra and a probability distribution
 is known as a \textbf{probability space}. Sometimes the combination
-\((X, \mathcal{X}, \pi)\) is also known as a \textbf{probability
+\((X, \mathcal{X}, \pi)\) is also referred to as a \textbf{probability
 triple}.
 
 Probability spaces are also sometimes denoted by \[
 x \sim \pi,
-\] where \(x \in X\) indicates the ambient set and a \(\sigma\)-algebra
-is taken for granted. In words this reads ``the variable \(x\) is
+\] where \(x \in X\) indicates the ambient set, and a \(\sigma\)-algebra
+is taken for granted. In words, this reads ``the variable \(x\) is
 distributed according to \(\pi\)'' or ``the variable \(x\) follows the
-distribution \(\pi\)''. That said because probability distributions are
-generally defined over measurable subsets and not individual elements a
+distribution \(\pi\)''. Because probability distributions are generally
+defined over measurable subsets and not individual elements, however, a
 more precise description be would be ``the variable \(x\) takes values
-in a set \(X\) that is equipped with a probability distribution
+in a space \(X\) that is equipped with a probability distribution
 \(\pi\)''. The emphasis on variables instead of spaces in this notation
-is related to the awkward notion of a ``random variable'' which we will
-discuss in more detail in Chapter Ten.
+is related to the awkward notion of a ``random variable'', which we will
+discuss in more detail in Chapter Eleven.
 
-From a mathematical perspective probability distributions are just
+From a mathematical perspective, probability distributions are just
 special cases of measures. That special case, however, is uniquely
-important. For example as we'll see in
-\protect\hypertarget{sec:interpretations}{}{Section 6} probability
-distributions are naturally well-suited for many applications. Moreover
-the constraint of unit total measure endows probability distributions
-with many exceptional theoretical properties that help us better
-understand those applications in practice.
+important. As we'll see in \hyperref[sec:interpretations]{Section 6},
+for example, probability distributions are naturally well-suited for
+many applications. Moreover, the constraint of unit total measure endows
+probability distributions with many exceptional theoretical properties
+that help us to implement probabilistic calculations in practice.
 
-Because of these distinctions measure theory and probability theory are
+Because of these distinctions, measure theory and probability theory are
 often compartmentalized in the mathematics literature, with separate
 textbooks, terminologies, and notations despite their common
 mathematical foundations.
 
-\hypertarget{derived-properties}{%
-\subsection{Derived Properties}\label{derived-properties}}
+\subsection{Derived Properties}\label{derived-properties}
 
 Although these definitions might appear to be a bit stark, we can derive
 all of the usual rules of measure and probability theory from them.
 
-For example consider one measurable subset that is strictly smaller than
-another, \[
+Consider, for instance, one measurable subset that is strictly smaller
+than another, \[
 \mathsf{x}_{1} \subset \mathsf{x}_{2} \in \mathcal{X}.
 \] In this case we can always write \[
 \mathsf{x}_{2} = \mathsf{x}_{1} \cup \mathsf{x}_{3}
@@ -719,13 +744,13 @@ additivity then gives \begin{align*}
 \\
 &= \pi(\mathsf{x}_{1}) + \pi(\mathsf{x}_{3})
 \\
-&\ge \pi(\mathsf{x}_{1})
-\end{align*} because \(\pi(\mathsf{x}_{3}) \ge 0\). In other words
+&\ge \pi(\mathsf{x}_{1}),
+\end{align*} because \(\pi(\mathsf{x}_{3}) \ge 0\). In other words,
 larger measurable subsets are always allocated more or equal probability
 than smaller subsets.
 
-Similarly because any subset and its complement are disjoint and combine
-to reconstruct the full set we always have \begin{align*}
+Similarly, because any subset and its complement are disjoint and
+combine to reconstruct the full set, we always have \begin{align*}
 1
 &= \pi(X)
 \\
@@ -738,7 +763,7 @@ to reconstruct the full set we always have \begin{align*}
 
 In order to work with two measurable subsets
 \(\mathsf{x}_{1}, \mathsf{x}_{2} \in \mathcal{X}\) that might not be
-disjoint (Figure~\ref{fig-disjoint-decomposition}) we have to consider
+disjoint (Figure~\ref{fig-disjoint-decomposition}), we have to consider
 the elements that are unique to each, \[
 \mathsf{x}_{1 \setminus 2}
 =
@@ -755,97 +780,70 @@ the elements that are unique to each, \[
 
 \begin{figure}
 
-\begin{minipage}[t]{0.20\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.20\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.60\linewidth}
+\begin{minipage}{0.60\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/overlapping_sets/inputs/inputs.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/overlapping_sets/inputs/inputs.pdf}
 
 }
 
 \subcaption{\label{fig-input-subsets}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.20\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.20\linewidth}
+~\end{minipage}%
 \newline
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.90\linewidth}
+\begin{minipage}{0.90\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/overlapping_sets/disjoint_components/disjoint_components.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/overlapping_sets/disjoint_components/disjoint_components.pdf}
 
 }
 
 \subcaption{\label{fig-disjoint-components}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 
 \caption{\label{fig-disjoint-decomposition}The union of (a) two
 overlapping subsets \(\mathsf{x}_{1}\) and \(\mathsf{x}_{2}\) can always
-be decomposed into the union of (b) three disjoint subsets. One disjoint
-subset \(\mathsf{x}_{1 \setminus 2}\) encapsulates the elements unique
-to \(\mathsf{x}_{1}\), another \(\mathsf{x}_{2 \setminus 1}\)
-encapsulates the elements unique to \(\mathsf{x}_{2}\), and finally the
-intersection \(\mathsf{x}_{1} \cap \mathsf{x}_{2}\) encapsulates the
-elements shared by the two input subsets.}
+be decomposed into the union of (b) three disjoint subsets. The subset
+\(\mathsf{x}_{1 \setminus 2}\) encapsulates the elements unique to
+\(\mathsf{x}_{1}\), \(\mathsf{x}_{2 \setminus 1}\), encapsulates the
+elements unique to \(\mathsf{x}_{2}\), and the intersection
+\(\mathsf{x}_{1} \cap \mathsf{x}_{2}\) encapsulates the elements shared
+by the two input subsets.}
 
-\end{figure}
+\end{figure}%
 
-This then allows us to decompose \(\mathsf{x}_{1}\), \(\mathsf{x}_{2}\),
-and their union into disjoint, measurable subsets
+This decomposition then allows us to decompose \(\mathsf{x}_{1}\),
+\(\mathsf{x}_{2}\), and their union into disjoint, measurable subsets
 (Figure~\ref{fig-input-reconstruction},) \begin{align*}
-\mathsf{x}_{1} &=
-\mathsf{x}_{1 \setminus 2} \cup (\mathsf{x}_{1} \cap \mathsf{x}_{2})
+\mathsf{x}_{1}
+&=
+\mathsf{x}_{1 \setminus 2}
+\cup
+(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 \\
-\mathsf{x}_{2} &=
-\mathsf{x}_{2 \setminus 1} \cup (\mathsf{x}_{1} \cap \mathsf{x}_{2})
+\mathsf{x}_{2}
+&=
+\mathsf{x}_{2 \setminus 1}
+\cup
+(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 \\
-\mathsf{x}_{1} \cup \mathsf{x}_{2} &=
+\mathsf{x}_{1} \cup \mathsf{x}_{2}
+&=
 \mathsf{x}_{1 \setminus 2}
 \cup
 ( \mathsf{x}_{1} \cap \mathsf{x}_{2} )
@@ -855,7 +853,9 @@ and their union into disjoint, measurable subsets
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/overlapping_sets/input_reconstruction/input_reconstruction.pdf}
+\centering{
+
+\includegraphics[width=0.6\textwidth,height=\textheight]{figures/overlapping_sets/input_reconstruction/input_reconstruction.pdf}
 
 }
 
@@ -863,47 +863,51 @@ and their union into disjoint, measurable subsets
 in (Figure~\ref{fig-disjoint-decomposition}) can also be used to
 reconstruct the two input subsets individually.}
 
-\end{figure}
+\end{figure}%
 
-Applying countable additivity to these three decompositions gives a
-system of equations \begin{align*}
-\pi(\mathsf{x}_{1}) &=
-\pi(\mathsf{x}_{1 \setminus 2}) + \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
+Applying countable additivity to all three of these decompositions
+defines a system of equations, \begin{align*}
+\pi(\mathsf{x}_{1})
+&=
+  \pi(\mathsf{x}_{1 \setminus 2})
++ \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 \\
-\pi(\mathsf{x}_{2}) &=
-\pi(\mathsf{x}_{2 \setminus 1}) + \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
+\pi(\mathsf{x}_{2})
+&=
+  \pi(\mathsf{x}_{2 \setminus 1})
++ \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 \\
-\pi(\mathsf{x}_{1} \cup \mathsf{x}_{2}) &=
-\pi(\mathsf{x}_{1 \setminus 2})
+\pi(\mathsf{x}_{1} \cup \mathsf{x}_{2})
+&=
+  \pi(\mathsf{x}_{1 \setminus 2})
 + \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 + \pi \mathsf{x}_{2 \setminus 1}).
-\end{align*} Adding the first two together gives \[
+\end{align*} Adding the first two equations together gives \[
 \pi(\mathsf{x}_{1}) + \pi(\mathsf{x}_{2})
 =
-\pi(\mathsf{x}_{1 \setminus 2})
+  \pi(\mathsf{x}_{1 \setminus 2})
 + 2 \, \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 + \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 \] or \[
-\pi(\mathsf{x}_{1 \setminus 2})
+  \pi(\mathsf{x}_{1 \setminus 2})
 + \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 + \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
 =
-\pi(\mathsf{x}_{1}) + \pi(\mathsf{x}_{2})
+  \pi(\mathsf{x}_{1}) + \pi(\mathsf{x}_{2})
 - \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2}).
-\] Substituting this into the third equation finally gives \[
+\] Substituting this from the third equation finally gives \[
 \pi(\mathsf{x}_{1} \cup \mathsf{x}_{2})
 =
 \pi(\mathsf{x}_{1}) + \pi(\mathsf{x}_{2})
 - \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2}).
 \]
 
-\hypertarget{sec:null}{%
-\subsection{Null Subsets}\label{sec:null}}
+\subsection{Null Subsets}\label{sec:null}
 
 The measure allocated to a measurable subset quantifies the weight of
 that subset relative to any other measurable subsets. Those measurable
 subsets that are allocated \emph{zero} measure are the least important
-subsets in terms of the overall allocation. At the same time these
+subsets in terms of the overall allocation. At the same time, these
 negligible subsets can be useful for characterizing certain properties
 of a given measure.
 
@@ -912,7 +916,7 @@ zero measure \[
 \mu(\mathsf{x}) = 0
 \] is referred to as a \textbf{null subset} of the measure space
 \((X, \mathcal{X}, \mu)\) or, more compactly, a \(\mu\)-null subset.
-Similarly if \[
+Similarly, if \[
 \pi(\mathsf{x}) = 0
 \] then the measurable subset \(\mathsf{x}\) is denoted a null subset of
 the probability space \((X, \mathcal{X}, \pi)\), or simply a
@@ -920,21 +924,22 @@ the probability space \((X, \mathcal{X}, \pi)\), or simply a
 
 I will denote the collection of null subsets by \[
 \mathcal{X}_{\mu = 0}
-= \{ \mathsf{x} \in \mathcal{X} \mid \mu(\mathsf{x}) = 0 \}
+=
+\{ \mathsf{x} \in \mathcal{X} \mid \mu(\mathsf{x}) = 0 \}
 \subset \mathcal{X}.
 \]
 
 Most properties of measures depend on the detailed allocation of the
-total across all measurable subsets. Some useful properties, however,
-are completely characterized by which measurable subsets receive a
-non-zero allocation and which measurable subsets receive a zero
-allocation. In other words these null properties can be completely
+total measure across all measurable subsets. Some useful properties,
+however, are completely characterized by which measurable subsets
+receive a non-zero allocation and which measurable subsets receive a
+zero allocation. In other words, these null properties can be completely
 derived from \(\mathcal{X}_{\mu = 0}\).
 
 Any two measures that share the same null subsets, \[
 \mathcal{X}_{\mu_{1} = 0} = \mathcal{X}_{\mu_{2} = 0}
 \] will share any properties that are derived from those null subsets.
-Consequently the overlap in null subsets, or the lack thereof, is often
+Consequently, the overlap of null subsets, or the lack thereof, is often
 a useful way to determine how compatible two measures are with each
 other. We'll formalize this compatibility when we construct density
 functions in
@@ -942,43 +947,43 @@ functions in
 Six}.
 
 Many formal calculations become particularly straightforward when every
-subset of a null subset is a null subset as well. This allows us to
-decompose null subsets into smaller subsets without having to worry
-about measurability concerns. Any measure with recursively-consistent
-null subsets is known as a \textbf{complete measure}.
+subset of a null subset is also a null subset. This allows us to, for
+example, decompose null subsets into smaller subsets without having to
+worry about measurability concerns. Any measure with
+recursively-consistent null subsets is known as a \textbf{complete
+measure}.
 
-Unfortunately many measures that we encounter in practice, for example
+Unfortunately, many measures that we encounter in practice, specifically
 many measures defined with respect to Borel \(\sigma\)-algebras, are not
-complete because not enough subsets are measurable. In these cases
+complete because not enough subsets are measurable. In these cases,
 extending the initial \(\sigma\)-algebra to include every subset of the
-initial null subsets is particularly useful for more technical work.
-That said these considerations have little to no practical consequence.
+initial null subsets can be convenient for more technical work. That
+said, these considerations have little to no practical consequence.
 
-\hypertarget{measures-and-probability-distributions-in-practice}{%
 \subsection{Measures and Probability Distributions In
-Practice}\label{measures-and-probability-distributions-in-practice}}
+Practice}\label{measures-and-probability-distributions-in-practice}
 
 The formal definition of measures and probability distributions tell us
 what form the consistent allocation of any quantity on any measurable
-space has to take, but it does not necessarily provide a way for
-constructing explicit allocations in practice. Specifically in almost
-all circumstances it is infeasible, if not outright impossible, to
+space has to take, but it does not necessarily provide a way to
+construct explicit allocations in practice. Specifically, in almost all
+circumstances it is infeasible, if not outright impossible, to
 exhaustively specify the measure or probability allocated to
 \emph{every} subset in the ambient \(\sigma\)-algebra. Constructing and
 then storing infinitely large databases linking each measurable subset,
 or even just the non-null subsets, to their allocations is not
 particularly practical!
 
-In some cases we can define useful measures and probability
+In some cases, we can define useful measures and probability
 distributions by specifying the allocation to only \emph{some} of the
-measurable subsets and then deriving the allocations to the rest with
-countable additivity. For example in finite and countable spaces we need
-to specify only the allocations to all atomic subsets. Similarly
+measurable subsets, and then deriving the allocations to the rest with
+countable additivity. For instance, in finite and countable spaces we
+need to specify only the allocations to all atomic subsets. Similarly
 measures over \((\mathbb{R}, \mathcal{B}_{\mathbb{R}})\) can be
 completely specified by allocations to all interval subsets.
 
-That said in most of these cases those reduced allocations are still
-impractical to specify one-by-one. Because of that our introduction to
+In most of these cases, however, those reduced allocations are still
+impractical to specify one-by-one. Because of that, our introduction to
 general measure and probability theory will have to remain a bit
 abstract, without many explicit examples, for the time being.
 
@@ -987,30 +992,30 @@ always defined \emph{algorithmically}, with rules to evaluate the
 measure or probability allocated to a subset on the fly instead of
 storing and retrieving the allocation from an exhaustive specification.
 We will introduce two of these algorithmic representations, and use them
-to define many useful allocations, in Chapter Five and Chapter Eight.
+to define many useful allocations, in
+\href{https://betanalpha.github.io/assets/chapters_html/density_functions.html}{Chapter
+Six} and Chapter Fourteen.
 
-\hypertarget{uniform-measures}{%
-\section{Uniform Measures}\label{uniform-measures}}
+\section{Uniform Measures}\label{uniform-measures}
 
 Any given measurable space \((X, \mathcal{X})\) can be equipped with
 infinitely many measures and probability distributions. Some of these
 objects, however, are more useful in applied practice than others.
 
 This section will introduce two measures that encode distinct notions of
-\emph{uniformity} that are applicable to different types of ambient
-spaces. In the following chapters we will see how the properties of
-these \textbf{uniform measures} make them particularly useful in
-practical applications of probability theory.
+\emph{uniformity}, each of which is applicable to different types of
+ambient spaces. In the following chapters, we will see how the
+properties of these \textbf{uniform measures} make them particularly
+useful in practical applications of probability theory.
 
-\hypertarget{the-counting-measure-on-discrete-measurable-spaces}{%
 \subsection{The Counting Measure On Discrete Measurable
-Spaces}\label{the-counting-measure-on-discrete-measurable-spaces}}
+Spaces}\label{the-counting-measure-on-discrete-measurable-spaces}
 
-Intuitively a uniform measure should allocate the same measure to as
+Intuitively, a uniform measure should allocate the same measure to as
 many measurable subsets as possible. The consistency of measures,
 however, limits just how many subsets can receive the same allocation.
-For example if two disjoint subsets \(\mathsf{x}_{1} \in \mathcal{X}\)
-and \(\mathsf{x}_{2} \in \mathcal{X}\) are allocated the same measure,
+For example, if two disjoint subsets, \(\mathsf{x}_{1} \in \mathcal{X}\)
+and \(\mathsf{x}_{2} \in \mathcal{X}\), are allocated the same measure,
 \[
 \mu(\mathsf{x}_{1}) = \mu(\mathsf{x}_{2}) = \mu_{0},
 \] then their union will be allocated the measure, \[
@@ -1018,153 +1023,166 @@ and \(\mathsf{x}_{2} \in \mathcal{X}\) are allocated the same measure,
 =
 \mu(\mathsf{x}_{1}) + \mu(\mathsf{x}_{2})
 =
-2 \, \mu_{0};
-\] all three allocations will be equal only if \(\mu_{0} = \infty\).
+2 \, \mu_{0}.
+\] All three allocations can be equal only if \(\mu_{0} = 0\) or
+\(\mu_{0} = \infty\).
 
-In order to define a notion of uniformity that doesn't abuse infinity we
-need to restrict our consideration from the entire \(\sigma\)-algebra to
-collections of measurable subsets that we want to behave in the same
-way. If this collection is large enough then we can completely define a
+In order to define a notion of uniformity that doesn't abuse infinity,
+we need to restrict our consideration from the entire \(\sigma\)-algebra
+to collections of measurable subsets that we want to behave in the same
+way. If this collection is large enough, then we can completely define a
 uniform measure by enforcing the same allocation to those distinguished
 subsets.
 
-For example on any countable measure space \((X, 2^{X})\) a natural
+On any countable measure space \((X, 2^{X})\), for instance, a natural
 collection of subsets to consider are the atomic subsets. Because in
 this case the measure allocated to these subsets completely specifies
-the allocations to every other subset we can fully define a uniform
+the allocations to every other subset, we can fully define a uniform
 measure by a enforcing the same allocation to each element. This results
 in a constant mass function (Figure~\ref{fig-uniform-mass-function}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/uniform_mass_function/uniform_mass_function.pdf}
+\centering{
+
+\includegraphics[width=0.8\textwidth,height=\textheight]{figures/uniform_mass_function/uniform_mass_function.pdf}
 
 }
 
-\caption{\label{fig-uniform-mass-function}On a countable space any
-uniform measure allocates the same measure to every individual element
-resulting in a constant mass function.}
+\caption{\label{fig-uniform-mass-function}On a countable space, any
+uniform measure allocates the same measure to every individual element.
+This results in a constant mass function.}
 
-\end{figure}
+\end{figure}%
 
-In particular the \textbf{counting measure} on the discrete measurable
+In particular, the \textbf{counting measure} on the discrete measurable
 space \((X, 2^{X})\) is defined by a unit allocation to each atomic set,
 \[
 \chi(\{ x \}) = 1.
-\] Equivalently we can define the counting measure with a uniform mass
+\] Equivalently, we can define the counting measure with a uniform mass
 function that assigns each element to a unit allocation, \[
 \chi(x) = 1.
 \]
 
-Given these element-wise allocations we can derive the measure allocated
-to any other subset \(\mathsf{x} \subset X\) by countable additivity,
-\begin{align*}
+Given these element-wise allocations, we can derive the measure
+allocated to any other subset \(\mathsf{x} \subset X\) by countable
+additivity, \begin{align*}
 \chi( \mathsf{x} )
 &= \sum_{x \in \mathsf{x}} \chi(\{ x \})
 \\
-&= \sum_{x \in \mathsf{x}} 1,
-\end{align*} which always results in the total number of elements in
-\(\mathsf{x}\). The total counting measure, \[
+&= \sum_{x \in \mathsf{x}} 1.
+\end{align*} By construction, this always results in the total number of
+elements in \(\mathsf{x}\). The total counting measure, \[
 \chi( X ) = \sum_{x \in X} 1,
-\] just counts the number of elements in the ambient set. In other words
-a counting measure formalizes our intuitive notion of counting discrete
-objects.
+\] just counts the total number of elements in the ambient set. In other
+words, a counting measure formalizes our intuitive notion of counting
+discrete objects.
 
 An immediate consequence of these derived allocations is that \emph{any}
 subset with the same number of elements will receive the same
 allocation. Uniformity over the individual elements induces uniformity
 over other subsets as well.
 
-When there are only a finite number of elements in \(X\) the total
-measure will also be finite. In this case we can normalize the counting
+When there are only a finite number of elements in \(X\), the total
+measure will be finite. In this case we can normalize the counting
 measure into a uniform probability distribution, \[
 \pi ( \mathsf{x} ) =
 \frac{ \sum_{x \in \mathsf{x}} 1 }{ \sum_{x \in X} 1 },
-\] which quantifies the proportion of all of the elements in \(X\) that
-are contained in \(\mathsf{x}\). If there are an infinite number of
-elements in \(X\) then this normalization is no longer possible; for
-example there is no well-defined notion of a uniform probability
-distribution over the integers \(\mathbb{Z}\).
+\] which quantifies the proportion of elements in \(X\) that are
+contained in \(\mathsf{x}\). If there are an infinite number of elements
+in \(X\) then this normalization is no longer possible; for example,
+there is no well-defined notion of a uniform probability distribution
+over the integers \(\mathbb{Z}\).
 
 Counting measures are not the only uniform measures that we could define
-over a countable ambient set. More generally we can define a uniform
+over a countable ambient set. More generally, we can define a uniform
 measure by allocating any positive real number \(c \in \mathbb{R}^{+}\)
 to each element, \[
 \kappa(\{ x \}) = c.
-\] That said these other uniform measures are somewhat redundant in the
-sense that their allocations can be recovered by scaling the
+\] That said ,these other uniform measures are somewhat redundant in the
+sense that their allocations can always be recovered by scaling the
 corresponding counting measure allocations, \[
 \kappa ( \mathsf{x} ) = c \cdot \chi ( \mathsf{x} ).
 \]
 
 One important feature of a counting measure, indeed any uniform measure,
 is that every subset except the empty set receives a non-zero
-allocation. That is to say that the empty set is the \emph{only}
+allocation. That is to say, the empty set is the \emph{only}
 \(\chi\)-null subset.
 
-\hypertarget{sec:lebesgue}{%
-\subsection{The Lebesgue Measure On Real Lines}\label{sec:lebesgue}}
+\subsection{The Lebesgue Measure On Real Lines}\label{sec:lebesgue}
 
-Unfortunately on uncountable spaces element-wise allocations do not
-completely define measures. In order to generalize any notion of uniform
-measure we have to specify a larger class of measurable subsets that
-should receive equal allocations.
+Unfortunately, on uncountable spaces element-wise allocations do not
+completely define measures. In order to define any consistent notion of
+uniform measure, we have to specify a larger class of measurable subsets
+that should receive equal allocations.
 
 An uncountable set alone, however, offers no criteria for preferring any
 collection of subsets to any other, and hence no criteria for defining a
 consistent notion of uniform measure. Additional structure on \(X\),
 however, may be able to break this ambiguity.
 
-Consider for example a real line \(\mathbb{R}\) equipped with an
+Consider, for instance, a real line \(\mathbb{R}\) equipped with an
 appropriate ordering, algebra, metric, and topology as discussed in
 \href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
-Two}, that is a particular rigid real line or a particular
-parameterization of a flexible real line. Using the ordering we can
-construct closed interval subsets, \[
-[ x_{1}, x_{2} ] = \{ x \in \mathbb{R} \mid x_{1} \le x \le x_{2} \}.
+Two}. Recall that we can interpret this as a particular rigid real line
+or a particular parameterization of a flexible real line.
+
+Using the ordering, we can construct closed interval subsets, \[
+[ x_{1}, x_{2} ]
+=
+\{ x \in \mathbb{R} \mid x_{1} \le x \le x_{2} \}.
 \] We can then use the metric to characterize these intervals by the
 distance between the end points, \[
-L( \, [ x_{1}, x_{2} ] \, ) = d( x_{1}, x_{2} ) = | x_{2} - x_{1} |,
-\] otherwise known as the interval \textbf{length}. Moreover if we use a
-Borel \(\sigma\)-algebra derived from the real topology then these
+L( \, [ x_{1}, x_{2} ] \, )
+=
+d( x_{1}, x_{2} ) = | x_{2} - x_{1} |,
+\] otherwise known as the interval \textbf{length}. Moreover, if we use
+a Borel \(\sigma\)-algebra derived from the real topology then these
 closed intervals will all be measurable subsets.
 
 Any notion of uniformity that is compatible with all of this structure
 should treat all interval subsets with the \emph{same length} in the
-same way. In other words a uniform measure over \(\mathbb{R}\) should
+same way. In other words, a uniform measure over \(\mathbb{R}\) should
 allocate the same measure to all equal-length intervals
-(Figure~\ref{fig-equal-length-intervals}). For example because the
+(Figure~\ref{fig-equal-length-intervals}). For example ,because the
 intervals \[
 L( \, [-2, -1] \, ) = L( \, [5, 6] \, ) = L( \, [150, 151] \,)
-\] all have the same length any uniform measure should give \[
-\mu( \, [-2, -1] \, ) = \mu( \, [5, 6] \, ) = \mu( \, [150, 151] \, ).
-\] Likewise because \[
-L( \, [-350, -300] \, ) = L( \, [0, 50] \, )
+\] all have the same length, any uniform measure should give \[
+\mu( \, [-2, -1] \, )
+=
+\mu( \, [5, 6] \, )
+=
+\mu( \, [150, 151] \, ).
+\] Likewise, because \[
+L( \, [-350, -300] \, ) = L( \, [0, 50] \, ),
 \] we should have \[
 \mu( \, [-350, -300] \, ) = \mu( \, [0, 50] \,),
 \] and so on.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/interval_partitions/interval_partitions.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/interval_partitions/interval_partitions.pdf}
 
 }
 
 \caption{\label{fig-equal-length-intervals}The structure that defines a
-real line also distinguishes interval subsets that we can characterize
-by their length. Any uniform measure over a real line should allocate
-the same measure to any interval with the same length.}
+particular real line also distinguishes interval subsets that we can
+characterize by their length. Any uniform measure over a real line
+should allocate the same measure to any interval with the same length.}
 
-\end{figure}
+\end{figure}%
 
 The easiest way to accomplish this uniformity is to allocate to each
-interval a measure directly equal to the its length, \[
+interval a measure directly equal to its length, \[
 \lambda( \, [x_{1}, x_{2}] \, )
 = L( \, [x_{1}, x_{2}] \, )
 = | x_{2} - x_{1} |.
 \] Allocations to more general measurable subsets can then be derived
-from these interval allocations. The resulting uniform measure over a
-given real line is known as the \textbf{Lebesgue measure}.
+from these interval allocations and countable additivity. The resulting
+uniform measure is known as the \textbf{Lebesgue measure}.
 
 Just as the counting measure formalizes intuition notions of counting on
 countable spaces, the Lebesgue measure formalizes intuitive notions of
@@ -1190,7 +1208,7 @@ Because the total Lebesgue measure is infinitely large, \begin{align*}
 &=
 \infty,
 \end{align*} it cannot be normalized into a probability distribution. As
-with the integers there is no well-defined notion of a uniform
+with the integers, there is no well-defined notion of a uniform
 probability distribution over a real line.
 
 Every other uniform measure over a real line is defined by allocating a
@@ -1202,7 +1220,7 @@ constant scaling of the Lebesgue measure, \[
 \] similar to how every uniform measure over countable spaces reduces to
 a scaling of the counting measure.
 
-By definition the Lebesgue measure on any real line will allocate zero
+By definition, the Lebesgue measure on any real line will allocate zero
 measure to individual points, \begin{align*}
 \lambda(\{ x \})
 &= \lambda([x, x])
@@ -1226,13 +1244,13 @@ of elements will also be \(\lambda\)-null, \begin{align*}
 0.
 \end{align*}
 
-Critically these properties follow from \(d(x, x) = 0\) which is true
-for \emph{any} well-behaved metric. Two real lines with incompatible
-metrics might feature different Lebesgue measures, but those Lebesgue
-measures will always share the same null subsets and hence share any
-properties derived from those null subsets. Moving between rigid real
-lines or parameterizations of a flexible real line will change the
-Lebesgue measure but not these shared properties.
+These null properties follow from \(d(x, x) = 0\), which is true for
+\emph{any} well-behaved metric. Two real lines with incompatible metrics
+might feature different Lebesgue measures, but those Lebesgue measures
+will always share the same null subsets and hence share any properties
+derived from those null subsets. Moving between rigid real lines or
+parameterizations of a flexible real line will change the details of the
+Lebesgue measure, but not these shared properties.
 
 Let's conclude on a more technical note. Allocations based on interval
 lengths can be used to derive consistent allocations over any subset
@@ -1243,7 +1261,7 @@ subsets that are \emph{not} in \(\mathcal{B}_{\mathbb{R}}\).
 
 Extending \(\mathcal{B}_{\mathbb{R}}\) to include these additional null
 subsets results in a larger \(\sigma\)-algebra known as the
-\textbf{Lebesgue \(\sigma\)-algebra}. Conveniently if we define the
+\textbf{Lebesgue \(\sigma\)-algebra}. Conveniently, if we define the
 Lebesgue measure with respect to this larger \(\sigma\)-algebra then it
 becomes a complete measure which, as we have previously discussed,
 facilitates many technical results and is consequently preferred in more
@@ -1253,17 +1271,16 @@ Many references reserve the term ``Lebsegue measure'' for the
 \emph{complete} uniform measure defined over the Lebesgue
 \(\sigma\)-algebra and introduce the term ``Borel measure'' for the
 \emph{incomplete} uniform measure defined over the smaller Borel
-\(\sigma\)-algebra \(\mathcal{B}_{\mathbb{R}}\). That said because the
+\(\sigma\)-algebra \(\mathcal{B}_{\mathbb{R}}\). That said, because the
 differences between these definitions are limited to null subsets they
-can be effectively ignored in most practical applications.
+can be effectively ignored in practical applications.
 
-\hypertarget{the-lebesgue-measure-on-multivariate-real-spaces}{%
 \subsection{The Lebesgue Measure On Multivariate Real
-Spaces}\label{the-lebesgue-measure-on-multivariate-real-spaces}}
+Spaces}\label{the-lebesgue-measure-on-multivariate-real-spaces}
 
 The construction of the Lebesgue measure on a real line immediately
 generalizes to multivariate real spaces built up from multiple real
-lines at the same time. Within each component real line we can allocate
+lines at the same time. Within each component real line, we can allocate
 a uniform Lebesgue measure to each interval subset, \[
 \lambda_{i}( \, [x_{1, i}, x_{2, i}] \, )
 = | x_{2, i} - x_{1, i} |.
@@ -1276,62 +1293,63 @@ these component allocations, \begin{align*}
 \\
 &=
 \prod_{i = 1}^{I} | x_{2, i} - x_{1, i} |.
-\end{align*} As in the one-dimensional case allocations to more general
+\end{align*} As in the one-dimensional, case allocations to more general
 measurable subsets are derived from these rectangular allocations.
 
-Intuitively the Lebesgue measure on \(\mathbb{R}\) quantifies length.
-The Lebesgue measure over \(\mathbb{R}^{2}\), however, quantifies
-\emph{area}. More generally the Lebesgue measure over \(\mathbb{R}^{I}\)
-quantifies \emph{volume}.
+Intuitively, the Lebesgue measure on \(\mathbb{R}\) quantifies length.
+The Lebesgue measure over \(\mathbb{R}^{2}\) then quantifies
+\emph{area}. More generally, the Lebesgue measure over
+\(\mathbb{R}^{I}\) quantifies \emph{volume} and it's higher-order
+generalization.
 
-\hypertarget{uniformity-ignorance-and-information}{%
 \subsection{Uniformity, Ignorance, and
-Information}\label{uniformity-ignorance-and-information}}
+Information}\label{uniformity-ignorance-and-information}
 
 The concepts of \textbf{ignorance} and \textbf{information} are related
 to uniformity; formalizing the relationships between these concepts,
-however, is subtle. In order to avoid confusing these concepts we have
+however, is subtle. In order to avoid confusing these concepts, we have
 take care to recognize not only their similarities but also their
 differences.
 
-When two elements of a countable space are allocated the same measure
-then the overall allocation will be the same even if we permute those
-two elements before allocating measures. In other words any measure that
+When two elements of a countable space are allocated the same measure,
+the overall allocation will be the same even if we permute those two
+elements before allocating measures. In other words, any measure that
 allocates the same measure to two elements is not able to distinguish
 between any permutations of those elements.
 
-The more regular the individual allocations are the less sensitive the
+The more regular the individual allocations, are the less sensitive the
 resulting measure will be to any rearrangement of the elements.
-Conversely the more the allocations vary from element to element the
+Conversely, the more the allocations vary from element to element the
 more the resulting measure will able to discern one permutation from
-another. Informally we might say that the more uniform the measure the
-less information it encodes. Because a uniform measure allocates the
-same measure to every element it is ignorant to \emph{any} bijective
-transformation of the elements, capturing the least information possible
-on a countable space.
+another. Informally, we might say that the more uniform the measure is,
+the less information it encodes. Because a uniform measure on a
+countable space allocates the same measure to every element, it is
+ignorant to \emph{any} bijective transformation of the elements,
+capturing the least information possible on a countable space.
 
 On uncountable spaces these concepts become more delicate. The
 allocations defined by the Lebesgue measure, for example, are \emph{not}
 invariant to arbitrary transformations of the real line. Any
-transformation that warps the metric will also warp lengths and hence
-the measures allocated by the Lebesgue measure. Instead the Lebesgue
-measure is ignorant only to transformations that preserve distances.
+transformation that warps the metric will also warp lengths, and hence
+the measures allocated by the Lebesgue measure. Instead, the Lebesgue
+measure is ignorant to only those transformations that preserve
+distances.
 
 In order to formalize heuristic concepts like ``ignorance'' and
-``information'' we have to embrace a bit more abstraction. Recall that
+``information'', we have to embrace a bit more abstraction. Recall that
 in
 \href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
 Two} we discussed the notion of a structure-preserving transformation.
-More generally if \(\phi : X \rightarrow X\) is a structure-preserving
+More generally, if \(\phi : X \rightarrow X\) is a structure-preserving
 automorphism then we say that the structure is \textbf{symmetric} to
-\(\phi\) while the transformation \(\phi\) is a \textbf{symmetry} of the
-structure.
+\(\phi\), while the transformation \(\phi\) is a \textbf{symmetry} of
+the structure.
 
-In other words if \(\phi\) is a symmetry of a structure \(\mathfrak{x}\)
-then the behavior of \(\mathfrak{x}\) is the same before and after we
-apply the transformation. The structure cannot detect whether or not we
-apply the transformation. For example on a real line the metric is
-symmetric to translations, \begin{align*}
+In other words, if \(\phi\) is a symmetry of a structure
+\(\mathfrak{x}\) then the behavior of \(\mathfrak{x}\) is the same
+before and after we apply the transformation. The structure cannot
+detect whether or not we apply the transformation. For example, on a
+real line the metric is symmetric to translations, \begin{align*}
 d( t_{x_{3}}(x_{1}), t_{x_{3}}(x_{2}) )
 &=
 | t_{x_{3}}(x_{2}) - t_{x_{3}}(x_{1}) |
@@ -1346,96 +1364,92 @@ d( t_{x_{3}}(x_{1}), t_{x_{3}}(x_{2}) )
 d(x_{1}, x_{2}).
 \end{align*}
 
-Some structures admit multiple symmetries at the same time. For example
-the discrete topology on a countable set is invariant to any permutation
-of the elements while the metric on a real line is invariant to all
-translations of the elements. The more symmetric a structure is the less
-it can distinguish between arbitrary transformations to the ambient set.
-If we formalize information as the ability of a structure to distinguish
-between transformations of the ambient set then the more symmetric a
-structure is the less information it encodes.
+Some structures admit multiple symmetries at the same time. The discrete
+topology on a countable set, for instance, is invariant to any
+permutation of the elements, while the metric on a real line is
+invariant to all translations of the elements. The more symmetric a
+structure is, the less it can distinguish between arbitrary
+transformations to the ambient set. If we formalize information as the
+ability of a structure to distinguish between transformations of the
+ambient set, then the more symmetric a structure is the less information
+it encodes.
 
-From an abstract perspective measures and probability distributions are,
-like orderings, algebras, metrics, topologies, and \(\sigma\)-algebras,
-just structures that we can endow onto a set. The more invariant a
-measure is to transformations of that set the less information it will
-contain. We will more formally consider how measures transform, and
-hence how to precisely define symmetries of a measure, in
-\href{https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html}{Chaper
+From an abstract perspective, measures and probability distributions
+are, like orderings, algebras, metrics, topologies, and
+\(\sigma\)-algebras, just structures that we can endow onto a set. The
+more invariant a measure is to transformations of that set, the less
+information it will contain. We will more formally consider how measures
+transform, and hence how to precisely define symmetries of a measure, in
+\href{https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html}{Chapter
 Seven}.
 
 Uniform measures are built to be symmetric to at least some
-transformations and hence encode less information than other measures.
-For example the counting measure is invariant to any permutation of a
-countable ambient set while the Lebesgue measure is invariant to any
-translation of a real line. We can also extend this construction to more
-elaborate spaces, for instance defining uniform measures on spheres that
-are invariant to any rotation.
+transformations, and hence encode less information than most other
+measures. For example, the counting measure is invariant to any
+permutation of a countable ambient set, while the Lebesgue measure is
+invariant to any translation of a real line. We can also extend this
+construction to more elaborate spaces, for instance defining uniform
+measures on spheres that are invariant to any rotation.
 
-Critically, however, not every uniform measure is invariant to every
-possible transformation of the ambient set; some uniform measures are
-more informative than others! Consequently notions of uniformity do not
+Not every uniform measure, however, is invariant to every possible
+transformation of the ambient set; some uniform measures are more
+informative than others! Consequently, notions of uniformity do not
 define any \emph{universal} notions of ignorance, just ignorance to the
 particular transformations that are used to define uniformity in a given
 context.
 
-In practice this means that we have to be careful not to make broad
-claims about uniform measures that are least informative or most
-ignorant but instead specify \emph{with respect to which
-transformations} a measure might be least informative or most ignorant.
+In practice, this means that we have to be careful not to make broad
+claims about uniform measures being least informative or most ignorant.
+Instead we should specify \emph{with respect to which transformations} a
+measure might be least informative or most ignorant.
 
-\hypertarget{sec:interpretations}{%
 \section{Interpretations of Measure And
-Probability}\label{sec:interpretations}}
+Probability}\label{sec:interpretations}
 
-To this point our treatment of measure and probability theory has been
+To this point, our treatment of measure and probability theory has been
 purely mathematical. A measures defines the allocations of some abstract
 conserved quantity across some abstract measurable space; a probability
 distribution defines a proportional allocations. This mathematical
 construction cannot be endowed with any particular interpretation until
-we use it to model something.
+we use it to \emph{model} something.
 
 In this section we'll review some of the most common applications of
 measure and probability theory and the particular interpretations those
 applications create.
 
-\hypertarget{modeling-physical-distributions}{%
 \subsection{Modeling Physical
-Distributions}\label{modeling-physical-distributions}}
+Distributions}\label{modeling-physical-distributions}
 
 One immediate application of measure theory is to model the behavior of
-a physical quantity, such as mass or electric charge. For example
+a physical quantity, such as mass or electric charge. For example,
 physical mass can be distributed across a solid object in a variety of
 different ways, with the exact distribution affecting how that object
-interacts with the surrounding environment. Similarly the distribution
+interacts with the surrounding environment. Similarly, the distribution
 of charge across the surface of a conducting object defines its
 electrostatic properties.
 
-In some physical systems the distribution can also change with time and
+In some physical systems, the distribution can also change with time and
 influence the dynamics of the system. Time-dependent measures that
 quantify how the distribution of a physical quantity evolves are a
-common feature of many mathematical physical theories.
+common feature of many physical theories.
 
-\hypertarget{modeling-populations}{%
-\subsection{Modeling Populations}\label{modeling-populations}}
+\subsection{Modeling Populations}\label{modeling-populations}
 
 A similar application is modeling the selection of individuals, or the
 properties of individuals, from a larger population. Each time we
 \emph{sample} a subset of individuals from the population we will
-observe a different ensemble of behaviors, such as political or consumer
-preferences, heights, or ages. The heterogeneity of these
+observe a different ensemble of behaviors. The heterogeneity of these
 characteristics across the population can often be quantified with
 measures, and their relative occurrences modeled with probability
 distributions.
 
-For example is \(30\%\) of the individuals in a population have a height
-between \(0\) feet and \(5\) feet then a probability distribution
-modeling the variation in heights would give \[
+For instance, if \(30\%\) of the individuals in a population of people
+have a height between \(0\) feet and \(5\) feet, then a probability
+distribution modeling the variation in heights would give \[
 \pi([0, 5]) = 0.3.
 \]
 
-\hypertarget{modeling-frequencies}{%
-\subsection{Modeling Frequencies}\label{modeling-frequencies}}
+\subsection{Modeling Frequencies}\label{modeling-frequencies}
 
 An application particular to probability theory concerns the frequencies
 of repeated events.
@@ -1448,7 +1462,7 @@ this event \(N\) times defines a sequence of values in \(Y\), \[
 
 While we cannot predict what values the individual events in this
 sequence will take, we may be able to characterize how often certain
-outcomes appear relative to others. In particular we can define the
+outcomes appear relative to others. In particular, we can define the
 \textbf{frequency} of a subset \(\mathsf{x} \subset X\) by the number of
 events that that take values in \(\mathsf{x}\), \[
 f_{N}(\mathsf{x})
@@ -1474,39 +1488,40 @@ f(\mathsf{x})
 &=
 \lim_{N \rightarrow \infty}
 \frac{ \sum_{n = 1}^{N} \mathbb{I}_{\mathsf{x}}(x_{n}) }{N}.
-\end{align*} In other words the more frequent subsets contain more
+\end{align*} In other words, the more frequent subsets contain more
 common event outcomes.
 
-If the frequencies are the same for \emph{any} sequence of events then
-we can model them with probability theory. Specifically we can interpret
-the allocated probabilities as the proportion of the total event
-outcomes that fall into each subset of outcome values.
+If the frequencies are the same for \emph{any} sequence of events, then
+we can model them with probability theory. Specifically, we can
+interpret the allocated probabilities as the proportion of the total
+event outcomes that fall into each subset of outcome values.
 
 In this case the particular ordering of the event sequences doesn't
-matter and we can also interpret them as defining a population of
-possible events. From this perspective the application of probability
-theory is equivalent to the application in the previous section. At the
-same time if we interpret repeated samples from a population as events
-then the population probabilities can be interpreted as frequencies.
+matter; by ignoring the order we can interpret the sequences as defining
+a population of possible events. From this perspective, the application
+of probability theory is equivalent to the application in the previous
+section. At the same time, if we interpret repeated samples from a
+population as events, then the population probabilities can be
+interpreted as frequencies.
 
-\hypertarget{modeling-uncertainties}{%
-\subsection{Modeling Uncertainties}\label{modeling-uncertainties}}
+\subsection{Modeling Uncertainties}\label{modeling-uncertainties}
 
 Probability theory can also be used to consistently quantify uncertain
 information.
 
-Consider a space of possible statements \(X\). Under perfect knowledge
-we would be able to specify a particular statement \(x \in X\) as true
-with all other statements in \(X\) being false. In other words certainty
-is quantified with binary true/false assignments. When our knowledge is
-not quite so certain, however, we have to soften those claims.
+Consider a space of possible statements \(X\). Under perfect knowledge,
+we would be able to specify a particular statement \(x \in X\) as true,
+with all other statements in \(X\) being false. In other words,
+certainty is quantified with binary true/false assignments. When our
+knowledge is not quite so certain, however, we have to soften those
+claims.
 
-To quantify uncertain information we have to generalize beyond binary
+To quantify uncertain information, we have to generalize from binary
 true/false assignments to continuous values that \emph{interpolate}
 between absolute truth and falsity. The larger the value we assign to a
-subset of statements the more our uncertain information supports one of
-those statements being true. Conversely the smaller the value we assign
-to a subset the more our uncertain information supports all of the
+subset of statements, the more our uncertain information supports one of
+those statements being true. Conversely, the smaller the value we assign
+to a subset, the more our uncertain information supports all of the
 included statements being false.
 
 Applying probability theory allows us to enforce consistent uncertainty
@@ -1514,11 +1529,11 @@ assignments across all of the possible statements. The individual
 probability allocations can then be interpreted as quantifying how
 strongly our information supports that one of the statements within a
 measurable set is true. In this setting the allocated probabilities are
-sometimes referred to as ``plausibilities'', ``credibilities'', and
+sometimes referred to as ``plausibilities'', ``credibilities'', or
 ``beliefs''.
 
-For example the property that \(\pi(X) = 1\) corresponds to the fact
-that at least one of the statements in \(X\) always has to be true. A
+For example, the property that \(\pi(X) = 1\) corresponds to the fact
+that at least one of the statements in \(X\) has to be true. A
 probability distribution that concentrates around the statement \(x\)
 encodes confidence that one of the statements near \(x\) is true. The
 singular limit where all of the available probability collapses onto a
@@ -1526,21 +1541,21 @@ single statement, \(\pi( \{ x \} ) = 1\), communicates certainty that
 \(x\) is true.
 
 This kind of probabilistic uncertainty quantification can be interpreted
-in many ways. For example we can use it out model the personal,
+in many ways. For instance, we can use it to model the personal,
 subjective beliefs that an individual holds about the behavior of a
-system. In particular we can use it to model our own specific beliefs.
-At the same time we can use it to model the collective understanding of
-entire communities. We can also use probability theory to model only
-certain aspects of individual or community knowledge and not attempt to
-quantify the entirety of that knowledge at once.
+system. In particular, we can use it to model our own specific beliefs.
+At the same time, we can use it to model the collective understanding of
+entire communities. We can also avoid attempting to quantify the
+entirety of that knowledge at once, and instead use probability theory
+to model only certain aspects of individual or community knowledge,
 
-More formally this application defines one way to generalize classical
-propositional logic to a many-valued logic. Using probability theory to
-generalize other logical systems can sometimes also be possible,
-although the technical details quickly become more complicated.
+More formally, this application of probability theory is one way to
+generalize classical propositional logic to a many-valued logic. Using
+probability theory to generalize other logical systems can sometimes
+also be possible, although the technical details quickly become more
+complicated.
 
-\hypertarget{everyone-play-nicely}{%
-\subsection{Everyone Play Nicely}\label{everyone-play-nicely}}
+\subsection{Everyone Play Nicely}\label{everyone-play-nicely}
 
 A key point of confusion in probability theory is the confounding of its
 abstract mathematical structure with the interpretations that arise in
@@ -1548,56 +1563,58 @@ particular applications. This confusion is made all the worse by the
 long history of attempts to \emph{derive} probability theory from these
 particular applications.
 
-For example many have tried to derive probabilities as asymptotic
-frequencies of physical events. The key motivations of this approach is
-that the resulting probabilities would be objective in the sense that
-everyone who could implement those infinite trials would attain the same
-probabilities. Even if we ignore the impracticality of perfectly
+For example, many have tried to derive probabilities as asymptotic
+frequencies of physical events. The key motivation of this approach is
+that the resulting probabilities would be ``objective'' in the sense
+that everyone who could implement those infinite trials would attain the
+same probabilities. Even if we ignore the impracticality of perfectly
 repeating an event an infinite number of times within a finite lifetime
-it turns out that there are also some subtle mathematical complications
-with this approach. For a comprehensive discussion see Diaconis and
-Skyrms (2017).
+-- see Jay and Purce (2003) for visual demonstrations of just how
+ephemeral dice can be even when they are not rolled -- it turns out that
+there are also some subtle mathematical complications with this
+approach. For a comprehensive discussion see Diaconis and Skyrms (2017).
 
-Similarly many have tried to derive probability theory from uncertainty
-quantification. For example the Cox postulates (Van Horn, Kevin S.
-(2003)) define basic intuitions about uncertainty quantification. On
-simpler spaces these rules are equivalent to probability theory, but
-that equivalence doesn't persist to more general spaces. Because of that
+Similarly, many have tried to derive probability theory from uncertainty
+quantification. The Cox postulates (Van Horn, Kevin S. (2003)), for
+instance, define basic intuitions about uncertainty quantification. On
+simpler spaces, these rules are equivalent to probability theory, but
+that equivalence doesn't persist to more general spaces. Consequently,
 this approach is not able to recover the full generality of probability
 theory.
 
 A common reaction to these technical difficulties is to resort to a sort
 of philosophical bait and switch. When one cannot derive probability
-theory from a particular application one might define probability theory
-abstractly, as we have done above, but then impose an \emph{arbitrary}
-restriction that it can only ever be applied to that one application.
-For example those trying to derive probability theory from frequencies
-might argue that probability theory can be applied to model only
-frequencies, in which case all probabilities are frequencies. Others
-trying to derive probability theory from the Cox axioms might argue that
-any application of probability theory always models uncertain
-information.
+theory from a particular application, one might instead define
+probability theory abstractly, as we have done in this chapter, but then
+impose an \emph{arbitrary} restriction that it can only ever be applied
+to that one application. Those trying to derive probability theory from
+frequencies, for example, might argue that probability theory can only
+ever be applied to model frequencies, in which case all probabilities
+must be frequencies. Others trying to derive probability theory from the
+Cox axioms might argue that any application of probability theory always
+models uncertain information.
 
 These interpretational restrictions then force some awkward
 philosophical contortions when trying to apply probability theory in
-practice. For example after imposing that all probabilities are
+practice. For instance, after imposing that all probabilities are
 frequencies the only way to model uncertainty in the value of some
-quantity is to treat it as the outcome of some hypothetical, and
-completely non-existent, event. The introduction of these hypothetical
-events to real events makes the entire system more difficult to
-understand.
+quantity is to treat it as the outcome of some hypothetical, and maybe
+even unachievable, event. The introduction of these hypothetical events
+to real events makes the entire system more difficult to understand.
 
 In this book we will avoid these restrictions, respect the full
 generality of probability theory, and take advantage of any consistent
-applications that might be useful in a given problem. Indeed we will
-often take advantage of multiple applications \emph{at the same time}.
+applications that might be useful in any given problem. Indeed we will
+often take advantage of multiple applications of probability theory
+\emph{at the same time}.
 
 Consider, for example, a binary space \(X = {0, 1}\) that corresponds to
-the two sides of a coin. In particular let \texttt{0} denote tails and
-\texttt{1} denote heads. Any probability distribution over \(X\) can be
-quantified with the probability \(p \in [0, 1]\) allocated to the point
-\texttt{1}, which gives the consistent probability allocations
-\begin{align*}
+whether a two-sided coin lands with its head side or its tail side up.
+In particular, let \texttt{0} denote a flip that lands tails up, and
+\texttt{1} denote a flip that lands heads up. Any probability
+distribution over \(X\) can be quantified with the probability
+\(p \in [0, 1]\) allocated to the point \texttt{1}, which gives the
+consistent probability allocations \begin{align*}
 \pi( \emptyset; p ) &= 0
 \\
 \pi( {0}; p ) &= 1 - p
@@ -1610,61 +1627,58 @@ quantified with the probability \(p \in [0, 1]\) allocated to the point
 There are many ways to flip a coin, but let's say that we flip our coin
 in a way that results in an unpredictable sequence of heads and tails.
 The asymptotic frequencies of these outcomes can then be modeled with an
-application of probability theory. In other words we can use a
-probability distribution \(\pi(\cdot; p)\) to model the physical
-outcomes of the flips.
+application of probability theory. In other words, we can use the
+probability distribution defined by \(p\) to model the physical outcomes
+of the flips.
 
-At the same time we use probability theory to model any uncertainty in
+At the same time, we use probability theory to model any uncertainty in
 which of the possible frequency models best matches the true behavior of
-the coin. In particular we can construct a probability distribution over
-the unit interval to quantify how compatible each probability allocation
-\(p \in [0, 1]\) is with our knowledge of the coin.
+the coin. In particular, we can construct a probability distribution
+over the unit interval to quantify how compatible each probability
+allocation \(p \in [0, 1]\) is with our knowledge of the coin.
 
-If we have a bag of \(I\) coins then could also model the variation in
-the probability parameters \[
+If we have a collection of \(I\) coins, then we might also be interested
+in the variation of the probability parameters \[
 \{ p_{1}, \ldots, p_{i}, \ldots, p_{I} \}
 \] for each coin. In this case we can apply probability theory once
 again, this time to model the population of coin behaviors.
 
-To be clear the interpretations inherent to particular applications of
+To be clear, the interpretations inherent to particular applications of
 probability theory are important for ensuring that we implement those
 applications correctly in practice. Elevating one interpretation to the
-exclusion of others, however, excludes the corresponding applications
-and limits the full potential of probability theory. To take full
-advantage of the practical utility of probability theory we have to
-respect all of consistent applications!
+exclusion of others, however, limits the full potential of probability
+theory. To take full advantage of the practical utility of probability
+theory we have to respect all of the consistent applications!
 
-\hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\section{Conclusion}\label{conclusion}
 
-Conceptually measure and probability theory are straightforward. Measure
-theory quantifies how we can consistently allocate a conserved quantify
-across a general mathematical space and probability theory considers the
-special case of proportional allocations. In order to quantify that
-conceptual simplicity, however, we need to resort to some careful
-mathematics. In particular we need to incorporate \(\sigma\)-algebras to
-surgically remove any pathological behavior that can arise, even on
-seemingly well-behaved spaces such as the real line, and obstruct
-consistent allocations.
+Conceptually, measure and probability theory are straightforward.
+Measure theory quantifies how we can consistently allocate a conserved
+quantify across a general mathematical space and probability theory
+considers the special case of proportional allocations. In order to
+formalize that conceptual simplicity, however, we need to resort to some
+careful mathematics. In particular, we need to incorporate
+\(\sigma\)-algebras to surgically remove any pathological behavior that
+can arise, even on seemingly well-behaved spaces such as the real line,
+and obstruct consistent allocations.
 
-Once we've safely constructed these theories in full generality we can
-use the apply abstract mathematics to model particular systems. Within
-these applications the math inherits particular interpretations, but we
-have to be careful to not take these circumstantial interpretations too
-seriously lest we abandon the full utility of the abstract mathematics.
+Once we've safely constructed these theories in full generality, we can
+use the abstract mathematics to model particular systems. Within these
+applications, the math inherits particular interpretations. We have to
+be careful to not take these circumstantial interpretations too
+seriously, lest we abandon the full utility of the abstract mathematics.
 
 The technical exploration of measures and probability distributions goes
-far beyond the introduction in this chapter. Unfortunately many
+far beyond the introduction in this chapter. Unfortunately, many
 textbooks that cover this material can be difficult to parse without
 extensive mathematical experience. My personal favorite is Folland
 (1999) which, while technically rigorous, provides more exposition and
 motivation than I have found in other treatments.
 
-\hypertarget{acknowledgements}{%
-\section{Acknowledgements}\label{acknowledgements}}
+\section{Acknowledgements}\label{acknowledgements}
 
-I thank Jeff Helzner, Simon Duane, and Adriano Yoshino for helpful
-discussion.
+I thank Jeff Helzner, Simon Duane, Adriano Yoshino, jd, and Léo Burgund
+for helpful discussion.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
@@ -1712,29 +1726,35 @@ Utku Turk, Virginia Fisher, Vitaly Druker, Vladimir Markov, Wil
 Yegelwel, Will Farr, Will Tudor-Evans, woejozney, yolhaj , yureq , Zach
 A, Zad Rafi, and Zhengchen Cai.
 
-\hypertarget{references}{%
-\section*{References}\label{references}}
+\section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
-\hypertarget{refs}{}
+\phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-DiaconisEtAl:2017}{}}%
+\bibitem[\citeproctext]{ref-DiaconisEtAl:2017}
 Diaconis, Persi, and Brian Skyrms. 2017. \emph{Ten Great Ideas about
 Chance}. Princeton University Press.
 
-\leavevmode\vadjust pre{\hypertarget{ref-Folland:1999}{}}%
+\bibitem[\citeproctext]{ref-Folland:1999}
 Folland, G. B. 1999. \emph{Real Analysis: Modern Techniques and Their
 Applications}. New York: John Wiley; Sons, Inc.
 
-\leavevmode\vadjust pre{\hypertarget{ref-VanHorn:2003}{}}%
+\bibitem[\citeproctext]{ref-JayEtAl:2003}
+Jay, Ricky, and Rosamond Purce. 2003. \emph{Deception, Fate \& Rotten
+Luck}. Quantuck Lane Press.
+
+\bibitem[\citeproctext]{ref-Kolmogorov:1950}
+Kolmogorov, A. N. 1950. \emph{Foundations of the {T}heory of
+{P}robability}. Chelsea Publishing Co., New York.
+
+\bibitem[\citeproctext]{ref-VanHorn:2003}
 Van Horn, Kevin S. 2003. {``{Constructing a logic of plausible
 inference: a guide to {C}ox's theorem}.''} \emph{{International Journal
 of Approximate Reasoning}} 34 (1): 3--24.
 
 \end{CSLReferences}
 
-\hypertarget{license}{%
-\section*{License}\label{license}}
+\section*{License}\label{license}
 \addcontentsline{toc}{section}{License}
 
 A repository containing all of the files used to generate this chapter

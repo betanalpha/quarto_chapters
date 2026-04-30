@@ -11,6 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -36,16 +40,16 @@
       
       \draw[<->, >=stealth, line width=1] (-4.25, \y) -- (+4.25, \y);
       
-      \draw[arrows={-Bracket[sharp]}, light, dotted, line width=1] (-4.1, \y) -- ({-4 + 0.5 - \delta}, \y);
-      \draw[light, line width=1] ({-4 + 0.2}, \y) -- ({-4 + 0.5}, \y); 
+      \draw[arrows={-Bracket[sharp]}, lightteal, dotted, line width=1] (-4.1, \y) -- ({-4 + 0.5 - \delta}, \y);
+      \draw[lightteal, line width=1] ({-4 + 0.2}, \y) -- ({-4 + 0.5}, \y); 
       
       \foreach \n in {1, 2, ..., \N} {
         \pgfmathsetmacro{\x}{-3.5 + (\n - 1) * \l}
-        \draw[arrows={Bracket[sharp]-Bracket[sharp]}, light, line width=1] ({\x}, \y) -- ({\x + \l - \delta}, \y);
+        \draw[arrows={Bracket[sharp]-Bracket[sharp]}, lightteal, line width=1] ({\x}, \y) -- ({\x + \l - \delta}, \y);
       }
       
-      \draw[arrows={Bracket[sharp]-}, light, dotted, line width=1] ({4 - 0.5}, \y) -- (4.1, \y);
-      \draw[light, line width=1] ({4 - 0.2}, \y) -- ({4 - 0.5}, \y); 
+      \draw[arrows={Bracket[sharp]-}, lightteal, dotted, line width=1] ({4 - 0.5}, \y) -- (4.1, \y);
+      \draw[lightteal, line width=1] ({4 - 0.2}, \y) -- ({4 - 0.5}, \y); 
     }
   \end{scope}
 
@@ -58,16 +62,16 @@
       
       \draw[<->, >=stealth, line width=1] (-4.25, \y) -- (+4.25, \y);
       
-      \draw[arrows={-Bracket[sharp]}, light, dotted, line width=1] (-4.1, \y) -- ({-4 + 0.5 - \delta}, \y);
-      \draw[light, line width=1] ({-4 + 0.2}, \y) -- ({-4 + 0.5}, \y); 
+      \draw[arrows={-Bracket[sharp]}, lightteal, dotted, line width=1] (-4.1, \y) -- ({-4 + 0.5 - \delta}, \y);
+      \draw[lightteal, line width=1] ({-4 + 0.2}, \y) -- ({-4 + 0.5}, \y); 
       
       \foreach \n in {1, 2, ..., \N} {
         \pgfmathsetmacro{\x}{-3.5 + (\n - 1) * \l}
-        \draw[arrows={Bracket[sharp]-Bracket[sharp]}, light, line width=1] ({\x}, \y) -- ({\x + \l - \delta}, \y);
+        \draw[arrows={Bracket[sharp]-Bracket[sharp]}, lightteal, line width=1] ({\x}, \y) -- ({\x + \l - \delta}, \y);
       }
       
-      \draw[arrows={Bracket[sharp]-}, light, dotted, line width=1] ({4 - 0.5}, \y) -- (4.1, \y);
-      \draw[light, line width=1] ({4 - 0.2}, \y) -- ({4 - 0.5}, \y); 
+      \draw[arrows={Bracket[sharp]-}, lightteal, dotted, line width=1] ({4 - 0.5}, \y) -- (4.1, \y);
+      \draw[lightteal, line width=1] ({4 - 0.2}, \y) -- ({4 - 0.5}, \y); 
     }
   \end{scope}
   
