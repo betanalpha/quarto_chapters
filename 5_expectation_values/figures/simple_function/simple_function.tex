@@ -11,9 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
-\definecolor{light_teal}{RGB}{107, 142, 142}
-\definecolor{mid_teal}{RGB}{72, 117, 117}
-\definecolor{dark_teal}{RGB}{29, 79, 79}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -27,7 +28,7 @@
 
 \begin{document}
 
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.95]
 
   % First Term
   \begin{scope}[shift={(0, 0)}]
@@ -36,9 +37,9 @@
     \draw [-|, >=stealth, line width=1.25] (-3.00, -1.265) -- +(0, 3.25);
     \draw [->, >=stealth, line width=1.25] (-3.015, -1.25) -- +(6, 0);
     
-    \draw[mid, line width = 1.25] (-3, -1.25) -- (-2.5, -1.25);
-    \draw[mid, line width = 1.25] (-2.5, +2) -- (2, 2);
-    \draw[mid, line width = 1.25] (2, -1.25) -- (2.85, -1.25);
+    \draw[midteal, line width = 1.25] (-3, -1.25) -- (-2.5, -1.25);
+    \draw[midteal, line width = 1.25] (-2.5, +2) -- (2, 2);
+    \draw[midteal, line width = 1.25] (2, -1.25) -- (2.85, -1.25);
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-2.5, -1.35) -- (2, -1.35);
     \node[gray50] at (-0.25, -1.8) { $\mathsf{x}_{1}$ };
@@ -57,9 +58,9 @@
     \draw [->, >=stealth, line width=1.25] (-3.015, 0.00) -- +(6, 0);
     \node at (3, -0.3) { $x$ };
     
-    \draw[mid, line width = 1.25] (-3, 0) -- (-2.5, 0);
-    \draw[mid, line width = 1.25] (-2.5, 1) -- (2, 1);    
-    \draw[mid, line width = 1.25] (2, 0) -- (2.85, 0);                               
+    \draw[midteal, line width = 1.25] (-3, 0) -- (-2.5, 0);
+    \draw[midteal, line width = 1.25] (-2.5, 1) -- (2, 1);    
+    \draw[midteal, line width = 1.25] (2, 0) -- (2.85, 0);                               
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-2.5, -1.5) -- (2, -1.5);
     \node[gray50] at (-0.25, -1.9) { $\mathsf{x}_{1}$ };
@@ -75,9 +76,9 @@
     \node at (-3.5, 1.95) { $s(x)$ };
     \node at (3, -0.3) { $x$ };
     
-    \draw[mid, line width = 1.25] (-3, 0) -- (-2.5, 0);
-    \draw[mid, line width = 1.25] (-2.5, 1) -- (2, 1);    
-    \draw[mid, line width = 1.25] (2, 0) -- (2.85, 0);                               
+    \draw[midteal, line width = 1.25] (-3, 0) -- (-2.5, 0);
+    \draw[midteal, line width = 1.25] (-2.5, 1) -- (2, 1);    
+    \draw[midteal, line width = 1.25] (2, 0) -- (2.85, 0);                               
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-2.5, -1.5) -- (2, -1.5);
     \node[gray50] at (-0.25, -1.9) { $\mathsf{x}_{1}$ };
@@ -93,9 +94,9 @@
     \node at (-3.5, 1.95) { $s(x)$ };
     \node at (3, -0.3) { $x$ };
     
-    \draw[mid, line width = 1.25] (-3, 0) -- (-2.5, 0);
-    \draw[mid, line width = 1.25] (-2.5, 1) -- (2, 1);    
-    \draw[mid, line width = 1.25] (2, 0) -- (2.85, 0);                               
+    \draw[midteal, line width = 1.25] (-3, 0) -- (-2.5, 0);
+    \draw[midteal, line width = 1.25] (-2.5, 1) -- (2, 1);    
+    \draw[midteal, line width = 1.25] (2, 0) -- (2.85, 0);                               
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-2.5, -1.5) -- (2, -1.5);
     \node[gray50] at (-0.25, -1.9) { $\mathsf{x}_{1}$ };
@@ -110,9 +111,9 @@
     \draw [-|, >=stealth, line width=1.25] (-3.00, -1.265) -- +(0, 3.25);
     \draw [->, >=stealth, line width=1.25] (-3.015, -1.25) -- +(6, 0);
     
-    \draw[mid, line width = 1.25] (-3, -1.25) -- (-1.5, -1.25);
-    \draw[mid, line width = 1.25] (-1.5, +2) -- (0.5, 2);
-    \draw[mid, line width = 1.25] (0.5, -1.25) -- (2.85, -1.25);
+    \draw[midteal, line width = 1.25] (-3, -1.25) -- (-1.5, -1.25);
+    \draw[midteal, line width = 1.25] (-1.5, +2) -- (0.5, 2);
+    \draw[midteal, line width = 1.25] (0.5, -1.25) -- (2.85, -1.25);
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-1.5, -1.35) -- (0.5, -1.35);
     \node[gray50] at (-0.5, -1.8) { $\mathsf{x}_{2}$ };
@@ -131,9 +132,9 @@
     \draw [->, >=stealth, line width=1.25] (-3.015, 0.00) -- +(6, 0);
     \node at (3, -0.3) { $x$ };
     
-    \draw[mid, line width = 1.25] (-3, 0) -- (-1.5, 0);
-    \draw[mid, line width = 1.25] (-1.5, 0.5) -- (0.5, 0.5);    
-    \draw[mid, line width = 1.25] (0.5, 0) -- (2.85, 0);                               
+    \draw[midteal, line width = 1.25] (-3, 0) -- (-1.5, 0);
+    \draw[midteal, line width = 1.25] (-1.5, 0.5) -- (0.5, 0.5);    
+    \draw[midteal, line width = 1.25] (0.5, 0) -- (2.85, 0);                               
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-1.5, -1.5) -- (0.5, -1.5);
     \node[gray50] at (-0.5, -1.9) { $\mathsf{x}_{2}$ };
@@ -149,11 +150,11 @@
     \node at (-3.5, 1.95) { $s(x)$ };
     \node at (3, -0.3) { $x$ };
     
-    \draw[mid, line width = 1.25] (-3, 0) -- (-2.5, 0);
-    \draw[mid, line width = 1.25] (-2.5, 1) -- (-1.5, 1);
-    \draw[mid, line width = 1.25] (-1.5, 1.5) -- (0.5, 1.5);
-    \draw[mid, line width = 1.25] (0.5, 1) -- (2, 1);    
-    \draw[mid, line width = 1.25] (2, 0) -- (2.85, 0);  
+    \draw[midteal, line width = 1.25] (-3, 0) -- (-2.5, 0);
+    \draw[midteal, line width = 1.25] (-2.5, 1) -- (-1.5, 1);
+    \draw[midteal, line width = 1.25] (-1.5, 1.5) -- (0.5, 1.5);
+    \draw[midteal, line width = 1.25] (0.5, 1) -- (2, 1);    
+    \draw[midteal, line width = 1.25] (2, 0) -- (2.85, 0);  
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-2.5, -1.5) -- (2, -1.5);
     \node[gray50] at (-0.25, -1.9) { $\mathsf{x}_{1}$ };
@@ -172,9 +173,9 @@
     \draw [-|, >=stealth, line width=1.25] (-3.00, -1.265) -- +(0, 3.25);
     \draw [->, >=stealth, line width=1.25] (-3.015, -1.25) -- +(6, 0);
     
-    \draw[mid, line width = 1.25] (-3, -1.25) -- (0, -1.25);
-    \draw[mid, line width = 1.25] (0, +2) -- (1.5, 2);
-    \draw[mid, line width = 1.25] (1.5, -1.25) -- (2.85, -1.25);
+    \draw[midteal, line width = 1.25] (-3, -1.25) -- (0, -1.25);
+    \draw[midteal, line width = 1.25] (0, +2) -- (1.5, 2);
+    \draw[midteal, line width = 1.25] (1.5, -1.25) -- (2.85, -1.25);
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (0, -1.35) -- (1.5, -1.35);
     \node[gray50] at (0.75, -1.8) { $\mathsf{x}_{3}$ };
@@ -193,9 +194,9 @@
     \draw [->, >=stealth, line width=1.25] (-3.015, 0.00) -- +(6, 0);
     \node at (3, -0.3) { $x$ };
     
-    \draw[mid, line width = 1.25] (-3, 0) -- (0, 0);
-    \draw[mid, line width = 1.25] (0, -1.15) -- (1.5, -1.15);    
-    \draw[mid, line width = 1.25] (1.5, 0) -- (2.85, 0);                               
+    \draw[midteal, line width = 1.25] (-3, 0) -- (0, 0);
+    \draw[midteal, line width = 1.25] (0, -1.15) -- (1.5, -1.15);    
+    \draw[midteal, line width = 1.25] (1.5, 0) -- (2.85, 0);                               
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (0, -1.5) -- (1.5, -1.5);
     \node[gray50] at (0.75, -1.9) { $\mathsf{x}_{3}$ };
@@ -211,15 +212,15 @@
     \node at (-3.5, 1.95) { $s(x)$ };
     \node at (3, -0.3) { $x$ };
     
-    \draw[mid, line width = 1.25] (-3, 0) -- (-2.5, 0);
-    \draw[mid, line width = 1.25] (-2.5, 1) -- (-1.5, 1);
-    \draw[mid, line width = 1.25] (-1.5, 1.5) -- (0, 1.5);
+    \draw[midteal, line width = 1.25] (-3, 0) -- (-2.5, 0);
+    \draw[midteal, line width = 1.25] (-2.5, 1) -- (-1.5, 1);
+    \draw[midteal, line width = 1.25] (-1.5, 1.5) -- (0, 1.5);
     
-    \draw[mid, line width = 1.25] (0, 0.35) -- (0.5, 0.35);
-    \draw[mid, line width = 1.25] (0.5, -0.15) -- (1.5, -0.15);
+    \draw[midteal, line width = 1.25] (0, 0.35) -- (0.5, 0.35);
+    \draw[midteal, line width = 1.25] (0.5, -0.15) -- (1.5, -0.15);
     
-    \draw[mid, line width = 1.25] (1.5, 1) -- (2, 1);    
-    \draw[mid, line width = 1.25] (2, 0) -- (2.85, 0);  
+    \draw[midteal, line width = 1.25] (1.5, 1) -- (2, 1);    
+    \draw[midteal, line width = 1.25] (2, 0) -- (2.85, 0);  
     
     \draw[gray50, line width=1, decorate,decoration={brace,amplitude=5pt,mirror}] (-2.5, -1.5) -- (2, -1.5);
     \node[gray50] at (-0.25, -1.9) { $\mathsf{x}_{1}$ };

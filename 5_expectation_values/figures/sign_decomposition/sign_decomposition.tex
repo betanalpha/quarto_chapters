@@ -11,9 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
-\definecolor{light_teal}{RGB}{107, 142, 142}
-\definecolor{mid_teal}{RGB}{72, 117, 117}
-\definecolor{dark_teal}{RGB}{29, 79, 79}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -49,7 +50,7 @@
 
 \begin{document}
 
-\begin{tikzpicture}[scale=1.0]
+\begin{tikzpicture}[scale=0.9]
 
   \begin{scope}[shift={(0, 0)}]
     \draw[white] (-4.25, -2.5) rectangle (3.5, 2.75);
@@ -59,7 +60,7 @@
     \node at (-3.6, 1.95) { $f(x)$ };
     \node at (3, -0.3) { $x$ };   
     
-    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=dark] 
+    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=darkteal] 
       plot ({\x},{f(\x)});                         
   \end{scope}
 
@@ -71,7 +72,7 @@
     \node at (-3.6, 1.95) { $f^{+}(x)$ };
     \node at (3, -0.3) { $x$ }; 
     
-    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=dark] 
+    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=darkteal] 
       plot ({\x},{fp(\x)});                           
   \end{scope}
   
@@ -83,7 +84,7 @@
     \node at (-3.6, 1.95) { $f^{-}(x)$ };
     \node at (3, -0.3) { $x$ };  
     
-    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=dark] 
+    \draw[domain={-3:2.8}, smooth, samples=100, line width=1.25, variable=\x, color=darkteal] 
       plot ({\x},{-fm(\x)});                          
   \end{scope}
   

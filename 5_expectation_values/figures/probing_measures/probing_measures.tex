@@ -11,6 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -23,7 +27,7 @@
 
 \begin{document}
 
-\begin{tikzpicture}[scale=1]
+\begin{tikzpicture}[scale=0.9]
 
 \begin{scope}[shift={(0, 0)}]
   \draw[white] (-6, -4.5) rectangle (6, 4.5);
@@ -40,9 +44,9 @@
     
     \pgfmathsetmacro{\theta}{atan( (\yr * \y) / (\xr * sqrt(\yr * \yr - \y * \y))}
 
-    \draw[light, line width=1.5] (0, \yr) 
+    \draw[lightteal, line width=1.5] (0, \yr) 
       arc[start angle=90, end angle={180 - \theta}, x radius=\xr, y radius=\yr];
-    \draw[light, line width=1.5, ->, >=stealth] (0, \yr) 
+    \draw[lightteal, line width=1.5, ->, >=stealth] (0, \yr) 
       arc[start angle=90, end angle={\theta}, x radius=\xr, y radius=\yr];
     
     \draw[light, line width=1.5, ->, >=stealth] (0, -\yr) 
@@ -55,23 +59,23 @@
   \node at (-\xro + 0.25, 0) { Analyst };
   
   \fill[white] (-0.55, 2 - 0.3) rectangle (0.55, 3.5);
-  \node at (0, 2) { $f_{1}$ };
+  \node at (0, 2) { $f_{J}$ };
   \node at (0, 2.3) { $\cdots$ };
   \node at (0, 2.6) { $f_{j}$ };
   \node at (0, 2.9) { $\cdots$ };
-  \node at (0, 3.2) { $f_{J}$ };
+  \node at (0, 3.2) { $f_{1}$ };
   \node at (0, 3.8) { Questions };
   
   %\fill[white] (\xro - 1, 0 - 0.5) rectangle +(2, 1);
   \node at (\xro - 0.25, 0) { $\mu$ };
   
   \fill[white] (-0.55, -2 + 0.3) rectangle (0.55, -3.5);
-  \node at (0, -2) { $\mathbb{I}_{\mu}[f_{1}]$ };
+  \node at (0, -1.9) { $\mathbb{I}_{\mu}[f_{1}]$ };
   \node at (0, -2.3) { $\cdots$ };
-  \node at (0, -2.6) { $\mathbb{I}_{\mu}[f_{j}]$ };
-  \node at (0, -2.9) { $\cdots$ };
-  \node at (0, -3.2) { $\mathbb{I}_{\mu}[f_{J}]$ };
-  \node at (0, -3.8) { Answers };
+  \node at (0, -2.7) { $\mathbb{I}_{\mu}[f_{j}]$ };
+  \node at (0, -3.1) { $\cdots$ };
+  \node at (0, -3.5) { $\mathbb{I}_{\mu}[f_{J}]$ };
+  \node at (0, -3.9) { Answers };
 \end{scope}
   
 \end{tikzpicture}

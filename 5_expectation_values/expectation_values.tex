@@ -80,10 +80,6 @@
 
 \KOMAoption{captions}{tableheading}
 \makeatletter
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
@@ -119,23 +115,16 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
-\makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -154,7 +143,6 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, frame hidden, interior hidden, borderline west={3pt}{0pt}{shadecolor}, breakable, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -164,44 +152,44 @@
 }
 In
 \href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html}{Chapter
-Four} we defined measures, and probability distributions as a special
-case, as mappings from measurable subsets to allocated measures. These
-subset allocations, however, also induce a somewhat surprising but
-incredibly powerful mapping from real-valued functions to single real
-numbers that generalizes Riemann integration from calculus. This
-measure-informed integration operation summarizes the interaction
-between a measure and a given function, allowing us to use one to learn
-about the other.
+Four}, we defined measures and probability distributions, as mappings
+from measurable subsets to allocated measures. These subset allocations
+also induce a somewhat surprising, but incredibly powerful, mapping from
+real-valued functions to single real numbers that generalizes Riemann
+integration in calculus. This measure-informed integration operation
+summarizes the interaction between a measure and a given function,
+allowing us to use one to learn about the other.
 
-We will being our exploration of measure-informed integration with a
+We will begin our exploration of measure-informed integration with a
 heuristic construction on finite measure spaces before considering a
 more formal, but also more abstract, construction that applies to any
-measure space. Next we'll investigate how the specification of
+measure space. Next, we'll investigate how the specification of
 measure-informed integrals can be used to implicitly define measures
-without having to explicitly define subset allocations and some useful
-applications of these implicit specifications. Finally we'll consider
-particular measure-informed integrals that are distinguished by common
-ambient space structures and then conclude with a discussion of a few
-exceptional measures whose integrals can be computed algorithmically.
+without having to explicitly define subset allocations, as well as some
+useful applications of these implicit specifications. Finally, we'll
+consider particular measure-informed integrals that are distinguished by
+common ambient space structures before concluding with a discussion of a
+few exceptional measures whose integrals can be computed
+algorithmically.
 
-\hypertarget{sec:finite_integration}{%
 \section{Integration on Finite Measure
-Spaces}\label{sec:finite_integration}}
+Spaces}\label{sec:finite_integration}
 
 To start our discussion of measure-informed integration as simply as
-possible let's begin by considering a finite measure space compromised
+possible, let's begin by considering a finite measure space, comprised
 of the finite set \[
 X = \{ \Box, \clubsuit, \diamondsuit, \heartsuit, \spadesuit \},
-\] a measure defined by the mass function \[
+\] and a measure defined by the mass function \[
 \mu : X \rightarrow [0, \infty],
-\] and a real-valued function \(f : X \rightarrow \mathbb{R}\).
+\] and a distinguished real-valued function
+\(f : X \rightarrow \mathbb{R}\).
 
 The allocations defined by the mass function weight the elements of
 \(X\) relative to each other, emphasizing some while suppressing others.
-At the same time the function \(f\) associates those elements with a
-numerical output. We can then weight the numerical outputs by combining
-the weights of the inputs \(\mu(x)\) and the individual output values
-\(f(x)\), \[
+At the same time, the function \(f\) associates those elements with a
+numerical output. Because the output of both \(\mu\) and \(f\) are
+real-valued, we can also multiply them together into weighted outputs,
+\[
 \mu(x) \cdot f(x).
 \]
 
@@ -222,23 +210,24 @@ is sensitive to the interplay between \(\mu\) and \(f\), \begin{align*}
 \\
 &\quad
 + \mu(\spadesuit) \cdot f(\spadesuit).
-\end{align*} This summary emphasizes not only large output values but
-also outputs from highly-weighted inputs. For example even if the output
-\(f(\Box)\) is small the contribution from \(\Box\) can still be
-important if the atomic allocation \(\mu(\Box)\) is large.
+\end{align*} This scalar summary emphasizes not only large output values
+but also outputs from high-measure inputs. For example, even if the
+output \(f(\Box)\) is small, the contribution from \(\Box\) can still be
+important to the weighted sum if the atomic allocation \(\mu(\Box)\) is
+large.
 
 This summary defines the \textbf{integral} of \(f\) with respect to
 \(\mu\), \begin{align*}
 \mathbb{I}_{\mu}[f]
 &\equiv \sum_{x \in X} \mu(x) \cdot f(x).
-\end{align*} We use square brackets instead of round brackets to
-visually denote that the mapping doesn't take points as input but rather
-entire functions.
+\end{align*} We use square brackets instead of round brackets here to
+visually indicate that the mapping doesn't take points as input but
+rather entire functions.
 
 An interesting side effect of this construction is that measure-informed
-integrals are linear: given two real-valued functions
+integrals are always linear. Given two real-valued functions
 \(f: X \rightarrow \mathbb{R}\) and \(g : X \rightarrow \mathbb{R}\) and
-two real constants \(\alpha, \beta \in \mathbb{R}\) we have
+two real constants \(\alpha, \beta \in \mathbb{R}\), we have
 \begin{align*}
 \mathbb{I}_{\mu}[\alpha \cdot f + \beta \cdot g]
 &= \sum_{x \in X} \mu(x) \cdot
@@ -257,83 +246,63 @@ when working with measure-informed integrals.
 
 The measure-informed integral \(\mathbb{I}_{\mu}[f]\) is sensitive to
 the behavior of \(f\), but only in the context of \(\mu\). By
-considering multiple \emph{test} measures, however, we can use this
-operation to more fully probe the behavior of a fixed function \(f\).
+considering multiple \emph{test} measures, we can use this operation to
+more fully probe the behavior of a fixed function \(f\).
 Measure-informed integrals of \(f\) with respect to test measures that
 emphasizes certain input elements will be more sensitive to the
 corresponding output elements, probing different aspects of \(f\). More
-intuitively we can interpret each test measure \(\mu_{j}\) as encoding a
-question about \(f\) and the corresponding measure-informed integral
-\(\mathbb{I}_{\mu_{j}}[f]\) as encoding the answer
+intuitively, we can interpret each test measure \(\mu_{j}\) as encoding
+a question about \(f\), with the corresponding measure-informed integral
+\(\mathbb{I}_{\mu_{j}}[f]\) encoding the answer
 (Figure~\ref{fig-probing-functions}).
 
 \begin{figure}
 
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.45\linewidth}
+\begin{minipage}{0.45\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/probing_functions/probing_functions.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/probing_functions/probing_functions.pdf}
 
 }
 
 \subcaption{\label{fig-probing-functions}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.45\linewidth}
+\begin{minipage}{0.45\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/probing_measures/probing_measures.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/probing_measures/probing_measures.pdf}
 
 }
 
 \subcaption{\label{fig-probing-measures}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 
 \caption{\label{fig-probes}Measure-informed integrals probe the
 interaction between a measure and a real-valued function. (a) If we fix
-the function \(f\) then measure-informed integrals with respect to
+the function \(f\), then measure-informed integrals with respect to
 multiple test measures are sensitive to different features of \(f\). We
-can interpret each test measure as a question about \(f\) with the
+can interpret each test measure as a question about \(f\), with the
 corresponding measure-informed integral providing an answer. (b)
-Similarly measure-informed integrals of multiple test functions with
+Similarly, measure-informed integrals of multiple test functions with
 respect to a fixed measure \(\mu\) are sensitive to different features
-of \(\mu\). Again we can interpret each test function as a question
-about \(\mu\) with the corresponding measure-informed integral encoding
+of \(\mu\). Again, we can interpret each test function as a question
+about \(\mu\), with the corresponding measure-informed integral encoding
 an answer.}
 
-\end{figure}
+\end{figure}%
 
-For example consider a \emph{singular} probability mass function that
+Consider, for instance, a \emph{singular} probability mass function that
 concentrates entirely on a single element, \[
 \delta_{x'} (x) =
 \left\{
@@ -354,11 +323,11 @@ respect to \(\delta_{x_{i}}\) are given by \begin{align*}
   + \sum_{x \neq x'} 0 \cdot f(x)
 \\
 &= f(x').
-\end{align*} In other words measure-informed integration of functions
-with respect to \(\delta_{x'}\) allow us to probe the individual output
-values \(f(x')\).
+\end{align*} In other words, measure-informed integration of functions
+with respect to \(\delta_{x'}\) filters out individual output values
+\(f(x')\).
 
-Similarly consider a uniform probability mass function where each
+Similarly, consider a uniform probability mass function where each
 element is allocated the same probability, \[
 \pi(x) = \frac{1}{I}.
 \] The corresponding measure-informed integrals captures the
@@ -369,19 +338,19 @@ element is allocated the same probability, \[
 &= \sum_{x \in X} \frac{1}{I} \cdot f(x)
 \\
 &= \frac{1}{I} \sum_{x \in X} f(x).
-\end{align*} When we use non-uniform measures this measure-informed
-integration generalizes averages to more general summaries.
+\end{align*} When we use non-uniform measures, this measure-informed
+integration generalizes averages to more subtle summaries.
 
-At the same time we can use different test functions to probe different
+At the same time, we can use different test functions to probe different
 features of a fixed measure \(\mu\). Measure-informed integrals of test
 functions with larger outputs for some inputs will be more sensitive to
-the measures \(\mu\) allocated to those inputs. Again we can interpret
+the measures \(\mu\) allocates to those inputs. Again, we can interpret
 each test function \(f_{j}\) as encoding a different question about
-\(\mu\) with the corresponding measure-informed integrals
-\(\mathbb{I}_{\mu}[f_{j}]\) encoding the answer
+\(\mu\), with the corresponding measure-informed integrals
+\(\mathbb{I}_{\mu}[f_{j}]\) providing an answer
 (Figure~\ref{fig-probing-measures}).
 
-For example for any subset \(\mathsf{x} \subset X\) we can construct an
+For example, for any subset \(\mathsf{x} \subset X\) we can construct an
 \textbf{indicator function} that returns \(1\) if the input is contained
 in \(\mathsf{x}\) and zero otherwise, \[
 I_{\mathsf{x}} (x) =
@@ -391,7 +360,7 @@ I_{\mathsf{x}} (x) =
 0, & x \notin \mathsf{x}
 \end{array}
 \right. .
-\] In other words an indicator function \emph{indicates} whether or not
+\] Unsurprisingly, an indicator function \emph{indicates} whether or not
 a point is contained in the defining subset.
 
 The measure-informed integral of the indicator function
@@ -409,36 +378,33 @@ The measure-informed integral of the indicator function
 &=  \sum_{x \in \mathsf{x}} \mu(x)
 \\
 &= \mu( \mathsf{x} ).
-\end{align*} Measure-informed integrals of various indicator functions
-allow us to directly probe the various subset allocations.
+\end{align*} Measure-informed integrals of indicator functions allow us
+to directly probe measurable subset allocations.
 
-\hypertarget{integration-on-general-measure-spaces}{%
-\section{Integration on General Measure
-Spaces}\label{integration-on-general-measure-spaces}}
+\section{Integration on General Measure Spaces}\label{sec:gen_int}
 
-Unfortunately the straightforward construction of measure-informed
+Unfortunately, the straightforward construction of measure-informed
 integrals on finite spaces doesn't generalize to general measure spaces.
-In particular on uncountable spaces, where element-wise allocations
-\(\mu( \{x\} )\) do not completely characterize a measure, the weighted
-output values \(\mu( \{ x \} ) \cdot f(x)\) do not completely
-characterize the interaction between a measure and a real-valued
-function.
+On uncountable spaces, for example, element-wise allocations
+\(\mu( \{x\} )\) do not completely characterize a measure. Consequently,
+the weighted output values \(\mu( \{ x \} ) \cdot f(x)\) cannot
+completely characterize the interaction between a measure and a
+real-valued function.
 
 In order to generalize measure-informed integrals to arbitrary measure
-spaces we have to appeal to a more sophisticated construction with some
+spaces, we have to appeal to a more sophisticated construction with some
 subtle, but important, consequences.
 
-\hypertarget{integration-of-simple-functions}{%
 \subsection{Integration of Simple
-Functions}\label{integration-of-simple-functions}}
+Functions}\label{integration-of-simple-functions}
 
 We'll build up to general measure-informed integrals by considering
 increasingly sophisticated classes of functions that are still nice
 enough for their measure-informed integrals to be unambiguous on any
 measurable space.
 
-For example consider indicator functions which vanish outside of a given
-measurable subset (Figure~\ref{fig-indicator}) \[
+To start, let's consider indicator functions which vanish outside of a
+given measurable subset (Figure~\ref{fig-indicator}) \[
 I_{\mathsf{x}} (x) =
 \left\{
 \begin{array}{rr}
@@ -450,7 +416,9 @@ I_{\mathsf{x}} (x) =
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/indicator_function/indicator_function.pdf}
+\centering{
+
+\includegraphics[width=0.6\textwidth,height=\textheight]{figures/indicator_function/indicator_function.pdf}
 
 }
 
@@ -459,10 +427,10 @@ measurable subset \(\mathsf{x} \in \mathcal{X}\) vanishes for all inputs
 that are not contained in \(\mathsf{x}\). Here \(\mathsf{x}\) is an
 interval subset over a real line.}
 
-\end{figure}
+\end{figure}%
 
 In order to generalize the behavior on finite measure spaces that we
-encountered in \href{@sec:finite_integration}{Section One} the
+encountered in \hyperref[sec:finite_integration]{Section One}, the
 measure-informed integral of any indicator function should be equal to
 the measure allocated to that subset, \[
 \mathbb{I}_{\mu}[ I_{\mathsf{x}} ]
@@ -476,16 +444,19 @@ function} is given by the sum of scaled indicator functions
 (Figure~\ref{fig-simple}), \[
 s(x) = \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x),
 \] where \[
-\{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{j}, \ldots \} \in \mathcal{X}
-\] is any sequence of measurable subsets and \[
+\{ \mathsf{x}_{1}, \ldots, \mathsf{x}_{j}, \ldots \}
+\in \mathcal{X}
+\] is any collection of measurable subsets and \[
 \{ \phi_{1}, \ldots, \phi_{j}, \ldots \} \in \mathbb{R}
-\] is any sequence of real numbers. By incorporating countably many
-indicator functions we can engineer quite sophisticated functional
+\] is any collection of real numbers. By incorporating countably many
+indicator functions, we can engineer quite sophisticated functional
 behavior.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/simple_function/simple_function.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/simple_function/simple_function.pdf}
 
 }
 
@@ -493,14 +464,15 @@ behavior.
 combinations of indicator functions. Incorporating more indicator
 functions yields more sophisticated functional behavior.}
 
-\end{figure}
+\end{figure}%
 
 If we assume that measure-informed integration is a linear operation on
-any measure space then we can immediately compute the integral of any
+any measure space, then we can immediately compute the integral of any
 simple function, \begin{align*}
 \mathbb{I}_{\mu}[ s ]
 &=
-\mathbb{I}_{\mu} \left[ \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}} \right]
+\mathbb{I}_{\mu}
+\left[ \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}} \right]
 \\
 &=
 \sum_{j} \phi_{j} \cdot \mathbb{I}_{\mu}[ I_{\mathsf{x}_{j}} ]
@@ -509,30 +481,31 @@ simple function, \begin{align*}
 \sum_{j} \phi_{j} \cdot \mu(\mathsf{x}_{j}).
 \end{align*}
 
-\hypertarget{integration-of-measurable-functions}{%
 \subsection{Integration of Measurable
-Functions}\label{integration-of-measurable-functions}}
+Functions}\label{integration-of-measurable-functions}
 
 Most functions whose measure-informed integrals are of interest in
 practical analysis are not simple functions. Relevant functions,
-however, can often be \emph{well-approximated} by simple functions. As
-we incorporate more and more indicator functions we can construct simple
-functions that approximate non-simple functions better and better
-(Figure~\ref{fig-simple-approx}).
+however, can often be \emph{well-approximated} by sufficiently many
+simple functions. As we incorporate more and more indicator functions,
+we can construct simple functions that approximate non-simple functions
+better and better (Figure~\ref{fig-simple-approx}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/simple_function_approx/simple_function_approx.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/simple_function_approx/simple_function_approx.pdf}
 
 }
 
 \caption{\label{fig-simple-approx}As we incorporate more indicator
-functions simple functions become more flexible and are able to better
+functions, simple functions become more flexible and are able to better
 approximate the behavior of non-simple functions. Certain non-negative
 functions can be \emph{exactly} recovered from sufficiently flexible
 simple functions.}
 
-\end{figure}
+\end{figure}%
 
 Some functions can even be \emph{exactly} recovered from sufficiently
 flexible simple functions. A real-valued function
@@ -544,23 +517,27 @@ the \(\sigma\)-algebra \(\mathcal{X}\), or
 \] pulls back to a measurable subset on \((X, \mathcal{X})\), \[
 f^{*}( (-\infty, x] )
 =
-\{ x \in X \mid f(x) \in (\infty, x] \}
+\{ x' \in X \mid f(x') \in (\infty, x] \}
 \in \mathcal{X}.
 \] In practice non-measurable functions are as difficult to construct as
-non-measurable subsets and measurability can largely be taken for
-granted.
+non-measurable subsets; consequently measurability can largely be taken
+for granted.
 
 We'll come back to the topic of measurable functions in much more detail
-in Chapter Seven. For now our main concern will be to avoid confusing
-measurable \emph{subsets} on \((X, \mathcal{X})\) and measurable
-\emph{functions} from \((X, \mathcal{X})\) to \(\mathbb{R}\).
+in
+\href{https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html}{Chapter
+Seven}. For now, our main concern will be to avoid confusing measurable
+\emph{subsets} on \((X, \mathcal{X})\) and measurable \emph{functions}
+from \((X, \mathcal{X})\) to \(\mathbb{R}\).
 
 Measurable functions with non-negative outputs, \[
 f(x) \ge 0
 \] for all \(x \in X\), are particularly special. Any non-negative,
 measurable function can always be \emph{perfectly} recovered as a
 certain limit of increasingly complicated simple functions, \[
-f(x) = \sum_{j = 1}^{\infty} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x).
+f(x)
+=
+\sum_{j = 1}^{\infty} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x).
 \] We can then \emph{define} the measure-informed integral of a
 non-negative, measurable function as the measure-informed integral of
 the corresponding simple function decomposition, \begin{align*}
@@ -578,23 +555,23 @@ the corresponding simple function decomposition, \begin{align*}
 \mu(\mathsf{x}_{j}).
 \end{align*}
 
-In general a non-negative, measurable function can be represented by
-more than one simple function decomposition. Fortunately the
+In general, a non-negative, measurable function can be represented by
+more than one simple function decomposition. Fortunately, the
 measure-informed integral derived from any of them will always be the
-same. Consequently there's no worry for ambiguous of otherwise
-inconsistent answers, and measure-informed integrals for non-negative,
-measurable function are completely well-behaved.
+same. Consequently, there's no worry for ambiguous, or otherwise
+inconsistent, answers, and measure-informed integrals for non-negative,
+measurable functions are completely well-behaved.
 
 This procedure for defining measure-informed integrals through simple
 functions representations is known as \textbf{Lebesgue integration} in
-the mathematics literature. In this book I will use the more explicit
+the mathematics literature. In this book, I will use the more explicit
 ``measure-informed integration'' instead.
 
 We've come a long way, but non-negative functions are still somewhat
-exceptional amongst all of the functions that might come up in a given
+exceptional among all of the functions that might come up in a given
 analysis. To define measure-informed integrals for measurable functions
-that aren't necessarily positive we just have to decompose the functions
-by the sign of their outputs (Figure~\ref{fig-sign-decomposition}), \[
+that might be negative, we just have to decompose the functions by the
+sign of their outputs (Figure~\ref{fig-sign-decomposition}), \[
 f(x) = f^{+}(x) - f^{-}(x),
 \] where \[
 f^{+} (x) =
@@ -616,22 +593,24 @@ f^{-} (x) =
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/sign_decomposition/sign_decomposition.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/sign_decomposition/sign_decomposition.pdf}
 
 }
 
 \caption{\label{fig-sign-decomposition}Every real-valued function
 \(f: X \rightarrow \mathbb{R}\) function can be decomposed by the sign
-of its output values, resulting in the two positive functions
+of its output values, resulting in the two non-negative functions
 \(f^{+}: X \rightarrow \mathbb{R}^{+}\) and
 \(f^{-}: X \rightarrow \mathbb{R}^{+}\).}
 
-\end{figure}
+\end{figure}%
 
-Because \(f^{+}\) and \(f^{-}\) are both non-negative we can construct
+Because \(f^{+}\) and \(f^{-}\) are both non-negative, we can construct
 their measure-informed integrals \(\mathbb{I}_{\mu}[f^{+}]\) and
 \(\mathbb{I}_{\mu}[f^{-}]\) as above. Provided that the measure-informed
-integrals are not both infinite we can then define the measure-informed
+integrals are not both infinite, we can then define the measure-informed
 integral of \(f\) by taking advantage of linearity, \begin{align*}
 \mathbb{I}_{\mu}[f]
 =
@@ -653,28 +632,27 @@ that \begin{align*}
 \] are said to be \textbf{Lebesgue integrable} with respect to \(\mu\),
 or just \textbf{\(\mu\)-integrable} for short.
 
-I will refer to any real-valued function \(f: X \rightarrow \mathbb{R}\)
-that is measurable with respect to the ambient \(\sigma\)-algebra and
-integrable with respect to any relevant measures simply as an
-\textbf{integrand}.
+To avoid excessive verbiage, I will refer to any real-valued function
+\(f: X \rightarrow \mathbb{R}\) that is measurable with respect to the
+ambient \(\sigma\)-algebra and integrable with respect to any relevant
+measures simply as an \textbf{integrand}.
 
 Nearly every real-valued function that we will encounter in practical
-applications will be measurable. Consequently taking this technical
+applications will be measurable. Consequently, taking this technical
 assumption for granted is largely safe. Many real-valued functions will
 also be integrable with respect to typical measures, especially when we
-restrict attention to probability distributions. That said there are
-enough exceptions that we have to be careful to explicitly validate
-integrability in practice.
+restrict attention to probability distributions. That said, there are
+enough exceptions that we do have to be a bit careful to explicitly
+double check integrability in practice.
 
-\hypertarget{equivalent-integrands}{%
-\subsection{Equivalent Integrands}\label{equivalent-integrands}}
+\subsection{Equivalent Integrands}\label{equivalent-integrands}
 
 One subtle but important consequence of this general definition of
 measure-informed integration is that many integrands will yield the same
-measure-informed integrals even when their individual outputs are not
+measure-informed integrals, even when their individual outputs are not
 all equal!
 
-To see why let's consider a simple function
+To see why, let's consider a simple function
 \(s: X \rightarrow \mathbb{R}\) that's build up from arbitrarily many
 indicator functions, \[
 s(x) = \sum_{j} \phi_{j} \cdot I_{\mathsf{x}_{j}}(x).
@@ -688,22 +666,24 @@ related to each other by \begin{align*}
 \mathbb{I}_{\mu}[s + \phi' \cdot I_{\mathsf{x}'}]
 \\
 &=
-\mathbb{I}_{\mu}[s] + \phi' \cdot \mathbb{I}_{\mu}[I_{\mathsf{x}'}]
+\mathbb{I}_{\mu}[s]
++
+\phi' \cdot \mathbb{I}_{\mu}[I_{\mathsf{x}'}]
 \\
 &=
 \mathbb{I}_{\mu}[s] + \phi' \cdot \mu(\mathsf{x}').
 \end{align*}
 
-When \(\phi' \ne 0\) then \(s(x)\) and \(s'(x)\) will differ for all
+When \(\phi' \ne 0\), \(s(x)\) and \(s'(x)\) will differ for all
 \(x \in \mathsf{x}'\); so long as \(\mathsf{x}'\) is not the empty set
 then the function outputs will differ for at least some inputs. On the
-other hand the corresponding measure-informed integrals will differ only
-if \[
+other hand, the corresponding measure-informed integrals will differ
+only if \[
 \mu(\mathsf{x}') > 0!
-\] In other words if \(\mathsf{x}'\) is a \(\mu\)-null subset then \(s\)
-and \(s'\) will share the exact same \(\mu\)-integrals.
+\] In other words, if \(\mathsf{x}'\) is a \(\mu\)-null subset then
+\(s\) and \(s'\) will share the exact same \(\mu\)-integrals.
 
-More generally any two integrands \(f: X \rightarrow \mathbb{R}\) and
+More generally, any two integrands \(f: X \rightarrow \mathbb{R}\) and
 \(g: X \rightarrow \mathbb{R}\) will share the same \(\mu\)-integrals if
 the subset of input points where their outputs differ, \[
 \mathsf{x}_{\delta} = \{ x \in X \mid f(x) \ne g(x) \},
@@ -711,90 +691,91 @@ the subset of input points where their outputs differ, \[
 \mathsf{x}_{\delta} \subseteq \mathsf{x} \in \mathcal{X}
 \] with \[
 \mu(\mathsf{x}) = 0.
-\] Intuitively modifying integrands on sets of measure zero does not
+\] Intuitively, modifying integrands on subsets of measure zero does not
 affect their measure-informed integrals.
 
 If the subset of deviant inputs is contained within a \(\mu\)-null
-subset then \(f\) and \(g\) are said to be equal \textbf{almost
+subset, then \(f\) and \(g\) are said to be equal \textbf{almost
 everywhere} with respect to \(\mu\). When working with probability
-distributions instead of measures the term \textbf{almost surely} equal
-is used instead. A bit more colloquially we can say that the two
+distributions instead of measures, the term \textbf{almost surely} equal
+is used instead. A bit more colloquially, we can say that the two
 integrands are equal \textbf{up to subsets of measure zero} or equal
 \textbf{up to null subsets}.
 
 Much of the mathematics literature overloads the equals sign when
 referring to measurable functions that are equal almost everywhere in
 equations, as that is the only notion of equals that is relevant in
-measure and probability theory. In this book I will be more explicit and
-use \[
+measure and probability theory. In this book, I will be more explicit
+and use \[
 f \overset{\mu}{=} g
 \] whenever comparing two measurable functions that are equal up to
 \(\mu\)-null subsets.
 
-Intuitively the null subsets of a measure can ``wash out'' some of the
-finer structure of integrands. For example on a real line any countable
-collection of points is allocated zero Lebesgue measure. Consequently
+Intuitively, the null subsets of a measure can ``wash out'' some of the
+finer structure of integrands. For example, on a real line any countable
+collection of points is allocated zero Lebesgue measure. Consequently,
 integration with respect to the Lebesgue measure will disregard any
 ``point defects'' in the integrals
 (Figure~\ref{fig-equivalent-integrands}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/equivalent_integrands/equivalent_integrands.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/equivalent_integrands/equivalent_integrands.pdf}
 
 }
 
 \caption{\label{fig-equivalent-integrands}Because any countable
-collection of points is allocated zero Lebesgue measure any integrands
+collection of points is allocated zero Lebesgue measure, any integrands
 whose outputs differ only at a countable number of inputs will yield the
 same measure-informed integrals. Here
 \(\mathbb{I}_{\lambda}[f_{1}] = \mathbb{I}_{\lambda}[f_{2}] = \mathbb{I}_{\lambda}[f_{3}]\)
 and, from perspective of the Lebesgue measure, these functions are
-equivalent. In this case we write
+equivalent. In this case, we write
 \(f_{1} \overset{\lambda}{=} f_{2} \overset{\lambda}{=} f_{3}\).}
 
-\end{figure}
+\end{figure}%
 
 Applications of measure theory can't distinguish between integrands that
-are equal up to sets of measure zero. If we want to avoid this ambiguity
-then we have to impose structural constraints to isolate a single,
-unique integrands from the collection of equivalent integrands. For
-example we can modify a continuous integrands on input subsets of
+are equal up to sets of measure zero. If we want to avoid this
+ambiguity, then we have to impose structural constraints to isolate a
+single, unique integrands from the collection of equivalent integrands.
+For example, we can modify a continuous integrands on input subsets of
 measure zero without changing the measure-informed integrals, but those
 modifications will also introduce discontinuities. Amongst all of the
-equivalent integrands only one will be continuous and even though
-general integrands are not unique continuous integrands are.
+equivalent integrands, only one will be continuous. In other words, even
+though general integrands are not unique, continuous integrands are.
 
 Equality up to sets of measure zero is mostly a technical concern, but
 there are few exceptional circumstances where it will be relevant in
 practice. I will clearly point these circumstances out as we go along.
 
-\hypertarget{sec:alt_notations}{%
 \subsection{Alternative Measure-Informed Integral
-Notations}\label{sec:alt_notations}}
+Notations}\label{sec:alt_notations}
 
 One of the limitations of the measure-informed integral notation,
 \(\mathbb{I}_{\mu}[f]\), is that it doesn't denote the ambient space.
-When working on a single space this isn't too much of an issue, but it
-can cause confusion when we start working with multiple spaces at the
-same time.
+When working on a single space, this isn't too much of an issue. That
+said, it can cause confusion when we start working with multiple spaces
+at the same time.
 
 A more expressive notation like \[
 \mathbb{I}_{(X, \mathcal{X}, \mu)}[f]
 \\
 \mathbb{I}_{(Y, \mathcal{Y}, \nu)}[g]
-\] is much more explicit but also much more cumbersome. Mathematicians
+\] is much more explicit, but also much more cumbersome. Mathematicians
 have developed a variety of shorthand notations that offer different
 compromises between clarity and compactness.
 
-For example some references denote measure-informed integrals as \[
+For example, some references denote measure-informed integrals as \[
 \mathbb{I}_{\mu}[f] = \int_{X} \mu \, f,
 \] where the subscript of the integral sign allows us to specify the
 ambient space and a \(\sigma\)-algebra is taken for granted. When using
 this notation, however, we have to be careful to not confuse \(\int\)
 with the Riemann integral from calculus. We'll discuss the subtle
 relationship between measure-informed integration and Riemann
-integration in detail in \href{@sec:integration_on_R}{Section 5.2}.
+integration in detail in \hyperref[sec:integration_on_R]{Section 5.2}.
 
 We can also use variables to denote the ambient space. Taking
 \(x \in X\) to be a variable that takes values in \(X\), some references
@@ -807,104 +788,100 @@ references prefer instead \[
 \mathbb{I}_{\mu}[f] = \int f(x) \, \mu(\mathrm{d} x),
 \] and \[
 \mathbb{I}_{\mu}[f] = \int f(x) \, \mathrm{d} \mu(x).
-\] Again when using these particular notations we have to be careful to
+\] Again, when using these particular notations we have to be careful to
 avoid confusing them with Riemann integrals.
 
-For this book I will use \(\mathbb{I}_{\mu}[f]\) most often, but when it
-becomes convenient I'll also use the notation \[
+For this book, I will use \(\mathbb{I}_{\mu}[f]\) most often, but when
+it becomes convenient I'll also use the notation \[
 \mathbb{I}_{\mu}[f] = \int \mu(\mathrm{d} x) \, f(x).
 \]
 
-\hypertarget{expectation-values}{%
-\subsection{Expectation Values}\label{expectation-values}}
+\subsection{Expectation Values}\label{expectation-values}
 
-In this book we will ultimately be interested in not general measures
-but rather probability distributions. General measures will be used only
-as tools to help implement probability distributions in practice.
+In probability theory we are interested in not general measures, but
+rather probability distributions. General measures are used only as
+tools to help implement probability distributions in practice.
 
-Within this context measure-informed integration is also known as
+Within this context, measure-informed integration is also known as
 \textbf{expectation}, with measure-informed integrals known as
-\textbf{expectation values}, \(\mathbb{E}_{\pi}[f]\). Similarly
+\textbf{expectation values}, \(\mathbb{E}_{\pi}[f]\). Similarly,
 integrands become \textbf{expectands}.
 
-Technically either terminology is correct when referring to probability
+Technically, either terminology is correct when referring to probability
 distributions, but I will use the expectation terminology as much as
 possible to better relate to the statistics literature where it is
 typical.
 
-\hypertarget{specifying-measures-with-integrals}{%
 \section{Specifying Measures With
-Integrals}\label{specifying-measures-with-integrals}}
+Integrals}\label{specifying-measures-with-integrals}
 
-To this point we have derived measure-informed integrals as a
+To this point, we have derived measure-informed integrals as a
 consequence of measurable subset allocations. Measure-informed
-integrals, however, can also be used to define measures directly, with
+integrals, however, can also be used to directly define measures, with
 subset allocations derived indirectly. While a bit more abstract than
-our initial approach this perspective does have its benefits.
+our initial approach, this perspective does have its benefits.
 
-\hypertarget{functional-perspective-of-measures}{%
 \subsection{Functional Perspective of
-Measures}\label{functional-perspective-of-measures}}
+Measures}\label{functional-perspective-of-measures}
 
 Measure-informed integrals map real-valued functions into real numbers.
 If we denote the space of all functions from \(X\) to \(\mathbb{R}\) as
-\(C(X)\) then we might be tempted to write this mapping as
+\(C(X)\), then we might be tempted to write this mapping as
 \begin{alignat*}{6}
 \mathbb{I}_{\mu} :\; & C(X) & &\rightarrow& \; & \mathbb{R} &
 \\
 & f & &\mapsto& & \mathbb{I}_{\mu}[f] &.
-\end{alignat*} Unfortunately this isn't technically correct because not
-every real-valued function has a well-defined measure-informed integral.
-In other words \(C(X)\) is too large of an input space.
+\end{alignat*} Because not every real-valued function has a well-defined
+measure-informed integral, however, this isn't technically correct. In
+other words, \(C(X)\) is too large of a space of functions.
 
-To remedy that we can define \[
+To remedy that, we can define \[
 L(X, \mathcal{X}, \mu) \subset C(X)
 \] as the subset of real-valued functions from \(X\) to \(\mathbb{R}\)
 that are measurable with respect to \(\mathcal{X}\) and then integrable
 with respect to \(\mu\). Using the terminology introduced in the
 previous section, \(L(X, \mathcal{X}, \mu)\) is the space of integrands.
 
-With this notation measure-informed integration can be interpreted as a
+With this notation, measure-informed integration can be interpreted as a
 map from integrands to real numbers, \begin{alignat*}{6}
 \mathbb{I}_{\mu} :\; & L(X, \mathcal{X}, \mu) & &\rightarrow& \;
 & \mathbb{R} &
 \\
 & f & &\mapsto& & \mathbb{I}_{\mu}[f] &.
-\end{alignat*} In fact measure-informed integration is the only
-\emph{linear} mapping of this form.
+\end{alignat*} In fact, measure-informed integration is the only
+\emph{linear} mapping between these spaces.
 
 Because \(L(X, \mathcal{X}, \mu)\) contains all of the indicator
-functions this functional relationship between
+functions, the functional relationship between
 \(L(X, \mathcal{X}, \mu)\) and \(\mathbb{R}\) determines the allocations
-to every measurable subset, and hence full determines the measure
-\(\mu\). At the same time \(L(X, \mathcal{X}, \mu)\) also contains many
+to every measurable subset, and hence fully determines the measure
+\(\mu\). At the same time, \(L(X, \mathcal{X}, \mu)\) also contains many
 integrands that are not indicator functions, and hence quite a bit of
 redundant information about \(\mu\).
 
 Sufficiently nice measures can be completely characterized by their
 integral action on subsets of \(L(X, \mathcal{X}, \mu)\) that do not
-contain any indicator functions at all! In theory the measure-informed
-integrals of other integrands, including indicator functions to recover
-subset allocations, can then be derived from these initial integrals.
-These sparser characterizations are particularly useful for analyzing
-certain theoretical properties of measures with the tools of
-\textbf{functional analysis}.
+contain any indicator functions at all! In theory, the measure-informed
+integrals of other integrands, including indicator functions from which
+we can recover subset allocations, can then be derived from these
+initial integrals. These sparse characterizations are particularly
+useful for analyzing certain theoretical properties of measures with the
+tools of \textbf{functional analysis}.
 
 The integration perspective also has its benefits for applied practice.
-For example once we've built a probability distribution relevant to an
-application we will use expectation values to extract meaningful
+For example, once we've built a probability distribution relevant to an
+application, we will use expectation values to extract meaningful
 information. \textbf{Probabilistic computational algorithms} automate
 this process, mapping expectands to expectation values exactly or, more
 realistically, approximately.
 
 Interpreting measures as integral generators helps us understand not
-only what operations we need to carry out to realize an applied analysis
-but also how well our algorithmic tools actually implement those
-operations. We will spend a good bit of time discussing these issues in
-later chapters.
+only what operations we need to carry out in an applied analysis, but
+also how well our algorithmic tools actually implement those operations.
+We will spend a good bit of time discussing these issues in later
+chapters.
 
-\hypertarget{sec:scaling_measures}{%
-\subsection{Scaling Measures}\label{sec:scaling_measures}}
+\subsection{Scaling Measures}\label{sec:scaling_measures}
 
 Measures become much more flexible tools when we can readily modify
 their behavior, enhancing the measure at some points while suppressing
@@ -912,7 +889,7 @@ it at others. The functional perspective of measures is particularly
 convenient for implicitly defining these modifications that would be at
 best awkward to specify directly through subset allocations.
 
-For example let's say that we want to \emph{globally} scale the subset
+For example, let's say that we want to \emph{globally} scale the subset
 allocations defined by \(\mu\) with a constant
 \(\alpha \in \mathbb{R}^{+}\). The scaled measure is straightforward to
 define by modifying the individual subset allocations, \[
@@ -953,23 +930,27 @@ to \(\mu\), \begin{align*}
 &=
 \mathbb{I}_{\mu} [ \alpha \cdot s ].
 \end{align*} Because general measure-informed integrals are derived from
-the measure-informed integrals of simple functions we will then have \[
-\mathbb{I}_{\alpha \cdot \mu} [ f ] = \mathbb{I}_{\mu} [ \alpha \cdot f ]
+the measure-informed integrals of simple functions, we will then have \[
+\mathbb{I}_{\alpha \cdot \mu} [ f ]
+=
+\mathbb{I}_{\mu} [ \alpha \cdot f ]
 \] for \emph{every} integrand \(f: X \rightarrow \mathbb{R}\). In other
-words these modified integrals fully define the scaled measure
+words, these modified integrals fully define the scaled measure
 \(\alpha \cdot \mu\) just as well as the modified subset allocations.
 
-To complicate matters we might then ask how we can \emph{locally} scale
+To complicate matters, we might then ask how we can \emph{locally} scale
 a measure by some positive, \(\mathcal{X}\)-measurable, real-valued
 function \(g: X \rightarrow \mathbb{R}^{+}\). Because \(g\) varies
-across non-atomic subsets it is no longer clear how we can consistently
+across non-atomic subsets, it is no longer clear how we can consistently
 modify all of the initial subset allocations to be larger when \(g\) is
 larger and smaller when \(g\) is smaller.
 
 The functional construction, however, immediately generalizes. We can
 \emph{define} a scaled measure \(g \cdot \mu\) as the unique measure
 with the integrals \[
-\mathbb{I}_{g \cdot \mu} [ f ] \equiv \mathbb{I}_{\mu} [ g \cdot f ]
+\mathbb{I}_{g \cdot \mu} [ f ]
+\equiv
+\mathbb{I}_{\mu} [ g \cdot f ]
 \] for every integrand \(f: X \rightarrow \mathbb{R}\) with \[
 \mathbb{I}_{\mu} [ \, | g \cdot f | \, ] < \infty.
 \]
@@ -982,23 +963,22 @@ necessary, modifications to the subset allocations, \begin{align*}
 \\
 &=
 \mathbb{I}_{\mu} [ g \cdot I_{\mathsf{x}} ].
-\end{align*} In particular the modified subset allocations are no longer
-given by simple scalings of the initial subset allocations!
+\end{align*} In particular, the modified subset allocations are no
+longer given by simple scalings of the initial subset allocations!
 
 This flexible construction can be applied in a variety of useful ways.
-For example scaling a measure \(\mu\) by the indicator function of a
+For example, scaling a measure \(\mu\) by the indicator function of a
 measurable subset \(\mathsf{x}'\), \[
 \mathbb{I}_{I_{\mathsf{x}'} \cdot \mu} [ f ]
 \equiv
 \mathbb{I}_{\mu} [ I_{\mathsf{x}'} \cdot f ],
 \] consistently zeroes out all measure outside of \(\mathsf{x}'\),
 restricting \(\mu\) to that subset. If \(X\) is an ordered space and
-\(\mathsf{x}'\) is an interval subset then this restriction is also
+\(\mathsf{x}'\) is an interval subset ,then this restriction is also
 known as \textbf{truncation}.
 
-\hypertarget{scaling-probability-distributions}{%
 \subsection{Scaling Probability
-Distributions}\label{scaling-probability-distributions}}
+Distributions}\label{scaling-probability-distributions}
 
 Scaling probability distributions is not quite as straightforward
 because we have to maintain the proper normalization. Naively scaling a
@@ -1015,12 +995,14 @@ probability distribution \(\pi\) with a positive,
 \\
 &=
 \mathbb{E}_{\pi} [ g ]
-\end{align*} which is not, in general, equal to \(1\). In other words
-scaling a probability distribution results not in another probability
-distribution but rather a generic measure.
+\end{align*} which is not, in general, equal to \(1\). Scaling a
+probability distribution usually results not in another probability
+distribution, but rather a generic measure!
 
-If we want transform one probability distribution into another then we
-need to correct for the modified normalization, defining \begin{align*}
+If we want to transform one probability distribution into another, then
+we need to correct for the modified normalization. To that end, we can
+define the renormalized scaling \(g \ast \pi\) as the probability
+distribution with the expectation values \begin{align*}
 \mathbb{E}_{g \ast \pi} [ f ]
 &\equiv
 \mathbb{E}_{\pi} \left[ \frac{g}{ \mathbb{E}_{\pi} [ g ] } \cdot f \right]
@@ -1031,12 +1013,12 @@ need to correct for the modified normalization, defining \begin{align*}
 \mathbb{E}_{\pi} [ \, | g \cdot f | \, ] < \infty.
 \]
 
-In this case the modified subset allocations become \begin{align*}
+In this case, the modified subset allocations become \begin{align*}
 (g \ast \pi)(\mathsf{x})
 &=
 \frac{ \mathbb{E}_{\pi} [ g \cdot I_{\mathsf{x}} ] }
 { \mathbb{E}_{\pi} [ g ] }.
-\end{align*} Specifically we will always have \begin{align*}
+\end{align*} Specifically, we will always have \begin{align*}
 (g \ast \pi)(X)
 &=
 \frac{ \mathbb{E}_{\pi} [ g \cdot I_{X} ] }
@@ -1047,11 +1029,11 @@ In this case the modified subset allocations become \begin{align*}
 { \mathbb{E}_{\pi} [ g ] }
 \\
 &=
-1
+1,
 \end{align*} as necessary.
 
-For example scaling with an indicator function restricts a probability
-distribution to the corresponding subset and reduces the total
+For instance, scaling with an indicator function restricts a probability
+distribution to the corresponding subset while also reducing the total
 probability to the probability initially allocated to that subset,
 \begin{align*}
 (I_{\mathsf{x}'} \cdot \pi)(X)
@@ -1069,7 +1051,7 @@ probability to the probability initially allocated to that subset,
 \end{align*}
 
 Scaling and then normalizing, however, corrects the proportional subset
-allocations to this restriction, \begin{align*}
+allocations to account for this restriction, \begin{align*}
 (I_{\mathsf{x}'} \ast \pi)( \mathsf{x} )
 &=
 \frac{ \mathbb{E}_{I_{\mathsf{x}'} \ast \pi} [ I_{\mathsf{x}} ] }
@@ -1086,7 +1068,7 @@ allocations to this restriction, \begin{align*}
 &=
 \frac{ \pi(\mathsf{x}' \cap \mathsf{x}) }
 { \pi(\mathsf{x}') }.
-\end{align*} In particular \[
+\end{align*} In particular, \[
 (I_{\mathsf{x}'} \ast \pi)( X )
 =
 \frac{ \pi(\mathsf{x}' \cap X) }{ \pi(\mathsf{x}') }
@@ -1096,52 +1078,49 @@ allocations to this restriction, \begin{align*}
 1.
 \]
 
-\hypertarget{structure-informed-integrals}{%
 \section{Structure-Informed
-Integrals}\label{structure-informed-integrals}}
+Integrals}\label{structure-informed-integrals}
 
 Every ambient space admits infinitely many real-valued functions, and
 hence endless ways to interrogate a given measure through
 measure-informed integration. Some integrands, however, are naturally
-compatible with the structure of the space itself, and their integrals
+compatible with the structure of an ambient space; their integrals
 extract particularly interpretable information. In this section we'll
 review some of the most common structure-informed integrals.
 
-\hypertarget{moments-and-cumulants}{%
-\subsection{Moments and Cumulants}\label{moments-and-cumulants}}
+\subsection{Moments and Cumulants}\label{moments-and-cumulants}
 
 Some spaces are inherently related to a real line. The precise
 relationship between the elements of a space and the elements of a real
 line defines a distinguished real-valued function, and hence a
-distinguished integrand. We can even build off of this initial integrand
-to construct an entire family of useful integrands.
+distinguished integrand. We can build off of this initial integrand to
+construct an entire family of useful integrands.
 
-\hypertarget{embeddings}{%
-\subsubsection{Embeddings}\label{embeddings}}
+\subsubsection{Embeddings}\label{embeddings}
 
-In order for an ambient space \(X\) to be compatible with a real line it
-needs to share the metric structure of the real line. We say that we can
-\textbf{embed} a metric space \(X\) into a real line if we can construct
-an isometric injection \(\iota : X \rightarrow \mathbb{R}\), in other
-words a function that maps each element of \(X\) to a distinct output
-while also preserving distances, \[
+In order for an ambient space \(X\) to be compatible with a real line,
+it needs to share the metric structure of the real line. We say that we
+can \textbf{embed} a metric space \(X\) into a real line if we can
+construct an isometric injection \(\iota : X \rightarrow \mathbb{R}\),
+in other words a function that maps each element of \(X\) to a distinct
+output while also preserving distances, \[
 d_{X}(x_{1}, x_{2})
 = d_{\mathbb{R}}(\iota(x_{1}), \iota(x_{2}))
 = | \iota(x_{2}) - \iota(x_{1}) |.
 \] Embedding maps are often denoted with a hooked arrow instead of the
 typical flat arrow, \[
 \iota : X \hookrightarrow \mathbb{R},
-\] to communicate that some structure is being preserved by definition.
+\] to communicate that the metric structure is being preserved.
 
-Note that the construction of an embedding requires that we fix the
-output structure of the output real line, specifying either a particular
-rigid real line or a particular parameterization of a flexible real
-line. An ambient might embed into \emph{a} real line, but it cannot
-embed into \emph{all} real lines at the same time.
+Note that the construction of an embedding requires fixing the output
+real line to be a particular rigid real line or, equivalently, a
+particular parameterization of a flexible real line. An ambient space
+might embed into \emph{a} real line, but it cannot embed into \emph{all}
+real lines at the same time.
 
-For example if \(X\) is itself a real line then the identify map defines
-a natural embedding \(\iota : \mathbb{R} \hookrightarrow \mathbb{R}\)
-(Figure~\ref{fig-identity}). Similarly we can embed subsets of a real
+If \(X\) is itself a real line, then the identify map defines a natural
+embedding \(\iota : \mathbb{R} \hookrightarrow \mathbb{R}\)
+(Figure~\ref{fig-identity}). Similarly, we can embed subsets of a real
 line, such as intervals
 \(\iota : [x_{1}, x_{2}] \hookrightarrow \mathbb{R}\)
 (Figure~\ref{fig-interval}) or even integers
@@ -1150,125 +1129,102 @@ line, such as intervals
 
 \begin{figure}
 
-\begin{minipage}[t]{0.05\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-~
-
-}
-
-\end{minipage}%
-%
-\begin{minipage}[t]{0.30\linewidth}
-
-{\centering 
-
-\raisebox{-\height}{
-
-\includegraphics{figures/embeddings/identity/identity.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/embeddings/identity/identity.pdf}
 
 }
 
 \subcaption{\label{fig-identity}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.30\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/embeddings/interval/interval.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/embeddings/interval/interval.pdf}
 
 }
 
 \subcaption{\label{fig-interval}}
+
 \end{minipage}%
+\newline
+\begin{minipage}{0.25\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.30\linewidth}
+\begin{minipage}{0.50\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/embeddings/integer/integer.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/embeddings/integer/integer.pdf}
 
 }
 
 \subcaption{\label{fig-integer}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.25\linewidth}
+~\end{minipage}%
 
 \caption{\label{fig-integrate}Many spaces naturally embed into a real
-line, including (a) that real line, (b) intervals of that real line, and
-(c) integers.}
+line, including (a) that real line itself, (b) intervals of that real
+line, and (c) integers.}
 
-\end{figure}
+\end{figure}%
 
 The existence of an embedding map can be interpreted in a few different
-ways. On one hand it implies that \(X\) is isomorphic to some subset of
-a real line, if not an entire real line, which allows us to interpret
-\(X\) as that subset. Alternatively we can think of an embedding map as
-assigning to each element \(x \in X\) a numerical \emph{position} that
-we can use to characterize geometric behavior. Both interpretations are
-useful but in this section we will lean heavily on this latter
+ways. On one hand, it implies that \(X\) is isomorphic to some subset of
+a real line, if not an entire real line. This allows us to interpret
+\(X\) as being that subset. Alternatively, we can think of an embedding
+map as assigning to each element \(x \in X\) a numerical \emph{position}
+that we can use to characterize geometric behavior. Both interpretations
+are useful, but in this section we will lean heavily on this latter
 perspective.
 
 When an embedding map is measurable with respect to the ambient
-\(\sigma\)-algebra and integrable with respect to the ambient measure it
-defines an integrand. Most embedding maps are measurable but
-integrability is less dependable, and failures of integrability are
-important in practice.
+\(\sigma\)-algebra and integrable with respect to the ambient measure,
+it defines an integrand. Most embedding maps are measurable.
+Integrability, however, is less dependable, and failures of
+integrability are important in practice.
 
-\hypertarget{the-mean}{%
-\subsubsection{The Mean}\label{the-mean}}
+\subsubsection{The Mean}\label{the-mean}
 
-If an embedding function is an integrand than we can evaluate its
-measure-informed integral, \(\mathbb{I}_{\mu}[\iota]\). The ultimately
+If an embedding function is an integrand, then we can evaluate its
+measure-informed integral, \(\mathbb{I}_{\mu}[\iota]\). The ultimate
 utility of this measure-informed integral, however, depends on what
 information about the ambient measure it extracts.
 
 Interpreting \(\mathbb{I}_{\mu}[\iota]\) is straightforward when \(X\)
 is finite, \(\mathcal{X}\) is the full power set, and we can represent
-any measure with a mass function. In this case we can explicitly compute
-the \(\mathbb{I}_{\mu}[\iota]\) as a weighted sum of positions, \[
+any measure with a mass function. In this case, we can explicitly
+compute \(\mathbb{I}_{\mu}[\iota]\) as a weighted sum of positions, \[
 \mathbb{I}_{\mu}[\iota] = \sum_{x \in X} \mu(x) \, \iota(x).
-\] The more measure that is allocated to an element the more strongly
+\] The more measure that is allocated to an element, the more strongly
 the measure-informed integral is pulled towards the position of that
-element. In other words \(\mathbb{I}_{\mu}[\iota]\) is one way to
+element. In other words, \(\mathbb{I}_{\mu}[\iota]\) is one way to
 quantify the position around which the measure \(\mu\) concentrates,
 defining a notion of \emph{centrality} for the measure \(\mu\).
 
 This interpretation does generalize to arbitrary spaces, although the
 formal motivation is a bit more subtle because we can no longer
-interpret measure-informed integrals as simple weighted sums. Instead
+interpret measure-informed integrals as simple weighted sums. Instead,
 consider a baseline position \(r_{0} \in \mathbb{R}\) and the squared
 distance function \begin{alignat*}{6}
 d_{r_{0}}^{2} :\; & X & &\rightarrow& \; &\mathbb{R}^{+}&
 \\
-& x & &\mapsto& & (\iota(x) - r_{0})^{2} &
+& x & &\mapsto& & (\iota(x) - r_{0})^{2} &,
 \end{alignat*} which quantifies how far the position of any point in the
 ambient space is from that baseline position.
 
-So long as \(\iota : X \hookrightarrow \mathbb{R}\) is an embedding this
-squared distance function will be measurable and will define a valid
-integrand. The measure-informed integral \begin{align*}
+So long as \(\iota : X \hookrightarrow \mathbb{R}\) is an embedding,
+this squared distance function will be measurable and, consequently,
+will define a valid integrand. The measure-informed integral
+\begin{align*}
 \mathbb{I}_{\mu} \left[ d_{r_{0}}^{2} \right]
 &=
 \mathbb{I}_{\mu} \left[ (\iota - r_{0})^{2} \right]
@@ -1289,14 +1245,14 @@ integrand. The measure-informed integral \begin{align*}
 around \(r_{0}\); the larger the integral the less \(\mu\) concentrates
 around \(r_{0}\).
 
-Consequently the baseline position \(r_{0} \in \mathbb{R}\) with the
+Consequently, the baseline position \(r_{0} \in \mathbb{R}\) with the
 \emph{smallest} integrated squared distance should be, in some sense,
 the position closest to where \(\mu\) concentrates. Because we're
-working with continuous positions we can compute the baseline position
-that minimizes the integrated squared distance using calculus methods
-even if \(X\) itself is not continuous.
+working with continuous positions, we can compute the baseline position
+that minimizes the integrated squared distance using calculus tools even
+if \(X\) itself is not continuous.
 
-In particular the minimum \(r_{0}^{*}\) is given by setting the
+In particular, the minimum \(r_{0}^{*}\) is given by setting the
 derivative of the measure-informed integral, \begin{align*}
 \frac{\mathrm{d}}{\mathrm{d} r_{0} }
 \mathbb{I}_{\mu} \left[ d_{r_{0}}^{2} \right]
@@ -1312,7 +1268,8 @@ derivative of the measure-informed integral, \begin{align*}
 \end{align*} to zero, \begin{align*}
 0
 &= \left. \frac{\mathrm{d}}{\mathrm{d} r_{0} }
-\mathbb{I}_{\mu} \left[ d_{r_{0}}^{2} \right] \right|_{r_{0} = r_{0}^{*}}
+\mathbb{I}_{\mu}
+\left[ d_{r_{0}}^{2} \right] \right|_{r_{0} = r_{0}^{*}}
 \\
 0
 &=
@@ -1328,67 +1285,71 @@ r_{0}^{*}
 \mathbb{I}_{\mu} \left[ \iota \right].
 \end{align*}
 
-In other words the measure-informed integral of the embedding function
+Specifically, the measure-informed integral of the embedding function
 \(\mathbb{I}_{\mu} [ \iota ]\) is exactly the position that minimizes
-the expected squared distance and, in that sense, is closest to the
-concentration of \(\mu\). Note that if \(X\) is not continuous, for
-example if \(X = \mathbb{Z}\), then this central position might fall
-between the positions of the individual elements
+the expected squared distance. In that sense, it is the position closest
+to the concentration of \(\mu\). Note, however, that if \(X\) is not
+continuous, for example if \(X = \mathbb{Z}\), then this central
+position might fall between the positions of the individual elements
 (Figure~\ref{fig-mean}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.7\textwidth,height=\textheight]{figures/mean/mean.pdf}
+\centering{
+
+\includegraphics[width=0.7\textwidth,height=\textheight]{figures/mean/mean.pdf}
 
 }
 
 \caption{\label{fig-mean}The measure-informed integral of an embedding
-function, \(\mathbb{I}_{\mu} [ \iota ]\), is a continuous value even
-when the ambient space is discrete. In these cases the centrality of a
+function, \(\mathbb{I}_{\mu} [ \iota ]\), can take arbitrary real values
+even when the ambient space cannot. In these cases, the centrality of a
 measure can fall ``between'' the individual elements.}
 
-\end{figure}
+\end{figure}%
 
 Because \(\mathbb{I}_{\mu} \left[ \iota \right]\) quantifies a sense of
-the centrality of the measure \(\mu\) is referred to as the
+the centrality of the measure \(\mu\), it is referred to as the
 \textbf{mean} of \(\mu\), in reference to the ``middle'' of the measure.
-When space is at a premium I will use \(\mathbb{M}_{\mu}\) to denote the
-mean, with the ambient space and embedding map all implicit.
+When space is at a premium, I will use \(\mathbb{M}_{\mu}\) to denote
+the mean, with the ambient space and embedding map all implicit.
 
-\hypertarget{higher-order-moments-and-cumulants}{%
 \subsubsection{Higher-Order Moments and
-Cumulants}\label{higher-order-moments-and-cumulants}}
+Cumulants}\label{higher-order-moments-and-cumulants}
 
 We have not yet, however, exhausted the usefulness of an embedding map.
-For example the integrated squared distance from the mean \[
+For example, the integrated squared distance from the mean \[
 \mathbb{I}_{\mu} \bigg[ d_{\mathbb{M}_{\mu}}^{2} \bigg]
 =
 \mathbb{I}_{\mu} \bigg[ (\iota - \mathbb{M}_{\mu})^{2} \bigg]
 \] quantifies how \emph{strongly} \(\mu\) concentrates around its
-centrality; the larger the measure-informed integral the more diffuse
-the concentration is. This is known as the \textbf{variance} of \(\mu\).
+centrality; the larger the measure-informed integral is, the more
+diffuse the concentration is. This is known as the \textbf{variance} of
+\(\mu\).
 
-Higher-powers extract even more information. For example the
+Higher-powers extract even more information. For instance, the
 measure-informed integral of the cubic integrand \[
 \mathbb{I}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{3} \right]
 \] characterizes how \emph{symmetric} the concentration of \(\mu\) is
 around its centrality.
 
 The many measure-informed integral that we can construct from an
-embedding function can be systemized in various ways. For example the
-direct powers \[
-\mathbb{M}_{\mu, k} = \mathbb{I}_{\mu} \left[ \iota^{k} \right]
-\] define the \(k\)-th order \textbf{moments} while the shifted powers
+embedding function can be systematized in various ways. The direct
+powers, \[
+\mathbb{M}_{\mu, k} = \mathbb{I}_{\mu} \left[ \iota^{k} \right],
+\] define the \(k\)-th order \textbf{moments}, while the shifted powers
 \[
 \mathbb{D}_{\mu, k} =
 \mathbb{I}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{k} \right]
-\] define the \(k\)-th order \textbf{central moments}. In some cases
+\] define the \(k\)-th order \textbf{central moments}. In some cases,
 normalizing the central moments, \[
 \mathbb{N}_{\mu, k} =
-\frac{ \mathbb{I}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{k} \right] }
+\frac{ \mathbb{I}_{\mu}
+\left[ (\iota - \mathbb{M}_{\mu})^{k} \right] }
 { (\mathbb{D}_{\mu, 2})^{k / 2} }
 =
-\frac{ \mathbb{I}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{k} \right] }
+\frac{ \mathbb{I}_{\mu}
+\left[ (\iota - \mathbb{M}_{\mu})^{k} \right] }
 { \left(
     \mathbb{I}_{\mu} \left[ (\iota - \mathbb{M}_{\mu})^{2} \right]
   \right)^{k / 2} },
@@ -1399,27 +1360,25 @@ While straightforward to construct, higher-order moments can be tricky
 to interpret. More useful information can often be isolated by carefully
 mixing a higher-order moment with lower-order moments, resulting in
 \textbf{cumulants}, \(\mathbb{C}_{\mu, k}\). The general construction of
-cumulants is complicated, with some very interesting but very elaborate
-connections to combinatorics, but in this book we'll focus on the first
-few cumulants. Conveniently the first-order cumulant is just the mean,
-\[
+cumulants is complicated, with some very interesting connections to
+combinatorics, but in this book we'll focus on only the first few
+cumulants. Conveniently the first-order cumulant is just the mean, \[
 \mathbb{C}_{\mu, 1} = \mathbb{M}_{\mu, 1},
 \] the second-order cumulant is just the variance, \[
 \mathbb{C}_{\mu, 2} = \mathbb{D}_{\mu, 2},
 \] and the third-order cumulant is just the third-order central moment,
 \[
 \mathbb{C}_{\mu, 3} = \mathbb{D}_{\mu, 3}.
-\] Beyond third-order the cumulants begin deviate away from the central
+\] Beyond third-order, the cumulants begin deviate away from the central
 moments.
 
-\hypertarget{spaces-without-moments}{%
-\subsubsection{Spaces Without Moments}\label{spaces-without-moments}}
+\subsubsection{Spaces Without Moments}\label{spaces-without-moments}
 
-Well-defined moments can be obstructed in three different ways. Firstly
+Well-defined moments can be obstructed in three different ways. First,
 an isometric injection from the ambient space into a real line might not
-exist. Secondly if an isometric injection does exist then it needs to be
+exist. Second, if an isometric injection does exist then it needs to be
 not only \(\mathcal{X}\)-measurable but also \(\mu\)-integrable. In
-practice measurability is almost never an issue on finite dimensional
+practice, measurability is almost never an issue on finite-dimensional
 ambient spaces, but we do need to take care to check existence and
 integrability to avoid nonsensical results.
 
@@ -1431,74 +1390,75 @@ circle at any point, unrolling it into the half-open interval
 \((0, 2 \pi]\), and then mapping the half-open interval into the entire
 real line.
 
-Unfortunately any function constructed this way will not be isometric;
+Unfortunately, any function constructed this way will not be isometric;
 two points \(x_{1}, x_{2} \in \mathbb{S}^{1}\) around the cut will be
-close to each other in the circle but are mapped into points
+close to each other in the circle, but are mapped into points
 \(y_{1}, y_{2} \in (0, 2 \pi]\), and then
 \(z_{1}, z_{2} \in \mathbb{R}\), that are far apart from each other
 (Figure~\ref{fig-no-circle-embedding}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.4\textwidth,height=\textheight]{figures/embeddings/circle/circle.pdf}
+\centering{
+
+\includegraphics[width=0.4\textwidth,height=\textheight]{figures/embeddings/circle/circle.pdf}
 
 }
 
 \caption{\label{fig-no-circle-embedding}A circle \(\mathbb{S}^{1}\) can
 be injectively mapped into a real line \(\mathbb{R}\) by first cutting
 the circle into a half-open interval
-\((\theta_{0} - \pi, \theta_{0} + \pi]\) and then mapping the half-open
+\((\theta_{0} - \pi, \theta_{0} + \pi]\), and then mapping the half-open
 interval into a real line. This mapping, however, is not isometric. Two
 points \(x_{1}, x_{2} \in \mathbb{S}^{1}\) around the cut will be close
-to each other in the ambient space but map into points
+to each other in the ambient space, but map into points
 \(y_{1}, y_{2} \in (0, 2 \pi]\), and then
 \(z_{1}, z_{2} \in \mathbb{R}\), that are far from each other. Without
-an isometric injection we cannot define moments for any measure over a
-circle.}
+an isometric injection, we cannot define the standard moments for any
+measure over a circle.}
 
-\end{figure}
+\end{figure}%
 
-Ultimately one can use the topological incompatibility between the
-circle and the real line that we first encountered in
+Formally, one can use the topological incompatibility between the circle
+and the real line that we first encountered in
 \href{https://betanalpha.github.io/assets/chapters_html/spaces.html}{Chapter
 Two} to show that there is no way to construct \emph{any} isometry from
 the circle \(\mathbb{S}^{1}\) into a real line \(\mathbb{R}\), let alone
 an injective one.
 
 This formal definition of moments is easy to dismiss as overly
-technical. Unfortunately the practical consequences are critical when
+technical. Unfortunately, the practical consequences are critical when
 working with spaces like circles, spheres, torii, and more. Many
 analyses on these spaces have been undermined by attempts to summarize
 measures with moments that don't actually exist!
 
-All of this said we still to take care with the necessary conditions
-when working with more familiar spaces as well. For example in
-\href{@sec:practical_lebesgue}{Section 5.2.2} we'll learn that the
+All of this said, we still have to take care with the necessary
+conditions when working with more familiar spaces as well. For example,
+in \hyperref[sec:practical_lebesgue]{Section 5.2.2} we'll learn that the
 identify function from a real line into itself is not integrable with
-respect to the Lebesgue measure on a real line. Consequently the
-Lebesgue measure does not have a mean, let alone a variance or other
-higher-order moments.
+respect to the Lebesgue measure on a real line. Consequently, the
+Lebesgue measure does not have a well-defined mean, let alone a variance
+or other higher-order moments.
 
-\hypertarget{histograms}{%
-\subsection{Histograms}\label{histograms}}
+\subsection{Histograms}\label{histograms}
 
-When the structure of the ambient space distinguishes certain subsets
+When the structure of the ambient space distinguishes certain subsets,
 the corresponding indicator functions become natural integrands to
-consider. Conveniently the measure-informed integrals of indicator
+consider. Conveniently, the measure-informed integrals of indicator
 functions are also straightforward to interpret.
 
-For example an ordering on the ambient space motivates interval subsets,
-such as the half-open interval subsets \[
+For instance, an ordering over an ambient space motivates interval
+subsets, such as the half-open interval subsets \[
 ( x_{1}, x_{2} ] = \{ x \in X \mid x_{1} < x \le x_{2} \}.
-\] We can then use disjoint intervals to study the behavior of a measure
-by investigating how the measure allocations, or equivalently the
-measure-informed integrals of the corresponding indicator functions,
+\] We can use \emph{disjoint} intervals to study the behavior of a
+measure by investigating how the measure allocations, or equivalently
+the measure-informed integrals of the corresponding indicator functions,
 vary across the ambient space.
 
-More formally given the sequence of points \[
+More formally, given the sequence of points \[
 \{ x_{1}, \ldots, x_{b}, \ldots, x_{B + 1} \} \in X
-\] we can partition the interval \((x_{1}, x_{B + 1})\) into a sequence
-of \(B\) disjoint half-open intervals, \begin{align*}
+\] we can partition the half-open interval \((x_{1}, x_{B + 1}]\) into a
+sequence of \(B\) disjoint half-open intervals, \begin{align*}
 \mathsf{b}_{1} &= ( x_{1}, x_{2} ]
 \\
 \mathsf{b}_{2} &= ( x_{2}, x_{3} ]
@@ -1525,7 +1485,9 @@ individual intervals denoted \textbf{bins}.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/histograms/histogram/histogram.pdf}
+\centering{
+
+\includegraphics[width=0.6\textwidth,height=\textheight]{figures/histograms/histogram/histogram.pdf}
 
 }
 
@@ -1534,207 +1496,175 @@ the behavior of a measure over an ordered space. After partitioning a
 segment of the ambient space into disjoint intervals, or bins, the
 measure allocated to each bin is represented by a rectangle.}
 
-\end{figure}
+\end{figure}%
 
 Histograms are incredibly useful for quickly communicating some of the
-key features of a measure (Figure~\ref{fig-hist-examples}). For example
-histograms allow us to differentiate between allocations that
+key features of a measure (Figure~\ref{fig-hist-examples}). For
+instance, histograms allow us to differentiate between allocations that
 concentrate around a point, referred to as \textbf{unimodal} measures,
-or even allocations that concentrate around multiple points, referred to
-as \textbf{multimodal} measures. At the same time we can see \emph{how}
-a measure concentrates around a point, for example whether the
+and allocations that concentrate around multiple points, referred to as
+\textbf{multimodal} measures. At the same time, we can see \emph{how} a
+measure concentrates around a point, for example whether the
 concentrations is symmetric or skewed towards smaller or larger values.
 
 \begin{figure}
 
-\begin{minipage}[t]{0.10\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.10\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.40\linewidth}
+\begin{minipage}{0.40\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/histograms/varying_behaviors/diffuse/diffuse.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/histograms/varying_behaviors/diffuse/diffuse.pdf}
 
 }
 
 \subcaption{\label{fig-hist-diffuse}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.40\linewidth}
+\begin{minipage}{0.40\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/histograms/varying_behaviors/unimodal/unimodal.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/histograms/varying_behaviors/unimodal/unimodal.pdf}
 
 }
 
 \subcaption{\label{fig-hist-unimodal}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.10\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.10\linewidth}
+~\end{minipage}%
 \newline
-\begin{minipage}[t]{0.10\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.10\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.40\linewidth}
+\begin{minipage}{0.40\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/histograms/varying_behaviors/unimodal_skewed/unimodal_skewed.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/histograms/varying_behaviors/unimodal_skewed/unimodal_skewed.pdf}
 
 }
 
 \subcaption{\label{fig-hist-unimodal}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.40\linewidth}
+\begin{minipage}{0.40\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/histograms/varying_behaviors/multimodal/multimodal.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/histograms/varying_behaviors/multimodal/multimodal.pdf}
 
 }
 
 \subcaption{\label{fig-hist-multimodal}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.10\linewidth}
+\begin{minipage}{0.10\linewidth}
+~\end{minipage}%
 
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
-
-\caption{\label{fig-hist-examples}Histogram are extremely effective at
+\caption{\label{fig-hist-examples}Histograms are extremely effective at
 communicating the basic features of a measure. The measure in (a) is
 diffuse but decaying, allocating more measure at smaller points than
-larger points. Conversely the measure in (b) concentrates around a
-single point while the measure in (c) concentrates around multiple,
-distinct points. Finally the measure in (d) concentrates around a single
-point, but that concentration is strongly asymmetric unlike the
+larger points. Conversely, the measure in (b) concentrates around a
+single point, while the measure in (c) concentrates around multiple,
+distinct points. Finally, the measure in (d) concentrates around a
+single point, but that concentration is strongly asymmetric, unlike the
 concentration in (b).}
 
-\end{figure}
+\end{figure}%
 
-The smaller the bins the finer the features we can resolve but the more
-measure-informed integrals we have to compute in order to construct the
-histogram (Figure~\ref{fig-hist-binning}). In practice we have to choose
-a binning that is suited to each measure of interest without being too
-expensive to implement.
+The smaller the bins, the finer the features we can resolve
+(Figure~\ref{fig-hist-binning}). At the same time, the smaller the bins,
+the more measure-informed integrals we have to compute in order to
+construct the full histogram. In practice, we have to choose a binning
+that is suited to each measure of interest without being too expensive
+to implement.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/histograms/varying_binning/varying_binning.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/histograms/varying_binning/varying_binning.pdf}
 
 }
 
 \caption{\label{fig-hist-binning}A histogram with a finer binning
 communicates more detail about a given measure, but also requires the
-computation of more measure-informed integrals and hence is more
-expensive to construct. Here as we use smaller bins we start to resolve
-a small side mode. Note that as we decrease the bins we also decrease
+computation of more measure-informed integrals, and hence is more
+expensive to construct. As we use smaller bins here, we start to resolve
+a small side mode. Note that, as we decrease the bins, we also decrease
 the allocated measures, and hence the height of each rectangle. Here the
-heights are scaled to accommodate the smaller measures and make the
-comparison between the histograms easier.}
+heights are scaled to accommodate the smaller measures and facilitate
+the comparison between the three histograms.}
 
-\end{figure}
+\end{figure}%
 
-The practical limitation of a finite number of bins also requires care
-in how we choose the boundaries of a histogram. Because a histogram
-censors any behavior below \(x_{1}\) and above \(x_{B + 1}\) we need to
-choose the binning to span all of the behaviors of interest. For example
-if the ambient measure allocations decay towards smaller and larger
-values then we can set the bin boundaries to where the allocations start
-to become negligible.
+The practical limitation to a finite number of bins also the choice of
+histogram boundaries important. Because a histogram censors any behavior
+below \(x_{1}\) and above \(x_{B + 1}\), we need to choose the binning
+to span all of the behaviors of interest. If, for example, the ambient
+measure allocations decay towards smaller and larger values, then we can
+set the bin boundaries to where the allocations start to become
+negligible.
 
-On discrete measure spaces we can always tune the bins in a histogram to
-span only a single element. In this case the height of each bin reduces
-to \(\mu( \{ x \} )\) and the resulting histogram reduces to a
+On discrete measure spaces, we can always tune the bins in a histogram
+to span only a single element. In this case, the height of each bin
+reduces to \(\mu( \{ x \} )\), and the resulting histogram reduces to a
 visualization of the mass function.
 
-\hypertarget{cumulative-distribution-functions}{%
 \subsection{Cumulative Distribution
-Functions}\label{cumulative-distribution-functions}}
+Functions}\label{cumulative-distribution-functions}
 
-On an ordered space we can also use interval subsets to visualize how
+On an ordered space, we can also use interval subsets to visualize how
 the total measure is allocated as we go from smaller values to larger
-values. More concretely consider the interval subsets consisting of all
+values. More concretely, consider the interval subsets consisting of all
 points smaller than or equal to a given point, \[
 \mathsf{I}_{x} = \{ x' \in X \mid x' \le x \}.
-\] The measure allocated to these interval subsets quantifies how the
-measure accumulates as we scan across the space, \begin{alignat*}{6}
+\] The measure allocated to these overlapping interval subsets
+quantifies how the measure \emph{accumulates} as we scan across the
+space, \begin{alignat*}{6}
 M :\; & X & &\rightarrow& \; &[0, \mu(X)]&
 \\
 & x & &\mapsto& & M_{\mu}(x) = \mu(\mathsf{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathsf{I}_{x}}] &.
-\end{alignat*} According this mapping is known as a \textbf{cumulative
-distribution function} (Figure~\ref{fig-cdf-basics}).
+\end{alignat*} Accordingly, this mapping is known as a
+\textbf{cumulative distribution function} (Figure~\ref{fig-cdf-basics}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\textwidth,height=\textheight]{figures/cdfs/cdf/cdf.pdf}
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figures/cdfs/cdf/cdf.pdf}
 
 }
 
 \caption{\label{fig-cdf-basics}A cumulative distribution function
 quantifies how measure is allocated to expanding intervals on an ordered
-space. At the lower boundary of the space the interval contains no
-points and the cumulative distribution function returns zero. As we move
-towards larger values the interval expands, accumulating more and more
-measure. Finally at the upper boundary of the space the interval
-asymptotes to the total measure.}
+space. At the lower boundary of the space, the interval contains no
+points and the cumulative distribution function always returns zero. As
+we move towards larger values, the interval expands and accumulates more
+and more measure. Finally, at the upper boundary of the space the
+interval asymptotes to the total measure.}
 
-\end{figure}
+\end{figure}%
 
-Cumulative distribution functions are also sometimes written as
-\(\mu([x' < x])\) or even \(\mu(x' < x)\). Personally I find these
-notations to be a bit too confusing as it's easy to mistake which
-variable denotes points in the interval and which variable defines the
-upper boundary of the interval itself.
+Using the shorthand notation for implicit subset allocations that we
+discussed in
+\href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html}{Chapter
+Four}, we can also write a cumulative distribution functions as
+\(\mu([x' < x])\) or even \(\mu(x' < x)\). That said, the shorthand in
+this case can be confusing because it's easy to mistake which variable
+denotes points in the interval and which variable defines the upper
+boundary of the interval itself.
 
-By construction if \(x_{1} < x_{2}\) then
-\(\mathsf{I}_{x_{1}} \subset \mathsf{I}_{x_{2}}\). Consequently \[
+By construction, if \(x_{1} < x_{2}\) then
+\(\mathsf{I}_{x_{1}} \subset \mathsf{I}_{x_{2}}\). Consequently, \[
 \mu(\mathsf{I}_{x_{1}}) \le \mu(\mathsf{I}_{x_{2}})
 \] or, equivalently, \[
 M(x_{1}) \le M(x_{2}).
@@ -1743,105 +1673,83 @@ monotonically non-decreasing function that begins at \(0\) and ends at
 \(\mu(X)\).
 
 The precise shape of this non-decreasing accumulation conveys many
-features of the ambient measure. For example if the measure concentrates
-around a single point then the cumulative distribution function will
-rapidly increase around that point, increasing only slowly before and
-after (Figure~\ref{fig-cdf-unimodal}). In general the faster the
-cumulative distribution function increases the stronger the
-concentration will be (Figure~\ref{fig-cdf-narrow-unimodal}). Similarly
-if there are any gaps in the allocation, intermediate intervals with
-zero allocated measure, then the cumulative distribution function will
-flatten out completely (Figure~\ref{fig-cdf-gap}).
+features of the ambient measure. For instance, if the measure
+concentrates around a single point, then the cumulative distribution
+function will rapidly increase around that point, increasing only slowly
+before and after (Figure~\ref{fig-cdf-unimodal}). In general, the faster
+the cumulative distribution function increases in a neighborhood the
+stronger the concentration will be there
+(Figure~\ref{fig-cdf-narrow-unimodal}). Similarly, if there are any gaps
+in the allocation, where intermediate intervals are allocated zero
+measure, then the cumulative distribution function will flatten out
+completely (Figure~\ref{fig-cdf-gap}).
 
 \begin{figure}
 
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.30\linewidth}
+\begin{minipage}{0.30\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/cdfs/cdf_behaviors/unimodal/unimodal.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/cdfs/cdf_behaviors/unimodal/unimodal.pdf}
 
 }
 
 \subcaption{\label{fig-cdf-unimodal}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.30\linewidth}
+\begin{minipage}{0.30\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/cdfs/cdf_behaviors/narrow_unimodal/narrow_unimodal.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/cdfs/cdf_behaviors/narrow_unimodal/narrow_unimodal.pdf}
 
 }
 
 \subcaption{\label{fig-cdf-narrow-unimodal}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.30\linewidth}
+\begin{minipage}{0.30\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/cdfs/cdf_behaviors/gap/gap.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/cdfs/cdf_behaviors/gap/gap.pdf}
 
 }
 
 \subcaption{\label{fig-cdf-gap}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.05\linewidth}
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
-
-\caption{\label{fig-hist-examples}A careful survey of a cumulative
-distribution function can communicate a wealth of information about the
-ambient measure. (a) Here the ambient measure is unimodal with the
-cumulative distribution function appreciably increasingly only one we
+\caption{\label{fig-cdf-examples}A careful survey of the shape of a
+cumulative distribution function can communicate a wealth of information
+about the ambient measure. (a) Here the ambient measure is unimodal with
+the cumulative distribution function appreciably increasing only once we
 reach the central neighborhood where the measure allocation is
 concentrated. (b) A narrower concentration results in a steeper
 cumulative distribution function. (c) A cumulative distribution function
-flattens if there are any gaps in the measure allocation. Here the
-measure concentrates around two points separated by null interval
+flattens if there are any gaps in the measure allocation. In this case,
+the measure concentrates around two points separated by null interval
 \(\mathsf{n}\) in between.}
 
-\end{figure}
+\end{figure}%
 
 One really nice feature of cumulative distribution functions is that
-they allow us to compute explicit interval probabilities. The union of
-any two-sided, half-open interval \[
+they can be used to directly calculate interval probabilities. The union
+of any two-sided, half-open interval \[
 ( x_{1}, x_{2} ] = \{ x \in X \mid x_{1} < x \le x_{2} \}
 \] with the disjoint one-sided interval \(\mathbb{I}_{x_{1}}\) defines
 another one-sided interval, \[
 \mathsf{I}_{x_{2}} = \mathsf{I}_{x_{1}} \cup (x_{1}, x_{2}].
-\] Because measure allocations are additive this implies that
-\begin{align*}
+\] Because measure allocations to disjoint subsets are additive, this
+implies that \begin{align*}
 \mu(\mathsf{I}_{x_{2}})
 &= \mu( \, \mathsf{I}_{x_{1}} \cup (x_{1}, x_{2}] \, )
 \\
@@ -1858,32 +1766,35 @@ M(x_{1}) + \mu( \, (x_{1}, x_{2}] \, )
 \mu( \, (x_{1}, x_{2}] \, )
 &
 = M(x_{2})  - M(x_{1}).
-\end{align*} In words the measure allocated to any half-open interval
+\end{align*} In words, the measure allocated to any half-open interval
 can be computed by subtracting the cumulative distribution function
 outputs at the interval boundaries (Figure~\ref{fig-cdf-probs}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\textwidth,height=\textheight]{figures/cdfs/cdf_probs/cdf_probs.pdf}
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figures/cdfs/cdf_probs/cdf_probs.pdf}
 
 }
 
 \caption{\label{fig-cdf-probs}The difference of cumulative distribution
 function outputs at two points is equal to the measure allocated to the
-half-open interval spanning those two points. This allows us to
-calculate interval measure allocations as needed.}
+half-open interval spanning those two points. This allows us to readily
+calculate interval measure allocations.}
 
-\end{figure}
+\end{figure}%
 
 If the measure allocated to every measurable subset
-\(\mathsf{x} \in \mathcal{X}\) can be derived from interval allocations
+\(\mathsf{x} \in \mathcal{X}\) can be derived from interval allocations,
 then a cumulative distribution function will provide enough information
 to compute the measure allocated to every measurable subset. In other
-words the cumulative distribution function in this case
-\emph{completely} characterizes the measure, and it can be considered as
-alternative way to define measures entirely. Conveniently on every
+words, the cumulative distribution function will in this case
+\emph{completely} characterizes the measure. Consequently, it can be
+considered an alternative way to define measures entirely. On every
 ordered measurable space that we will encounter, such spaces of integers
-and real numbers equipped with Borel \(\sigma\)-algebras, this will be
+and real numbers equipped with Borel \(\sigma\)-algebras, the
+equivalence of measures and cumulative distribution functions will be
 true.
 
 On an ordered, discrete measure space the cumulative distribution
@@ -1893,13 +1804,15 @@ M(x)
 &= \mu(\{ x' \in X \mid x' \le x \})
 \\
 &= \sum_{x' \le x} \mu(x').
-\end{align*} Consequently mass functions and cumulative distribution
+\end{align*} Consequently, mass functions and cumulative distribution
 functions provide redundant information on these spaces
 (Figure~\ref{fig-discrete-cdf}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/cdfs/discrete_cdf/discrete_cdf.pdf}
+\centering{
+
+\includegraphics[width=0.8\textwidth,height=\textheight]{figures/cdfs/discrete_cdf/discrete_cdf.pdf}
 
 }
 
@@ -1907,41 +1820,44 @@ functions provide redundant information on these spaces
 mass function and cumulative distribution function provide equivalent,
 and hence redundant, characterizations of a measure.}
 
-\end{figure}
+\end{figure}%
 
-Mass functions do not completely define a measure, however, on ordered
-but uncountable spaces. In this case a cumulative distribution function
+Mass functions, however, do not completely define a measure on ordered
+but uncountable spaces. In this case, a cumulative distribution function
 can provide the information that the element-wise allocations lack. For
-example on a real line a continuous cumulative distribution function
-defines a measure that allocates zero to every atomic subset but still
+example, on a real line a continuous cumulative distribution function
+defines a measure that allocates zero to every atomic subset, but still
 manages to accumulate finite measure as we scan through the space. Any
-jumps in a cumulative distribution function correspond to individual
+jumps in a cumulative distribution function corresponds to individual
 elements that have been allocated non-zero measure
 (Figure~\ref{fig-cdf-jump}).
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/cdfs/jump/jump.pdf}
+\centering{
+
+\includegraphics[width=0.6\textwidth,height=\textheight]{figures/cdfs/jump/jump.pdf}
 
 }
 
 \caption{\label{fig-cdf-jump}When the ambient space is ordered but
-uncountable and every atomic subset is a null subset then the cumulative
+uncountable and every atomic subset is a null subset, the cumulative
 distribution function will be continuous. Any discontinuities in a
 cumulative distribution function correspond to exceptional atomic
 subsets that have been allocated finite measure.}
 
-\end{figure}
+\end{figure}%
 
-\hypertarget{quantiles}{%
-\subsection{Quantiles}\label{quantiles}}
+\subsection{Quantiles}\label{quantiles}
 
 When a cumulative distribution function is bijective, mapping each point
 \(x \in X\) in the ambient space to a unique accumulated measure \[
-M(x) = \mu(\mathsf{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathsf{I}_{x}}],
-\] we can invert it to map any accumulated measure to the point at which
-that accumulation is achieved (Figure~\ref{fig-quantile-function}),
-\begin{alignat*}{6}
+M(x)
+=
+\mu(\mathsf{I}_{x}) = \mathbb{I}_{\mu}[I_{\mathsf{I}_{x}}],
+\] we can invert it. The inverse function maps any accumulated measure
+to the point at which that accumulation is achieved
+(Figure~\ref{fig-quantile-function}), \begin{alignat*}{6}
 q_{\mu} :\; & [0, \mu(X)] & &\rightarrow& \; &X&
 \\
 & m & &\mapsto& & M^{-1}(m) &.
@@ -1950,40 +1866,42 @@ function}.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{figures/quantiles/quantile_function/quantile_function.pdf}
+\centering{
+
+\includegraphics[width=0.8\textwidth,height=\textheight]{figures/quantiles/quantile_function/quantile_function.pdf}
 
 }
 
 \caption{\label{fig-quantile-function}If a cumulative distribution
-function is invertible then its inverse defines a quantile function that
-maps accumulated measures to the points in the ambient space where the
-accumulation is reached.}
+function is invertible, then its inverse defines a quantile function
+that maps accumulated measures to the points in the ambient space where
+the accumulation is reached.}
 
-\end{figure}
+\end{figure}%
 
 Because quantiles of probability distribution functions are particularly
-useful in some applications they are often given explicit names. For
-example the point at which half of the total probability has been
+useful in many applications, they are often given explicit names. For
+example, the point at which half of the total probability has been
 accumulated, \[
 \Pi(x_{0.5}) = 0.5,
 \] is denoted the \textbf{median} of the probability distribution. On
-spaces where a mean is well-defined the median and mean complement each
-other by quantifying slightly different notions of centrality. Similarly
-the points where a quarter of the probability has been accumulated and a
-quarter of the probability remains, \begin{align*}
+spaces where a mean is well-defined, the median and mean complement each
+other by quantifying slightly different notions of centrality.
+Similarly, the points where a quarter of the probability has been
+accumulated and a quarter of the probability remains, \begin{align*}
 \Pi(x_{0.25}) &= 0.25
 \\
 \Pi(x_{0.75}) &= 0.75,
 \end{align*} are known as the \textbf{quartiles}.
 
-If the cumulative distribution function is not continuous then the
-quantile function will not be well-defined. For example on a countable
+If the cumulative distribution function is not continuous, then the
+quantile function will not be well-defined. For instance, on a countable
 space the cumulative distribution function can achieve only a countable
 number of accumulated measures. Any intermediate value \(m\) can be only
 bounded below by the point \(x_{m-}\) that achieves the largest
 accumulated measure below \(m\), \[
 x_{m-} = \underset{x \in X}{\mathrm{argmax}} M(x) < m,
-\] and bounded above by the point \(x_{+}\) that achieves the smallest
+\] and bounded above by the point \(x_{m+}\) that achieves the smallest
 accumulated measure above \(m\)
 (Figure~\ref{fig-quantile-inverse-problems}), \[
 x_{m+} = \underset{x \in X}{\mathrm{argmin}} M(x) > m.
@@ -1991,7 +1909,9 @@ x_{m+} = \underset{x \in X}{\mathrm{argmin}} M(x) > m.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\textwidth,height=\textheight]{figures/quantiles/inverse_problems/inverse_problems.pdf}
+\centering{
+
+\includegraphics[width=0.6\textwidth,height=\textheight]{figures/quantiles/inverse_problems/inverse_problems.pdf}
 
 }
 
@@ -2000,50 +1920,46 @@ functions on countable spaces are not invertible. Only a countable
 number of measure accumulations occur at individual points; most measure
 accumulations occur ``in between'' the countable points.}
 
-\end{figure}
+\end{figure}%
 
 Many software packages implement \emph{heuristic} quantile functions
-that either return \(x_{m-}\) or \(x_{m+}\) or interpolate between
-\(x_{m-}\) and \(x_{m+}\) to provide a single value when the cumulative
-distribution function is not invertible. In this case different
-interpolation strategies define different quantile functions.
+that either return \(x_{m-}\), \(x_{m+}\) or an interpolation between
+\(x_{m-}\) and \(x_{m+}\) when the cumulative distribution function is
+not invertible. In this case, different interpolation strategies define
+different quantile functions.
 
-\hypertarget{explicit-measure-informed-integrals}{%
-\section{Explicit Measure-Informed
-Integrals}\label{explicit-measure-informed-integrals}}
+\section{Explicit Measure-Informed Integrals}\label{sec:exp_int}
 
-Up to this point our discussion of measure-informed integration has been
-theoretical. Given a measure \(\mu\) we have shown that a linear map
-from sufficiently nice, real-valued functions \(f\) to real numbers
-\(\mathbb{I}_{\mu}[f] \in \mathbb{R}\) is well-defined. We do not yet
-know, however, how to \emph{evaluate} that map to give explicit
+Up to this point, our discussion of measure-informed integration has
+been theoretical. Given a measure \(\mu\), we have shown that a linear
+map \(\mathbb{I}_{\mu}[f] \in \mathbb{R}\) from sufficiently nice,
+real-valued functions \(f\) to real numbers is well-defined. We do not
+yet know, however, how to \emph{evaluate} that map to give explicit
 measure-informed integrals in practice.
 
-Fortunately a few exceptional measures produce integrals that can be
-computed from certain explicit mathematical operations that allow us to
-realize them in practice. In this section we'll review these exceptional
-measures and their practical consequences. Along the way we'll also see
-how measure-informed integration relates to the Riemann integral from
-calculus.
+Fortunately, a few exceptional measures produce integrals that can be
+computed from certain explicit mathematical operations. This allow us to
+realize them in practice. In this section, we'll review these
+exceptional measures and their practical consequences. Along the way,
+we'll also see how measure-informed integration relates to the Riemann
+integral from calculus.
 
-\hypertarget{integration-on-discrete-measure-spaces}{%
 \subsection{Integration on Discrete Measure
-Spaces}\label{integration-on-discrete-measure-spaces}}
+Spaces}\label{integration-on-discrete-measure-spaces}
 
 Because they can be completely specified by a mass function, measure
 allocations on discrete measure spaces are particularly straightforward
-to implement in practice. Conveniently measure-informed integrals on
-these spaces are also completely specified by mass functions.
+to implement in practice. Measure-informed integrals on these spaces can
+also be computed from the outputs of the mass function.
 
-\hypertarget{integration-as-summation}{%
-\subsubsection{Integration As
-Summation}\label{integration-as-summation}}
+\subsubsection{Integration As Summation}\label{integration-as-summation}
 
-For any discrete measurable space \((X, 2^{X})\) we can always decompose
-a real-valued function into a sum of atomic indicator functions, \[
+For any discrete measurable space \((X, 2^{X})\), we can always
+decompose a real-valued function into a sum of atomic indicator
+functions, \[
 f(x) = \sum_{x' \in X} f(x') \cdot I_{ \{ x' \} }(x).
 \] The integral with respect to any measure \(\mu\) follows immediately
-by applying linearity, \begin{align*}
+by applying first linearity, \begin{align*}
 \mathbb{I}_{\mu}[f]
 &\equiv
 \mathbb{I}_{\mu} \left[ \sum_{x' \in X} f(x') \cdot I_{ \{ x' \} } \right]
@@ -2062,42 +1978,42 @@ indicator functions, \begin{align*}
 \sum_{x' \in X} f(x') \cdot \mu( \{ x' \} ).
 \end{align*}
 
-Consequently measure-informed integrals with respect to \emph{any}
+In other words, measure-informed integrals with respect to \emph{any}
 real-valued function on discrete measure spaces reduces to summations
-which we can compute explicitly. Moreover because the summations are
-informed by only the measure allocations to atomic subsets they can be
-computed using only the mass function and not the entire measure.
+which we can compute explicitly. Moreover, because the summations are
+completely determined by atomic allocations, they can be computed using
+only the mass function and not the entire measure.
 
-If \(X\) is not only countable but also finite then the general
+If \(X\) is not only countable but also finite, then the general
 definition of measure-informed integral reduces to the heuristic
-construction that we considered in \href{@finite_expectation}{Section
+construction that we considered in \hyperref[finite_expectation]{Section
 1}.
 
-\hypertarget{practical-consequences}{%
-\subsubsection{Practical Consequences}\label{practical-consequences}}
+\subsubsection{Practical Consequences}\label{practical-consequences}
 
-When \(X\) is finite we can implement the summation given by any
-measure-informed integral by directly looping over each integrand
-outputs. Unfortunately this approach becomes unfeasible if \(X\)
+When \(X\) is finite, we can implement the summation given by any
+measure-informed integral by directly looping over each point in the
+space. Unfortunately, direct summations becomes unfeasible if \(X\)
 contains a countably infinite number of elements.
 
-Some infinite sums do enjoy closed-form solutions; for all other sums we
-cannot evaluate the corresponding measure-informed integral exactly.
-That said we may be able to \emph{approximate} them by summing over only
-a finite number of elements where both \(\mu(x)\) and \(f(x)\) are
-large. The more terms we include, the better these finite sums will
-approximate the exact measure-informed integrals.
+Some infinite sums do enjoy closed-form solutions. For most infinite
+sums, however, we cannot evaluate the corresponding measure-informed
+integral exactly. That said, we may be able to \emph{approximate} them
+by summing over only a finite number of elements where \(\mu(x)\) is, or
+perhaps both \(\mu(x)\) and \(f(x)\) are, large. The more terms we
+include, the better these finite sums will approximate the exact
+measure-informed integrals.
 
 Consider, for example, the counting measure that allocates unit measure
 to each atomic subset, \[
 \chi( \{x \}) = 1.
-\] More generally the counting measure allocates measure by counting the
-number of elements contained in a given subset, \[
+\] More generally, the counting measure allocates measure by counting
+the number of elements contained in a given subset, \[
 \chi( \mathsf{x} ) = \sum_{x \in \mathsf{x}} 1.
 \]
 
 The integral of any real-valued function \(f: X \rightarrow \mathbb{R}\)
-with respect to counting measure is given by over summing all of the
+with respect to counting measure is given by summing over all of the
 output values, \begin{align*}
 \mathbb{I}_{\chi}[f]
 &=
@@ -2111,51 +2027,53 @@ output values, \begin{align*}
 \\
 &=
 \sum_{x \in X} f(x).
-\end{align*} In other words all integrals with respect to the counting
+\end{align*} In other words, all integrals with respect to the counting
 measure can be implemented by simply summing over the integrand outputs.
 
-We can scale the counting measure by a positive function
-\(g : X \rightarrow \mathbb{R}^{+}\) following the strategy introduced
-in \href{@sec:scaling_measures}{Section 3.2}. The scaled measure
+What if we scale the counting measure by a positive function
+\(g : X \rightarrow \mathbb{R}^{+}\), following the strategy introduced
+in \hyperref[sec:scaling_measures]{Section 3.2}? The scaled measure
 \(g \cdot \chi\) is implicitly defined by the integrals \begin{align*}
 \mathbb{I}_{g \cdot \chi}[f]
 &=
 \mathbb{I}_{\chi}[g \cdot f]
 \\
 &=
-\sum_{x \in X} \chi( \{ x \}) \cdot \left( g(x) \cdot f(x) \right)
+\sum_{x \in X}
+\chi( \{ x \}) \cdot \left( g(x) \cdot f(x) \right)
 \\
 &=
-\sum_{x \in X} \left( g(x) \cdot \chi( \{ x \} ) \right) \cdot f(x).
-\end{align*} Consequently \(g \cdot \chi\) can be implemented by simply
+\sum_{x \in X}
+\left( g(x) \cdot \chi( \{ x \} ) \right) \cdot f(x).
+\end{align*} Consequently, \(g \cdot \chi\) can be implemented by simply
 scaling the element-wise allocations, \[
 (g \cdot \chi)( \{ x \} ) = g(x) \cdot \chi( \{ x \} ).
 \] While this might have seemed obvious from the start, the machinery of
 measure-informed integration allows us to prove that this intuitive
 definition is consistent with how measure theory behaves more generally.
 
-\hypertarget{sec:integration_on_R}{%
-\subsection{Integration on Real Lines}\label{sec:integration_on_R}}
+\subsection{Integration on Real Lines}\label{sec:integration_on_R}
 
-Frustratingly there are no universal strategies for directly evaluating
+Frustratingly, there are no universal strategies for directly evaluating
 measure-informed integrals on uncountable spaces. Sometimes, however,
 the structure of an uncountable space allow us to reduce
 measure-informed integrals to more feasible mathematical operations. In
-particular measure-informed integrals with respect to the Lebesgue
+particular, measure-informed integrals with respect to the Lebesgue
 measure on a real line can be related to the familiar Riemann integral
 from calculus.
 
-\hypertarget{lebesgue-verses-riemann}{%
-\subsubsection{Lebesgue Verses Riemann}\label{lebesgue-verses-riemann}}
+\subsubsection{Lebesgue Verses Riemann}\label{lebesgue-verses-riemann}
 
-By definition the measure-informed integral of an indicator function is
+By definition, the measure-informed integral of an indicator function is
 given by the measure allocated to the defining subset, \[
 \mathbb{I}_{\mu}[I_{\mathsf{x}}] = \mu(\mathsf{x}).
-\] On a real line \((\mathbb{R}, \mathcal{B}_{\mathbb{R}})\) the
+\] On a real line \((\mathbb{R}, \mathcal{B}_{\mathbb{R}})\), the
 Lebesgue measure allocated to any interval is just the distance between
 the end points, \[
-\lambda( \, [x_{1}, x_{2}] \, ) = d(x_{1}, x_{2}) = | x_{2} - x_{1} |.
-\] Consequently the Lebesgue integral of an interval indicator function
+\lambda( \, [x_{1}, x_{2}] \, )
+=
+d(x_{1}, x_{2}) = | x_{2} - x_{1} |.
+\] Consequently, the Lebesgue integral of an interval indicator function
 is given by \[
 \mathbb{I}_{\lambda}[I_{[x_{1}, x_{2}]}]
 =
@@ -2186,107 +2104,99 @@ s(x) = \phi \cdot I_{[x_{1}, x_{2}]}
 &= \mathbb{I}_{\lambda}[\phi \cdot I_{[x_{1}, x_{2}]}]
 \\
 &= \mathbb{I}_{\lambda}[s].
-\end{align*} More generally the area under the curve defined by a simple
-function built from many intervals \[
-s(x) = \sum_{j} \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}
+\end{align*}
+
+More generally, the area under any simple function, \[
+s(x) = \sum_{j} \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]},
 \] is built up from rectangles defined by each component, \begin{align*}
 \text{area}
-&= \sum_{j} \text{area}_{j}
+&=
+\sum_{j} \text{area}_{j}
 \\
-&= \sum_{j} \text{height}_{j} \cdot \text{length}_{j}
+&=
+\sum_{j} \text{height}_{j} \cdot \text{length}_{j}
 \\
-&= \sum_{j} \phi_{j} \cdot | x_{2, j} - x_{1, j} |
+&=
+\sum_{j} \phi_{j} \cdot | x_{2, j} - x_{1, j} |
 \\
-&= \sum_{j} \mathbb{I}_{\lambda}[\phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}].
-\end{align*} By linearity, however, this is just the measure-informed
-integral of the simple function itself (Figure~\ref{fig-simple-area})
-\begin{align*}
+&=
+\sum_{j}
+\mathbb{I}_{\lambda}[
+  \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}
+].
+\end{align*} This, however, is also the measure-informed integral of the
+simple function itself (Figure~\ref{fig-simple-area}) \begin{align*}
 \text{area}
 &=
-\sum_{j} \mathbb{I}_{\lambda}[\phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}]
+\sum_{j}
+\mathbb{I}_{\lambda}[\phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}]
 \\
 &=
-\mathbb{I}_{\lambda}[\sum_{j} \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}]
+\mathbb{I}_{\lambda}[
+  \sum_{j} \phi_{j} \cdot I_{[x_{1, j}, x_{2, j}]}
+]
 \\
 &= \mathbb{I}_{\lambda}[s].
 \end{align*}
 
 \begin{figure}
 
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.45\linewidth}
+\begin{minipage}{0.45\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/integration/lebesgue_indicator/lebesgue_indicator.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/integration/lebesgue_indicator/lebesgue_indicator.pdf}
 
 }
 
 \subcaption{\label{fig-indicator-area}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.45\linewidth}
+\begin{minipage}{0.45\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/integration/lebesgue_simple/lebesgue_simple.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/integration/lebesgue_simple/lebesgue_simple.pdf}
 
 }
 
 \subcaption{\label{fig-simple-area}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 
 \caption{\label{fig-integrate}Integrals of simple functions with respect
-to the Lebesgue measure are intimately related to the area under the
-curve defined by simple functions. (a) The area under the curve defined
-by an interval indicator function is equal to the height, \(1\), times
-the length of the interval. That, however, is just equal to the Lebesgue
+to the Lebesgue measure are equal to the area under the curves defined
+by those simple functions. (a) The area under the curve defined by an
+interval indicator function is equal to the height, \(1\), times the
+length of the interval. That, however, is just equal to the Lebesgue
 integral of the indicator function itself. (b) The area under the curve
-defined by interval simple functions is built up from the area of
+defined by a more general simple functions is built up from the area of
 rectangles defined by each component indicator function. The total area
 is equal to the Lebesgue integral of the simple function itself.}
 
-\end{figure}
+\end{figure}%
 
 Decomposing the positive and negative parts of a measurable, real-valued
 function into simple functions pushes this relationship further. On one
-hand we can use the decomposition to define Lebesgue integrals, and on
-the other we can use it to compute the area under the curve defined by
-any sufficiently nice function (Figure~\ref{fig-lebesgue}).
+hand, we can use the decomposition to define general Lebesgue integrals
+and, on the other, we can use it to compute the area under the curve
+defined by any sufficiently nice function (Figure~\ref{fig-lebesgue}).
 
-We can also use classic calculus to compute the same area under the
-curve. A Riemann integral is defined by partitioning the real line into
-equally-sized intervals and then constructing rectangles from the height
-of the integrand at the end of each interval. As the intervals length
-\(\delta\) becomes smaller and smaller the sum of the rectangle areas
-converges to the area under the curve (Figure~\ref{fig-riemann}), \[
+At the same time, we can use calculus to compute the area under the
+curves defined by a sufficiently nice function
+\(f: \mathbb{R} \rightarrow \mathbb{R}\). A Riemann integral is defined
+by partitioning the real line into equally-sized intervals and then
+constructing rectangles from the height of the integrand at the end of
+each interval. As the interval length \(\delta\) becomes smaller and
+smaller, the sum of the rectangle areas converges to the area under the
+curve (Figure~\ref{fig-riemann}), \[
 \int \mathrm{d} x \, f(x)
 =
 \lim_{\delta \rightarrow 0}
@@ -2295,128 +2205,94 @@ converges to the area under the curve (Figure~\ref{fig-riemann}), \[
 
 \begin{figure}
 
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.90\linewidth}
+\begin{minipage}{0.90\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/integration/lebesgue/lebesgue.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/integration/lebesgue/lebesgue.pdf}
 
 }
 
 \subcaption{\label{fig-lebesgue}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 \newline
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 %
-\begin{minipage}[t]{0.90\linewidth}
+\begin{minipage}{0.90\linewidth}
 
-{\centering 
+\centering{
 
-\raisebox{-\height}{
-
-\includegraphics{figures/integration/riemann/riemann.pdf}
-
-}
+\captionsetup{labelsep=none}\includegraphics{figures/integration/riemann/riemann.pdf}
 
 }
 
 \subcaption{\label{fig-riemann}}
+
 \end{minipage}%
 %
-\begin{minipage}[t]{0.05\linewidth}
-
-{\centering 
-
-~
-
-}
-
-\end{minipage}%
+\begin{minipage}{0.05\linewidth}
+~\end{minipage}%
 
 \caption{\label{fig-integrate}On a real line \(X = \mathbb{R}\)
 integration with respect to the Lebesgue measure and Riemann integration
 both quantify the area under a curve defined by a sufficiently nice
 real-valued function \(f : \mathbb{R} \rightarrow \mathbb{R}\). (a) As
-we add more components the Lebesgue integral of a simple function
-converges to the Lebesgue integral of \(f\). At the same time the sum of
-the rectangular areas defined by each component indicator function
+we add more components, the Lebesgue integral of a simple function
+converges to the Lebesgue integral of \(f\). At the same time, the sum
+of the rectangular areas defined by each component indicator function
 converges to the area under the curve defined by \(f\). (b) Riemann
 integration computes the area under the curve as a sum of increasingly
 narrow rectangular areas, only the rectangles are stacked horizontally
 instead of vertically.}
 
-\end{figure}
+\end{figure}%
 
-Geometrically Lebesgue integration computes the area under a curve by
-summing over \emph{vertically} stacked rectangles while Riemann
-integration computes the area by summing over \emph{horizontally}
-stacked rectangles. Riemann integration doesn't always result in a
-well-defined answer, but when it does we can use these two methods for
-computing the area under a curve to relate integrals with respect to the
-Lebesgue measure to classic integration!
+Geometrically, we can think of Lebesgue integration as computing the
+area under a curve by summing over \emph{vertically} stacked rectangles,
+while Riemann integration computes the area by summing over
+\emph{horizontally} stacked rectangles. Riemann integration doesn't
+always result in a well-defined answer, but when it does it will be
+consistent with the corresponding Lebesgue integral. Consequently, class
+integration to compute Lebesgue integrals.
 
-More formally for any measurable and \(\lambda\)-integrable real-valued
-function \(f: \mathbb{R} \rightarrow \mathbb{R}\) we have \begin{align*}
+More formally, for any measurable and \(\lambda\)-integrable real-valued
+function \(f: \mathbb{R} \rightarrow \mathbb{R}\), we have
+\begin{align*}
 \mathbb{I}_{\lambda}[f]
 &= \int \lambda( \mathrm{d} x) \, f(x)
 \\
 &= \int_{-\infty}^{\infty} \mathrm{d} x \, f(x)
 \end{align*} so long as the Riemann integral
-\(\int \mathrm{d} x \, f(x)\) is well-defined. In other words Lebesgue
-integration on the real line completely generalizes Riemann integration;
+\(\int \mathrm{d} x \, f(x)\) is well-defined. Lebesgue integration on
+the real line completely generalizes Riemann integration;
 measure-informed integration then generalizes Lebesgue integration on
-the real line to arbitrary meaures and spaces.
+the real line to arbitrary measures and spaces.
 
-This particular equivalence is the motivation for the many alternative
-notations that we discussed in \href{@sec:alt_notations}{Section 2.4}.
-In general the integral signs in those notations do not correspond to
-the Riemann integral of calculus, but in the special case of the
-Lebesgue measure over a real line they do!
+This equivalence is the motivation for the many alternative notations
+that we discussed in \hyperref[sec:alt_notations]{Section 2.4}. In
+general, the integral signs in those notations do not correspond to the
+Riemann integral of calculus, but in the special case of the Lebesgue
+measure over a real line with sufficiently nice integrands they do!
 
-\hypertarget{sec:practical_lebesgue}{%
-\subsubsection{Practical Consequences}\label{sec:practical_lebesgue}}
+\subsubsection{Practical Consequences}\label{sec:practical_lebesgue}
 
-When a real-valued function has a well-defined Riemann integral then we
-can apply the tools of calculus to evaluate Lebesgue integrals. The
+When a real-valued function has a well-defined Riemann integral, we can
+apply the tools of calculus to evaluate Lebesgue integrals. The
 exceptional Riemann integrals that can be evaluated analytically allow
 us to compute the corresponding Lebesgue integrals exactly. More
-generally we can use to numerical integration techniques to approximate
+generally, we can use numerical integration techniques to approximate
 the Riemann integrals, and hence approximately evaluate Lebesgue
 integrals.
 
-For example the measure-informed integral of an interval indicator
+For example, the measure-informed integral of an interval indicator
 function is given by \begin{align*}
 \mathbb{I}_{\lambda}[I_{[x_{1}, x_{2}]}]
 &=
@@ -2428,14 +2304,20 @@ function is given by \begin{align*}
 &=
 x_{2} - x_{1},
 \end{align*} consistent with the definition of the Lebesgue measure.
-Note that the correct, positive answer required that we integrate from
-the lower end of the interval to the upper end. Changing the order
-defines the same interval, and hence the same Lebesgue measure
-allocation, but it flips the sign of the Riemann integral. In order to
-properly relate Lebesgue integrals to Riemann integrals we have to fix
-the \emph{orientation} of the intervals.
 
-Similarly the mean of a Lebesgue measure would by given by the integral
+Note that the correct, positive answer requires integrating from the
+lower end of the interval to the upper end. Changing the order defines
+the same interval, and hence the same Lebesgue measure allocation, but
+it flips the sign of the Riemann integral. In order to properly relate
+Lebesgue integrals to Riemann integrals, we have to fix the
+\emph{orientation} of the intervals. To avoid any sign errors, it never
+hurts to add absolute values for safety, \[
+\mathbb{I}_{\lambda}[I_{[x_{1}, x_{2}]}]
+=
+\left| \int_{x_{1}}^{x_{2}} \mathrm{d} x \right|.
+\]
+
+Similarly, the mean of a Lebesgue measure would be given by the integral
 of the identity function, \begin{align*}
 \mathbb{I}_{\lambda}[\iota]
 &=
@@ -2449,11 +2331,14 @@ of the identity function, \begin{align*}
 \\
 &=
 \infty - \infty.
-\end{align*} Unfortunately this result is ill-posed because \(\infty\)
+\end{align*} Unfortunately, this result is ill-posed because \(\infty\)
 minus itself is consistent with \emph{every} value on the real line. Had
 we been a bit more careful, however, this would not have been
-surprising. The problem is that the identify function is not
-Lebesgue-integrable, \begin{align*}
+surprising.
+
+The problem here is not that the Riemann integral is ill-defined, but
+rather that the Lebesgue integral itself is ill-defined. In particular,
+the identify function is not Lebesgue-integrable, \begin{align*}
 \mathbb{I}_{\lambda}[| \iota |]
 &=
 \int_{-\infty}^{\infty} \mathrm{d} x \, | \iota(x) |
@@ -2466,11 +2351,11 @@ Lebesgue-integrable, \begin{align*}
 \\
 &=
 \infty!
-\end{align*} Consequently the Lebesgue measure does not have any
+\end{align*} Consequently, the Lebesgue measure does not have any
 well-defined moments.
 
-Likewise the scaling of the Lebesgue measure by a positive function
-\(g : X \rightarrow \mathbb{R}^{+}\) can be implemented with the
+Likewise, the scaling of the Lebesgue measure by a positive function
+\(g : X \rightarrow \mathbb{R}^{+}\) can be implemented with the Riemann
 integrals \begin{align*}
 \mathbb{I}_{g \cdot \lambda}[f]
 &=
@@ -2478,7 +2363,7 @@ integrals \begin{align*}
 \\
 &=
 \int_{-\infty}^{+\infty} \mathrm{d} x \, g(x) \cdot f(x).
-\end{align*} In particular the measure allocated to any interval becomes
+\end{align*} In this case, the measure allocated to any interval becomes
 \begin{align*}
 (g \cdot \lambda) ( \, [x_{1}, x_{2} ] \, )
 &=
@@ -2498,29 +2383,261 @@ integrals \begin{align*}
 By appropriately scaling the Lebesgue measure in this way we can
 implement all kinds of measures over a real line, including most
 probability distributions of practical interest. We'll formalize this
-procedure in the next chapter.
+procedure in the
+\href{https://betanalpha.github.io/assets/chapters_html/density_functions.html}{next
+chapter}.
 
-\hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\section{Conclusion}\label{conclusion}
 
 Measure-informed integrals are the main way that we interact with
-measures, both in theory and in practice. Equivalently expectation
-values are the main way that we can probe the behavior of probability
-distributions. Indeed a recurring theme in applying probability theory
-in practice will be the principled computation of expectation values for
-relevant expectands.
+measures, both in theory and in practice. Equivalently, expectation
+values are the main way that we probe the behavior of probability
+distributions. Indeed, a recurring theme in applied probability theory
+will be the principled estimation of expectation values for relevant
+expectands.
 
 In the next chapter we'll learn how to extend the exceptionally explicit
 integrals with respect to Lebesgue measures to a much larger class of
-measures, including many probability distributions. Later on we'll learn
-some powerful \emph{sampling} techniques for directly estimating
+measures, including many probability distributions. Later on, we'll
+learn some powerful \emph{sampling} techniques for directly estimating
 expectation values for general probability distributions.
 
-\hypertarget{acknowledgements}{%
-\section*{Acknowledgements}\label{acknowledgements}}
+\section*{Appendix: Indicator Function Manipulations}\label{sec:app}
+\addcontentsline{toc}{section}{Appendix: Indicator Function
+Manipulations}
+
+In \hyperref[sec:gen_int]{Section 2}, we used indicator functions in the
+theoretical construction of measure-informed integration. As we saw in
+\hyperref[sec:exp_int]{Section 5}, however, we don't actually use
+indicator functions when actually calculating most measure-informed
+integrals in practice. Consequently, indicators don't play a direct role
+in most practical integration.
+
+Every now and then, however, indicator functions are useful beyond just
+integration. In those exceptional circumstances, familiarity with the
+properties of indicator functions can be pretty useful. The most useful
+of these properties are really just manifestations of the interaction
+between probability allocations and the basic set operations that we
+discussed in
+\href{https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html\#derived-properties}{Chapter
+4}.
+
+Consider, for example, the indicator function of the union of two
+\emph{disjoint} subsets, \[
+I_{ \mathsf{x}_{1} \cup \mathsf{x}_{2} } (x)
+=
+\left\{
+\begin{array}{rr}
+1, & x \in \mathsf{x}_{1} \cup \mathsf{x}_{2} \\
+0, & x \notin \mathsf{x}_{1} \cup \mathsf{x}_{2}
+\end{array}
+\right. .
+\] Because \(\mathsf{x}_{1}\) and \(\mathsf{x}_{2}\) are disjoint, an
+input \(x\) can only be in one subset at a time. This allows us to
+decompose the indicator function into two additive pieces,
+\begin{align*}
+I_{ \mathsf{x}_{1} \cup \mathsf{x}_{2} } (x)
+&=
+\left\{
+\begin{array}{rr}
+1, & x \in \mathsf{x}_{1} \cup \mathsf{x}_{2} \\
+0, & x \notin \mathsf{x}_{1} \cup \mathsf{x}_{2}
+\end{array}
+\right.
+\\
+&=
+\left\{
+\begin{array}{rr}
+1, & x \in \mathsf{x}_{1} \\
+0, & x \notin \mathsf{x}_{2}
+\end{array}
+\right.
++
+\left\{
+\begin{array}{rr}
+1, & x \in \mathsf{x}_{1} \\
+0, & x \notin \mathsf{x}_{2}
+\end{array}
+\right.
+\\
+&=
+I_{\mathsf{x}_{1}} (x)
++
+I_{\mathsf{x}_{2}} (x).
+\end{align*}
+
+One immediate consequence of this is that the indicator function of a
+set complement is equal to the reflection of the indicator function of
+the corresponding set, \begin{align*}
+I_{\mathsf{x}} (x)
++
+I_{\mathsf{x}^{c}} (x)
+&=
+I_{ \mathsf{x} \cup \mathsf{x}^{c} } (x)
+\\
+I_{\mathsf{x}} (x)
++
+I_{\mathsf{x}^{c}} (x)
+&=
+I_{ X } (x)
+\\
+I_{\mathsf{x}} (x)
++
+I_{\mathsf{x}^{c}} (x)
+&=
+1
+\\
+I_{\mathsf{x}} (x)
+&=
+1 - I_{\mathsf{x}^{c}} (x).
+\end{align*} Equivalently, \[
+I_{\mathsf{x}^{c}} (x)
+=
+1 - I_{\mathsf{x}} (x).
+\]
+
+To generalize this result to non-disjoint subsets, we have to first
+decompose each subset and their intersection into disjoint pieces. Let's
+use \(\mathsf{x}_{1 \setminus 2}\) to denote the elements in
+\(\mathsf{x}_{1}\) that are not also in \(\mathsf{x}_{2}\), with
+\(\mathsf{x}_{2 \setminus 1}\) denoting the elements in
+\(\mathsf{x}_{2}\) that are not also in \(\mathsf{x}_{1}\). This allows
+us to write \begin{align*}
+\mathsf{x}_{1}
+&=
+\mathsf{x}_{1 \setminus 2}
+\cup
+(\mathsf{x}_{1} \cap \mathsf{x}_{2})
+\\
+\mathsf{x}_{2}
+&=
+\mathsf{x}_{2 \setminus 1}
+\cup
+(\mathsf{x}_{1} \cap \mathsf{x}_{2})
+\\
+\mathsf{x}_{1} \cup \mathsf{x}_{2}
+&=
+\mathsf{x}_{1 \setminus 2}
+\cup
+( \mathsf{x}_{1} \cap \mathsf{x}_{2} )
+\cup
+\mathsf{x}_{2 \setminus 1}.
+\end{align*}
+
+We can now apply the result for disjoint subsets to each of these
+decompositions, \begin{align*}
+I_{ \mathsf{x}_{1 \setminus 2} } (x)
++
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
+&=
+I_{ \mathsf{x}_{1} } (x)
+\\
+I_{ \mathsf{x}_{2 \setminus 1} } (x)
++
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
+&=
+I_{ \mathsf{x}_{2} } (x)
+\\
+I_{ \mathsf{x}_{1 \setminus 2} } (x)
++
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
++
+I_{ \mathsf{x}_{2 \setminus 1} } (x)
+&=
+I_{ \mathsf{x}_{1} \cup \mathsf{x}_{2} } (x).
+\end{align*}
+
+Adding the first two equations together gives \[
+I_{ \mathsf{x}_{1 \setminus 2} } (x)
++
+2 \, I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
++
+I_{ \mathsf{x}_{2 \setminus 1} } (x)
+=
+I_{ \mathsf{x}_{1} } (x)
++
+I_{ \mathsf{x}_{2} } (x),
+\] or, equivalently, \[
+I_{ \mathsf{x}_{1 \setminus 2} } (x)
++
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
++
+I_{ \mathsf{x}_{2 \setminus 1} } (x)
+=
+I_{ \mathsf{x}_{1} } (x)
++
+I_{ \mathsf{x}_{2} } (x)
+-
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x).
+\]
+
+Substitution this result into the third equation gives \begin{align*}
+I_{ \mathsf{x}_{1 \setminus 2} } (x)
++
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
++
+I_{ \mathsf{x}_{2 \setminus 1} } (x)
+&=
+I_{ \mathsf{x}_{1} \cup \mathsf{x}_{2} } (x)
+\\
+I_{ \mathsf{x}_{1} } (x)
++
+I_{ \mathsf{x}_{2} } (x)
+-
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
+&=
+I_{ \mathsf{x}_{1} \cup \mathsf{x}_{2} } (x)
+\\
+I_{ \mathsf{x}_{1} } (x)
++
+I_{ \mathsf{x}_{2} } (x)
+&=
+I_{ \mathsf{x}_{1} \cap \mathsf{x}_{2} } (x)
++
+I_{ \mathsf{x}_{1} \cup \mathsf{x}_{2} } (x).
+\end{align*} Intuitively, the sum of indicator functions of overlapping
+subsets double counts the inputs that fall into both subsets.
+
+In addition to these additive relationships, indicator functions also
+satisfy a multiplicative relationship. For any input point \(x\), the
+product of the outputs of any two indicator functions, indicator
+functions \[
+I_{\mathsf{x}_{1}} (x)
+\cdot
+I_{\mathsf{x}_{2}} (x),
+\] will be non-zero if, and only if, both of the outputs are non-zero.
+This requires that the \(x\) falls into both \(\mathsf{x}_{1}\) and
+\(\mathsf{x}_{2}\); in other words \(x\) must be in the
+\emph{intersection} of the two subsets. Consequently, \[
+I_{\mathsf{x}_{1}} (x)
+\cdot
+I_{\mathsf{x}_{2}} (x)
+=
+I_{\mathsf{x}_{1} \cap \mathsf{x}_{2}} (x).
+\] This allows us to convert from point-wise multiplication to set
+intersections and back whenever it might be convenient.
+
+As a special case, the point-wise product of an indicator function with
+itself is given by \begin{align*}
+I^{2}_{\mathsf{x}} (x)
+&=
+I_{\mathsf{x}} (x)
+\cdot
+I_{\mathsf{x}} (x)
+\\
+&=
+I_{\mathsf{x} \cap \mathsf{x}} (x)
+\\
+&=
+I_{\mathsf{x}} (x).
+\end{align*} Formally, this property is known as idempotence under
+point-wise multiplication.
+
+\section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I thank Simon Duane and Pietro Monticone for helpful comments.
+I thank Simon Duane, Pietro Monticone, and Léo Burgund for helpful
+comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
@@ -2567,8 +2684,7 @@ Tobychev , Tom McEwen, Tony Wuersch, Utku Turk, Virginia Fisher, Vitaly
 Druker, Vladimir Markov, Wil Yegelwel, Will Farr, Will Tudor-Evans,
 woejozney, yolhaj , Zach A, Zad Rafi, and Zhengchen Cai.
 
-\hypertarget{license}{%
-\section*{License}\label{license}}
+\section*{License}\label{license}
 \addcontentsline{toc}{section}{License}
 
 A repository containing all of the files used to generate this chapter

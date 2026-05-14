@@ -11,9 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
-\definecolor{light_teal}{RGB}{107, 142, 142}
-\definecolor{mid_teal}{RGB}{72, 117, 117}
-\definecolor{dark_teal}{RGB}{29, 79, 79}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -116,14 +117,14 @@
     \pgfmathsetmacro{\t}{90 + (180 - 22) * \r / \R)}
     \fill[white] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                   {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.05);    
-    \fill[dark] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
+    \fill[darkteal] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                  {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.04)
     node[below] { $x_{1}$ }; 
 
     \pgfmathsetmacro{\t}{90 - (180 - 22) * \r / \R)}
     \fill[white] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                   {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.05);
-    \fill[dark] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
+    \fill[darkteal] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                  {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.04)
     node[below] { $x_{2}$ }; 
     
@@ -163,14 +164,14 @@
     \pgfmathsetmacro{\t}{90 + (180 - 22) * \r / \R)}
     \fill[white] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                   {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.05);    
-    \fill[dark] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
+    \fill[darkteal] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                  {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.04)
     node[below left] { $y_{1}$ }; 
 
     \pgfmathsetmacro{\t}{90 - (180 - 22) * \r / \R)}
     \fill[white] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                   {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.05);
-    \fill[dark] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
+    \fill[darkteal] ({x(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}, 
                  {y(\R * cos(\t), (\r - \R) + \R * sin(\t), 0, \theta, \phi)}) circle (0.04)
     node[below right] { $y_{2}$ }; 
     
@@ -190,12 +191,12 @@
       
       \pgfmathsetmacro{\t}{22}
       \fill[white] ( { ln(\t / (360 - \t) }, 0 ) circle (0.05);
-      \fill[dark] ( { ln(\t / (360 - \t) }, 0 ) circle (0.05) circle (0.04)
+      \fill[darkteal] ( { ln(\t / (360 - \t) }, 0 ) circle (0.05) circle (0.04)
       node[below] { $z_{1}$ }; 
       
       \pgfmathsetmacro{\t}{338}
       \fill[white] ( { ln(\t / (360 - \t) }, 0 ) circle (0.05);
-      \fill[dark] ( { ln(\t / (360 - \t) }, 0 ) circle (0.05) circle (0.04)
+      \fill[darkteal] ( { ln(\t / (360 - \t) }, 0 ) circle (0.05) circle (0.04)
       node[below] { $z_{2}$ }; 
         
     \end{scope}
