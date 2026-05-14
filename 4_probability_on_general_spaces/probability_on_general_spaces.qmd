@@ -756,7 +756,7 @@ decompositions defines a system of equations,
 &=
   \pi(\mathsf{x}_{1 \setminus 2})
 + \pi(\mathsf{x}_{1} \cap \mathsf{x}_{2})
-+ \pi \mathsf{x}_{2 \setminus 1}).
++ \pi(\mathsf{x}_{2 \setminus 1}).
 \end{align*}
 Adding the first two equations together gives
 $$
