@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for file in `find . -name "*.pdf"`; do
+  newfile=`echo $file | sed 's/pdf$/png/'`
+
+  echo "Converting $file..."
+  convert -density 400 -antialias $file -quality 100 $newfile
+done
