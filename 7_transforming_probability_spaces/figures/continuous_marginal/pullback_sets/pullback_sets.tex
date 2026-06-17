@@ -11,6 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -47,11 +51,11 @@
     \clip (-3, -2) rectangle (3, 2);
     
     \foreach \x in {-1.2, -1.1, -1, -0.9, -0.8} {
-      \fiber{\x}{mid};    
+      \fiber{\x}{darkteal};    
     }  
   \end{scope}
   
-  \node[mid] at (0.75, 0.26) { $f^{*}( \mathsf{y} ) \subset X$ };
+  \node[darkteal] at (0.75, 0.26) { $f^{*}( \mathsf{y} ) \subset X$ };
   
   \draw [rounded corners=2, color=black, line width=0.75] (-3, -2) rectangle (3, 2);
   \node at (0, -2.5) { $X$ };  
@@ -62,8 +66,8 @@
   
   \draw[white, line width=0.75] (4, -2 + 0.04) -- (4, 2 - 0.04);  
   
-  \draw[mid, line width=0.75] (4, -0.3) -- (4, -0.7);
-  \node[mid] at (4.65, -0.5) { $\mathsf{y} \subset Y$ };
+  \draw[darkteal, line width=0.75] (4, -0.3) -- (4, -0.7);
+  \node[darkteal] at (4.65, -0.5) { $\mathsf{y} \subset Y$ };
 
 \end{tikzpicture}
 

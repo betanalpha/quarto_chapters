@@ -11,6 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -37,12 +41,16 @@
   \begin{scope}[shift={(0, 0)}]
     \draw[white] (-8.5, -5.75) rectangle (7.75, -0.25);
     
-    \fill[light] (-3, -2) -- (4, -2) -- ({2 * logistic(2)}, -4) -- ({2 * logistic(-1.5)}, -4) -- cycle;
-    \draw[mid, dashed] (-3, -2) -- ({2 * logistic(-1.5)}, -4);
-    \draw[mid, dashed] (4, -2) -- ({2 * logistic(2)}, -4);
+    \fill[lightteal] (-3, -2) -- (4, -2) -- ({2 * logistic(2)}, -4) -- ({2 * logistic(-1.5)}, -4) -- cycle;
+    \draw[midteal, dashed] (-3, -2) -- ({2 * logistic(-1.5)}, -4);
+    \draw[midteal, dashed] (4, -2) -- ({2 * logistic(2)}, -4);
     
     \draw[<->, >=stealth, line width=1] (-6.5, -2) -- (6.5, -2);
+    \draw[line width=1, dark] (-2 * 1.5, -2) -- (2 * 2, -2);
+        
     \draw[arrows={Parenthesis[sharp]-Parenthesis[sharp]}, line width=1] (0, -4) -- (2, -4);
+    \draw[line width=1, dark] ({2 * logistic(2)}, -4) -- ({2 * logistic(-1.5)}, -4);
+    
     
     \foreach [count=\n] \x in {-1.5, 2} {
       \fill[white] (2 * \x, -2) circle (0.065);

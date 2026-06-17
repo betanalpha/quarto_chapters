@@ -10,6 +10,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -99,7 +103,7 @@
   
   \foreach \xi/\yi/\xf/\yf/\si/\sf in {0/-0.4/6.5/-0.25/0/14, -2/1.65/5.5/1.5/0/15, 2/-0.15/6.5/-0.25/0/14, 
                                        0.5/-1.6/6.25/-1.5/0/14.5, 0/1.35/5.5/1.5/0/14, -2/-0.25/6.5/-0.25/0/14} {
-    \draw[light, -{Stealth}, line width=1, shorten <=\si, shorten >=\sf] (\xi, \yi) -- (\xf, \yf);                 
+    \draw[midteal, -{Stealth}, line width=1, shorten <=\si, shorten >=\sf] (\xi, \yi) -- (\xf, \yf);                 
   }
   
   \foreach \x/\y\glyph [count=\n] in {0/-0.4/\blacksquare, -2/1.65/\clubsuit, 2/-0.15/\diamondsuit, 
@@ -146,7 +150,7 @@
     \node[gray70] at (0.75, -2.35) { $Y$ };
   \end{scope}
   
-  \node[light] at (4.35, -2.35) { $f : X \rightarrow Y$ };
+  \node[midteal] at (4.35, -2.35) { $f : X \rightarrow Y$ };
 \end{tikzpicture}
 
 \end{document}  

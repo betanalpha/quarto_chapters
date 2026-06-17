@@ -10,7 +10,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
-\definecolor{darkteal}{RGB}{29, 79, 79}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
@@ -56,7 +59,7 @@
     \draw[domain=0:360, smooth, samples=100, variable=\t, gray70, dashed, line width=1] 
       plot ({set2x(\t)}, {set2y(\t)}); 
     
-    \fill[domain=0:1, smooth, samples=100, variable=\t, dark, line width=1] 
+    \fill[domain=0:1, smooth, samples=100, variable=\t, darkteal, line width=1] 
       plot ({set1x(-50 + 101 * \t)}, {set1y(-50 + 101 * \t)}) -- plot ({set2x(127.25 + 114 * \t)}, {set2y(127.25 + 114 * \t)});
     \node[white] at (0, 0.25) { $\mathsf{x}_{1} \cap \mathsf{x}_{2}$ };
   \end{scope}
@@ -76,10 +79,10 @@
     \begin{scope}
       \clip plot[domain=52.5:303, samples=100, variable=\t] ({phi(set1x(\t))}, {set1y(\t)}) -- cycle;
    
-      \fill[domain=-128.1:128.25, smooth, samples=100, variable=\t, light, line width=1] 
+      \fill[domain=-128.1:128.25, smooth, samples=100, variable=\t, lightteal, line width=1] 
         plot ({phi(set2x(\t))}, {set2y(\t)}) -- cycle;
     \end{scope}
-    \node[light] at (1.5, -1.35) { $f_{*}(\mathsf{x}_{1}) \cap f_{*}(\mathsf{x}_{2})$ };
+    \node[lightteal] at (1.5, -1.35) { $f_{*}(\mathsf{x}_{1}) \cap f_{*}(\mathsf{x}_{2})$ };
     
     %\draw[domain=0:1, smooth, samples=100, variable=\t, light, line width=1] 
     %  plot ({phi(set1x(-50 + 101 * \t))}, {set1y(-50 + 101 * \t)});
@@ -87,13 +90,13 @@
     %\draw[domain=0:1, smooth, samples=100, variable=\t, light, line width=1] 
     %  plot ({phi(set2x(127.25 + 114 * \t))}, {set2y(127.25 + 114 * \t)});
       
-    \fill[domain=0:1, smooth, samples=10, variable=\t, dark, line width=1] 
+    \fill[domain=0:1, smooth, samples=10, variable=\t, darkteal, line width=1] 
          plot ({phi(set2x(229 + 11 * \t))}, {set2y(229 + 11 * \t)}) 
       -- plot ({phi(set1x(-49.5 + 13 * \t))}, {set1y(-49.5 + 13 * \t)})
       -- plot ({phi(set2x(216 - 36.5 * \t))}, {set2y(216 - 36.5 * \t)})
       -- plot ({phi(set1x(0 + 51 * \t))}, {set1y(0 + 51 * \t)}) 
       -- cycle;
-    \node[dark] at (-0.25, 0) { $f_{*}(\mathsf{x}_{1} \cap \mathsf{x}_{2})$ };
+    \node[darkteal] at (-0.25, 0) { $f_{*}(\mathsf{x}_{1} \cap \mathsf{x}_{2})$ };
   \end{scope}
   
   

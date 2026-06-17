@@ -10,7 +10,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
-\definecolor{darkteal}{RGB}{29, 79, 79}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{darkolive}{RGB}{97, 123, 45}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
@@ -54,7 +57,7 @@
       \draw[domain=0:360, smooth, samples=100, variable=\t, gray70, dashed, line width=1] 
         plot ({set2x(\t)}, {set2y(\t)}); 
       
-      \fill[domain=0:360, smooth, samples=100, variable=\t, dark, line width=1] 
+      \fill[domain=0:360, smooth, samples=100, variable=\t, darkteal, line width=1] 
         plot ({set1x(\t)}, {set1y(\t)});
       \node[white] at (-1, 0) { $\mathsf{x}_{1} \subset X$ };
     \end{scope}
@@ -68,7 +71,7 @@
       \draw[domain=-128.1:128.25, smooth, samples=100, variable=\t, gray70, dashed, line width=1] 
         plot ({phi(set2x(\t))}, {set2y(\t)}) -- cycle;
         
-      \fill[domain=52.5:303, smooth, samples=100, variable=\t, dark, line width=1] 
+      \fill[domain=52.5:303, smooth, samples=100, variable=\t, darkteal, line width=1] 
         plot ({phi(set1x(\t))}, {set1y(\t)}) -- cycle;
       \node[white] at ({0}, 0) { $f_{*}(\mathsf{x}_{1}) \subset Y$ };
     \end{scope}
@@ -82,7 +85,7 @@
       \draw[domain=0:360, smooth, samples=100, variable=\t, gray70, dashed, line width=1] 
         plot ({set1x(\t)}, {set1y(\t)});
       
-      \fill[domain=0:360, smooth, samples=100, variable=\t, dark, line width=1] 
+      \fill[domain=0:360, smooth, samples=100, variable=\t, darkteal, line width=1] 
         plot ({set2x(\t)}, {set2y(\t)}); 
       \node[white] at (+1, 0) { $\mathsf{x}_{2} \subset X$ };
     \end{scope}
@@ -96,7 +99,7 @@
       \draw[domain=52.5:303, smooth, samples=100, variable=\t, gray70, dashed, line width=1] 
         plot ({phi(set1x(\t))}, {set1y(\t)}) -- cycle;
       
-      \fill[domain=-128.1:128.25, smooth, samples=100, variable=\t, dark, line width=1] 
+      \fill[domain=-128.1:128.25, smooth, samples=100, variable=\t, darkteal, line width=1] 
         plot ({phi(set2x(\t))}, {set2y(\t)}) -- cycle;
       \node[white] at ({0}, 0) { $f_{*}(\mathsf{x}_{2}) \subset Y$ };
     \end{scope}
