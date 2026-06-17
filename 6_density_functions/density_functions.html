@@ -3176,12 +3176,19 @@ window.Quarto = {
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title"></div>
+    <p>All probability theory chapters can be found <a href="http://www.symplectomorphic.com/writing/#part1">here</a>.</p>
+    <p>A repository containing all of the files used to generate this chapter is available on <a href="https://github.com/betanalpha/quarto_chapters/tree/main/6_density_functions">GitHub</a>.</p>
+  </div>
+</div>
 
 
 </header>
 
 
-<p>As we discussed in the <a href="https://betanalpha.github.io/assets/chapters_html/expectation_values.html">last chapter</a>, expectation values allow us to interrogate the behaviors of the probability distributions that we’ll encounter in practical applications. At least, that is, in theory. In practice, the expectation values of most probability distributions cannot be computed directly. Indeed integrals with respect to only a few exceptional measures can be computed directly at all.</p>
+<p>As we discussed in the <a href="http://www.symplectomorphic.com/assets/chapters_html/expectation_values.html">last chapter</a>, expectation values allow us to interrogate the behaviors of the probability distributions that we’ll encounter in practical applications. At least, that is, in theory. In practice, the expectation values of most probability distributions cannot be computed directly. Indeed integrals with respect to only a few exceptional measures can be computed directly at all.</p>
 <p>By scaling those exceptional measures, however, we can often use measure-informed integrals to indirectly compute integrals with respect to more general measures. If we can <em>engineer</em> scalings that reproduce expectation values of interest, then we can use this indirect approach to implement probability theory in practice.</p>
 <p>In this chapter we will formalize this procedure, identifying exactly how we can scale a given measure to reproduce the expectation values of a target probability distribution. We will then investigate the detailed application of the method on discrete and real probability spaces.</p>
 <section id="density-functions" class="level1" data-number="1">
@@ -3400,7 +3407,7 @@ u :\; &amp; X &amp; &amp;\rightarrow&amp; \; &amp; \mathbb{R}^{+} &amp;
 \overset{\nu}{=}
 u.
 </span> At the same time any function that deviates from the unit function on only <span class="math inline">\nu</span>-null subsets is also a valid Radon-Nikodym derivative for <span class="math inline">\nu</span> with respect to itself. If <span class="math inline">X = \mathbb{R}</span>, however, then the unit function is the only <em>continuous</em> Radon-Nikodym derivative.</p>
-<p>Using the local scaling notation that we introduced in <a href="https://betanalpha.github.io/assets/chapters_html/expectation_values.html">Chapter 5</a>, we can also express the relationship between two compatible measures and the Radon-Nikodym derivative that links them together as <span class="math display">
+<p>Using the local scaling notation that we introduced in <a href="http://www.symplectomorphic.com/assets/chapters_html/expectation_values.html">Chapter 5</a>, we can also express the relationship between two compatible measures and the Radon-Nikodym derivative that links them together as <span class="math display">
 \mu = \frac{ \mathrm{d} \mu }{ \mathrm{d} \nu } \cdot \nu.
 </span> That said, this is just shorthand for the integral relationships <span class="math display">
 \mathbb{I}_{\mu}[f] =
@@ -4091,8 +4098,8 @@ Figure 11: The decay of a probability density function around a peak determines
 </span> and <span class="math display">
 \frac{ \mathrm{d} \pi \hphantom{ {}^{3} } }{ \mathrm{d} \lambda^{3} }
 (x_{1}, x_{2}, \tilde{x}_{3})
-</span> Properly interpreting these slices, however, can be tricky. In <a href="https://betanalpha.github.io/assets/chapters_html/conditional_probability_theory.html">Chapter 8</a>, we’ll learn how to properly interpret these slices as <em>conditional probability density functions</em>.</p>
-<p>A more effective approach in practice is to not try to visualize an entire probability density function at once, but rather investigate its behavior when projected to lower-dimensional summaries spaces. We’ll learn how to construct these projections in the <a href="https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html">next chapter</a>.</p>
+</span> Properly interpreting these slices, however, can be tricky. In <a href="http://www.symplectomorphic.com/assets/chapters_html/conditional_probability_theory.html">Chapter 8</a>, we’ll learn how to properly interpret these slices as <em>conditional probability density functions</em>.</p>
+<p>A more effective approach in practice is to not try to visualize an entire probability density function at once, but rather investigate its behavior when projected to lower-dimensional summaries spaces. We’ll learn how to construct these projections in the <a href="http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html">next chapter</a>.</p>
 </section>
 <section id="lebesgue-probability-densities-as-limiting-interval-probabilities" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="lebesgue-probability-densities-as-limiting-interval-probabilities"><span class="header-section-number">4.4</span> Lebesgue Probability Densities As Limiting Interval Probabilities</h2>
@@ -4162,7 +4169,7 @@ Figure 12: When we scale the bin probabilities <span class="math inline">\pi(\m
 </figcaption>
 </figure>
 </div>
-<p>This approximate visualization is particularly useful when we can compute interval probabilities, but we can’t evaluate the Lebesgue probability density function. As we’ll discover in the <a href="https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html">next chapter</a>, this exact circumstance often arises when we try to project a probability distribution from a higher-dimensional space to a lower-dimensional space.</p>
+<p>This approximate visualization is particularly useful when we can compute interval probabilities, but we can’t evaluate the Lebesgue probability density function. As we’ll discover in the <a href="http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html">next chapter</a>, this exact circumstance often arises when we try to project a probability distribution from a higher-dimensional space to a lower-dimensional space.</p>
 </section>
 <section id="the-normal-family-of-probability-density-functions" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="the-normal-family-of-probability-density-functions"><span class="header-section-number">4.5</span> The Normal Family of Probability Density Functions</h2>
@@ -5320,7 +5327,6 @@ t = \frac{x&#39; - \mu}{\sqrt{2} \, \sigma},
 </section>
 <section id="license" class="level1 unnumbered">
 <h1 class="unnumbered">License</h1>
-<p>A repository containing all of the files used to generate this chapter is available on <a href="https://github.com/betanalpha/quarto_chapters/tree/main/6_density_functions">GitHub</a>.</p>
 <p>The text and figures in this chapter are copyrighted by Michael Betancourt and licensed under the CC BY-NC 4.0 license:</p>
 <p>https://creativecommons.org/licenses/by-nc/4.0/</p>
 </section>

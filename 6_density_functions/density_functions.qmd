@@ -3,6 +3,11 @@ title: "Probability Density Functions"
 author: "Michael Betancourt"
 date: "September 2023"
 date-format: "MMMM YYYY"
+abstract-title: ""
+abstract: |
+  All probability theory chapters can be found [here](http://www.symplectomorphic.com/writing/#part1).
+
+  A repository containing all of the files used to generate this chapter is available on [GitHub](https://github.com/betanalpha/quarto_chapters/tree/main/6_density_functions).
 toc: true
 number-sections: true
 highlight: pygments
@@ -33,7 +38,7 @@ format-links: false
 ---
 
 As we discussed in the
-[last chapter](https://betanalpha.github.io/assets/chapters_html/expectation_values.html),
+[last chapter](http://www.symplectomorphic.com/assets/chapters_html/expectation_values.html),
 expectation values allow us to interrogate the behaviors of the
 probability distributions that we'll encounter in practical
 applications.  At least, that is, in theory.  In practice, the
@@ -496,7 +501,7 @@ $X = \mathbb{R}$, however, then the unit function is the only
 _continuous_ Radon-Nikodym derivative.
 
 Using the local scaling notation that we introduced in
-[Chapter 5](https://betanalpha.github.io/assets/chapters_html/expectation_values.html),
+[Chapter 5](http://www.symplectomorphic.com/assets/chapters_html/expectation_values.html),
 we can also express the relationship between two compatible
 measures and the Radon-Nikodym derivative that links them
 together as
@@ -1557,7 +1562,7 @@ $$
 (x_{1}, x_{2}, \tilde{x}_{3})
 $$
 Properly interpreting these slices, however, can be tricky.  In
-[Chapter 8](https://betanalpha.github.io/assets/chapters_html/conditional_probability_theory.html),
+[Chapter 8](http://www.symplectomorphic.com/assets/chapters_html/conditional_probability_theory.html),
 we'll learn how to properly interpret these slices as
 _conditional probability density functions_.
 
@@ -1565,7 +1570,7 @@ A more effective approach in practice is to not try to visualize
 an entire probability density function at once, but rather
 investigate its behavior when projected to lower-dimensional
 summaries spaces.  We'll learn how to construct these projections
-in the [next chapter](https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html).
+in the [next chapter](http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html).
 
 ## Lebesgue Probability Densities As Limiting Interval Probabilities
 
@@ -1702,7 +1707,7 @@ width=100% #fig-histogram-approximation}
 This approximate visualization is particularly useful when we can
 compute interval probabilities, but we can't evaluate the
 Lebesgue probability density function.  As we'll discover in the
-[next chapter](https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html),
+[next chapter](http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html),
 this exact circumstance often arises when we try to project a
 probability distribution from a higher-dimensional space to a
 lower-dimensional space.
@@ -3192,10 +3197,6 @@ Will Farr, Will Tudor-Evans, woejozney, yolhaj , Zach A, Zad Rafi, and
 Zhengchen Cai.
 
 # License {-}
-
-A repository containing all of the files used to generate this chapter
-is available on [GitHub](
-https://github.com/betanalpha/quarto_chapters/tree/main/6_density_functions).
 
 The text and figures in this chapter are copyrighted by Michael
 Betancourt and licensed under the CC BY-NC 4.0 license:
