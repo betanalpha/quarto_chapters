@@ -3,6 +3,11 @@ title: "Measure and Probability on Finite Sets"
 author: "Michael Betancourt"
 date: "January 2023"
 date-format: "MMMM YYYY"
+abstract-title: ""
+abstract: |
+  All probability theory chapters can be found [here](http://www.symplectomorphic.com/writing/#part1).
+
+  A repository containing all of the files used to generate this chapter is available on [GitHub](https://github.com/betanalpha/quarto_chapters/tree/main/1_probability_on_finite_sets).
 toc: true
 number-sections: true
 highlight: pygments
@@ -533,7 +538,7 @@ system of interest.  We'll come back to the many different
 systems that can be consistently modeled with probability theory,
 and hence the many different interpretations of probability
 itself, in
-[Chapter 4](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html).
+[Chapter 4](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html).
 
 While we're on the topic of terminological issues, the word
 "distribution" is not without its own problems.  In mathematics,
@@ -767,7 +772,7 @@ also important for generalizing measure theory beyond finite
 sets.  Specifically, it becomes _necessary_ when trying to
 consistently define measures on more mathematically complicated
 sets like the real line.  This will be discussed in detail in
-[Chapter 4](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html).
+[Chapter 4](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html).
 
 # Acknowledgements
 
@@ -824,10 +829,6 @@ Will Kurt, Will Tudor-Evans, woejozney, yolhaj , yureq , Zach A, Zad Rafi, and
 Zhengchen Cai.
 
 # License {-}
-
-A repository containing all of the files used to generate this
-chapter is available on [GitHub](
-https://github.com/betanalpha/quarto_chapters/tree/main/1_probability_on_finite_sets).
 
 The text and figures in this chapter are copyrighted by Michael
 Betancourt and licensed under the CC BY-NC 4.0 license:
