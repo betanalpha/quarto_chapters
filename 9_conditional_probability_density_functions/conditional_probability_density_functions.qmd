@@ -2064,8 +2064,7 @@ application in detail in the **next chapter**.
 In this appendix, I've sequestered the nasty integrals that arise
 when deriving the pushforward probability density function, and
 the subsequent conditional probability density functions, shown
-in @fig-radial1 of [Section 6][#sec:push-densities].  This
-section is completely optional!
+in @fig-radial1.  This section is completely optional!
 
 We begin with a two-dimensional, non-negative real space
 $X = \mathbb{R}^{+} \times \mathbb{R}^{+}$, equipped with a
@@ -2108,7 +2107,7 @@ radius which we can cover with the curves
 &\theta& &\mapsto& &( r \, \cos \theta, r \, \sin \theta )&.
 \end{alignat*}
 
-As we saw in [Section 6][#sec:push-densities], evaluating the
+As we saw in [Section 6](#sec:push-densities), evaluating the
 pushforward probability density function at any output $r$
 requires computing the line integral
 \begin{align*}
