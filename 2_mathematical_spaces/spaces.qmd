@@ -3,6 +3,11 @@ title: "Mathematical Spaces"
 author: "Michael Betancourt"
 date: "April 2023"
 date-format: "MMMM YYYY"
+abstract-title: ""
+abstract: |
+  All probability theory chapters can be found [here](http://www.symplectomorphic.com/writing/#part1).
+
+  A repository containing all of the files used to generate this chapter is available on [GitHub](https://github.com/betanalpha/quarto_chapters/tree/main/2_mathematical_spaces).
 toc: true
 number-sections: true
 highlight: pygments
@@ -27,7 +32,7 @@ format-links: false
 ---
 
 I introduced probability theory on finite sets in
-[Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html);
+[Chapter One](http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_sets.html);
 this simple setting allowed us to focus on the basic concepts
 without too much mathematical distraction.  Unfortunately, finite
 sets have only limited use in practical applications.  Most
@@ -352,8 +357,8 @@ In this section we will review just a few of the structures that
 play important roles in practical applications.  Specifically, we
 will focus on the structures that define the most common spaces
 that arise in mathematical modeling.  We have already encountered
-_probabilistic_ structures in [Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html), and we'll explore
-them in full generality in [Chapter Four](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html)
+_probabilistic_ structures in [Chapter One](http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_sets.html), and we'll explore
+them in full generality in [Chapter Four](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html)
 
 ### Ordering Structures
 
@@ -1576,9 +1581,9 @@ metric and the corresponding metric topology.
 Appending positive infinite to a positive real line defines an
 **extended positive real line** $[0, +\infty]$.  We have already
 been sneakily introduced to the extended positive real line in
-[Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_spaces.html),
+[Chapter One](http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_spaces.html),
 where we used it to model the potentially infinite reservoir that
-we want to allocate across a finite set.  In [Chapter Four](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html)
+we want to allocate across a finite set.  In [Chapter Four](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html)
 we will use it model a potentially infinite reservoir to be
 allocated across any set.
 
@@ -2581,10 +2586,6 @@ Xianda Sun, yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
 <div id="refs"></div>
 
 # License {-}
-
-A repository containing all of the files used to generate this chapter is
-available on [GitHub](
-https://github.com/betanalpha/quarto_chapters/tree/main/2_mathematical_spaces).
 
 The text and figures in this chapter are copyrighted by Michael Betancourt
 and licensed under the CC BY-NC 4.0 license:

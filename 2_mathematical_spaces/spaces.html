@@ -3195,12 +3195,19 @@ window.Quarto = {
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title"></div>
+    <p>All probability theory chapters can be found <a href="http://www.symplectomorphic.com/writing/#part1">here</a>.</p>
+    <p>A repository containing all of the files used to generate this chapter is available on <a href="https://github.com/betanalpha/quarto_chapters/tree/main/2_mathematical_spaces">GitHub</a>.</p>
+  </div>
+</div>
 
 
 </header>
 
 
-<p>I introduced probability theory on finite sets in <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html">Chapter One</a>; this simple setting allowed us to focus on the basic concepts without too much mathematical distraction. Unfortunately, finite sets have only limited use in practical applications. Most applications typically require probability theory on not only more sophisticated sets but also sets that are equipped with additional structure. These combinations of sets and structure are also known as <em>spaces</em>.</p>
+<p>I introduced probability theory on finite sets in <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_sets.html">Chapter One</a>; this simple setting allowed us to focus on the basic concepts without too much mathematical distraction. Unfortunately, finite sets have only limited use in practical applications. Most applications typically require probability theory on not only more sophisticated sets but also sets that are equipped with additional structure. These combinations of sets and structure are also known as <em>spaces</em>.</p>
 <p>In this chapter we will discuss the basic conceptual features of general, mathematical spaces before reviewing some of the prototypical spaces that are particularly common in practical applications. This presentation will include not only the properties of sets with an arbitrary number of elements but also a survey of some of the most fundamental structures that we can endow onto those sets.</p>
 <section id="spaces" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Spaces</h1>
@@ -3466,7 +3473,7 @@ Figure 3: The union and intersection operations relate two input subsets to a s
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec:structures"><span class="header-section-number">1.2</span> Structures</h2>
 <p>A collection of elements alone is only so interesting mathematically, and only so useful in practice. The sets of theoretical and practical interest are equipped with additional <strong>structures</strong> that endow them with more rigidity and interpretability.</p>
 <p>Earlier I defined a space as any set equipped with any structure. When that structure is explicit, we often denote the space by specifying the underlying set and the additional structure together. For instance, if we denote the set <span class="math inline">X</span> and the structure <span class="math inline">\mathfrak{s}</span> then we would denote the space that pairs them by <span class="math inline">(X, \mathfrak{s})</span>. Unfortunately, these additional structures are often implicit and taken for granted. In particular, <span class="math inline">X</span> is often used to denote both the underlying set <em>and</em> the structure-informed space.</p>
-<p>In this section we will review just a few of the structures that play important roles in practical applications. Specifically, we will focus on the structures that define the most common spaces that arise in mathematical modeling. We have already encountered <em>probabilistic</em> structures in <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html">Chapter One</a>, and we’ll explore them in full generality in <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a></p>
+<p>In this section we will review just a few of the structures that play important roles in practical applications. Specifically, we will focus on the structures that define the most common spaces that arise in mathematical modeling. We have already encountered <em>probabilistic</em> structures in <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_sets.html">Chapter One</a>, and we’ll explore them in full generality in <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a></p>
 <section id="ordering-structures" class="level3" data-number="1.2.1">
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="ordering-structures"><span class="header-section-number">1.2.1</span> Ordering Structures</h3>
 <p>One way to enhance a set is to distinguish a special organization of its elements.</p>
@@ -3996,7 +4003,7 @@ Figure 17: A grid of equally distant elements in a real line partitions the spa
 <h2 data-number="2.4" class="anchored" data-anchor-id="extended-real-lines"><span class="header-section-number">2.4</span> Extended Real Lines</h2>
 <p>One limitation of a real line is that it contains points that are arbitrarily close to negative or positive infinity, but not those infinities themselves. An <strong>extended real line</strong> introduces two new elements: one smaller than all elements in the initial real line to represent negative infinity, and one larger than all of the elements to represent positive infinity. In other words, we can interpret an extended real line as the closed interval <span class="math inline">[-\infty, \infty]</span> while a real line is the corresponding open interval <span class="math inline">(-\infty, \infty)</span>.</p>
 <p>The inclusion of these two points does introduce some slight technical challenges. For instance, the algebraic structure is complicated by the fact that neither <span class="math inline">-\infty</span> nor <span class="math inline">+\infty</span> have well-defined additive or multiplicative inverses, unlike most other points. To avoid any inconsistencies we have to slightly tweak any structure derived from these operations, such as the metric and the corresponding metric topology.</p>
-<p>Appending positive infinite to a positive real line defines an <strong>extended positive real line</strong> <span class="math inline">[0, +\infty]</span>. We have already been sneakily introduced to the extended positive real line in <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_finite_spaces.html">Chapter One</a>, where we used it to model the potentially infinite reservoir that we want to allocate across a finite set. In <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a> we will use it model a potentially infinite reservoir to be allocated across any set.</p>
+<p>Appending positive infinite to a positive real line defines an <strong>extended positive real line</strong> <span class="math inline">[0, +\infty]</span>. We have already been sneakily introduced to the extended positive real line in <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_spaces.html">Chapter One</a>, where we used it to model the potentially infinite reservoir that we want to allocate across a finite set. In <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a> we will use it model a potentially infinite reservoir to be allocated across any set.</p>
 </section>
 </section>
 <section id="relating-spaces" class="level1" data-number="3">
@@ -4744,7 +4751,6 @@ Lee, John M. 2011. <em>Introduction to Topological Manifolds</em>. Springer.
 </section>
 <section id="license" class="level1 unnumbered">
 <h1 class="unnumbered">License</h1>
-<p>A repository containing all of the files used to generate this chapter is available on <a href="https://github.com/betanalpha/quarto_chapters/tree/main/2_mathematical_spaces">GitHub</a>.</p>
 <p>The text and figures in this chapter are copyrighted by Michael Betancourt and licensed under the CC BY-NC 4.0 license:</p>
 <p>https://creativecommons.org/licenses/by-nc/4.0/</p>
 </section>
