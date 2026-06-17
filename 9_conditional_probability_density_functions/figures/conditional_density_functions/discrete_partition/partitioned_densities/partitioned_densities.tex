@@ -1,0 +1,131 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math}
+\usepackage{pgfmath}
+\usepackage{pgfplots}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray50}{gray}{0.5}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\pgfplotsset{compat=1.17}
+\pgfplotsset{
+  colormap={reds}{rgb255=(252, 250, 250) rgb255=(245, 236, 236) rgb255=(235, 218, 218)
+                  rgb255=(220, 188, 188) rgb255=(199, 153, 153) rgb255=(185, 124, 124)
+                  rgb255=(162, 80, 80) rgb255=(143, 39, 39) rgb255=(124, 0, 0) } 
+}
+
+\tikzmath{
+  function multinormal(\x, \y) {
+    return 0.159154943091895 / (1 * 1) * exp( -0.5 * (\x * \x + \y * \y) / (1 * 1) );
+  };
+  function ymin(\x, \n, \delta) {
+    \a = 0.05 * \x * \x * \x - 0.2 * \x + (\n - 1.0) - 0.175 + \delta;
+    if \a < -2.5 then {
+      return -2.5;
+    } else {
+      return \a;
+    };
+  };
+  function ymax(\x, \n, \delta) {
+    return 0.05 * \x * \x * \x - 0.2 * \x + (\n + 0) - 0.175 - \delta;
+  };
+  function Y(\x, \y, \n, \delta) {
+    \a = ymin(\x, \n, \delta);
+    \b = ymax(\x, \n, \delta);
+    return \a + (\b - \a) * (2.5 + \y) / 5;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-1, -0.25) rectangle (7.75, 7);
+
+    \pgfmathsetmacro{\theta}{120}
+    \pgfmathsetmacro{\phi}{45}
+  
+    \coordinate (A) at (2.5, 3.275);
+    \coordinate (B) at (2.5, 6);
+    \coordinate (C) at (6.9, 2.05);
+    \coordinate (D) at (0, 1.2);  
+    \coordinate (E) at (6.85, 1.69); 
+    
+    \draw[->, >=stealth, line width=1] (A) -- (D);
+    \node[above left] at (D) { $x_{1}$ };
+    
+    \draw[->, >=stealth, line width=1] (A) -- (C);
+    \node[above right] at (C) { $x_{2}$ };
+    
+    \fill (A) circle (0.0175);
+    \draw[->, >=stealth, line width=1] (A) -- (B);
+    \node[above] at (B) { $p(x_{1}, x_{2}) \cdot I_{f^{-1}(y)}(x_{1}, x_{2})$ };
+
+    \foreach \d in {-2, -1, ..., 2} {
+      \begin{axis}[view={\theta}{\phi},
+                   xmin=-2.5, xmax=+2.5, xtick=\empty, 
+                   ymin=-2.5, ymax=+2.5, ytick=\empty,
+                   zmin=0, zmax=0.3, ztick=\empty,
+                   axis lines=none,              
+                   line width=1,
+                   colormap name=reds]
+        \addplot3 [domain=-2.5:2.5, samples=60, samples y=0, gray60]
+          ( {\x}, {0.05 * \x * \x * \x - 0.2 * \x + \d - 0.175}, {0} );
+      \end{axis}
+    }
+    
+    \pgfmathsetmacro{\delta}{0.05}
+    \foreach \d in {-2} {
+      \begin{axis}[view={\theta}{\phi},
+                   xmin=-2.5, xmax=+2.5, xtick=\empty, 
+                   ymin=-2.5, ymax=+2.5, ytick=\empty,
+                   zmin=0,    zmax=0.6, ztick=\empty,
+                   axis lines=none,              
+                   line width=1,
+                   colormap name=reds]
+        \addplot3[surf, shader=interp, samples=50, fill opacity=0.8, domain=-2.5:2.5] 
+          ( {\x}, {Y(\x, \y, \d, \delta)}, {multinormal(\x, Y(\x, \y, \d, \delta))} );
+        \addplot3 [domain=-2.5:2.5, samples=60, samples y=0, dark]
+          ( {\x}, {ymax(\x, \d, \delta)}, {multinormal(\x, ymax(\x, \d, \delta))} );
+      \end{axis}
+    }
+
+    \foreach \d in {-1, 0, ..., 3} {
+      \begin{axis}[view={\theta}{\phi},
+                   xmin=-2.5, xmax=+2.5, xtick=\empty, 
+                   ymin=-2.5, ymax=+2.5, ytick=\empty,
+                   zmin=0,    zmax=0.6, ztick=\empty,
+                   axis lines=none,              
+                   line width=1,
+                   colormap name=reds]
+        \addplot3 [domain=-2.5:2.5, samples=60, samples y=0, dark]
+          ( {\x}, {ymin(\x, \d, \delta)}, {multinormal(\x, ymin(\x, \d, \delta))} );
+        \addplot3[surf, shader=interp, samples=50, fill opacity=0.8, domain=-2.5:2.5] 
+          ( {\x}, {Y(\x, \y, \d, \delta)}, {multinormal(\x, Y(\x, \y, \d, \delta))} );
+        \addplot3 [domain=-2.5:2.5, samples=60, samples y=0, dark]
+          ( {\x}, {ymax(\x, \d, \delta)}, {multinormal(\x, ymax(\x, \d, \delta))} );
+      \end{axis}
+    }
+    
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  

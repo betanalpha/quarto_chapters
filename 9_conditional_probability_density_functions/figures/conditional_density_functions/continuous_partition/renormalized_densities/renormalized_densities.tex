@@ -1,0 +1,93 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math}
+\usepackage{pgfmath}
+\usepackage{pgfplots}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray50}{gray}{0.5}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\pgfplotsset{compat=1.17}
+\pgfplotsset{
+  colormap={reds}{rgb255=(252, 250, 250) rgb255=(245, 236, 236) rgb255=(235, 218, 218)
+                  rgb255=(220, 188, 188) rgb255=(199, 153, 153) rgb255=(185, 124, 124)
+                  rgb255=(162, 80, 80) rgb255=(143, 39, 39) rgb255=(124, 0, 0) } 
+}
+
+\tikzmath{
+  function multinormal(\x, \y) {
+    return 0.159154943091895 / (1 * 1) * exp( -0.5 * (\x * \x + \y * \y) / (1 * 1) );
+  };
+  function Y(\x, \n) {
+    \a = 0.05 * \x * \x * \x - 0.2 * \x - 0.175 + \n;
+    if \a < -2.5 then {
+      return -2.5;
+    } else {
+      return \a;
+    };
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1]
+
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-1, -0.25) rectangle (7.75, 7);
+
+    \pgfmathsetmacro{\theta}{120}
+    \pgfmathsetmacro{\phi}{45}
+  
+    \coordinate (A) at (2.5, 3.275);
+    \coordinate (B) at (2.5, 6);
+    \coordinate (C) at (6.9, 2.05);
+    \coordinate (D) at (0, 1.2);  
+    \coordinate (E) at (6.85, 1.69); 
+    
+    \draw[->, >=stealth, line width=1] (A) -- (D);
+    \node[above left] at (D) { $x_{1}$ };
+    
+    \draw[->, >=stealth, line width=1] (A) -- (C);
+    \node[above right] at (C) { $x_{2}$ };
+    
+    \fill (A) circle (0.0175);
+    \draw[->, >=stealth, line width=1] (A) -- (B);
+    \node[above] at (B) { $p(x_{1}, x_{2} \mid y)$ };
+    
+    \foreach \d/\C in {-2.300/49.818, -2.200/39.326, -2.100/31.340, -2.000/25.214, -1.900/20.482, -1.800/16.799, -1.700/13.911, -1.600/11.633, -1.500/9.822, -1.400/8.375, -1.300/7.211, -1.200/6.269, -1.100/5.504, -1.000/4.880, -0.900/4.369, -0.800/3.951, -0.700/3.607, -0.600/3.326, -0.500/3.097, -0.400/2.913, -0.300/2.766, -0.200/2.653, -0.100/2.569, 0.000/2.513, 0.100/2.483, 0.200/2.476, 0.300/2.495, 0.400/2.538, 0.500/2.608, 0.600/2.706, 0.700/2.835, 0.800/3.000, 0.900/3.206, 1.000/3.460, 1.100/3.770, 1.200/4.149, 1.300/4.612, 1.400/5.176, 1.500/5.867, 1.600/6.715, 1.700/7.761, 1.800/9.058, 1.900/10.675, 2.000/12.704, 2.100/15.267, 2.200/18.524, 2.300/22.695, 2.400/28.073, 2.500/35.059, 2.600/44.202, 2.700/56.259, 2.800/72.277, 2.900/93.720, 3.000/122.641} {
+      \begin{axis}[view={\theta}{\phi},
+                   xmin=-2.5, xmax=+2.5, xtick=\empty, 
+                   ymin=-2.5, ymax=+2.5, ytick=\empty,
+                   zmin=0,    zmax=0.4, ztick=\empty,
+                   axis lines=none,              
+                   line width=1,
+                   colormap name=reds]
+        \addplot3 [domain=-2.5:2.5, samples=60, samples y=0, gray60]
+          ( {\x}, {Y(\x, \d)}, {0} );
+          
+        \addplot3 [domain=-2.5:2.5, samples=60, samples y=0, dark]
+          ( {\x}, {Y(\x, \d)}, {multinormal(\x, Y(\x, \d)) * \C} );
+      \end{axis}
+    }
+    
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}  
