@@ -10,6 +10,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -42,40 +46,40 @@
   \draw[rounded corners=5, color=black, line width=1] (0, 0) rectangle (6, 4);
   \node at (3, -0.5) { $X$ };
   
-  \node[dark] at (3, 5.0) { $\mathsf{x} = \quad (\mathsf{x} \cap \mathsf{c}_{1}) \cup (\mathsf{x} \cap \mathsf{c}_{2})$ };
-  \node[dark] at (3, 4.5) { $\hphantom{\mathsf{x} = } \cup (\mathsf{x} \cap \mathsf{c}_{3}) \cup (\mathsf{x} \cap \mathsf{c}_{4})$ };
+  \node[darkteal] at (3, 5.0) { $\mathsf{x} = \quad (\mathsf{x} \cap \mathsf{c}_{1}) \cup (\mathsf{x} \cap \mathsf{c}_{2})$ };
+  \node[darkteal] at (3, 4.5) { $\hphantom{\mathsf{x} = } \cup (\mathsf{x} \cap \mathsf{c}_{3}) \cup (\mathsf{x} \cap \mathsf{c}_{4})$ };
   
   \pgfmathsetseed{2}
-  \draw[dark, line width=1] 
+  \draw[darkteal, line width=1] 
     plot [smooth cycle, tension=0.75] coordinates { \randpoints{4}{2.5}{1.5} } -- cycle;
   
-  \draw[dark, line width=1] (2.45, 3.03) -- (5.46, 3.03);
-  \node[dark] at (4, 3.35) { $\mathsf{x} \cap \mathsf{c}_{1}$ };
+  \draw[darkteal, line width=1] (2.45, 3.03) -- (5.46, 3.03);
+  \node[darkteal] at (4, 3.35) { $\mathsf{x} \cap \mathsf{c}_{1}$ };
   
-  \draw[dark, line width=1] (2.425, 2.97) -- (5.46, 2.97);
-  \draw[dark, line width=1] (2.475, 2.03) -- (5.333, 2.03);
-  \node[dark] at (4, 2.5) { $\mathsf{x} \cap \mathsf{c}_{2}$ };
+  \draw[darkteal, line width=1] (2.425, 2.97) -- (5.46, 2.97);
+  \draw[darkteal, line width=1] (2.475, 2.03) -- (5.333, 2.03);
+  \node[darkteal] at (4, 2.5) { $\mathsf{x} \cap \mathsf{c}_{2}$ };
 
-  \draw[dark, line width=1] (2.497, 1.97) -- (5.31, 1.97);
-  \node[dark] at (4, 1.5) { $\mathsf{x} \cap \mathsf{c}_{3}$ };
+  \draw[darkteal, line width=1] (2.497, 1.97) -- (5.31, 1.97);
+  \node[darkteal] at (4, 1.5) { $\mathsf{x} \cap \mathsf{c}_{3}$ };
 
-  \node[dark] at (4.3, 0.5) { $\mathsf{x} \cap \mathsf{c}_{4} =  \emptyset$ };
+  \node[darkteal] at (4.3, 0.5) { $\mathsf{x} \cap \mathsf{c}_{4} =  \emptyset$ };
   
-  \draw[mid, line width=1]
+  \draw[midteal, line width=1]
     (0, 3) -- (6, 3) {[rounded corners=5] -- (6, 4) -- (0, 4)} -- cycle;
-  \node[mid] at (1, 3.5) { $\mathsf{c}_{1}$ };
+  \node[midteal] at (1, 3.5) { $\mathsf{c}_{1}$ };
 
-  \draw[mid, line width=1]
+  \draw[midteal, line width=1]
     (0, 2) -- (6, 2) -- (6, 3) -- (0, 3) -- cycle;
-  \node[mid] at (1, 2.5) { $\mathsf{c}_{2}$ };
+  \node[midteal] at (1, 2.5) { $\mathsf{c}_{2}$ };
   
-  \draw[mid, line width=1]
+  \draw[midteal, line width=1]
     (0, 1) -- (6, 1) -- (6, 2) -- (0, 2) -- cycle;
-  \node[mid] at (1, 1.5) { $\mathsf{c}_{3}$ };
+  \node[midteal] at (1, 1.5) { $\mathsf{c}_{3}$ };
         
-  \draw[mid, line width=1]
+  \draw[midteal, line width=1]
     (0, 1) -- (6, 1) {[rounded corners=5] -- (6, 0) -- (0, 0)} -- cycle;
-  \node[mid] at (1, 0.5) { $\mathsf{c}_{4}$ };
+  \node[midteal] at (1, 0.5) { $\mathsf{c}_{4}$ };
 
 \end{tikzpicture}
 

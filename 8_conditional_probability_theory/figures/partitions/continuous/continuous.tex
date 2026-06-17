@@ -11,6 +11,10 @@
 \definecolor{mid}{RGB}{185, 124, 124}
 \definecolor{dark}{RGB}{143, 39, 39}
 \definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
 \definecolor{gray10}{gray}{0.1}
 \definecolor{gray20}{gray}{0.2}
 \definecolor{gray30}{gray}{0.3}
@@ -53,9 +57,9 @@
     }  
   \end{scope}
        
-  \fiber{-1}{dark};  
+  \fiber{-1}{darkteal};  
   
-  \node[dark] at (0.65, 0.26) { $\mathsf{c}_{y} = f^{-1}(y)$ };
+  \node[darkteal] at (0.65, 0.26) { $\mathsf{c}_{y} = f^{-1}(y)$ };
   
   \draw [rounded corners=5, color=black, line width=1] (-3, -2) rectangle (3, 2);
   \node at (0, -2.5) { $X$ };  
@@ -66,8 +70,8 @@
   
   \draw[white, line width=0.75] (4, -2 + 0.04) -- (4, 2 - 0.04);  
   
-  \fill[dark] (4, -0.5) circle (0.03);
-  \node[dark] at (4.65, -0.5) { $y \in Y$ };
+  \fill[darkteal] (4, -0.5) circle (0.03);
+  \node[darkteal] at (4.65, -0.5) { $y \in Y$ };
 
 \end{tikzpicture}
 
