@@ -3,6 +3,11 @@ title: "Product Spaces"
 author: "Michael Betancourt"
 date: "April 2023"
 date-format: "MMMM YYYY"
+abstract-title: ""
+abstract: |
+  All probability theory chapters can be found [here](http://www.symplectomorphic.com/writing/#part1).
+
+  A repository containing all of the files used to generate this chapter is available on [GitHub](https://github.com/betanalpha/quarto_chapters/tree/main/3_product_spaces).
 toc: true
 number-sections: true
 highlight: pygments
@@ -32,7 +37,7 @@ format-links: false
 
 Sometimes a system of applied interest can be adequately modeled
 with a single
-[space](https://betanalpha.github.io/assets/chapters_html/spaces.html).
+[space](http://www.symplectomorphic.com/assets/chapters_html/spaces.html).
 When a system is too complicated for a single space, we may be
 able to model it with _multiple spaces_ at the same time.
 _Product spaces_ integrate multiple component spaces together by
@@ -671,7 +676,7 @@ We refer to this topology as a **product topology**.
 
 The most common product spaces we will encounter in practice are
 built up from the prototypical spaces that we reviewed in
-[Chapter 2, Section 2](https://betanalpha.github.io/assets/chapters_html/spaces.html#sec:proto-spaces),
+[Chapter 2, Section 2](http://www.symplectomorphic.com/assets/chapters_html/spaces.html#sec:proto-spaces),
 combining various integers and real lines together into larger
 spaces.  That said, there are a few product spaces worth
 particular note.
@@ -1481,10 +1486,6 @@ Vladimir Markov, Wil Yegelwel, Will Farr, Will Tudor-Evans, woejozney,
 Xianda Sun, yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
 
 # License {-}
-
-A repository containing all of the files used to generate this chapter is
-available on [GitHub](
-https://github.com/betanalpha/quarto_chapters/tree/main/3_product_spaces).
 
 The text and figures in this chapter are copyrighted by Michael Betancourt
 and licensed under the CC BY-NC 4.0 license:
