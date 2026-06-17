@@ -3,6 +3,11 @@ title: "Measure and Probability on General Spaces"
 author: "Michael Betancourt"
 date: "July 2023"
 date-format: "MMMM YYYY"
+abstract-title: ""
+abstract: |
+  All probability theory chapters can be found [here](http://www.symplectomorphic.com/writing/#part1).
+
+  A repository containing all of the files used to generate this chapter is available on [GitHub](https://github.com/betanalpha/quarto_chapters/tree/main/4_probability_on_general_spaces).
 toc: true
 number-sections: true
 highlight: pygments
@@ -34,10 +39,10 @@ format-links: false
 ---
 
 In
-[Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html)
+[Chapter One](http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_sets.html)
 we discussed measure and probability theory over sets with only a
 finite number of elements.  We saw in
-[Chapter Two](https://betanalpha.github.io/assets/chapters_html/spaces.html),
+[Chapter Two](http://www.symplectomorphic.com/assets/chapters_html/spaces.html),
 however, that many of the mathematical spaces we encounter in
 practical applications, like the integers and the real line,
 feature not a finite number of elements but rather countably
@@ -60,7 +65,7 @@ some common applications.
 # Allocation Over Elements
 
 Recall that in
-[Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html)
+[Chapter One](http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_sets.html)
 we first defined measures and probability distributions as
 allocations to the individual elements in a finite set.  More
 formally, we were able to define a measure as a function that
@@ -132,7 +137,7 @@ need to specify what those subset allocations are ourselves.
 # Allocation Over All Subsets
 
 In
-[Chapter One](https://betanalpha.github.io/assets/chapters_html/probability_on_finite_sets.html)
+[Chapter One](http://www.symplectomorphic.com/assets/chapters_html/probability_on_finite_sets.html)
 we also considered defining a measure by specifying allocations
 to each subset in the power set,
 \begin{alignat*}{6}
@@ -832,7 +837,7 @@ subsets. Consequently, the overlap of null subsets, or the lack
 thereof, is often a useful way to determine how compatible two
 measures are with each other.  We'll formalize this compatibility
 when we construct density functions in
-[Chapter Six](https://betanalpha.github.io/assets/chapters_html/density_functions.html).
+[Chapter Six](http://www.symplectomorphic.com/assets/chapters_html/density_functions.html).
 
 Many formal calculations become particularly straightforward when
 every subset of a null subset is also a null subset.  This allows
@@ -884,7 +889,7 @@ the measure or probability allocated to a subset on the fly
 instead of storing and retrieving the allocation from an
 exhaustive specification.  We will introduce two of these
 algorithmic representations, and use them to define many useful
-allocations, in [Chapter Six](https://betanalpha.github.io/assets/chapters_html/density_functions.html) and Chapter Fourteen.
+allocations, in [Chapter Six](http://www.symplectomorphic.com/assets/chapters_html/density_functions.html) and Chapter Fourteen.
 
 # Uniform Measures
 
@@ -1026,7 +1031,7 @@ ambiguity.
 
 Consider, for instance, a real line $\mathbb{R}$ equipped with an
 appropriate ordering, algebra, metric, and topology as discussed
-in [Chapter Two](https://betanalpha.github.io/assets/chapters_html/spaces.html).
+in [Chapter Two](http://www.symplectomorphic.com/assets/chapters_html/spaces.html).
 Recall that we can interpret this as a particular rigid real line
 or a particular parameterization of a flexible real line.
 
@@ -1267,7 +1272,7 @@ transformations that preserve distances.
 In order to formalize heuristic concepts like "ignorance" and
 "information", we have to embrace a bit more abstraction.  Recall
 that in
-[Chapter Two](https://betanalpha.github.io/assets/chapters_html/spaces.html)
+[Chapter Two](http://www.symplectomorphic.com/assets/chapters_html/spaces.html)
 we discussed the notion of a structure-preserving transformation.
 More generally, if $\phi : X \rightarrow X$ is a
 structure-preserving automorphism then we say that the structure
@@ -1311,7 +1316,7 @@ set.  The more invariant a measure is to transformations of that
 set, the less information it will contain.  We will more formally
 consider how measures transform, and hence how to precisely
 define symmetries of a measure, in
-[Chapter Seven](https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html).
+[Chapter Seven](http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html).
 
 Uniform measures are built to be symmetric to at least some
 transformations, and hence encode less information than most
@@ -1686,10 +1691,6 @@ yolhaj , yureq , Zach A, Zad Rafi, and Zhengchen Cai.
 <div id="refs"></div>
 
 # License {-}
-
-A repository containing all of the files used to generate this chapter is
-available on [GitHub](
-https://github.com/betanalpha/quarto_chapters/tree/main/4_probability_on_general_spaces).
 
 The text and figures in this chapter are copyrighted by Michael Betancourt
 and licensed under the CC BY-NC 4.0 license:
