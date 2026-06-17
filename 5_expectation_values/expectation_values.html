@@ -3177,12 +3177,19 @@ window.Quarto = {
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title"></div>
+    <p>All probability theory chapters can be found <a href="http://www.symplectomorphic.com/writing/#part1">here</a>.</p>
+    <p>A repository containing all of the files used to generate this chapter is available on <a href="https://github.com/betanalpha/quarto_chapters/tree/main/5_expectation_values">GitHub</a>.</p>
+  </div>
+</div>
 
 
 </header>
 
 
-<p>In <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a>, we defined measures and probability distributions, as mappings from measurable subsets to allocated measures. These subset allocations also induce a somewhat surprising, but incredibly powerful, mapping from real-valued functions to single real numbers that generalizes Riemann integration in calculus. This measure-informed integration operation summarizes the interaction between a measure and a given function, allowing us to use one to learn about the other.</p>
+<p>In <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a>, we defined measures and probability distributions, as mappings from measurable subsets to allocated measures. These subset allocations also induce a somewhat surprising, but incredibly powerful, mapping from real-valued functions to single real numbers that generalizes Riemann integration in calculus. This measure-informed integration operation summarizes the interaction between a measure and a given function, allowing us to use one to learn about the other.</p>
 <p>We will begin our exploration of measure-informed integration with a heuristic construction on finite measure spaces before considering a more formal, but also more abstract, construction that applies to any measure space. Next, we’ll investigate how the specification of measure-informed integrals can be used to implicitly define measures without having to explicitly define subset allocations, as well as some useful applications of these implicit specifications. Finally, we’ll consider particular measure-informed integrals that are distinguished by common ambient space structures before concluding with a discussion of a few exceptional measures whose integrals can be computed algorithmically.</p>
 <section id="sec:finite_integration" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Integration on Finite Measure Spaces</h1>
@@ -3409,7 +3416,7 @@ f^{*}( (-\infty, x] )
 \{ x&#39; \in X \mid f(x&#39;) \in (\infty, x] \}
 \in \mathcal{X}.
 </span> In practice non-measurable functions are as difficult to construct as non-measurable subsets; consequently measurability can largely be taken for granted.</p>
-<p>We’ll come back to the topic of measurable functions in much more detail in <a href="https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html">Chapter Seven</a>. For now, our main concern will be to avoid confusing measurable <em>subsets</em> on <span class="math inline">(X, \mathcal{X})</span> and measurable <em>functions</em> from <span class="math inline">(X, \mathcal{X})</span> to <span class="math inline">\mathbb{R}</span>.</p>
+<p>We’ll come back to the topic of measurable functions in much more detail in <a href="http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html">Chapter Seven</a>. For now, our main concern will be to avoid confusing measurable <em>subsets</em> on <span class="math inline">(X, \mathcal{X})</span> and measurable <em>functions</em> from <span class="math inline">(X, \mathcal{X})</span> to <span class="math inline">\mathbb{R}</span>.</p>
 <p>Measurable functions with non-negative outputs, <span class="math display">
 f(x) \ge 0
 </span> for all <span class="math inline">x \in X</span>, are particularly special. Any non-negative, measurable function can always be <em>perfectly</em> recovered as a certain limit of increasingly complicated simple functions, <span class="math display">
@@ -3928,7 +3935,7 @@ Figure 9: A circle <span class="math inline">\mathbb{S}^{1}</span> can be injec
 </figcaption>
 </figure>
 </div>
-<p>Formally, one can use the topological incompatibility between the circle and the real line that we first encountered in <a href="https://betanalpha.github.io/assets/chapters_html/spaces.html">Chapter Two</a> to show that there is no way to construct <em>any</em> isometry from the circle <span class="math inline">\mathbb{S}^{1}</span> into a real line <span class="math inline">\mathbb{R}</span>, let alone an injective one.</p>
+<p>Formally, one can use the topological incompatibility between the circle and the real line that we first encountered in <a href="http://www.symplectomorphic.com/assets/chapters_html/spaces.html">Chapter Two</a> to show that there is no way to construct <em>any</em> isometry from the circle <span class="math inline">\mathbb{S}^{1}</span> into a real line <span class="math inline">\mathbb{R}</span>, let alone an injective one.</p>
 <p>This formal definition of moments is easy to dismiss as overly technical. Unfortunately, the practical consequences are critical when working with spaces like circles, spheres, torii, and more. Many analyses on these spaces have been undermined by attempts to summarize measures with moments that don’t actually exist!</p>
 <p>All of this said, we still have to take care with the necessary conditions when working with more familiar spaces as well. For example, in <a href="#sec:practical_lebesgue">Section 5.2.2</a> we’ll learn that the identify function from a real line into itself is not integrable with respect to the Lebesgue measure on a real line. Consequently, the Lebesgue measure does not have a well-defined mean, let alone a variance or other higher-order moments.</p>
 </section>
@@ -4075,7 +4082,7 @@ Figure 13: A cumulative distribution function quantifies how measure is allocat
 </figcaption>
 </figure>
 </div>
-<p>Using the shorthand notation for implicit subset allocations that we discussed in <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a>, we can also write a cumulative distribution functions as <span class="math inline">\mu([x&#39; &lt; x])</span> or even <span class="math inline">\mu(x&#39; &lt; x)</span>. That said, the shorthand in this case can be confusing because it’s easy to mistake which variable denotes points in the interval and which variable defines the upper boundary of the interval itself.</p>
+<p>Using the shorthand notation for implicit subset allocations that we discussed in <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html">Chapter Four</a>, we can also write a cumulative distribution functions as <span class="math inline">\mu([x&#39; &lt; x])</span> or even <span class="math inline">\mu(x&#39; &lt; x)</span>. That said, the shorthand in this case can be confusing because it’s easy to mistake which variable denotes points in the interval and which variable defines the upper boundary of the interval itself.</p>
 <p>By construction, if <span class="math inline">x_{1} &lt; x_{2}</span> then <span class="math inline">\mathsf{I}_{x_{1}} \subset \mathsf{I}_{x_{2}}</span>. Consequently, <span class="math display">
 \mu(\mathsf{I}_{x_{1}}) \le \mu(\mathsf{I}_{x_{2}})
 </span> or, equivalently, <span class="math display">
@@ -4556,7 +4563,7 @@ x_{2} - x_{1},
 &amp;=
 \int_{x_{1}}^{x_{2}} \mathrm{d} x \, g(x).
 \end{align*}</span></p>
-<p>By appropriately scaling the Lebesgue measure in this way we can implement all kinds of measures over a real line, including most probability distributions of practical interest. We’ll formalize this procedure in the <a href="https://betanalpha.github.io/assets/chapters_html/density_functions.html">next chapter</a>.</p>
+<p>By appropriately scaling the Lebesgue measure in this way we can implement all kinds of measures over a real line, including most probability distributions of practical interest. We’ll formalize this procedure in the <a href="http://www.symplectomorphic.com/assets/chapters_html/density_functions.html">next chapter</a>.</p>
 </section>
 </section>
 </section>
@@ -4568,7 +4575,7 @@ x_{2} - x_{1},
 <section id="sec:app" class="level1 unnumbered">
 <h1 class="unnumbered">Appendix: Indicator Function Manipulations</h1>
 <p>In <a href="#sec:gen_int">Section 2</a>, we used indicator functions in the theoretical construction of measure-informed integration. As we saw in <a href="#sec:exp_int">Section 5</a>, however, we don’t actually use indicator functions when actually calculating most measure-informed integrals in practice. Consequently, indicators don’t play a direct role in most practical integration.</p>
-<p>Every now and then, however, indicator functions are useful beyond just integration. In those exceptional circumstances, familiarity with the properties of indicator functions can be pretty useful. The most useful of these properties are really just manifestations of the interaction between probability allocations and the basic set operations that we discussed in <a href="https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html#derived-properties">Chapter 4</a>.</p>
+<p>Every now and then, however, indicator functions are useful beyond just integration. In those exceptional circumstances, familiarity with the properties of indicator functions can be pretty useful. The most useful of these properties are really just manifestations of the interaction between probability allocations and the basic set operations that we discussed in <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html#derived-properties">Chapter 4</a>.</p>
 <p>Consider, for example, the indicator function of the union of two <em>disjoint</em> subsets, <span class="math display">
 I_{ \mathsf{x}_{1} \cup \mathsf{x}_{2} } (x)
 =
@@ -4762,9 +4769,7 @@ I_{\mathsf{x}} (x).
 </section>
 <section id="license" class="level1 unnumbered">
 <h1 class="unnumbered">License</h1>
-<p>A repository containing all of the files used to generate this chapter is available on <a href="https://github.com/betanalpha/quarto_chapters/tree/main/5_expectation_values">GitHub</a>.</p>
-<p>The text and figures in this chapter are copyrighted by Michael Betancourt and licensed under the CC BY-NC 4.0 license:</p>
-<p>https://creativecommons.org/licenses/by-nc/4.0/</p>
+<p>The text and figures in this chapter are copyrighted by Michael Betancourt and licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0 license</a>.</p>
 </section>
 
 </main>

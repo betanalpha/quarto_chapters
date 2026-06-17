@@ -3,6 +3,11 @@ title: "Measured-Informed Integration and Expectation"
 author: "Michael Betancourt"
 date: "August 2023"
 date-format: "MMMM YYYY"
+abstract-title: ""
+abstract: |
+  All probability theory chapters can be found [here](http://www.symplectomorphic.com/writing/#part1).
+
+  A repository containing all of the files used to generate this chapter is available on [GitHub](https://github.com/betanalpha/quarto_chapters/tree/main/5_expectation_values).
 toc: true
 number-sections: true
 highlight: pygments
@@ -33,7 +38,7 @@ knitr:
 format-links: false
 ---
 
-In [Chapter Four](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html),
+In [Chapter Four](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html),
 we defined measures and probability distributions, as mappings
 from measurable subsets to allocated measures.  These subset
 allocations also induce a somewhat surprising, but incredibly
@@ -391,7 +396,7 @@ construct as non-measurable subsets; consequently measurability
 can largely be taken for granted.
 
 We'll come back to the topic of measurable functions in much more
-detail in [Chapter Seven](https://betanalpha.github.io/assets/chapters_html/transforming_probability_spaces.html).  For now,
+detail in [Chapter Seven](http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html).  For now,
 our main concern will be to avoid confusing measurable _subsets_
 on $(X, \mathcal{X})$ and measurable _functions_ from
 $(X, \mathcal{X})$ to $\mathbb{R}$.
@@ -1342,7 +1347,7 @@ width=40% #fig-no-circle-embedding}
 
 Formally, one can use the topological incompatibility between the
 circle and the real line that we first encountered in
-[Chapter Two](https://betanalpha.github.io/assets/chapters_html/spaces.html)
+[Chapter Two](http://www.symplectomorphic.com/assets/chapters_html/spaces.html)
 to show that there is no way to construct _any_ isometry from the
 circle $\mathbb{S}^{1}$ into a real line $\mathbb{R}$, let alone
 an injective one.
@@ -1513,7 +1518,7 @@ figures/cdfs/cdf/cdf){
 width=50% #fig-cdf-basics}
 
 Using the shorthand notation for implicit subset allocations that
-we discussed in [Chapter Four](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html), we can also
+we discussed in [Chapter Four](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html), we can also
 write a cumulative distribution functions as $\mu([x' < x])$ or
 even $\mu(x' < x)$.  That said, the shorthand in this case can be
 confusing because it's easy to mistake which variable denotes
@@ -2177,7 +2182,7 @@ By appropriately scaling the Lebesgue measure in this way we can
 implement all kinds of measures over a real line, including most
 probability distributions of practical interest.  We'll
 formalize this procedure in the
-[next chapter](https://betanalpha.github.io/assets/chapters_html/density_functions.html).
+[next chapter](http://www.symplectomorphic.com/assets/chapters_html/density_functions.html).
 
 # Conclusion
 
@@ -2210,7 +2215,7 @@ familiarity with the properties of indicator functions can be
 pretty useful.  The most useful of these properties are really
 just manifestations of the interaction between probability
 allocations and the basic set operations that we discussed in
-[Chapter 4](https://betanalpha.github.io/assets/chapters_html/probability_on_general_spaces.html#derived-properties).
+[Chapter 4](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html#derived-properties).
 
 Consider, for example, the indicator function of the union of two
 _disjoint_ subsets,
@@ -2504,11 +2509,5 @@ and Zhengchen Cai.
 
 # License {-}
 
-A repository containing all of the files used to generate this chapter is
-available on [GitHub](
-https://github.com/betanalpha/quarto_chapters/tree/main/5_expectation_values).
-
-The text and figures in this chapter are copyrighted by Michael Betancourt
-and licensed under the CC BY-NC 4.0 license:
-
-https://creativecommons.org/licenses/by-nc/4.0/
+The text and figures in this chapter are copyrighted by Michael
+Betancourt and licensed under the [CC BY-NC 4.0 license](https://creativecommons.org/licenses/by-nc/4.0/).
