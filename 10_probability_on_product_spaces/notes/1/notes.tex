@@ -1,0 +1,749 @@
+\documentclass[11pt, oneside]{article}
+\usepackage{geometry} 
+\geometry{letterpaper}
+\usepackage{graphicx}	
+
+\usepackage{amssymb, amsmath}
+
+\newcommand{\I}[2]{
+  \ensuremath{ \mathbb{I}_{#1} \! \left[ #2 \right] }
+}
+
+\newcommand{\E}[2]{
+  \ensuremath{ \mathbb{E}_{#1} \! \left[ #2 \right] }
+}
+
+\newcommand{\rnd}[2]{
+  \ensuremath{ \frac{ \mathrm{d} #1}{ \mathrm{d} #2 } }
+}
+
+\begin{document}
+
+\section{Integral Notation}
+
+Partially evaluating a conditional probability distribution on any $y \in Y$ 
+yields a probability distribution that concentrates on the level set 
+$f^{-1}(y)$,
+%
+\begin{alignat*}{6}
+\pi^{f}_{y} :\; &\mathcal{X}& &\rightarrow& \; &[0, 1]&
+\\
+&\mathsf{x}& &\mapsto& &\pi^{f}( \mathsf{x} \mid y )&.
+\end{alignat*}
+
+When paired with an integrand $g : X \rightarrow \mathbb{R}$ this collection 
+of probability distributions defines a \textbf{conditional expectation function},
+%
+\begin{alignat*}{6}
+e_{g} : \; &Y& &\rightarrow& \; &\mathbb{R}&
+\\
+&y& &\mapsto& & \E{ \pi^{f}_{y} }{ g }&.
+\end{alignat*}
+
+The law of total expectation ensures that the pushforward expectation of this 
+conditional expectation function is always equal to the original expectation 
+value,
+%
+\begin{equation*}
+\E{\pi}{g} = \E{ f_{*} \pi }{e_{g}}.
+\end{equation*}
+
+Ideally we'd be able to write the law of total expectation more compactly,
+packing everything into one line.  Unfortunately any compact notation is 
+frustrated by the standard notational convention of ignoring arguments when 
+denoting expectation values.  For example a notation that replaces $y$ with 
+a placeholder ``$\cdot$",
+%
+\begin{equation*}
+\E{\pi}{g} = \E{ f_{*} \pi }{e_{g}} = \E{ f_{*} \pi }{ \E{\pi^{f}_{\cdot}}{g} },
+\end{equation*}
+%
+is not only hard to read but can be ambiguous in applications where there 
+are multiple spaces on which $f$ and $g$ might act.
+
+At the same time a more explicit notation like
+%
+\begin{equation*}
+\E{\pi}{g} = \E{ f_{*} \pi }{e_{g}} = \E{ f_{*} \pi }{ \E{\pi^{f}_{y}}{g(x)} }
+\end{equation*}
+%
+breaks the standard notational convention without clarifying on what spaces 
+the probability distributions $f_{*} \pi$ and $\pi^{f}_{y}$ are defined.
+
+Conditional probability theory is one place where the more explicit integral 
+notation for expectation values that we first discussed in \textbf{previous chapter}
+becomes incredibly useful.  To make the notation as compact as possible we
+will need to  introduce a \emph{conditional variable} $z_{y}$ that takes values 
+in only the level set corresponding to the output point $y \in Y$,
+%
+\begin{equation*}
+z_{y} \in f^{-1}(y) \subset X.
+\end{equation*}
+%
+Conditional variables allow us to decompose any input variable into an output 
+variable and a corresponding conditional variable,
+%
+\begin{equation*}
+x = (y, z_{y}).
+\end{equation*}
+%
+Note that the right hand-side isn't an ordered pair because the possible
+values of the second variable will in general depend on the choice of the 
+first variable.  For the mathematically-curious this construction is known 
+as a \textbf{semi-direct product}.
+
+Using conditional variables we can write the conditional expectation value as
+%
+\begin{align*}
+e_{g}(y) 
+&= 
+\E{ \pi^{f}_{y} }{ g }
+\\
+&=
+\int \pi^{f}( \mathrm{d} x \mid y ) \, g(x),
+\end{align*}
+%
+with the law of total expectation becoming
+%
+\begin{align*}
+\E{\pi}{g} 
+&= 
+\E{ f_{*} \pi }{e_{g}}
+\\
+\int \pi( \mathrm{d} x ) \, g(x)
+&=
+\int f_{*} \pi (\mathrm{d} y) \, e_{g}(y)
+\\
+\int \pi( \mathrm{d} x ) \, g(x)
+&=
+\int f_{*} \pi (\mathrm{d} y) \int \pi^{f}( \mathrm{d} x \mid y ) \, g(x).
+\end{align*}
+%
+\textbf{Convert $\mathrm{d} x \mid y$ to $\mathrm{d} x_{y} \mid y$.}
+
+I will make extensive use of this compact notation anytime conditional 
+probability theory might come into play which, as we will see, will be 
+often.
+
+\section{Conditional Probability Density Functions}
+
+\subsection{Non-Null Partitions}
+
+Constructing conditional probability density functions for non-null 
+partitions is relatively straightforward.  Recall that in this case 
+we can define a conditional probability as
+%
+\begin{equation*}
+\pi^{\mathcal{P}}( \mathsf{x} \mid \mathsf{c}_{j} )
+=
+\frac{ \pi( \mathsf{x} \cap \mathsf{c}_{j} ) }{ \pi( \mathsf{c}_{j} ) }.
+\end{equation*}
+%
+More generally for any integrand $g : X \rightarrow \mathbb{R}$ these 
+conditional probability allocations define a conditional expectation 
+value,
+%
+\begin{equation*}
+\E{ \pi^{\mathcal{P}}_{\mathsf{c}_{j}} }{g}
+=
+\frac{ \E{\pi}{ I_{\mathsf{c}_{j}} \cdot g } }
+{ \E{\pi}{ I_{\mathsf{c}_{j}} } }.
+\end{equation*}
+
+Given a convenient reference measure $\mu$ we can convert these expectation 
+values into $\mu$-informed integrals with the introduction of a Radon-Nikodym
+derivative.  On the left-hand side we have
+%
+\begin{equation*}
+\E{\pi^{\mathcal{P}}_{\mathsf{c}_{j}}}{g}
+=
+\I{\mu}{ \rnd{\pi^{\mathcal{P}}_{\mathsf{c}_{j}}}{\mu} \cdot g }
+\end{equation*}
+%
+and on the right-hand side we have
+%
+\begin{align*}
+\frac{ \E{\pi}{ I_{\mathsf{c}_{j}} \cdot g } }
+{ \E{\pi}{ I_{\mathsf{c}_{j}} } }
+&=
+\frac{ \I{\mu}{ \rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} \cdot g } }
+{ \I{\mu}{ \rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} } }
+\\
+&=
+\I{\mu}{ 
+\frac{ \rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} }
+{ \I{\mu}{ \rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} } 
+} \cdot g }.
+\end{align*}
+
+Consequently
+%
+\begin{align*}
+\E{\pi^{\mathcal{P}}_{\mathsf{c}_{j}}}{g}
+&=
+\frac{ \E{\pi}{ I_{\mathsf{c}_{j}} \cdot g } }
+{ \E{\pi}{ I_{\mathsf{c}_{j}} } }
+\\
+\I{\mu}{ \rnd{\pi^{\mathcal{P}}_{\mathsf{c}_{j}}}{\mu} \cdot g }
+&=
+\I{\mu}{ 
+\frac{ \rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} }
+{ \I{\mu}{ \rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} } 
+} \cdot g }
+\end{align*}
+%
+which is true for any integrand $g : X \rightarrow \mathbb{R}$ if, and only if, 
+%
+\begin{equation*}
+\rnd{\pi^{\mathcal{P}}_{\mathsf{c}_{j}}}{\mu}
+\overset{\mu}{=}
+\frac{\rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} }
+{ \I{\mu}{ \rnd{\pi}{\mu} \cdot I_{\mathsf{c}_{j}} } }.
+\end{equation*}
+%
+Repeating this calculation for each partition cell $\mathsf{c}_{j}$ defines a family 
+of probability density functions that completely specifies the conditional 
+probability distribution in the context of the reference measure $\mu$.
+
+In words a conditional probability density function for a non-null partition is given 
+by truncating the unconditional probability density function to each partition cell 
+and then scaling by the reciprocal of the cell probability to ensure the proper 
+normalization.
+
+\textbf{figure}
+
+\subsection{The Problem with Null Partitions}
+
+Defining conditional probability density functions when the partition cells might 
+be allocated vanishing probability is, unfortunately, a bit more complicated.
+Because we can no longer define conditional probabilities as a ratio of unconditional 
+probabilities we need to consult the law of total expectation in order to define 
+conditional probability density functions,
+%
+\begin{equation*}
+\int \pi( \mathrm{d} x ) \, g(x)
+=
+\int f_{*} \pi (\mathrm{d} y) \int \pi^{f}( \mathrm{d}x \mid y ) \, g(x),
+\end{equation*}
+
+In order to move forwards we need to convert the inner expectation into a reference 
+measure-informed integral.  The subtlety, however, is exactly \emph{how} we can 
+integrate over the level sets.
+
+Consider, for example, a reference measure $\lambda$ over the entire input space
+for which each conditional probability distribution $\pi^{f}( \mathsf{x} \mid y)$
+is absolutely continuous.  In theory we can write the expectation over any 
+particular level set as a $\lambda$-informed integral using a Radon-Nikodym
+derivative,
+%
+\begin{equation*}
+\int \pi^{f}( \mathrm{d}x \mid y ) \, g(x)
+=
+\int \lambda( \mathrm{d} x ) \, \rnd{ \pi^{f} }{ \lambda} (x \mid y) \, g(x).
+\end{equation*}
+
+\textbf{Actually not mathematically valid}.
+While this is mathematically valid the necessary Radon-Nikodym derivative 
+$\mathrm{d} \pi^{f} / \mathrm{d} \lambda$ is somewhat weird object.  For example 
+remember that any subset that doesn't intersect with a given level set is allocated 
+zero conditional probability,
+%
+\begin{align*}
+0
+&=
+\int \pi^{f}( \mathrm{d}x \mid y ) \, I_{\mathsf{x}}(x)
+\\
+&=
+\int \lambda( \mathrm{d} x ) \, \rnd{ \pi^{f} }{ \lambda } (x \mid y) \, I_{\mathsf{x}}(x).
+\end{align*}
+%
+This is true, however, if and only if
+%
+\begin{equation*}
+\rnd{ \pi^{f} }{ \lambda } (x \mid y) \overset{\lambda, \nu}{=} 0.
+\end{equation*}
+%
+In other words $\mathrm{d} \pi^{f} / \mathrm{d} \lambda(x \mid y)$ has to be effectively 
+zero outside of the level set $f^{-1}(y)$.
+
+At the same time if the level set is allocated vanishing reference measure,
+%
+\begin{equation*}
+\lambda( f^{-1}(y) ) = 0
+\end{equation*}
+%
+then any integrand that is non-zero only within the level set $f^{-1})(y)$ should 
+give the same integral as an integrand that is identically zero within that level 
+set.  Consequently we should have
+%
+\begin{align*}
+\int \pi^{f}( \mathrm{d}x \mid y ) \, g(x)
+&=
+\int \lambda( \mathrm{d} x ) \, \rnd{ \pi^{f} }{ \lambda} (x \mid y) \, g(x)
+\\
+&=
+\int \lambda( \mathrm{d} x ) \, 0 \cdot g(x)
+\\
+&=
+0
+\end{align*}
+%
+regardless of $g$.  That vanishing integral then propagates through the law of 
+total expectation to give
+%
+\begin{align*}
+\int \pi( \mathrm{d} x ) \, g(x)
+&=
+\int f_{*} \pi (\mathrm{d} y) \int \pi^{f}( \mathrm{d}x \mid y ) \, g(x)
+\\
+&=
+\int f_{*} \pi (\mathrm{d} y) \, 0
+\\
+&=
+0
+\end{align*}
+%
+for all expectands $g$, which cannot hold for arbitrary probability distributions
+$\pi$.
+
+In order to ensure non-trivial expectations the object 
+$\mathrm{d} \pi^{f} / \mathrm{d} \lambda(x \mid y)$ cannot be a regular function.
+Instead it would have to be a generalized function that can inflate a null subset 
+to have non-vanishing integrals, mirroring the construction of the Dirac delta
+``function'' that we encountered in \textbf{previous chapter}.
+
+In practice, however, it's much more straightforward if we restrict the inner 
+expectation in the law of total probability to particular level sets and define 
+conditional probability density functions relative to a family of reference measures, 
+each of which is restricted to a particular level set,
+%
+\begin{equation*}
+\int \pi^{f}( \mathrm{d}x \mid y ) \, g(x)
+=
+\int \eta_{y}( \mathrm{d} x ) \, \rnd{ \pi^{f} }{ \eta_{y} } (x \mid y) \, g(x).
+\end{equation*}
+
+In order to relate this to probability density functions defined over the input 
+and output spaces we'll need to learn how to disintegrate measures.
+
+\subsection{Disintegrating Measures}
+
+Disintegrating measures, however, is more subtle than disintegrating probability 
+distributions.
+
+Firstly in order to avoid the kinds of ambiguous results that arise when we allow
+infinities into calculations we need to restrict our consideration to measures that 
+are $\sigma$-finite.  Moreover when generalizing the law of total expectation into 
+a law of total integration we cannot rely on the pushforward of an initial  
+$\sigma$-finite measure because it will not always be $\sigma$-finite.
+
+For example consider a rigid two-dimensional real space $\mathbb{R}^{2}$ equipped
+with the two-dimensional Lebesgue measure $\lambda^{2}$ and a projection function
+\begin{alignat*}{6}
+\varpi_{1} :\; &\mathbb{R}^{2}& &\rightarrow& \; &\mathbb{R}&
+\\
+&(x_{1}, x_{2})& &\mapsto& &x_{1}&.
+\end{alignat*}
+The Lebesgue measure $\lambda_{2}$ is $\sigma$-finite, allocating finite measure 
+to every measurable subset that can be encapsulated in a finite rectangle: if
+%
+\begin{equation*}
+\mathsf{x} \subset [0, 1] \times [0, 1]
+\end{equation*}
+%
+then
+\begin{align*}
+\lambda^{2}(\mathsf{x}) 
+&< 
+\lambda^{2}( [0, 1] \times [0, 1] )
+\\
+&<
+l([0, 1]) \cdot l([0, 1])
+\\
+&<
+1 \cdot 1
+\\
+&< 
+1.
+\end{align*}
+Pushing $\lambda^{2}$ forward along $\varpi_{1}$, however, results in a measure 
+that allocates infinite measure to finite intervals,
+%
+\begin{align*}
+(\varpi_{1})_{*} \lambda^{2} ( [0, 1] ) 
+&= 
+\lambda^{2}( \varpi_{1}^{*} [0, 1]) 
+\\
+&= \lambda^{2}( [0, 1] \times (\infty, \infty) ) 
+\\
+&= l([0, 1]) \cdot l( (-\infty, \infty) )
+\\
+&= 1 \cdot \infty
+\\
+&= \infty.
+\end{align*}
+
+\textbf{figure}
+
+In order to define a well-behaved law of total integration for $\sigma$-finite measures 
+we need to specify not only a measurable function $f: X \rightarrow Y$ but also a 
+$\sigma$-finite reference measure over the output space $Y$.  Formally given 
+%
+\begin{enumerate}
+  \item an input measurable space $(X, \mathcal{X})$,
+  \item a $\sigma$-finite measure $\mu : \mathcal{X} \rightarrow [0, \infty]$, 
+  \item an output measurable space $(Y, \mathcal{Y})$ where every atomic subset is measurable, 
+  \item a $(\mathcal{X}, \mathcal{Y})$-measurable function $f: X \rightarrow Y$, 
+  \item and finally a $\sigma$-finite measure $\nu : \mathcal{Y} \rightarrow [0, \infty]$ 
+\end{enumerate}
+there exists at least one conditional measure
+%
+\begin{alignat*}{6}
+\mu^{f, \nu} :\; &\mathcal{X} \times Y& &\rightarrow& \; &[0, \infty]&
+\\
+&\mathsf{x}, y& &\mapsto& &\mu^{f}( \mathsf{x} \mid y )&
+\end{alignat*}
+%
+that defines a $(\mathcal{Y}, \mathcal{B}_{\mathbb{R}})$-measurable function when 
+partially evaluated on the first argument,
+%
+\begin{alignat*}{6}
+\mu^{f, \nu}_{\mathsf{x}} :\; &Y& &\rightarrow& \; &[0, \infty]&
+\\
+&y& &\mapsto& &\mu^{f, \nu}( \mathsf{x} \mid y )&
+\end{alignat*}
+%
+for all $\mathsf{x} \in \mathcal{X}$, and a $\sigma$-finite measure when partially 
+evaluated on the second argument,
+%
+\begin{alignat*}{6}
+\mu^{f}_{y, \nu} :\; &\mathcal{X}& &\rightarrow& \; &[0, \infty]&
+\\
+&\mathsf{x}& &\mapsto& &\mu^{f, \nu}( \mathsf{x} \mid y )&
+\end{alignat*}
+%
+$\nu$-almost all $y \in Y$.
+%
+Any conditional measure almost always concentrates on a given level set,
+%
+\begin{equation*}
+\mu^{f, \nu}_{y}( \mathsf{x} ) \overset{\nu}{=} 0
+\end{equation*}
+%
+for any $\mathsf{x} \in \mathcal{X}$ with $\mathsf{x} \cap f^{-1}(y)$
+while also satisfying a law of total integration,
+%
+\begin{equation*}
+\int \mu( \mathrm{d} x ) \, g(x)
+=
+\int \nu (\mathrm{d} y) \int \mu^{f, \nu}( \mathrm{d}x_{y} \mid y ) \, g(x),
+\end{equation*}
+%
+for any well-behaved integrand $g : X \rightarrow \mathbb{R}$.
+
+If $f_{*} \mu$ is $\sigma$-finite then we can always take $\nu = f_{*} \mu$ so that 
+the law of total integration mirrors the law of total expectation.  This is always 
+possible if $\mu$ is a finite measure, with $\mu(X) < \infty$, but not always
+viable when $\mu$ is only $\sigma$-finite.  In particular we have to be careful 
+when disintegrating Lebesgue and counting measures!
+
+
+
+\section{Explicit Formula For Pushforward Probability Density Functions}
+
+Disintegrating a reference measure also gives us an explicit formula for pushforward 
+probability density functions.  We start with the definition of pullback expectation values:
+for sufficiently measurable $f : X \rightarrow Y$ and $h : Y \rightarrow \mathbb{R}$ we have
+%
+\begin{equation*}
+\E{\pi}{ h \circ f } = \E{f_{*} \pi}{ h },
+\end{equation*}
+%
+or, equivalently,
+%
+\begin{equation*}
+\int \pi( \mathrm{d} x ) \, h(f(x)) = \int f_{*} \pi( \mathrm{d} y )  \, h(y).
+\end{equation*}
+
+Our goal will be to convert these expectations into equivalent integrals so that we can 
+compare the integrands, at least up to null subsets.  For example given a convenient 
+reference measure $\nu$ over $Y$ we can write the right-hand side as
+%
+\begin{align*}
+\int f_{*} \pi( \mathrm{d} y )  \, h(y)
+&=
+\int \nu( \mathrm{d} y ) \, \rnd{f_{*}\pi}{\nu}(y) \, h(y)
+\\
+&=
+\int \nu( \mathrm{d} y ) \, \left[ \rnd{f_{*}\pi}{\nu}(y) \right] \, h(y).
+\end{align*}
+
+Similarly given a convenient reference measure $\mu$ over $X$ we can write the left-hand
+side as
+%
+\begin{equation*}
+\int \pi( \mathrm{d} x ) \, h(f(x))
+=
+\int \mu( \mathrm{d} x ) \, \rnd{\pi}{\mu}(x) \, h(f(x)).
+\end{equation*}
+%
+Disintegrating $\mu$ with respect to $f$ and $\nu$ then gives
+%
+\begin{align*}
+\int \pi( \mathrm{d} x ) \, h(f(x))
+&=
+\int \mu( \mathrm{d} x ) \, \rnd{\pi}{\mu}(x) \, h(f(x))
+\\
+&=
+\int \nu( \mathrm{d} y ) \, \int \mu^{f, \nu}( \mathrm{d} x \mid y ) \, \rnd{\pi}{\mu}(x) \, h(f(x)).
+\end{align*}
+%
+Because the function $h \circ f : X \rightarrow \mathbb{R}$ yields the same output for any 
+$x \in f^{-1}(y)$ it is a constant with respect to the inner integral that can be factored out,
+%
+\begin{align*}
+\int \pi( \mathrm{d} x ) \, h(f(x))
+&=
+\int \nu( \mathrm{d} y ) \, \int \mu^{f, \nu}( \mathrm{d} x \mid y ) \, \rnd{\pi}{\mu}(x) \, h(f(x))
+\\
+&=
+\int \nu( \mathrm{d} y ) \, 
+\left[ \int \mu^{f, \nu}( \mathrm{d} x \mid y ) \, \rnd{\pi}{\mu}(x) \right] \, h(y).
+\end{align*}
+
+Combining the transformed left-hand and right-hand sides together gives
+%
+\begin{align*}
+\int \pi( \mathrm{d} x ) \, h(f(x)) 
+&= 
+\int f_{*} \pi( \mathrm{d} y )  \, h(y)
+\\
+\int \nu( \mathrm{d} y ) \, 
+\left[ \int \mu^{f, \nu}( \mathrm{d} x \mid y ) \, \rnd{\pi}{\mu}(x) \right] \, h(y)
+&=
+\int \nu( \mathrm{d} y ) \, \left[ \rnd{f_{*}\pi}{\nu}(y) \right] \, h(y).
+\end{align*}
+%
+Because both sides of this equation are $\nu$-informed integrals we have equality if and only if the 
+integrands are equal up to $\nu$-null subsets. In particular we have equality for any integrand 
+$h : Y \rightarrow \mathbb{R}$ if and only if
+%
+\begin{equation*}
+\rnd{f_{*}\pi}{\nu}(y) 
+\overset{\nu}{=}
+\int \mu^{f, \nu}( \mathrm{d} x \mid y ) \, \rnd{\pi}{\mu}(x).
+\end{equation*}
+
+In theory this gives us an explicit formula for pushforward probability density functions.  
+Implementing this result in practice, however, will not straightforward unless we happen 
+to have an explicit method to integrate the initial probability density function over each 
+level set of $f$.
+
+\section{Simplifications For Product Spaces}
+
+Conditional probability theory can be intimidating in its full generality, but it becomes 
+much more straightforward when applied to the natural projection functions of product 
+spaces.  Consider, for example, a product space consisting of $I$ component spaces,
+%
+\begin{equation*}
+X^{1:I} = \times_{i = 1}^{I} X_{i},
+\end{equation*}
+%
+where 
+%
+\begin{equation*}
+1 \! : \! I = \{1, \ldots, I\}
+\end{equation*}
+%
+denotes the component indices.
+
+Given any subset of component indices 
+%
+\begin{equation*}
+\mathsf{i} = \{ i_{1}, \ldots, i_{J} \} \subset 1 \! : \! I
+\end{equation*}
+% 
+we can decompose any product variable 
+%
+\begin{equation*}
+x_{1:I} = (x_{1}, \ldots, x_{I})
+\end{equation*}
+%
+into a marginal variable
+%
+\begin{equation*}
+x_{\mathsf{i}} = (x_{i_{1}}, \ldots, x_{i_{J}}) \in \times_{i \in \mathsf{i} } X_{i}
+\end{equation*}
+%
+and a cross sectional variable
+%
+\begin{equation*}
+x_{\setminus \mathsf{i}} 
+= ( x_{i} \mid i \notin \mathsf{i} ) 
+\in \{ x_{\mathsf{i}} \} \times X^{\setminus \mathsf{i}},
+\end{equation*}
+%
+where
+%
+\begin{equation*}
+\setminus \mathsf{i} = \{ i \mid i \notin \mathsf{i} \}.
+\end{equation*}
+
+This decomposition is accompanied by the projection function
+%
+\begin{equation*}
+\varpi_{\mathsf{i}} : X^{1:I} \rightarrow X^{\mathsf{i}}
+\end{equation*}
+%
+with the level sets
+%
+\begin{equation*}
+\varpi_{\mathsf{i}}^{-1}( x_{\mathsf{i}} ) 
+= \{ x_{\mathsf{i}} \} \times X^{\setminus \mathsf{i}}.
+\end{equation*}
+
+Reference measures on each component space immediately define a product reference 
+measure over the product space,
+%
+\begin{equation*}
+\nu^{I} = \times_{i = 1}^{I} \nu_{i}.
+\end{equation*}
+%
+At the same time the product measure
+%
+\begin{equation*}
+\nu^{\mathsf{i}} = \times_{i \in \mathsf{i} } \nu_{i}
+\end{equation*}
+%
+defines a reference measure over the marginal space $X^{\mathsf{i}}$ which also 
+happens to be the output space of the projection function $\varpi_{\mathsf{i}}$.
+Finally the product of the remaining component measures,
+%
+\begin{equation*}
+\nu^{\setminus \mathsf{i}} = \times_{i \in \setminus \mathsf{i} } \nu_{i},
+\end{equation*}
+%
+defines a reference measure for each cross section 
+$\{ x_{\mathsf{i}} \} \times X^{\setminus \mathsf{i}}$, and hence each level 
+set of the projection function.  In summary by combining the component 
+reference measures together appropriately we can construct reference measures
+for the input space, output space, and level sets of the projection function 
+$\varpi_{\mathsf{i}}$!
+
+\textbf{Product measure disintegrates into product measure over conditional 
+components}
+%
+\begin{equation*}
+(\nu^{I})^{\varpi_{\mathsf{i}}, \nu^{\mathsf{i}}} = \nu^{\setminus \mathsf{i}}.
+\end{equation*}
+
+These reference measures allow us to construct conditional probability 
+density functions over the cross sections that satisfy the product rule
+%
+\begin{align*}
+\rnd{\pi}{ \nu^{I} }(x_{1:I})
+&\overset{ \nu^{I} }{ = }
+\rnd{ (\varpi_{\mathsf{i}})_{*} \pi }{\nu^{\mathsf{i}}} (\varpi_{\mathsf{i}}(x_{1:I})) \,
+\rnd{ \pi^{\varpi_{\mathsf{i}}} }{ (\nu^{I})^{\varpi_{\mathsf{i}}, \nu^{\mathsf{i}}} } (x_{\setminus \mathsf{i}}  \mid \varpi_{\mathsf{i}}(x_{1:I}))
+\\
+\rnd{\pi}{ \nu^{I} }(x_{1:I})
+&\overset{ \nu^{I} }{ = }
+\rnd{ (\varpi_{\mathsf{i}})_{*} \pi }{\nu^{\mathsf{i}}} (\varpi_{\mathsf{i}}(x_{1:I})) \,
+\rnd{ \pi^{\varpi_{\mathsf{i}}} }{ \nu^{\setminus \mathsf{i}} } (x_{\setminus \mathsf{i}}  \mid \varpi_{\mathsf{i}}(x_{1:I}))
+\\
+\rnd{\pi}{ \nu^{I} }(x_{1:I})
+&\overset{ \nu^{I} }{ = }
+\rnd{ (\varpi_{\mathsf{i}})_{*} \pi }{\nu^{\mathsf{i}}} (x_{\mathsf{i}}) \,
+\rnd{ \pi^{\varpi_{\mathsf{i}}} }{ \nu^{\setminus \mathsf{i}} } (x_{\setminus \mathsf{i}}  \mid x_{\mathsf{i}}).
+\end{align*}
+
+For example if $X^{1:I} = \mathbb{R}^{6}$ and we take
+%
+\begin{equation*}
+\mathsf{i} = \{ 2, 5, 6 \},
+\end{equation*}
+%
+\begin{equation*}
+\setminus \mathsf{i} = \{ 1, 3, 4 \},
+\end{equation*}
+%
+and
+%
+\begin{equation*}
+\nu_{i} = \lambda
+\end{equation*}
+%
+then we have
+%
+\begin{equation*}
+\rnd{\pi}{ \lambda^{6} }( x_{1}, x_{2}, x_{3}, x_{4}, x_{5}, x_{6} )
+\overset{ \nu^{I} }{ = }
+\rnd{ (\varpi_{\mathsf{i}})_{*} \pi }{ \lambda^{3} } ( x_{2}, x_{5}, x_{6}  ) \,
+\rnd{ \pi^{\varpi_{\mathsf{i}}} }{ \lambda^{3} } (x_{1}, x_{3}, x_{4} \mid x_{2}, x_{5}, x_{6} )
+\end{equation*}
+%
+This allows us to for example compute conditional probability densities from the evaluations of 
+joint and marginal probability density functions,
+%
+\begin{equation*}
+\rnd{ \pi^{\varpi_{\mathsf{i}}} }{ \lambda^{3} } (x_{1}, x_{3}, x_{4} \mid x_{2}, x_{5}, x_{6} )
+\overset{ \nu^{I} }{ = }
+\frac{ \rnd{\pi}{ \lambda^{6} }( x_{1}, x_{2}, x_{3}, x_{4}, x_{5}, x_{6} ) }
+{ \rnd{ (\varpi_{\mathsf{i}})_{*} \pi }{ \lambda^{3} } ( x_{2}, x_{5}, x_{6} ) }.
+\end{equation*}
+
+
+Similarly
+%
+\begin{align*}
+\rnd{ (\varpi_{\mathsf{i}})_{*}\pi }{ \lambda^{3} }( x_{2}, x_{5}, x_{6}  ) 
+&\overset{\nu}{=}
+\int (\lambda^{6})^{\varpi_{\mathsf{i}}, \lambda^{3}}( \mathrm{d} x_{1:6} \mid x_{2}, x_{5}, x_{6} ) \, 
+\rnd{\pi}{\lambda^{6}}( x_{1}, x_{2}, x_{3}, x_{4}, x_{5}, x_{6} )
+\\
+&\overset{\nu}{=}
+\int \lambda^{3}(x_{1}, x_{3}, x_{4} ) \, 
+\rnd{\pi}{\lambda^{6}}( x_{1}, x_{2}, x_{3}, x_{4}, x_{5}, x_{6} )
+\\
+&\overset{\nu}{=}
+\int \mathrm{d} x_{1} \, \mathrm{d} x_{3} \, \mathrm{d} x_{4} \,
+\rnd{\pi}{\lambda^{6}}( x_{1}, x_{2}, x_{3}, x_{4}, x_{5}, x_{6} ).
+\end{align*}
+
+Given a joint probability density function we can use this result to compute the marginal 
+probability density function, assuming we can evaluate the integral analytically, and then 
+the product rule to compute the conditional probability density function.  At the same time 
+any marginal probability density function paired with a conditional probability density 
+function defines a joint probability density function.
+
+Addition example.
+
+\section{Convolutions}
+
+Probability space $(X, \mathcal{X}, \pi)$.
+
+We can construct the second-order power space $X^{2} = X \times X$ with projection 
+functions $\varpi_{1}$ and $\varpi_{2}$ that return the first and second identical 
+components, respectively.  Any conditional probability distribution over $X^{2}$ 
+with respect to $\varpi_{1}$ lifts $\pi$ to a joint probability distribution
+%
+\begin{equation*}
+\pi( \mathrm{d} x_{1}, \mathrm{d} x_{2}) = \pi( \mathrm{d} x_{1} \mid x_{2} ) \, \pi( \mathrm{d} x_{2} ).
+\end{equation*}
+
+By construction pushing this joint probability distribution forward along $\varpi_{1}$ 
+returns the original probability distribution,
+%
+\begin{equation*}
+(\varpi_{1})_{*} \pi ( \mathrm{d} x_{2}) = \pi( \mathrm{d} x_{2}).
+\end{equation*}
+%
+Pushing it forward along the second projection function $\varpi_{2}$, however, generally 
+gives a completely different probability distribution over $X$.
+
+This process of lifting and then projecting to construct new probability distributions 
+is known as \textbf{convolution}.
+
+Comparison to additive pushforward.
+
+\end{document}  

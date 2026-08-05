@@ -1,0 +1,783 @@
+\documentclass[11pt, oneside]{article}
+\usepackage{geometry} 
+\geometry{letterpaper}
+\usepackage{graphicx}	
+
+\usepackage{amssymb, amsmath}
+
+\newcommand{\I}[2]{
+  \ensuremath{ \mathbb{I}_{#1} \! \left[ #2 \right] }
+}
+
+\newcommand{\E}[2]{
+  \ensuremath{ \mathbb{E}_{#1} \! \left[ #2 \right] }
+}
+
+\newcommand{\rnd}[2]{
+  \ensuremath{ \frac{ \mathrm{d} #1}{ \mathrm{d} #2 } }
+}
+
+\begin{document}
+
+\section{Decompositions}
+
+$\mathbb{R}^{2}$, Lebesgue measures.
+
+The joint probability density function
+%
+\begin{equation*}
+p( x_{1}, x_{2} )
+=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \left[
+  -\frac{1}{2} Q( x_{1}, x_{2} )
+\right]
+\end{equation*}
+%
+where
+%
+\begin{equation*}
+Q ( x_{1}, x_{2} )
+=
+\frac{ 
+    \sigma_{2}^{2} \, x_{1}^{2} 
+  - 2 \, \rho \, \sigma_{1} \, \sigma_{2} \, x_{1} \, x_{2}
+  + \sigma_{1}^{2} \, x_{2}^{2}
+}{
+  \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ).
+}
+\end{equation*}
+
+The marginal density function over $X_{1}$ is given by integrating over $x_{2}$,
+%
+\begin{align*}
+p ( x_{1} ) 
+&=
+\int \mathrm{d} x_{2} \, 
+p( x_{1}, x_{2} )
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\int \mathrm{d} x_{2} \, 
+\exp \left[
+  -\frac{1}{2} Q( x_{1}, x_{2} )
+\right].
+\end{align*}
+
+In order to evaluate this integral we need to isolate all of the $x_{2}$ terms 
+in $Q ( x_{1}, x_{2} )$.  This requires completing the square for $x_{2}$,
+%
+\begin{align*}
+\sigma_{2}^{2} \, x_{1}^{2} 
+  - 2 \, \rho \, \sigma_{1} \, \sigma_{2} \, x_{1} \, x_{2}
+  + \sigma_{1}^{2} \, x_{2}^{2}
+&=
+\sigma_{1}^{2} \,
+\left(
+  x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+\right)^{2}
++ 
+\sigma_{2}^{2} \, x_{1}^{2}
+- \rho \, \sigma_{2}^{2} \, x_{1}^{2} 
+\\
+&=
+\sigma_{1}^{2} \,
+\left(
+  x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+\right)^{2}
++ 
+\sigma_{2}^{2} \, x_{1}^{2} \, (1 - \rho^{2} ).
+\end{align*}
+
+Then
+%
+\begin{align*}
+Q ( x_{1}, x_{2} )
+&=
+\frac{ 
+    \sigma_{2}^{2} \, x_{1}^{2} 
+  - 2 \, \rho \, \sigma_{1} \, \sigma_{2} \, x_{1} \, x_{2}
+  + \sigma_{1}^{2} \, x_{2}^{2}
+}{
+  \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} )
+}
+\\
+&=
+\frac{ 
+  \sigma_{1}^{2} \,
+  \left(
+    x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+  \right)^{2}
+  +   
+  \sigma_{2}^{2} \, x_{1}^{2} \, (1 - \rho^{2} )
+}{
+  \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} )
+}
+\\
+&=
+\frac{ 
+  \left(
+    x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+  \right)^{2}
+}{
+  \sigma_{2}^{2} \, (1 - \rho^{2} )
+}
++
+\frac{  x_{1}^{2} }{ \sigma_{1}^{2} }.
+\end{align*}
+
+Consequently, we can write the joint density function as
+%
+\begin{align*}
+p( x_{1}, x_{2} )
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \left[
+  -\frac{1}{2} Q( x_{1}, x_{2} )
+\right]
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \left[
+  -\frac{1}{2} \left(
+      \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+    +
+    \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+  \right)
+\right]
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2}
+      \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg]
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg].
+\end{align*}
+
+This factorization of the joint density function then allows us to reduce the 
+marginal density function to a normal integral, which we can evaluate in 
+closed form,
+%
+\begin{align*}
+p ( x_{1} )
+&=
+\int \mathrm{d} x_{2} \, 
+p( x_{1}, x_{2} )
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\int \mathrm{d} x_{2} \, 
+\exp \Bigg[
+  -\frac{1}{2}
+    \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg]
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg]
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg]
+\int \mathrm{d} x_{2} \, 
+\exp \Bigg[
+  -\frac{1}{2}
+    \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg]
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg]
+\sqrt{ 2 \, \pi \, \sigma_{2}^{2} \, (1 - \rho^{2} ) }
+\\
+&=
+\frac{1}{ \sqrt{2 \, \pi \, \sigma_{1}^{2} } }
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg].
+\end{align*}
+
+After all of the that, the marginal density function is just a normal density function,
+%
+\begin{align*}
+p ( x_{1} )
+&=
+\frac{1}{ \sqrt{2 \, \pi \, \sigma_{1}^{2} } }
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg]
+\\
+&=
+\text{normal} ( x_{1} \mid 0, \sigma_{1} ).
+\end{align*}
+
+We can use this same factorization of the joint density function to simplify the calculation of the
+conditional density functions,
+%
+\begin{align*}
+p ( x_{2} \mid x_{1} )
+&=
+\frac{ p ( x_{1},  x_{2} ) }{ p ( x_{1} ) }
+\\
+&=
+\frac{
+  \frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+  \exp \Bigg[
+    -\frac{1}{2}
+        \frac{ 
+        \left(
+          x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+        \right)^{2}
+      }{
+        \sigma_{2}^{2} \, (1 - \rho^{2} )
+      }
+  \Bigg]
+  \exp \Bigg[
+    -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+  \Bigg]
+}{
+  \frac{1}{ \sqrt{2 \, \pi \, \sigma_{1}^{2} } }
+  \exp \Bigg[
+    -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+  \Bigg]
+}
+\\
+&=
+\frac{1}{ \sqrt{ 2 \, \pi \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2}
+      \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg].
+\end{align*}
+
+Miraculously, each conditional density function is also another normal density function,
+%
+\begin{align*}
+p ( x_{2} \mid x_{1} )
+&=
+\frac{1}{ \sqrt{ 2 \, \pi \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2}
+      \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg]
+\\
+&=
+\text{normal} \left( 
+  x_{2} \biggm| 
+  \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}, 
+  \sigma_{2} \sqrt{ 1 - \rho^{2} } 
+\right).
+\end{align*}
+
+Because of the symmetric of the joint density function, the same calculations apply if 
+when deriving the other marginal density function and corresponding conditional 
+density functions.  The result just swaps all of the indices,
+%
+\begin{align*}
+p ( x_{2} )
+&=
+\text{normal} ( x_{2} \mid 0, \sigma_{2} )
+\\
+p ( x_{1} \mid x_{2} )
+&=
+\text{normal} \left( 
+  x_{1} \biggm| 
+  \rho \frac{ \sigma_{1} }{ \sigma_{2} } x_{2}, 
+  \sigma_{1} \sqrt{ 1 - \rho^{2} } 
+\right).
+\end{align*}
+
+Finally, this is an example where some pattern matching can point to the marginal  
+and conditional density functions directly.  Examining
+%
+\begin{equation*}
+p( x_{1}, x_{2} )
+=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2}
+      \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg]
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg],
+\end{equation*}
+%
+we might notice that both of the exponentiated quadratics define normal
+density functions,
+%
+\begin{align*}
+p( x_{1}, x_{2} )
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma_{1}^{2} \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2}
+      \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg]
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg]
+\\
+&=
+\frac{1}{ \sqrt{ 2 \, \pi \, \sigma_{2}^{2} \, (1 - \rho^{2} ) } }
+\exp \Bigg[
+  -\frac{1}{2}
+      \frac{ 
+      \left(
+        x_{2} - \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1}
+      \right)^{2}
+    }{
+      \sigma_{2}^{2} \, (1 - \rho^{2} )
+    }
+\Bigg]
+\frac{1}{ \sqrt{ 2 \, \pi \, \sigma_{1}^{2} } }
+\exp \Bigg[
+  -\frac{1}{2} \frac{  x_{1}^{2} }{ \sigma_{1}^{2} }
+\Bigg]
+\\
+&=
+\text{normal} \left( 
+  x_{1} \biggm| 
+  \rho \frac{ \sigma_{1} }{ \sigma_{2} } x_{2}, 
+  \sigma_{1} \sqrt{ 1 - \rho^{2} } 
+\right) \,
+\text{normal} ( x_{1} \mid 0, \sigma_{1} ).
+\end{align*}
+
+In other words, by isolating $x_{2}$ we have incidentally manipulated 
+the joint density function into the desired conditional decomposition.
+This approach isn't always useful, but it can save time when working
+with similar calculations.
+
+\section{Convolution 1}
+
+Start with $X = \mathbb{R}$ and probability distribution defined by 
+the normal density function
+%
+\begin{align*}
+p( x )
+&=
+\text{normal} ( x \mid \mu, \sigma )
+\\
+&=
+\frac{1}{ \sqrt{ 2 \, \pi \, \sigma^{2} } }
+\exp \left[
+  -\frac{1}{2} \frac{ ( x - \mu )^{2} }{ \sigma^{2} }
+\right].
+\end{align*}
+
+We can left this probability distribution into a joint distribution 
+over $X^{2}$ by introducing a conditional probability kernel defined
+by the normal density functions
+%
+%
+\begin{align*}
+p( x' \mid x )
+&=
+\text{normal} ( x' \mid \eta - x, \tau )
+\\
+&=
+\frac{1}{ \sqrt{ 2 \, \pi \, \tau^{2} } }
+\exp \left[
+  -\frac{1}{2} \frac{ ( x' - \eta + x )^{2} }{ \tau^{2} }
+\right].
+\end{align*}
+
+The lifted joint density function is given by
+%
+\begin{align*}
+p( x, x' )
+&=
+p( x' \mid x ) \, p( x )
+\\
+&=
+\text{normal} ( x \mid \mu, \sigma ) \,
+\text{normal} ( x' \mid \eta - x, \tau )
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma^{2} \, \tau^{2} } }
+\exp \left[
+  -\frac{1}{2} Q(x, x')
+\right],
+\end{align*}
+%
+where
+%
+\begin{equation*}
+Q(x, x') 
+= 
+  \frac{ ( x - \mu )^{2} }{ \sigma^{2} }
++ \frac{ ( x' - \eta + x )^{2} }{ \tau^{2} }.
+\end{equation*}
+
+The convolution of $p(x)$ with $p(x' \mid x)$ is given by 
+projecting this joint density function to the auxiliary 
+space,
+%
+\begin{align*}
+p( x' ) 
+&= 
+\int \mathrm{d} x \, p( x, x' )
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma^{2} \, \tau^{2} } }
+\int \mathrm{d} x \, 
+\exp \left[
+  -\frac{1}{2} Q(x, x')
+\right].
+\end{align*}
+
+To evaluate this integral, we'll need to isolate $x$ with some 
+completion of some squares,
+%
+\begin{align*}
+Q(x, x') 
+&= 
+  \frac{ ( x - \mu )^{2} }{ \sigma^{2} }
++ \frac{ ( x' - \eta + x )^{2} }{ \tau^{2} }
+\\
+&=
+  \frac{ x^{2} - 2 \, \mu \, x + \mu^{2} }{ \sigma^{2} }
++ \frac{ x^{2} - 2 \, (x' - \eta) \, x + (x' - \eta)^{2} }{ \tau^{2} }
+\\
+&=
+\frac{1}{ \sigma^{2} \, \tau^{2} } \bigg[
+    ( \sigma^{2} + \tau^{2} ) \, x^{2}
+  - 2 ( \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) ) \, x
+  + \tau^{2} \, \mu^{2} + \sigma^{2} ( x' - \eta)^{2}
+\bigg]
+\\
+&=
+\frac{1}{ \sigma^{2} \, \tau^{2} } \bigg[ \quad
+    ( \sigma^{2} + \tau^{2} ) \, \left( 
+      x - \frac{  \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) }{ \sigma^{2} + \tau^{2} } 
+    \right)^{2}
+\\
+&\hspace{16mm}
+  + \tau^{2} \, \mu^{2} + \sigma^{2} ( x' - \eta)^{2}
+  - \frac{ 
+      \left( \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) \right)^{2}
+    }{
+      \sigma^{2} + \tau^{2} 
+    }
+\bigg]
+\\
+&=\quad
+\frac{1}{ \sigma^{2} \, \tau^{2} } \bigg[
+    ( \sigma^{2} + \tau^{2} ) \, \left( 
+      x - \frac{  \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) }{ \sigma^{2} + \tau^{2} } 
+    \right)^{2}
+\bigg]
+\\
+&\quad+
+\frac{1}{ \sigma^{2} \, \tau^{2} } \bigg[ \quad
+    \frac{ 
+       \tau^{4} \, \mu^{2} 
+     + \sigma^{2} \, \tau^{2} \, \mu^{2} 
+     + \sigma^{4} ( x' - \eta)^{2}
+     + \sigma^{2} \, \tau^{2} \, ( x' - \eta)^{2}
+    }{
+      \sigma^{2} + \tau^{2} 
+    }
+\\
+&\hspace{20mm}
+  - \frac{ 
+       \tau^{4} \, \mu^{2} 
+     + 2 \tau^{2} \, \sigma^{2} \, \mu \, (x' - \eta)
+     + \sigma^{4} (x' - \eta)^{2}
+    }{
+      \sigma^{2} + \tau^{2} 
+    }
+\hspace{15mm} \bigg]
+\\
+&=\quad
+\frac{1}{ \sigma^{2} \, \tau^{2} } \bigg[
+    ( \sigma^{2} + \tau^{2} ) \, \left( 
+      x - \frac{  \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) }{ \sigma^{2} + \tau^{2} } 
+    \right)^{2}
+\bigg]
+\\
+&\quad+
+\frac{1}{ \sigma^{2} \, \tau^{2} } \bigg[
+    \frac{ 
+       \sigma^{2} \, \tau^{2} \, \mu^{2} 
+     - 2 \, \tau^{2} \, \sigma^{2} \, \mu \, (x' - \eta)
+     + \sigma^{2} \, \tau^{2} \, ( x' - \eta)^{2}
+    }{
+      \sigma^{2} + \tau^{2} 
+    }
+\bigg]
+\\
+&=\quad
+\frac{\sigma^{2} + \tau^{2} }{ \sigma^{2} \, \tau^{2} }
+\left( 
+  x - \frac{  \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) }{ \sigma^{2} + \tau^{2} } 
+\right)^{2}
+\\
+&\quad+
+\frac{ 
+   \mu^{2} 
+ - 2 \, \mu \, (x' - \eta)
+ + ( x' - \eta)^{2}
+}{
+  \sigma^{2} + \tau^{2} 
+}
+\\
+&=\quad
+\frac{\sigma^{2} + \tau^{2} }{ \sigma^{2} \, \tau^{2} }
+\left( 
+  x - \frac{  \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) }{ \sigma^{2} + \tau^{2} } 
+\right)^{2}
+\\
+&\quad+
+\frac{ 
+  ( x ' - (\mu + \eta) )^{2}
+}{
+  \sigma^{2} + \tau^{2} 
+}.
+\end{align*}
+
+Now we can reduce the convolution operation to a normal integral,
+%
+\begin{align*}
+p( x' ) 
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma^{2} \, \tau^{2} } }
+\int \mathrm{d} x \, 
+\exp \left[
+  -\frac{1}{2} Q(x, x')
+\right]
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma^{2} \, \tau^{2} } }
+\int \mathrm{d} x \, 
+\exp \left[
+  -\frac{1}{2} \frac{\sigma^{2} + \tau^{2} }{ \sigma^{2} \, \tau^{2} }
+  \left( 
+    x - \frac{  \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) }{ \sigma^{2} + \tau^{2} } 
+  \right)^{2}
+\right]
+\exp \left[
+  -\frac{1}{2} \frac{  ( x ' - (\mu + \eta) )^{2} }{ \sigma^{2} + \tau^{2} }
+\right]
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma^{2} \, \tau^{2} } } \,
+\exp \left[
+  -\frac{1}{2} \frac{  ( x ' - (\mu + \eta) )^{2} }{ \sigma^{2} + \tau^{2} }
+\right]
+\int \mathrm{d} x \, 
+\exp \left[
+  -\frac{1}{2} \frac{\sigma^{2} + \tau^{2} }{ \sigma^{2} \, \tau^{2} }
+  \left( 
+    x - \frac{  \tau^{2} \, \mu + \sigma^{2} \, (x' - \eta) }{ \sigma^{2} + \tau^{2} } 
+  \right)^{2}
+\right]
+\\
+&=
+\frac{1}{ 2 \, \pi \, \sqrt{ \sigma^{2} \, \tau^{2} } } \,
+\exp \left[
+  -\frac{1}{2} \frac{  ( x ' - (\mu + \eta) )^{2} }{ \sigma^{2} + \tau^{2} }
+\right]
+\sqrt{2 \, \pi \, \frac{ \sigma^{2} \, \tau^{2} }{\sigma^{2} + \tau^{2} } }
+\\
+&=
+\frac{1}{ \sqrt{ 2 \, \pi \, ( \sigma^{2} + \tau^{2} ) } } \,
+\exp \left[
+  -\frac{1}{2} \frac{  ( x ' - (\mu + \eta) )^{2} }{ \sigma^{2} + \tau^{2} }
+\right]
+\\
+&=
+\text{normal} \left( x' \mid \mu + \eta, \sqrt{ \sigma^{2} + \tau^{2} } \right).
+\end{align*}
+
+This has a neat interpretation.  The convolution operation takes in initial 
+normal density function, translates it by $\eta$, and then inflates the standard 
+deviation.
+
+In the limit $\tau \rightarrow 0$, the convolution results in a pure 
+translation,
+%
+\begin{equation*}
+p( x' ) 
+=
+\text{normal} \left( x' \mid \mu + \eta, \sqrt{ \sigma^{2} + \tau^{2} } \right).
+\end{equation*}
+%
+Specifically, this is exactly the pushforward of a normal density function
+along the translation operation that we discussed in \textbf{Section Blah}.
+
+
+At the same time, the convolution kernel in this limit acts like a singular 
+Delta function that shifts an input $x$ to $x + \eta$.  This limit is 
+also known as a linear convolution.
+
+\section{Convolution 2}
+
+Start with $X = \mathbb{I}$ and
+%
+\begin{equation*}
+p( x ) 
+= \text{Poisson}( x \mid \lambda )
+= \frac{ \lambda^{x} e^{-\lambda} }{ x! }.
+\end{equation*}
+
+We can left this probability distribution into a joint distribution 
+over $X^{2}$ by introducing a conditional probability kernel defined
+by the conditional density functions
+%
+\begin{equation*}
+p( x' \mid x )
+=
+\frac{ \delta^{x' - x} e^{-\delta} }{ (x' - x)! } I[ x \le x' ].
+\end{equation*}
+
+These conditional density functions look a bit awkward.  Let's verify 
+that they're properly normalized for all $\delta$,
+%
+\begin{align*}
+\sum_{x' = 0}^{ \infty }
+p( x' \mid x )
+&=
+\sum_{x' = 0}^{ \infty }
+\frac{ \delta^{x' - x} e^{-\delta} }{ (x' - x)! } I[ x \le x' ]
+\\
+&=
+\sum_{x' = x}^{ \infty }
+\frac{ \delta^{x' - x} e^{-\delta} }{ (x' - x)! }
+\\
+&=
+\sum_{k = 0}^{ \infty }
+\frac{ \delta^{k} e^{-\delta} }{ k! }
+\\
+&=
+e^{-\delta} 
+\sum_{k = 0}^{ \infty }
+\frac{ \delta^{k} }{ k! }
+\\
+&=
+e^{-\delta} 
+e^{\delta}
+\\
+&=
+1.
+\end{align*}
+
+With the validity of the convolution kernel verified, we can proceed
+to the convolution itself,
+%
+\begin{align*}
+p ( x' )
+&=
+\sum_{x = 0}^{ \infty }
+p( x' \mid x ) \, p (x)
+\\
+&=
+\sum_{x = 0}^{ \infty }
+\frac{ \delta^{x' - x} e^{-\delta} }{ (x' - x)! } I[ x \le x' ] \,
+\frac{ \lambda^{x} e^{-\lambda} }{ x! }
+\\
+&=
+e^{-(\lambda + \delta)} 
+\sum_{x = 0}^{ \infty }
+I[ x \le x' ] \,
+\frac{ 1 }{ x! \, (x' - x)! }
+\delta^{x' - x} \, \lambda^{x}
+\\
+&=
+\frac{ e^{-(\lambda + \delta)} }{ x'! }
+\sum_{x = 0}^{ x' }
+\frac{ x'! }{ x! \, (x' - x)! }
+\delta^{x' - x} \, \lambda^{x}.
+\end{align*}
+
+This summation can be simplified by the binomial theorem,
+%
+\begin{equation*}
+( a + b )^{K} = \sum_{k = 0}^{K} a^{k} \, b^{K - k}.
+\end{equation*}
+%
+Consequently,
+%
+\begin{align*}
+p ( x' )
+&=
+\frac{ e^{-(\lambda + \delta)} }{ x'! }
+\sum_{x = 0}^{ x' }
+\frac{ x'! }{ x! \, (x' - x)! }
+\delta^{x' - x} \, \lambda^{x}
+\\
+&=
+\frac{ e^{-(\lambda + \delta)} }{ x'! }
+(\lambda + \delta)^{x'}.
+\end{align*}
+
+This, however, is just another Poisson density function,
+%
+\begin{equation*}
+p ( x' )
+=
+\frac{ e^{-(\lambda + \delta)} }{ x'! }
+(\lambda + \delta)^{x'}
+=
+\text{Poisson}( x' \mid \lambda + \delta ).
+\end{equation*}
+%
+This particular convolution translates the intensity of the 
+Poisson parameter.
+
+\end{document}  
