@@ -1036,7 +1036,7 @@ I will refer to this sequence of probabilistic objects, or the
 partition of component indices that implicitly defines it, as a
 **conditional decomposition**.
 
-Every partition of the component spaces defines a unique
+Every ordered partition of the component spaces defines a unique
 conditional decomposition.  For example, when working with a
 three-component product space
 $$
@@ -1069,11 +1069,18 @@ in future chapters.
 
 Unfortunately, the number of possible conditional decompositions
 can be overwhelming.  If we have $I$ component spaces, then we
-can construct $B_{I}$ distinct conditional decompositions, where
-$B_{n}$ is the $n$th Bell number **ref**.  The Bell numbers grow
-wildly fast as $n$ increases.
+can construct $H_{d}(I)$ distinct conditional decompositions,
+where $H_{d}(n)$ is the $n$th ordered Bell number
+[@KnopfmacherEtAl:2005].  The ordered Bell numbers grow wildly
+fast as $n$ increases (@fig-bell).
 
-**figure**
+![The $n$th ordered Bell number counts the number of ordered
+partitions of a finite set with $n$ elements.  As the size of a
+set increases, the number of ordered partitions increases
+extraordinarily quickly; even on a log scale the growth is
+exponential.](
+figures/bell/bell){
+width=75% #fig-bell}
 
 That said, most practical applications consider only **atomic
 decompositions** that decompose joint probability distributions
@@ -4013,6 +4020,10 @@ Thomas Siegert, Thomas Vladeck, Tobychev , Tomas Capretto,
 Tony Wuersch, Virgile Andreani, Virginia Fisher, Vitalie Spinu,
 Vladimir M, VO2 Maximus Decius, Will Farr, Will Lowe, Will Wen,
 William A Vauter, yolhaj, yureq, and Zach A.
+
+# References {-}
+
+<div id="refs"></div>
 
 # License {-}
 

@@ -1015,9 +1015,9 @@ probability kernels \[
 partition of component indices that implicitly defines it, as a
 \textbf{conditional decomposition}.
 
-Every partition of the component spaces defines a unique conditional
-decomposition. For example, when working with a three-component product
-space \[
+Every ordered partition of the component spaces defines a unique
+conditional decomposition. For example, when working with a
+three-component product space \[
 X^{1:3} = X_{1} \times X_{2} \times X_{3},
 \] the index partitions \begin{align*}
 &\{1, 2, 3\}; \quad \{1, 2\}, \{3\}; \quad \{3\}, \{1, 2\};
@@ -1043,11 +1043,25 @@ modeling applications in future chapters.
 
 Unfortunately, the number of possible conditional decompositions can be
 overwhelming. If we have \(I\) component spaces, then we can construct
-\(B_{I}\) distinct conditional decompositions, where \(B_{n}\) is the
-\(n\)th Bell number \textbf{ref}. The Bell numbers grow wildly fast as
-\(n\) increases.
+\(H_{d}(I)\) distinct conditional decompositions, where \(H_{d}(n)\) is
+the \(n\)th ordered Bell number (Knopfmacher and Mayes 2005). The
+ordered Bell numbers grow wildly fast as \(n\) increases
+(Figure~\ref{fig-bell}).
 
-\textbf{figure}
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.75\textwidth,height=\textheight]{figures/bell/bell.pdf}
+
+}
+
+\caption{\label{fig-bell}The \(n\)th ordered Bell number counts the
+number of ordered partitions of a finite set with \(n\) elements. As the
+size of a set increases, the number of ordered partitions increases
+extraordinarily quickly; even on a log scale the growth is exponential.}
+
+\end{figure}%
 
 That said, most practical applications consider only \textbf{atomic
 decompositions} that decompose joint probability distributions as much
@@ -4156,13 +4170,8 @@ Vladeck, Tobychev , Tomas Capretto, Tony Wuersch, Virgile Andreani,
 Virginia Fisher, Vitalie Spinu, Vladimir M, VO2 Maximus Decius, Will
 Farr, Will Lowe, Will Wen, William A Vauter, yolhaj, yureq, and Zach A.
 
-\section*{License}\label{license}
-\addcontentsline{toc}{section}{License}
-
-The text and figures in this chapter are copyrighted by Michael
-Betancourt and licensed under the
-\href{https://creativecommons.org/licenses/by-nc/4.0/}{CC BY-NC 4.0
-license}.
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
@@ -4180,7 +4189,20 @@ Learning}. Information Science and Statistics. Springer, New York.
 Folland, G. B. 1999. \emph{Real Analysis: Modern Techniques and Their
 Applications}. New York: John Wiley; Sons, Inc.
 
+\bibitem[\citeproctext]{ref-KnopfmacherEtAl:2005}
+Knopfmacher, A, and M. E. Mayes. 2005. {``A Survey of Factorization
+Counting Functions.''} \emph{International Journal of Number Theory} 01
+(04): 563--81.
+
 \end{CSLReferences}
+
+\section*{License}\label{license}
+\addcontentsline{toc}{section}{License}
+
+The text and figures in this chapter are copyrighted by Michael
+Betancourt and licensed under the
+\href{https://creativecommons.org/licenses/by-nc/4.0/}{CC BY-NC 4.0
+license}.
 
 
 
