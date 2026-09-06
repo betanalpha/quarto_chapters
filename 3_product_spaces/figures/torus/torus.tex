@@ -1,0 +1,275 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, intersections}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{darker}{RGB}{124, 0, 0}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function x(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    \xb = \xa;
+    %\yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %  
+    return \xb;
+  };
+  function y(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    %\xb = \xa;
+    \yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %   
+    return \yb;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=1.0]
+  
+  % View
+  \pgfmathsetmacro{\theta}{0}
+  \pgfmathsetmacro{\phi}{60}
+  
+  % Bounding box
+  \draw[white] (-3, -3) rectangle (3, 3);
+  
+  % Torus Configuration
+  \pgfmathsetmacro{\ra}{2}
+  \pgfmathsetmacro{\rb}{0.5}
+  
+  % Cylinder set shadow
+  \pgfmathsetmacro{\etaa}{40}
+  \pgfmathsetmacro{\etab}{-40}
+  
+  \fill[darkteal, line width=0.5] 
+    plot[domain=0:360, smooth, samples=50, variable=\psi]
+      ( { x( cos(\etab) * (\ra + \rb * cos(\psi)), 
+             sin(\etab) * (\ra + \rb * cos(\psi)), 
+             \rb * sin(\psi), \theta, \phi) },
+        { y( cos(\etab) * (\ra + \rb * cos(\psi)), 
+             sin(\etab) * (\ra + \rb * cos(\psi)), 
+             \rb * sin(\psi), \theta, \phi) }     );
+  
+  % Torus Wireframe
+  \foreach \eta in { 15, 30, ..., 360} {
+    \draw[domain=0:360, smooth, samples=25, variable=\psi, gray90] 
+        plot ( { x( cos(\eta) * (\ra + \rb * cos(\psi)), 
+                    sin(\eta) * (\ra + \rb * cos(\psi)), 
+                    \rb * sin(\psi), \theta, \phi) },
+               { y( cos(\eta) * (\ra + \rb * cos(\psi)), 
+                    sin(\eta) * (\ra + \rb * cos(\psi)), 
+                    \rb * sin(\psi), \theta, \phi) }      ); 
+  }
+
+  
+  \foreach \psi in { 15, 30, ..., 360} {
+    \draw[domain=0:360, smooth, samples=50, variable=\eta, gray90] 
+        plot ( { x( cos(\eta) * (\ra + \rb * cos(\psi)), 
+                    sin(\eta) * (\ra + \rb * cos(\psi)), 
+                    \rb * sin(\psi), \theta, \phi) },
+               { y( cos(\eta) * (\ra + \rb * cos(\psi)), 
+                    sin(\eta) * (\ra + \rb * cos(\psi)), 
+                    \rb * sin(\psi), \theta, \phi) }     ); 
+  }
+
+  % Box subset
+  \pgfmathsetmacro{\etaa}{120}
+  \pgfmathsetmacro{\etab}{150}
+  \pgfmathsetmacro{\psia}{100}
+  \pgfmathsetmacro{\psib}{170}
+
+
+  \fill[midteal]
+    plot[domain=\etaa:\etab, smooth, samples=10, variable=\eta]
+     ( { x( cos(\eta) * (\ra + \rb * cos(\psia)), 
+            sin(\eta) * (\ra + \rb * cos(\psia)), 
+            \rb * sin(\psia), \theta, \phi) },
+       { y( cos(\eta) * (\ra + \rb * cos(\psia)), 
+            sin(\eta) * (\ra + \rb * cos(\psia)), 
+            \rb * sin(\psia), \theta, \phi) }     ) --
+    plot[domain=\psia:\psib, smooth, samples=10, variable=\psi]
+     ( { x( cos(\etab) * (\ra + \rb * cos(\psi)), 
+            sin(\etab) * (\ra + \rb * cos(\psi)), 
+            \rb * sin(\psi), \theta, \phi) },
+       { y( cos(\etab) * (\ra + \rb * cos(\psi)), 
+            sin(\etab) * (\ra + \rb * cos(\psi)), 
+            \rb * sin(\psi), \theta, \phi) }     ) --
+    plot[domain=\etab:\etaa, smooth, samples=10, variable=\eta]
+     ( { x( cos(\eta) * (\ra + \rb * cos(\psib)), 
+            sin(\eta) * (\ra + \rb * cos(\psib)), 
+            \rb * sin(\psib), \theta, \phi) },
+       { y( cos(\eta) * (\ra + \rb * cos(\psib)), 
+            sin(\eta) * (\ra + \rb * cos(\psib)), 
+            \rb * sin(\psib), \theta, \phi) }     ) --
+    plot[domain=\psib:\psia, smooth, samples=10, variable=\psi]
+     ( { x( cos(\etaa) * (\ra + \rb * cos(\psi)), 
+            sin(\etaa) * (\ra + \rb * cos(\psi)), 
+            \rb * sin(\psi), \theta, \phi) },
+       { y( cos(\etaa) * (\ra + \rb * cos(\psi)), 
+            sin(\etaa) * (\ra + \rb * cos(\psi)), 
+            \rb * sin(\psi), \theta, \phi) }     )
+     -- cycle;
+
+  % Cylinder subset
+  \pgfmathsetmacro{\etaa}{40}
+  \pgfmathsetmacro{\etab}{-40}
+  
+  % Left edge
+  \pgfmathsetmacro{\psila}{225}
+  \pgfmathsetmacro{\psilb}{135}  
+
+  \foreach [count=\n, remember=\psif as \psii (initially 215)] \psif in { 220, 215, ..., 135 } {
+  
+    \path[name path=line1,domain=\etaa:\etab, smooth, samples=50, variable=\eta] 
+        plot ( { x( cos(\eta) * (\ra + \rb * cos(\psii)), 
+                    sin(\eta) * (\ra + \rb * cos(\psii)), 
+                    \rb * sin(\psii), \theta, \phi) },
+               { y( cos(\eta) * (\ra + \rb * cos(\psii)), 
+                    sin(\eta) * (\ra + \rb * cos(\psii)), 
+                    \rb * sin(\psii), \theta, \phi) }     ); 
+                    
+    \path[name path=line2,domain=\etaa:\etab, smooth, samples=50, variable=\eta] 
+         plot ( { x( cos(\eta) * (\ra + \rb * cos(\psif)), 
+                      sin(\eta) * (\ra + \rb * cos(\psif)), 
+                      \rb * sin(\psif), \theta, \phi) },
+                 { y( cos(\eta) * (\ra + \rb * cos(\psif)), 
+                      sin(\eta) * (\ra + \rb * cos(\psif)), 
+                      \rb * sin(\psif), \theta, \phi) }     );                   
+                    
+    \path [name intersections={of=line1 and line2, by=L\n}];
+  }
+  
+  \edef\leftpoints{}
+  \foreach \n in { 17, 16, ..., 1 } {
+    \xdef\leftpoints{\leftpoints (L\n)}
+  }
+  
+  %\foreach [count=\n] \name in { 1, 2, ..., 17 } {
+  %  \fill[dark] (L\n) circle (0.01); 
+  %}
+  
+  \coordinate (LF) at ( { x( cos(\etaa) * (\ra + \rb * cos(\psila)), 
+                          sin(\etaa) * (\ra + \rb * cos(\psila)), 
+                          \rb * sin(\psila), \theta, \phi) },
+                        { y( cos(\etaa) * (\ra + \rb * cos(\psila)), 
+                          sin(\etaa) * (\ra + \rb * cos(\psila)), 
+                          \rb * sin(\psila), \theta, \phi) }     );
+                  
+  \coordinate (LI) at ( { x( cos(\etab) * (\ra + \rb * cos(\psilb)), 
+                          sin(\etab) * (\ra + \rb * cos(\psilb)), 
+                          \rb * sin(\psilb), \theta, \phi) },
+                        { y( cos(\etab) * (\ra + \rb * cos(\psilb)), 
+                          sin(\etab) * (\ra + \rb * cos(\psilb)), 
+                          \rb * sin(\psilb), \theta, \phi) }     );
+ 
+
+  %\draw[darkteal, line width=0.5] 
+  %  plot[smooth] coordinates { (LI) \leftpoints (LF) };
+
+  % Right edge
+  \pgfmathsetmacro{\psira}{45}
+  \pgfmathsetmacro{\psirb}{-45}  
+  
+  \foreach [count=\n, remember=\psif as \psii (initially 45)] \psif in { 40, 35, ..., -45 } {
+  
+    \path[name path=line1,domain=\etaa:\etab, smooth, samples=50, variable=\eta] 
+        plot ( { x( cos(\eta) * (\ra + \rb * cos(\psii)), 
+                    sin(\eta) * (\ra + \rb * cos(\psii)), 
+                    \rb * sin(\psii), \theta, \phi) },
+               { y( cos(\eta) * (\ra + \rb * cos(\psii)), 
+                    sin(\eta) * (\ra + \rb * cos(\psii)), 
+                    \rb * sin(\psii), \theta, \phi) }     ); 
+                    
+    \path[name path=line2,domain=\etaa:\etab, smooth, samples=50, variable=\eta] 
+         plot ( { x( cos(\eta) * (\ra + \rb * cos(\psif)), 
+                      sin(\eta) * (\ra + \rb * cos(\psif)), 
+                      \rb * sin(\psif), \theta, \phi) },
+                 { y( cos(\eta) * (\ra + \rb * cos(\psif)), 
+                      sin(\eta) * (\ra + \rb * cos(\psif)), 
+                      \rb * sin(\psif), \theta, \phi) }     );                   
+                    
+    \path [name intersections={of=line1 and line2, by=R\n}];
+  }
+  
+  \edef\points{}
+  \foreach \n in { 1, 2, ..., 18 } {
+    \xdef\points{\points (R\n)}
+  }
+  
+  %\foreach [count=\n] \name in { 1, 2, ..., 18 } {
+  %  \fill[dark] (R\n) circle (0.01); 
+  %}
+  
+  \coordinate (RI) at ( { x( cos(\etaa) * (\ra + \rb * cos(\psira)), 
+                          sin(\etaa) * (\ra + \rb * cos(\psira)), 
+                          \rb * sin(\psira), \theta, \phi) },
+                        { y( cos(\etaa) * (\ra + \rb * cos(\psira)), 
+                          sin(\etaa) * (\ra + \rb * cos(\psira)), 
+                          \rb * sin(\psira), \theta, \phi) }     );
+                  
+  \coordinate (RF) at ( { x( cos(\etab) * (\ra + \rb * cos(\psirb)), 
+                          sin(\etab) * (\ra + \rb * cos(\psirb)), 
+                          \rb * sin(\psirb), \theta, \phi) },
+                        { y( cos(\etab) * (\ra + \rb * cos(\psirb)), 
+                          sin(\etab) * (\ra + \rb * cos(\psirb)), 
+                          \rb * sin(\psirb), \theta, \phi) }     );
+ 
+
+  %\draw[darkteal, line width=0.5] 
+  %  plot[smooth] coordinates { (RI) \points (RF) };
+      
+  % Top
+  \fill[midteal, line width=0.5] 
+       plot[domain=\psila:\psira, smooth, samples=50, variable=\psi]
+         ( { x( cos(\etaa) * (\ra + \rb * cos(\psi)), 
+                sin(\etaa) * (\ra + \rb * cos(\psi)), 
+                \rb * sin(\psi), \theta, \phi) },
+           { y( cos(\etaa) * (\ra + \rb * cos(\psi)), 
+                sin(\etaa) * (\ra + \rb * cos(\psi)), 
+                \rb * sin(\psi), \theta, \phi) }     )
+    -- plot[smooth] coordinates { (RI) \points (RF) }
+    -- plot[domain=\psirb:\psilb, smooth, samples=50, variable=\psi]
+         ( { x( cos(\etab) * (\ra + \rb * cos(\psi)), 
+                sin(\etab) * (\ra + \rb * cos(\psi)), 
+                \rb * sin(\psi), \theta, \phi) },
+           { y( cos(\etab) * (\ra + \rb * cos(\psi)), 
+                sin(\etab) * (\ra + \rb * cos(\psi)), 
+                \rb * sin(\psi), \theta, \phi) }     )
+    -- plot[smooth] coordinates { (LI) \leftpoints (LF) }
+    -- cycle;
+
+\end{tikzpicture}
+
+\end{document}  

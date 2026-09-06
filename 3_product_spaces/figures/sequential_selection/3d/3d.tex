@@ -1,0 +1,434 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, fadings}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{darker}{RGB}{124, 0, 0}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function x(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    \xb = \xa;
+    %\yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %  
+    return \xb;
+  };
+  function y(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    %\xb = \xa;
+    \yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %   
+    return \yb;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=0.7]
+  
+  \pgfmathsetmacro{\theta}{45}
+  \pgfmathsetmacro{\phi}{15}
+
+  \pgfmathsetmacro{\N}{20}  
+  \pgfmathsetmacro{\delta}{1 / \N}   
+  \pgfmathsetmacro{\x}{1 + \delta}
+  \pgfmathsetmacro{\y}{1 + \delta}
+  \pgfmathsetmacro{\z}{1 + \delta}
+  
+  \pgfmathsetmacro{\I}{8}  
+  \pgfmathsetmacro{\J}{12} 
+  \pgfmathsetmacro{\K}{10}  
+  
+  %\draw[white] (-8, -15) rectangle (15, 3);
+
+  % X1
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-3, -3.25) rectangle (3, 3.25);
+    \node at (0, -2.5)
+      { $X_{1} \times X_{2} \times X_{3}$ };
+    
+    \foreach \n in {0, 1, ..., \N} {
+      \pgfmathsetmacro{\zeta}{-1 * (\n * 2 * \delta - 1)}
+      \pgfmathsetmacro{\prop}{100 * \n * \delta}
+      \colorlet{custom}{darkerteal!\prop!lightteal}; 
+      \fill[custom] 
+           ({x(-\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, -\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)},
+            {y(+\x, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(-\x, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, -\y, \zeta - \delta, \theta, \phi)}) 
+        -- ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- cycle;
+    }
+        
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, line width=0.25]
+         ({x(+\x, -\y, -\z, \theta, \phi)}, 
+          {y(+\x, -\y, -\z, \theta, \phi)})
+      -- ({x(+\x, -\y, +\z, \theta, \phi)}, 
+          {y(+\x, -\y, +\z, \theta, \phi)})
+      -- ({x(+\x, +\y, +\z, \theta, \phi)}, 
+          {y(+\x, +\y, +\z, \theta, \phi)})
+      -- ({x(-\x, +\y, +\z, \theta, \phi)}, 
+          {y(-\x, +\y, +\z, \theta, \phi)})
+      -- ({x(-\x, +\y, -\z, \theta, \phi)}, 
+          {y(-\x, +\y, -\z, \theta, \phi)})
+      -- ({x(-\x, -\y, -\z, \theta, \phi)}, 
+          {y(-\x, -\y, -\z, \theta, \phi)})
+      -- cycle;
+
+    \draw[custom, line width=0.25]
+         ({x(+\x, -\y, -\z, \theta, \phi)}, 
+          {y(+\x, -\y, -\z, \theta, \phi)})
+      -- ({x(+\x, +\y, -\z, \theta, \phi)}, 
+          {y(+\x, +\y, -\z, \theta, \phi)})
+      -- ({x(-\x, +\y, -\z, \theta, \phi)}, 
+          {y(-\x, +\y, -\z, \theta, \phi)});
+
+    \draw[custom, line width=0.25]
+         ({x(+\x, +\y, -\z, \theta, \phi)}, 
+          {y(+\x, +\y, -\z, \theta, \phi)})
+      -- ({x(+\x, +\y, +\z, \theta, \phi)}, 
+          {y(+\x, +\y, +\z, \theta, \phi)});
+  \end{scope}
+  
+  \begin{scope}[shift={(6, 0)}]
+    \draw[white] (-3, -3.25) rectangle (3, 3.25);
+    \node at (0, +2.5) 
+      { $ \tilde{x}_{1} \in X_{1} $ }; 
+    \node at (0, -2.5) 
+      { $ \{ \tilde{x}_{1} \} \times X_{2} \times X_{3} $ }; 
+      
+    \foreach \n in {0, 1, ..., \N} {
+      \pgfmathsetmacro{\zeta}{-2.5 * (\n * 2 * \delta - 1)}
+      \pgfmathsetmacro{\prop}{50}
+      \colorlet{custom}{darkerteal!\prop!lightteal}; 
+      
+      \pgfmathsetmacro{\O}{0.15}
+      \ifnum \n=\I
+        \pgfmathsetmacro{\O}{1}
+        \pgfmathsetmacro{\prop}{100 * \n * \delta}
+      \fi
+    
+      \fill[custom, opacity=\O] 
+           ({x(-\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, -\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)},
+            {y(+\x, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(-\x, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, -\y, \zeta - \delta, \theta, \phi)}) 
+        -- ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- cycle;
+        
+      \colorlet{custom}{darkerteal!140!lightteal};
+      \draw[custom, opacity=\O, line width=0.25]
+           ({x(-\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, -\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)},
+            {y(+\x, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(-\x, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, -\y, \zeta - \delta, \theta, \phi)}) 
+        -- ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- cycle;
+      
+      \draw[custom, opacity=\O, line width=0.25]
+           ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(+\x, -\y, \zeta - \delta, \theta, \phi)});
+        
+      \draw[custom, opacity=\O, line width=0.25]
+           ({x(+\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta + \delta, \theta, \phi)});
+    }
+  \end{scope}
+  
+  \begin{scope}[shift={(12, 0)}]
+    \draw[white] (-3, -3.25) rectangle (3, 3.25);
+    \node at (0, +2.5) 
+      { $ \tilde{x}_{2} \in \{ \tilde{x}_{1} \} \times X_{2} $ }; 
+    \node at (0, -2.5) 
+      { $ \{ \tilde{x}_{1} \} \times \{ \tilde{x}_{2} \} \times X_{3} $ }; 
+    
+    \pgfmathsetmacro{\m}{\I}
+    \foreach \n in {0, 1, ..., \N} {
+      \pgfmathsetmacro{\xi}{2 * (\n * 2 *  \delta - 1)}
+      \pgfmathsetmacro{\zeta}{-2 * (\m * 2 * \delta - 1)}
+      
+      \pgfmathsetmacro{\prop}{50}
+      
+      \pgfmathsetmacro{\O}{0.15}
+      \ifnum \n=\J
+        \pgfmathsetmacro{\O}{1}
+        \pgfmathsetmacro{\prop}{100 * (\n + \m) * \delta / 2}
+      \fi
+      
+      \colorlet{custom}{darkerteal!\prop!lightteal}; 
+      \fill[custom, opacity=\O] 
+           ({x(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)})
+        --cycle;
+        
+      \colorlet{custom}{darkerteal!140!lightteal};
+      \draw[custom, , opacity=\O, line width=0.25]
+             ({x(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)}, 
+              {y(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)})
+          -- ({x(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+              {y(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)})
+          -- ({x(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+              {y(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)})
+          -- ({x(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+              {y(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)})
+          -- ({x(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+              {y(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)})
+          -- ({x(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+              {y(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)})
+          --cycle;
+
+      \colorlet{custom}{darkerteal!140!lightteal};
+      \draw[custom, , opacity=\O, line width=0.25]
+             ({x(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+              {y(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)})
+          -- ({x(\xi + \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+              {y(\xi + \delta, +\y, \zeta - \delta, \theta, \phi)})
+          -- ({x(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+              {y(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)});
+              
+      \colorlet{custom}{darkerteal!140!lightteal};
+      \draw[custom, , opacity=\O, line width=0.25]
+             ({x(\xi + \delta, \y, \zeta - \delta, \theta, \phi)}, 
+              {y(\xi + \delta, \y, \zeta - \delta, \theta, \phi)})
+          -- ({x(\xi + \delta, \y, \zeta + \delta, \theta, \phi)}, 
+              {y(\xi + \delta, \y, \zeta + \delta, \theta, \phi)});
+    }              
+  \end{scope}
+  
+  \begin{scope}[shift={(18, 0)}]
+    \draw[white] (-3, -3.25) rectangle (3, 3.25);
+    \node at (0, +2.5) 
+      { $ \tilde{x} \in \{ \tilde{x}_{1} \} \times \{ \tilde{x}_{2} \} \times X_{3} $ }; 
+    
+    \pgfmathsetmacro{\m}{\I}
+    \pgfmathsetmacro{\n}{\J}
+
+    \pgfmathsetmacro{\xi}{2 * (\n * 2 *  \delta - 1)}
+    \pgfmathsetmacro{\eta}{2 * (\K * 2 *  \delta - 1)}
+    \pgfmathsetmacro{\zeta}{-2 * (\m * 2 * \delta - 1)}
+    
+     \pgfmathsetmacro{\prop}{100 * (\n + \m) * \delta / 2}
+    
+    \pgfmathsetmacro{\O}{0.15}
+    
+    % Bottom
+    \colorlet{custom}{darkerteal!\prop!lightteal}; 
+    \fill[custom, opacity=\O] 
+         ({x(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi - \delta, \eta - \delta, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)})
+      -- ({x(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)})
+      --cycle;
+      
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, opacity=\O, line width=0.25]
+           ({x(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, -\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta - \delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)})
+        --cycle;
+
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, opacity=\O, line width=0.25]
+           ({x(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)});
+            
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, opacity=\O, line width=0.25]
+           ({x(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}); 
+            
+    % Middle
+    \colorlet{custom}{darkerteal!\prop!lightteal}; 
+    \fill[custom] 
+         ({x(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, \eta + \delta, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi - \delta, \eta + \delta, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+      -- ({x(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+      --cycle;
+      
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, line width=0.25]
+           ({x(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta - \delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta + \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta + \delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+        --cycle;
+
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, line width=0.25]
+           ({x(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta - \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)});
+            
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, line width=0.25]
+           ({x(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)});         
+     
+    % Top       
+    \colorlet{custom}{darkerteal!\prop!lightteal}; 
+    \fill[custom, opacity=\O] 
+         ({x(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+          {y(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)})
+      -- ({x(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+      -- ({x(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+          {y(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+      --cycle;
+      
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, opacity=\O, line width=0.25]
+           ({x(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta + \delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi - \delta, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+        --cycle;
+
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, opacity=\O, line width=0.25]
+           ({x(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \eta + \delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi - \delta, +\y, \zeta - \delta, \theta, \phi)});
+            
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, opacity=\O, line width=0.25]
+           ({x(\xi + \delta, \y, \zeta - \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \y, \zeta - \delta, \theta, \phi)})
+        -- ({x(\xi + \delta, \y, \zeta + \delta, \theta, \phi)}, 
+            {y(\xi + \delta, \y, \zeta + \delta, \theta, \phi)});             
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}  

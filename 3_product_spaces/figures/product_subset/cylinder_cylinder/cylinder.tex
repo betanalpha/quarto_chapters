@@ -1,0 +1,160 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, intersections}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{darker}{RGB}{124, 0, 0}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function x(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    \xb = \xa;
+    %\yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %  
+    return \xb;
+  };
+  function y(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    %\xb = \xa;
+    \yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %   
+    return \yb;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=0.6]
+  
+  % View
+  \pgfmathsetmacro{\theta}{0}
+  \pgfmathsetmacro{\phi}{75}
+  
+  % Bounding box
+  \draw[white] (-4.5, -6.25) rectangle (4.5, 5.5);
+  
+  % Torus Configuration
+  \pgfmathsetmacro{\R}{4}
+  \pgfmathsetmacro{\Z}{4}
+  
+  % Cylinder subset (back)
+  \pgfmathsetmacro{\etaa}{0}
+  \pgfmathsetmacro{\etab}{180}
+  \pgfmathsetmacro{\za}{-1}
+  \pgfmathsetmacro{\zb}{-3}
+
+  \fill[darkteal]
+       plot[domain=\etaa:\etab, smooth, samples=10, variable=\eta]
+        ( { x(\R * cos(\eta),  \R * sin(\eta),  \za, \theta, \phi) },
+          { y(\R * cos(\eta),  \R * sin(\eta),  \za, \theta, \phi) }  )
+     -- ( { x(\R * cos(\etab), \R * sin(\etab), \za, \theta, \phi) },
+          { y(\R * cos(\etab), \R * sin(\etab), \za, \theta, \phi) } )
+     -- ( { x(\R * cos(\etab), \R * sin(\etab), \zb, \theta, \phi) },
+          { y(\R * cos(\etab), \R * sin(\etab), \zb, \theta, \phi) } ) --
+       plot[domain=\etab:\etaa, smooth, samples=10, variable=\eta]
+        ( { x(\R * cos(\eta),  \R * sin(\eta),  \zb, \theta, \phi) },
+          { y(\R * cos(\eta),  \R * sin(\eta),  \zb, \theta, \phi) }  )
+     -- ( { x(\R * cos(\etaa), \R * sin(\etaa), \zb, \theta, \phi) },
+          { y(\R * cos(\etaa), \R * sin(\etaa), \zb, \theta, \phi) } )
+     -- ( { x(\R * cos(\etaa), \R * sin(\etaa), \za, \theta, \phi) },
+          { y(\R * cos(\etaa), \R * sin(\etaa), \za, \theta, \phi) } ) -- cycle;
+ 
+  % Torus Wireframe
+  \foreach \eta in { 15, 30, ..., 360} {
+    \draw[gray90]    ( { x(\R * cos(\eta), \R * sin(\eta), -\Z, \theta, \phi) },
+                       { y(\R * cos(\eta), \R * sin(\eta), -\Z, \theta, \phi) } )
+                  -- ( { x(\R * cos(\eta), \R * sin(\eta), +\Z, \theta, \phi) },
+                       { y(\R * cos(\eta), \R * sin(\eta), +\Z, \theta, \phi) } );
+  }
+
+  \foreach \z in { -3.75, -2.75, ..., 3.75 } {
+    \draw[domain=0:360, smooth, samples=50, variable=\eta, gray90] 
+        plot ( { x(\R * cos(\eta), \R * sin(\eta), \z, \theta, \phi) },
+               { y(\R * cos(\eta), \R * sin(\eta), \z, \theta, \phi) } ); 
+  }
+
+  \node at (0, -5.5) { $S \times \mathbb{R}$ };
+  
+  % Box subset
+%  \pgfmathsetmacro{\etaa}{-80}
+%  \pgfmathsetmacro{\etab}{-30}
+%  \pgfmathsetmacro{\za}{1}
+%  \pgfmathsetmacro{\zb}{3}
+%
+%  \fill[midteal]
+%       plot[domain=\etaa:\etab, smooth, samples=10, variable=\eta]
+%        ( { x(\R * cos(\eta),  \R * sin(\eta),  \za, \theta, \phi) },
+%          { y(\R * cos(\eta),  \R * sin(\eta),  \za, \theta, \phi) }  )
+%     -- ( { x(\R * cos(\etab), \R * sin(\etab), \za, \theta, \phi) },
+%          { y(\R * cos(\etab), \R * sin(\etab), \za, \theta, \phi) } )
+%     -- ( { x(\R * cos(\etab), \R * sin(\etab), \zb, \theta, \phi) },
+%          { y(\R * cos(\etab), \R * sin(\etab), \zb, \theta, \phi) } ) --
+%       plot[domain=\etab:\etaa, smooth, samples=10, variable=\eta]
+%        ( { x(\R * cos(\eta),  \R * sin(\eta),  \zb, \theta, \phi) },
+%          { y(\R * cos(\eta),  \R * sin(\eta),  \zb, \theta, \phi) }  )
+%     -- ( { x(\R * cos(\etaa), \R * sin(\etaa), \zb, \theta, \phi) },
+%          { y(\R * cos(\etaa), \R * sin(\etaa), \zb, \theta, \phi) } )
+%     -- ( { x(\R * cos(\etaa), \R * sin(\etaa), \za, \theta, \phi) },
+%          { y(\R * cos(\etaa), \R * sin(\etaa), \za, \theta, \phi) } ) -- cycle;
+%          
+%  \node[white] at (2.2, 1) { $\mathsf{x}_{r}$ }; 
+
+  % Cylinder subset (front)
+  \pgfmathsetmacro{\etaa}{-180}
+  \pgfmathsetmacro{\etab}{0}
+  \pgfmathsetmacro{\za}{-1}
+  \pgfmathsetmacro{\zb}{-3}
+
+  \fill[midteal]
+       plot[domain=\etaa:\etab, smooth, samples=10, variable=\eta]
+        ( { x(\R * cos(\eta),  \R * sin(\eta),  \za, \theta, \phi) },
+          { y(\R * cos(\eta),  \R * sin(\eta),  \za, \theta, \phi) }  )
+     -- ( { x(\R * cos(\etab), \R * sin(\etab), \za, \theta, \phi) },
+          { y(\R * cos(\etab), \R * sin(\etab), \za, \theta, \phi) } )
+     -- ( { x(\R * cos(\etab), \R * sin(\etab), \zb, \theta, \phi) },
+          { y(\R * cos(\etab), \R * sin(\etab), \zb, \theta, \phi) } ) --
+       plot[domain=\etab:\etaa, smooth, samples=10, variable=\eta]
+        ( { x(\R * cos(\eta),  \R * sin(\eta),  \zb, \theta, \phi) },
+          { y(\R * cos(\eta),  \R * sin(\eta),  \zb, \theta, \phi) }  )
+     -- ( { x(\R * cos(\etaa), \R * sin(\etaa), \zb, \theta, \phi) },
+          { y(\R * cos(\etaa), \R * sin(\etaa), \zb, \theta, \phi) } )
+     -- ( { x(\R * cos(\etaa), \R * sin(\etaa), \za, \theta, \phi) },
+          { y(\R * cos(\etaa), \R * sin(\etaa), \za, \theta, \phi) } ) -- cycle;
+          
+  \node[white] at (0.1, -3) { $\mathsf{x}_{c}$ }; 
+
+\end{tikzpicture}
+
+\end{document}  
