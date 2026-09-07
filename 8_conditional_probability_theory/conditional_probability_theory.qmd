@@ -1006,7 +1006,7 @@ conditional probability theory to uncountable partitions
 implicitly defined by functions with an uncountable number of
 output points.
 
-## Conditioning On Countable Implicit Partitions
+## Conditioning On Countable Implicit Partitions { #sec:cont-impl }
 
 In [Section 1](#sec:partitions), we learned that surjective
 functions $f : X \rightarrow Y$ implicitly define a partition of
@@ -1348,9 +1348,12 @@ This conditional probability kernel gives a
 $(\mathcal{Y}, \mathcal{B}_{\mathbb{R}})$-measurable conditional
 probability function for any partial evaluation on the first
 argument,
-$$
-\pi^{f} ( \mathsf{x} \mid \cdot ) : Y \rightarrow [0, 1],
-$$
+\begin{alignat*}{6}
+p^{f}_{ \mathsf{x} }
+:\; &\mathcal{Y}& &\rightarrow& \; &[0, 1]&
+\\
+&y& &\mapsto& &\pi^{f} ( \mathcal{x} \mid y ) &,
+\end{alignat*}
 and a conditional probability distribution for $f_{*} \pi$-almost
 every partial evaluation on the second argument,
 \begin{alignat*}{6}
@@ -1369,10 +1372,11 @@ just as in the countable case.
 These partial evaluations also satisfy a generalized law of total
 probability (@fig-general-total-probability),
 $$
-\pi( \mathsf{x} ) = \mathbb{E}_{f_{*} \pi} [ p_{\mathsf{x}} ],
+\pi( \mathsf{x} )
+=
+\mathbb{E}_{f_{*} \pi} [ p^{f}_{ \mathsf{x} } ].
 $$
-where $p_{\mathsf{x}}(y)$ is the conditional probability
-function.  Moreover, they also satisfy a generalized law of total
+Moreover, they also satisfy a generalized law of total
 expectation,
 $$
 \mathbb{E}_{\pi}[g]
@@ -1398,9 +1402,7 @@ width=50% #fig-general-total-probability}
 
 In the case where the output space, and hence the number of level
 sets, is countable, these expectations reduce to discrete
-summations, and the general laws of total probability and
-expectation reduce to our initial laws of total probability and
-expectation.  For example,
+summations,
 \begin{align*}
 \pi( \mathsf{x} )
 &=
@@ -1412,14 +1414,16 @@ f_{*} \pi(y) \, p_{\mathsf{x}}(y)
 \\
 &=
 \sum_{y \in Y}
-\pi( f^{-1}( \{ y \} ) ) \, p^{f^{-1}}(\mathsf{x} \mid y)
-\\
-&=
-\sum_{y \in Y}
-\pi( f^{-1}( \{ y \} ) ) \,
-\frac{ \pi( \mathsf{x} \cap f^{-1}( \{ y \} ) )}
-{ \pi( f^{-1}( \{ y \} ) ) }.
+\pi( f^{-1}( \{ y \} ) ) \, \pi^{f} (\mathsf{x} \mid y).
 \end{align*}
+If we take
+$$
+\pi^{f} (\mathsf{x} \mid y)
+=
+\frac{ \pi(\mathsf{x} \cap f^{-1}(y)) }{ \pi(f^{-1}(y)) },
+$$
+then this is consistent with the countable law of total
+probability that we derived earlier.
 
 Any conditional probability kernel satisfying these properties is
 referred to as a **disintegration** of the probability
@@ -1483,7 +1487,7 @@ subsets $\mathsf{x}_{1} \in \mathcal{X}$ and
 $\mathsf{x}_{2} \in \mathcal{X}$ that have non-zero overlap with
 each other,
 $$
-\mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset,
+\mathsf{x}_{1} \cap \mathsf{x}_{2} \ne \emptyset,
 $$
 and are both allocated non-zero probability,
 $$

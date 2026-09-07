@@ -1313,7 +1313,7 @@ uncountable partitions implicitly defined by functions with an
 uncountable number of output points.
 
 \subsection{Conditioning On Countable Implicit
-Partitions}\label{conditioning-on-countable-implicit-partitions}
+Partitions}\label{sec:cont-impl}
 
 In \hyperref[sec:partitions]{Section 1}, we learned that surjective
 functions \(f : X \rightarrow Y\) implicitly define a partition of the
@@ -1672,10 +1672,14 @@ f_{*} \pi : \mathcal{Y} \rightarrow [0, 1],
 This conditional probability kernel gives a
 \((\mathcal{Y}, \mathcal{B}_{\mathbb{R}})\)-measurable conditional
 probability function for any partial evaluation on the first argument,
-\[
-\pi^{f} ( \mathsf{x} \mid \cdot ) : Y \rightarrow [0, 1],
-\] and a conditional probability distribution for \(f_{*} \pi\)-almost
-every partial evaluation on the second argument, \begin{alignat*}{6}
+\begin{alignat*}{6}
+p^{f}_{ \mathsf{x} }
+:\; &\mathcal{Y}& &\rightarrow& \; &[0, 1]&
+\\
+&y& &\mapsto& &\pi^{f} ( \mathcal{x} \mid y ) &,
+\end{alignat*} and a conditional probability distribution for
+\(f_{*} \pi\)-almost every partial evaluation on the second argument,
+\begin{alignat*}{6}
 \pi^{f}_{y}
 :\; &\mathcal{X}& &\rightarrow& \; &[0, 1]&
 \\
@@ -1687,9 +1691,11 @@ entirely concentrate on the corresponding level set, \[
 
 These partial evaluations also satisfy a generalized law of total
 probability (Figure~\ref{fig-general-total-probability}), \[
-\pi( \mathsf{x} ) = \mathbb{E}_{f_{*} \pi} [ p_{\mathsf{x}} ],
-\] where \(p_{\mathsf{x}}(y)\) is the conditional probability function.
-Moreover, they also satisfy a generalized law of total expectation, \[
+\pi( \mathsf{x} )
+=
+\mathbb{E}_{f_{*} \pi} [ p^{f}_{ \mathsf{x} } ].
+\] Moreover, they also satisfy a generalized law of total expectation,
+\[
 \mathbb{E}_{\pi}[g]
 =
 \mathbb{E}_{f_{*} \pi} [ e_{g} ]
@@ -1717,9 +1723,8 @@ expectation over the relative level set probabilities,
 \end{figure}%
 
 In the case where the output space, and hence the number of level sets,
-is countable, these expectations reduce to discrete summations, and the
-general laws of total probability and expectation reduce to our initial
-laws of total probability and expectation. For example, \begin{align*}
+is countable, these expectations reduce to discrete summations,
+\begin{align*}
 \pi( \mathsf{x} )
 &=
 \mathbb{E}_{f_{*} \pi} [ p_{\mathsf{x}} ]
@@ -1730,14 +1735,13 @@ f_{*} \pi(y) \, p_{\mathsf{x}}(y)
 \\
 &=
 \sum_{y \in Y}
-\pi( f^{-1}( \{ y \} ) ) \, p^{f^{-1}}(\mathsf{x} \mid y)
-\\
-&=
-\sum_{y \in Y}
-\pi( f^{-1}( \{ y \} ) ) \,
-\frac{ \pi( \mathsf{x} \cap f^{-1}( \{ y \} ) )}
-{ \pi( f^{-1}( \{ y \} ) ) }.
-\end{align*}
+\pi( f^{-1}( \{ y \} ) ) \, \pi^{f} (\mathsf{x} \mid y).
+\end{align*} If we take \[
+\pi^{f} (\mathsf{x} \mid y)
+=
+\frac{ \pi(\mathsf{x} \cap f^{-1}(y)) }{ \pi(f^{-1}(y)) },
+\] then this is consistent with the countable law of total probability
+that we derived earlier.
 
 Any conditional probability kernel satisfying these properties is
 referred to as a \textbf{disintegration} of the probability distribution
@@ -1799,7 +1803,7 @@ only a single subset. In particular, consider two measurable subsets
 \(\mathsf{x}_{1} \in \mathcal{X}\) and
 \(\mathsf{x}_{2} \in \mathcal{X}\) that have non-zero overlap with each
 other, \[
-\mathsf{x}_{1} \cap \mathsf{x}_{2} = \emptyset,
+\mathsf{x}_{1} \cap \mathsf{x}_{2} \ne \emptyset,
 \] and are both allocated non-zero probability, \[
 \pi(\mathsf{x}_{1}) > 0, \pi(\mathsf{x}_{2}) > 0.
 \]
@@ -1844,7 +1848,7 @@ A much more useful notion of independence is when almost all of the
 conditional probability distributions in a conditional probability
 kernel are equivalent, so the conditional behavior is independent of
 whichever partition cell, level set, or output point we consider. This
-behavior is often referred to not as \textbf{conditional independence}.
+behavior is often referred to as \textbf{conditional independence}.
 
 To rigorously define conditional independence, however, we need the
 level sets to be particularly well-behaved. In general, the level sets
