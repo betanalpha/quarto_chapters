@@ -239,8 +239,9 @@ I find that it offers the best compromise between compactness and
 explicitness.
 
 Finally, the integral relationships implied by the law of total
-expectation are often simplified to relationships between the
-integrands.  For example, the equation
+expectation are often simplified to symbolic relationships
+between the contributing probability distributions.  For example,
+the equation
 $$
 \int \pi( \mathrm{d} x ) \, g(x)
 =
@@ -358,14 +359,15 @@ then we must also have $\mu( f^{-1}(y) ) > 0$.
 With the absolutely continuity of each conditional probability
 distribution $\pi^{f}_{y}$ ensured, we can write the right-hand
 side as
-$$
-\sum_{y \in Y} \int \pi^{f}( \mathrm{d} x \mid y ) \,
+\begin{align*}
+\sum_{y \in Y} \int \pi^{f} &( \mathrm{d} x \mid y ) \,
 \pi ( f^{-1}(y) ) \, g(x)
-=
+\\
+&=
 \sum_{y \in Y} \int \mu( \mathrm{d} x) \,
 \rnd{ \pi^{f} }{ \mu }( x \mid y ) \,
-\pi ( f^{-1}(y) ) \, g(x).
-$$
+\pi ( f^{-1}(y) ) \, g(x),
+\end{align*}
 where $\rnd{ \pi^{f} }{ \mu }( x \mid y )$ is a collection of
 probability density functions over $X$ indexed by output points
 in $Y$.
@@ -381,7 +383,7 @@ Putting both sides together gives
 &=
 \sum_{y \in Y} \int \mu( \mathrm{d} x) \,
 \rnd{ \pi^{f} }{ \mu }( x \mid y ) \,
-\pi ( f^{-1}(y) ) \, g(x),
+\pi ( f^{-1}(y) ) \, g(x).
 \end{align*}
 
 ## Decomposing Ambient Expectations
@@ -417,7 +419,6 @@ pull the summation outside of the measure-informed integral to
 give
 \begin{align*}
 \int \mu( \mathrm{d} x ) \, \rnd{ \pi }{ \mu }(x) \, g(x)
-\\
 &=
 \int \mu( \mathrm{d} x ) \, \rnd{ \pi }{ \mu }(x) \,
 \left[ \sum_{y \in Y} I_{f^{-1}(y)}(x) \right] \, g(x)
@@ -932,9 +933,13 @@ completely traced out by the single curve
 $$
 \gamma_{y} : [a, b] \rightarrow X,
 $$
-with the variable $z \in [0, 1]$ tracking the relative position
-along the curve.  In this case, the conditional integral of $g$
-with respect to $\mu^{f, \lambda^{X}}$ can be evaluated as
+with the real-valued variable
+$$
+z \in [a, b] \subset \mathbb{R}
+$$
+tracking the relative position along the curve.  In this case,
+the conditional integral of $g$ with respect to
+$\mu^{f, \lambda^{X}}$ can be evaluated as
 \begin{align*}
 i_{y}
 &=
@@ -1317,8 +1322,8 @@ $$
 
 The product rule allows us to generalize the construction of
 conditional probability density functions that we first
-encountered in [Section 4.2](#sec:discrete-conditional-density)
-to any measurable partitions.  (a) An initial probability density
+encountered in [Section 2](#sec:discrete-conditional-density) to
+any measurable partitions.  (a) An initial probability density
 function is first (b) sliced into a collection of conditional
 density functions by restricting valid inputs to a particular
 level set.  (c) Dividing by the corresponding pushforward
@@ -1402,7 +1407,7 @@ $$
 $$
 
 This general result is consistent with the particular result that
-we derived in [Section 4.2](#sec:discrete-conditional-density).
+we derived in [Section 2](#sec:discrete-conditional-density).
 In other words, using the general product rule will always give
 us a well-defined conditional probability density function.
 
@@ -1533,7 +1538,7 @@ an is shown here in teal.  Integrals with respect to conditional
 Lebesgue measures can be evaluated as line integrals over these
 curves.](
 figures/radial_level_sets/2/2){
-width=50% #fig-rad-level-sets2}
+width=45% #fig-rad-level-sets2}
 
 In this case, the Jacobian correction is the same as it was for
 the example of [Section 4.2](#sec:leb_disint),
@@ -1997,7 +2002,7 @@ defines a probability distribution over $X$ that is conditionally
 independent of $f$.
 
 Consider, for instance, the example from
-[Section 6.3](#sec:build-ex) only with conditional
+[Section 7.3](#sec:build-ex) only with conditional
 probability density functions that are independent of $r$,
 \begin{align*}
 p( \theta_{r} \mid r )
@@ -2057,7 +2062,7 @@ then the equations can be prone to misinterpretation.
 Fortunately, much of this frustration is ameliorated when we
 apply conditional probability theory to _product spaces_ and
 their natural projection functions.  We'll explore this
-application in detail in the **next chapter**.
+application in detail in [Chapter 10](http://www.symplectomorphic.com/assets/chapters_html/probability_theory_on_product_spaces.html)
 
 # Appendix: "Explicit" Calculations { - #sec:appendix }
 
