@@ -2062,7 +2062,7 @@ then the equations can be prone to misinterpretation.
 Fortunately, much of this frustration is ameliorated when we
 apply conditional probability theory to _product spaces_ and
 their natural projection functions.  We'll explore this
-application in detail in [Chapter 10](http://www.symplectomorphic.com/assets/chapters_html/probability_theory_on_product_spaces.html)
+application in detail in [Chapter 10](http://www.symplectomorphic.com/assets/chapters_html/probability_theory_on_product_spaces.html).
 
 # Appendix: "Explicit" Calculations { - #sec:appendix }
 
