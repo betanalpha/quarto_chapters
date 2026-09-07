@@ -2359,23 +2359,35 @@ structure-transforming functions it induces.
 
 \paragraph{Relating Orderings}\label{relating-orderings}
 
-Consider, for example, orderings. When \(f\) is an injective function
-every input element \(x\) corresponds to one and only one output
-element, \(y = f(x)\). Consequently, any comparison between output
-elements can be translated to the corresponding input elements. If the
-output space \(Y\) is equipped with an ordering \(<\), then we can
-define a compatible ordering on \(X\) as \[
-x_{1} \;\; f^{*}\!\!< \; x_{2}
-\] if and only if \[
-f(x_{1}) < f(x_{2}).
-\] In other words, every injective function allows us to pullback
-orderings on the output set \(<_{Y}\) to orderings on the input set
-\(<_{X} = f^{*}\!\!<_{Y}\).
+A function \(f : X \rightarrow Y\) allows us to implicitly compare two
+input elements by explicitly comparing their output values. In other
+words, we can pull back output comparisons to input comparisons.
 
-If \(f\) is not also surjective, and hence not bijective, then we cannot
-consistently pushforward orderings on the input space to orderings on
-the output space. The problem is that if any pair of output elements are
-associated with multiple input elements, \begin{align*}
+Consider, for example, orderings. If the output space \(Y\) is equipped
+with a partial ordering \(<_{Y}\), then for any function \(f\) we can
+define a partial ordering on the input space as \[
+x_{1} \;\; (f^{*}\!\!<_{Y}) \; x_{2}
+\] if and only if \[
+f(x_{1}) <_{Y} f(x_{2}).
+\]
+
+Pulling back strict orderings requires a bit more care. In general,
+distinct input elements can map to the same output element, \[
+f(x_{1}) = f(x_{2}),
+\] making any strict ordering between \(x_{1}\) and \(x_{2}\) ambiguous.
+Only when \(f\) is injective will we be able to define a consistent
+strict ordering on the input space. That said, these ambiguous
+comparisons still define a perfectly well-behaved \emph{partial}
+ordering on the input set.
+
+To review, an arbitrary function \(f : X \rightarrow Y\) pulls back
+\emph{any} ordering on the output space to a partial ordering on the
+input space. Injective functions in particular also pull back strict
+orderings on the output space to strict orderings on the input space.
+
+Pushing forward orderings from the input space to the output space is
+not quite as easy as pulling back orderings. If any pair of output
+elements are associated with multiple input elements, \begin{align*}
 y_{1} &= f(x_1) = f(x_1')
 \\
 y_{2} &= f(x_2) = f(x_2'),
@@ -2384,7 +2396,14 @@ y_{2} &= f(x_2) = f(x_2'),
 x_1 &< x_2
 \\
 x_2' &< x_1',
-\end{align*} that cannot be combined into a consistent output ordering.
+\end{align*} that cannot be reconciled into a consistent output
+ordering.
+
+Consequently, we can push orderings on the input space forward to
+partial orderings on the output space only if \(f\) is surjective. If we
+want to push strict orderings on the input space forward to strict
+orderings on the output space, then we also need \(f\) to be surjective,
+and hence bijective.
 
 \paragraph{Relating Algebras}\label{relating-algebras}
 
@@ -2536,27 +2555,37 @@ known as \textbf{isomorphisms}.
 \paragraph{Ordering-Preserving
 Relations}\label{ordering-preserving-relations}
 
-For instance, consider an ordered input space \((X, <_{X})\) and an
-ordered output space \((Y, <_{Y})\). For any function
-\(f: X \rightarrow Y\) the pullback ordering \(f^{*} \!\! <_{Y}\) on the
-input space is defined by \[
-x_{1} \;\; f^{*}\!\!<_{Y} \; x_{2}
+For instance, consider a strictly ordered input space \((X, <{X})\) and
+a strictly ordered output space \((Y, <{Y})\). Any injective function
+\(f: X \rightarrow Y\) defines a pullback strict ordering
+\(f^{*} \!\! <{Y}\) on the input space by \[
+x_{1} \;\; (f^{*}\!\!<_{Y}) \; x_{2}
 \] if and only if \[
 f(x_{1}) <_{Y} f(x_{2}).
 \] There's no guarantee, however, that this will be consistent with the
-initial ordering \(<_{X}\). Instead, we will have
-\(f_{*} <_{Y} = <_{X}\) only for the exceptional functions satisfying \[
-f(x_{1}) <_{Y} f(x_{2})
+initial ordering \(<{X}\). Instead, we will have \(f_{*} <{Y} = <{X}\)
+only for the exceptional functions satisfying \[
+f(x_{1}) <{Y} f(x_{2})
 \] if and only if \[
-x_{1} <_{X} x_{2}.
-\] These functions are known as \textbf{monotonically increasing
-functions}. Functions that respect given input and output partial
-orderings are known as \textbf{monotonically non-decreasing functions}.
+x_{1} <{X} x_{2}.
+\] These injective functions are known as \textbf{monotonically
+increasing functions}. Injective functions that \emph{flip} the
+orientation of the orderings, so that \[
+f(x_{1}) <{Y} f(x_{2})
+\] if and only if \[
+x_{2} <{X} x_{1}
+\] are known as \textbf{monotonically decreasing functions}.
+
+More generally, functions that respect a \emph{partial} ordering on the
+input space and any ordering on the output space are known as
+\textbf{monotonically non-decreasing functions}. Those that reverse the
+orientation of the partial orderings are known as \textbf{monotonically
+non-increasing functions}.
 
 To demonstrate, consider the functions \begin{alignat*}{6}
 f_1 :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
 \\
-& x & &\mapsto& & x \cdot x \cdot x &
+& x & &\mapsto& & + x \cdot x \cdot x &
 \end{alignat*} and \begin{alignat*}{6}
 f_2 :\; & \mathbb{R} & &\rightarrow& \; & \mathbb{R} &
 \\
@@ -2942,8 +2971,8 @@ useful reference for delving into technical details on precise topics.
 \addcontentsline{toc}{section}{Acknowledgements}
 
 I thank Simon Duane, Jerzy Baranowski, Ron Garcia, Stone Chen, Alexander
-Noll, Pietro Monticone, Tatsuo Okubo, and Léo Burgund for helpful
-comments and discussion.
+Noll, Pietro Monticone, Tatsuo Okubo, Léo Burgund, and Francesco Terenzi
+for helpful comments and discussion.
 
 A very special thanks to everyone supporting me on Patreon: Adam
 Fleischhacker, Adriano Yoshino, Alan Chang, Alessandro Varacca,
