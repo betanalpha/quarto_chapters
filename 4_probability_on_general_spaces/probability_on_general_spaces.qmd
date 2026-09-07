@@ -1094,9 +1094,10 @@ $$
 = | x_{2} - x_{1} |.
 $$
 Allocations to more general measurable subsets can then be
-derived from these interval allocations and countable additivity.
-The resulting uniform measure is known as the
-**Lebesgue measure**.
+derived from these interval allocations using a powerful
+technical method known as **Carathéodory's extension
+theorem** (@Folland:1999).  The resulting uniform measure is
+known as the **Lebesgue measure**.
 
 Just as the counting measure formalizes intuition notions of
 counting on countable spaces, the Lebesgue measure formalizes
@@ -1520,7 +1521,8 @@ infinite number of times within a finite lifetime -- see
 @JayEtAl:2003 for visual demonstrations of just how ephemeral
 dice can be even when they are not rolled -- it turns out that
 there are also some subtle mathematical complications with this
-approach.  For a comprehensive discussion see @DiaconisEtAl:2017.
+approach (@WrinchEtAl:1919).  For a comprehensive discussion see
+@DiaconisEtAl:2017.
 
 Similarly, many have tried to derive probability theory from
 uncertainty quantification.  The Cox postulates (@VanHorn:2003),
