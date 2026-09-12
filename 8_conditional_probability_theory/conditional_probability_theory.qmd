@@ -367,7 +367,7 @@ explicitly defined as lists of subsets.
 ## The Law of Total Probability
 
 As we saw in
-[Chapter Four](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html),
+[Chapter 4](http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html),
 Kolmogorov's axioms define a probability distribution as
 consistent allocation of probability over measurable subsets.
 In order to decompose a probability distribution, we need to be
