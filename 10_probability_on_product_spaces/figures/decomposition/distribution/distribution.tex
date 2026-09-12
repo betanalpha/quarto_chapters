@@ -1,0 +1,339 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{math, fadings}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{darker}{RGB}{124, 0, 0}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{lightteal}{RGB}{186, 219, 219}
+\definecolor{midteal}{RGB}{124, 186, 186}
+\definecolor{darkteal}{RGB}{38, 142, 142}
+\definecolor{darkerteal}{RGB}{0, 124, 124}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\tikzmath{
+  function x(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    \xb = \xa;
+    %\yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %  
+    return \xb;
+  };
+  function y(\x, \y, \z, \theta, \phi) {
+    \c = cos(\theta);
+    \s = sin(\theta);
+    \xa = +\c * \x + \s * \z;
+    \ya = \y;
+    \za = -\s * \x + \c * \z;
+    %
+    %\xb = \xa;
+    \yb = +cos(\phi) * \ya + sin(\phi) * \za;
+    %\zb = -sin(\phi) * \ya + cos(\phi) * \za;
+    %   
+    return \yb;
+  };
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=0.7]
+  
+  \pgfmathsetmacro{\theta}{45}
+  \pgfmathsetmacro{\phi}{15}
+
+  \pgfmathsetmacro{\N}{20}  
+  \pgfmathsetmacro{\delta}{1 / \N}   
+  \pgfmathsetmacro{\x}{1 + \delta}
+  \pgfmathsetmacro{\y}{1 + \delta}
+  \pgfmathsetmacro{\z}{1 + \delta}
+  
+  \draw[white] (-8, -15) rectangle (15, -3);
+
+  \node[anchor=west] at (9.5, -6) 
+      { $ \quad\quad\quad \pi(  \mathrm{d} x_{1} )$ };
+  
+  \node[anchor=west] at (9.5, -12 + 0.5) 
+      { $ \{ \; \pi(  \mathrm{d} x_{2}, \mathrm{d} x_{3} \mid x_{1} )$ };
+  \node[anchor=west] at (9.5, -12 - 0.5) 
+      { $ \;\; \text{ for } x_{1} \in X_{1} \quad\quad \}$ };   
+
+  \node at (-5.5, -9)
+      { $\pi( \mathrm{d} x_{1}, \mathrm{d} x_{2}, \mathrm{d} x_{3} )$ };
+  
+  % Joint Distribution
+  \begin{scope}[shift={(0, -9)}]
+    \draw[white] (-3, -3) rectangle (3, 3);
+
+    \begin{scope}
+      \clip  ({x(+\x, -\y, -\z, \theta, \phi)}, 
+              {y(+\x, -\y, -\z, \theta, \phi)})
+          -- ({x(+\x, -\y, +\z, \theta, \phi)}, 
+              {y(+\x, -\y, +\z, \theta, \phi)})
+          -- ({x(+\x, +\y, +\z, \theta, \phi)}, 
+              {y(+\x, +\y, +\z, \theta, \phi)})
+          -- ({x(+\x, +\y, -\z, \theta, \phi)}, 
+              {y(+\x, +\y, -\z, \theta, \phi)})
+          -- cycle;
+      
+      \foreach \i in {1, 0.99, ..., 0.01} {
+        \pgfmathsetmacro{\prop}{100 * (1 - exp(-3 * \i * \i))};
+        \colorlet{custom}{light!\prop!dark};
+        
+        \fill[custom] 
+             ({x(+\x, -\y, -\i * \z, \theta, \phi)}, 
+              {y(+\x, -\y, -\i * \z, \theta, \phi)})
+          -- ({x(+\x, -\y, +\i * \z, \theta, \phi)}, 
+              {y(+\x, -\y, +\i * \z, \theta, \phi)})
+          -- ({x(+\x, +\y, +\i * \z, \theta, \phi)}, 
+              {y(+\x, +\y, +\i * \z, \theta, \phi)})
+          -- ({x(+\x, +\y, -\i * \z, \theta, \phi)}, 
+              {y(+\x, +\y, -\i * \z, \theta, \phi)})
+          -- cycle;
+      }
+    \end{scope}
+    
+    \begin{scope}
+      \clip  ({x(+\x, -\y, -\z, \theta, \phi)}, 
+              {y(+\x, -\y, -\z, \theta, \phi)})
+          -- ({x(+\x, +\y, -\z, \theta, \phi)}, 
+              {y(+\x, +\y, -\z, \theta, \phi)})
+          -- ({x(-\x, +\y, -\z, \theta, \phi)}, 
+              {y(-\x, +\y, -\z, \theta, \phi)})
+          -- ({x(-\x, -\y, -\z, \theta, \phi)}, 
+              {y(-\x, -\y, -\z, \theta, \phi)})
+          -- cycle;
+      
+      \foreach \i in {1, 0.99, ..., 0.01} {
+        \pgfmathsetmacro{\prop}{100 * (1 - exp(-8 * \i * \i))};
+        \colorlet{custom}{light!\prop!dark};
+        
+        \fill[custom] 
+           ({x(0, 0, -\z + \delta, \theta, \phi)}, 
+            {y(0, 0, -\z + \delta, \theta, \phi)})
+          circle [x radius=8 * \i * \x, y radius=2 * \i * \x, rotate=45];
+      }
+    \end{scope}
+
+    \begin{scope}
+      \clip  ({x(+\x, +\y, -\z, \theta, \phi)}, 
+              {y(+\x, +\y, -\z, \theta, \phi)})
+          -- ({x(+\x, +\y, +\z, \theta, \phi)}, 
+              {y(+\x, +\y, +\z, \theta, \phi)})
+          -- ({x(-\x, +\y, +\z, \theta, \phi)}, 
+              {y(-\x, +\y, +\z, \theta, \phi)})
+          -- ({x(-\x, +\y, -\z, \theta, \phi)}, 
+              {y(-\x, +\y, -\z, \theta, \phi)})
+          -- cycle;
+      
+      \foreach \i in {1, 0.99, ..., 0.01} {
+        \pgfmathsetmacro{\prop}{100 * (1 - exp(-6 * \i * \i))};
+        \colorlet{custom}{light!\prop!dark};
+        
+        \fill[custom] 
+           ({x(0, \y, 0, \theta, \phi)}, 
+            {y(0, \y, 0, \theta, \phi)})
+          circle [x radius=8 * \i * \x, y radius=0.5 * \i * \x, rotate=0];
+      }
+    \end{scope}
+
+
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, line width=0.25]
+         ({x(+\x, -\y, -\z, \theta, \phi)}, 
+          {y(+\x, -\y, -\z, \theta, \phi)})
+      -- ({x(+\x, -\y, +\z, \theta, \phi)}, 
+          {y(+\x, -\y, +\z, \theta, \phi)})
+      -- ({x(+\x, +\y, +\z, \theta, \phi)}, 
+          {y(+\x, +\y, +\z, \theta, \phi)})
+      -- ({x(+\x, +\y, -\z, \theta, \phi)}, 
+          {y(+\x, +\y, -\z, \theta, \phi)})
+      -- cycle;
+
+    \draw[custom, line width=0.25]
+         ({x(+\x, -\y, -\z, \theta, \phi)}, 
+          {y(+\x, -\y, -\z, \theta, \phi)})
+      -- ({x(+\x, +\y, -\z, \theta, \phi)}, 
+          {y(+\x, +\y, -\z, \theta, \phi)})
+      -- ({x(-\x, +\y, -\z, \theta, \phi)}, 
+          {y(-\x, +\y, -\z, \theta, \phi)})
+      -- ({x(-\x, -\y, -\z, \theta, \phi)}, 
+          {y(-\x, -\y, -\z, \theta, \phi)})
+      -- cycle;
+      
+    \draw[custom, line width=0.25]
+         ({x(+\x, +\y, -\z, \theta, \phi)}, 
+          {y(+\x, +\y, -\z, \theta, \phi)})
+      -- ({x(+\x, +\y, +\z, \theta, \phi)}, 
+          {y(+\x, +\y, +\z, \theta, \phi)})
+      -- ({x(-\x, +\y, +\z, \theta, \phi)}, 
+          {y(-\x, +\y, +\z, \theta, \phi)})
+      -- ({x(-\x, +\y, -\z, \theta, \phi)}, 
+          {y(-\x, +\y, -\z, \theta, \phi)})
+      -- cycle;
+
+  \end{scope}
+  
+  % Marginal Distribution
+  \begin{scope}[shift={(6, -6)}]
+    \draw[white] (-3, -3) rectangle (3, 3);
+  
+    \foreach \n in {0, 0.5, ..., \N} {
+      \pgfmathsetmacro{\zeta}{-1 * (2 * \n * \delta - 1)}
+
+      \pgfmathsetmacro{\i}{\zeta / \z}
+      \pgfmathsetmacro{\prop}{100 * (1 - exp(-3 * \i * \i))};
+      \colorlet{custom}{light!\prop!dark};
+        
+      \fill[custom] 
+           ({x(-\delta, +\delta, \zeta + \delta, \theta, \phi)}, 
+            {y(-\delta, +\delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\delta, +\delta, \zeta + \delta, \theta, \phi)}, 
+            {y(+\delta, +\delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\delta, -\delta, \zeta + \delta, \theta, \phi)}, 
+            {y(+\delta, -\delta, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\delta, -\delta, \zeta - \delta, \theta, \phi)},
+            {y(+\delta, -\delta, \zeta - \delta, \theta, \phi)})
+        -- ({x(-\delta, -\delta, \zeta - \delta, \theta, \phi)}, 
+            {y(-\delta, -\delta, \zeta - \delta, \theta, \phi)}) 
+        -- ({x(-\delta, +\delta, \zeta - \delta, \theta, \phi)}, 
+            {y(-\delta, +\delta, \zeta - \delta, \theta, \phi)})
+        -- cycle;
+    }
+    
+    \colorlet{custom}{darkerteal!140!lightteal};
+    \draw[custom, line width=0.25]
+         ({x(-\delta, +\delta, +\z, \theta, \phi)}, 
+          {y(-\delta, +\delta, +\z, \theta, \phi)})
+      -- ({x(+\delta, +\delta, +\z, \theta, \phi)}, 
+          {y(+\delta, +\delta, +\z, \theta, \phi)})
+      -- ({x(+\delta, -\delta, +\z, \theta, \phi)}, 
+          {y(+\delta, -\delta, +\z, \theta, \phi)})
+      -- ({x(+\delta, -\delta, -\z, \theta, \phi)},
+          {y(+\delta, -\delta, -\z, \theta, \phi)})
+      -- ({x(-\delta, -\delta, -\z, \theta, \phi)}, 
+          {y(-\delta, -\delta, -\z, \theta, \phi)}) 
+      -- ({x(-\delta, +\delta, -\z, \theta, \phi)}, 
+          {y(-\delta, +\delta, -\z, \theta, \phi)})
+      -- cycle;
+    
+    \draw[custom, line width=0.25]
+         ({x(-\delta, +\delta, -\z, \theta, \phi)}, 
+          {y(-\delta, +\delta, -\z, \theta, \phi)})
+      -- ({x(+\delta, +\delta, -\z, \theta, \phi)}, 
+          {y(+\delta, +\delta, -\z, \theta, \phi)})
+      -- ({x(+\delta, -\delta, -\z, \theta, \phi)}, 
+          {y(+\delta, -\delta, -\z, \theta, \phi)});
+      
+    \draw[custom, line width=0.25]
+         ({x(+\delta, +\delta, -\z, \theta, \phi)}, 
+          {y(+\delta, +\delta, -\z, \theta, \phi)})
+      -- ({x(+\delta, +\delta, +\z, \theta, \phi)}, 
+          {y(+\delta, +\delta, +\z, \theta, \phi)});
+  \end{scope}
+  
+  % Conditional Distributions
+  \begin{scope}[shift={(6, -12)}]
+    \draw[white] (-3, -3) rectangle (3, 3);
+  
+    \foreach \n in {0, 1, ..., \N} {
+      \pgfmathsetmacro{\zeta}{-2.5 * (\n * 2 * \delta - 1)}
+
+      %\pgfmathsetmacro{\i}{\zeta / \z}
+      %\pgfmathsetmacro{\prop}{100 * (1 - exp(-3 * \i * \i))};
+      \pgfmathsetmacro{\prop}{50};
+      \colorlet{custom}{light!\prop!dark};
+      
+      \fill[custom] 
+           ({x(-\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, -\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)},
+            {y(+\x, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(-\x, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, -\y, \zeta - \delta, \theta, \phi)}) 
+        -- ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- cycle;
+
+      \begin{scope}
+        \clip  ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+                {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+            -- ({x(+\x, +\y, \zeta - \delta, \theta, \phi)}, 
+                {y(+\x, +\y, \zeta - \delta, \theta, \phi)})
+            -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)}, 
+                {y(+\x, -\y, \zeta - \delta, \theta, \phi)})
+            -- ({x(-\x, -\y, \zeta - \delta, \theta, \phi)}, 
+                {y(-\x, -\y, \zeta - \delta, \theta, \phi)})
+            -- cycle;
+
+        \pgfmathsetmacro{\R}{5 * \x};
+
+        \foreach \i in {1, 0.99, ..., 0.01} {
+          \pgfmathsetmacro{\prop}{100 * (1 - exp(-8 * \i * \i))};
+          \colorlet{custom}{light!\prop!dark};
+          
+          \fill[custom] 
+             ({x(0.5 * \zeta, 0.5 * \zeta, \zeta + \delta, \theta, \phi)}, 
+              {y(0.5 * \zeta, 0.5 * \zeta, \zeta + \delta, \theta, \phi)})
+            circle [x radius=\i * \R, y radius=0.5 * \i * \R, rotate=45];
+        }
+      \end{scope}
+        
+      \colorlet{custom}{darkerteal!140!lightteal};
+      \draw[custom, line width=0.25]
+           ({x(-\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, -\y, \zeta + \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)},
+            {y(+\x, -\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(-\x, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, -\y, \zeta - \delta, \theta, \phi)}) 
+        -- ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- cycle;
+      
+      \draw[custom, line width=0.25]
+           ({x(-\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(-\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(+\x, -\y, \zeta - \delta, \theta, \phi)}, 
+            {y(+\x, -\y, \zeta - \delta, \theta, \phi)});
+        
+      \draw[custom, line width=0.25]
+           ({x(+\x, +\y, \zeta - \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta - \delta, \theta, \phi)})
+        -- ({x(+\x, +\y, \zeta + \delta, \theta, \phi)}, 
+            {y(+\x, +\y, \zeta + \delta, \theta, \phi)});
+    }
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}  
