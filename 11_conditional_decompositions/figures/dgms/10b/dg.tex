@@ -1,0 +1,80 @@
+\documentclass{standalone}
+\usepackage{graphicx}	
+\usepackage{amssymb, amsmath}
+\usepackage{color}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usepackage{pgfmath}
+
+\definecolor{light}{RGB}{220, 188, 188}
+\definecolor{mid}{RGB}{185, 124, 124}
+\definecolor{dark}{RGB}{143, 39, 39}
+\definecolor{highlight}{RGB}{180, 31, 180}
+\definecolor{gray10}{gray}{0.1}
+\definecolor{gray20}{gray}{0.2}
+\definecolor{gray30}{gray}{0.3}
+\definecolor{gray40}{gray}{0.4}
+\definecolor{gray60}{gray}{0.6}
+\definecolor{gray70}{gray}{0.7}
+\definecolor{gray80}{gray}{0.8}
+\definecolor{gray90}{gray}{0.9}
+\definecolor{gray95}{gray}{0.95}
+
+\newcommand*{\h}{30}
+
+\begin{document}
+
+\begin{tikzpicture}[
+   scale=0.15,
+   obscirc/.style={circle, draw=dark, fill=dark, line width=1.5, text=white,
+               inner sep=5, minimum size=\h},
+   obsell/.style={ellipse, draw=dark, fill=dark, line width=1.5, text=white,
+                  inner sep=5, minimum height=\h, minimum width=50},
+   obsrec/.style={rectangle, draw=dark, fill=dark, line width=1.5, text=white,
+                  inner sep=5, minimum height=\h, minimum width=\h},
+   unobscirc/.style={circle, draw=dark, fill=white, line width=1.5, text=black,
+                     inner sep=5, minimum size=\h},
+   unobsell/.style={ellipse, draw=dark, fill=white, line width=1.5, text=black,
+                    inner sep=5, minimum height=\h}, minimum width=50,
+   unobsrec/.style={rectangle, draw=dark, fill=white, line width=1.5, text=black,
+                    inner sep=1, minimum height=\h, minimum width=27},
+   pushobscirc/.style={circle, draw=white, fill=dark, line width=1.5, dashed, text=white,
+                    inner sep=1, minimum size=\h},
+   pushunobscirc/.style={circle, draw=dark, fill=white, line width=1.5, dashed, text=black,
+                    inner sep=1, minimum size=\h},
+   pushell/.style={ellipse, draw=dark, fill=white, line width=1.5, dashed, text=black,
+                   inner sep=1, minimum height=\h}
+  ]
+
+  % Node Spacing
+  \pgfmathsetmacro{\d}{6}
+  
+  \begin{scope}[shift={(0, 0)}]
+    \draw[white] (-2.75 * \d, -1 * \d) rectangle (7.25 * \d, 5.5 * \d);
+
+    \node (A) at (0 * \d, +0 * \d) [unobscirc] { $x_{2}$ };
+    
+    \node (B) at (+1.75 * \d, +1.5 * \d) [unobscirc] { $x_{3}$ };
+
+    \node (C) at (-1.75 * \d, +3 * \d) [obscirc] { $x_{1}$ };
+    
+    \node (D) at (+0 * \d, +4.5 * \d) [obscirc] { $x_{4}$ };        
+
+    \foreach \B/\E in {A/B, B/C, B/D, C/D} {
+      \draw[->, >=stealth, color=mid, line width=1.5] (\B) -- (\E);
+    }
+    
+
+    \node[anchor=west] at (3.25 * \d, 3.1 * \d) { $p( x_{2}, x_{3} \mid \tilde{x}_{1}, \tilde{x}_{4} )$ };    
+    \node[anchor=west] at (3.25 * \d, 2.7 * \d) { $\quad \propto \;\, p( \tilde{x}_{1}, x_{2}, x_{3}, \tilde{x}_{4} )$ };
+    \node[anchor=west] at (3.25 * \d, 2.3 * \d) { $\quad \propto \;\, p( \tilde{x}_{4} \mid \tilde{x}_{1}, x_{2} )$ }; 
+    \node[anchor=west] at (3.25 * \d, 1.9 * \d) { $\quad\quad \cdot\, p( \tilde{x}_{1} \mid x_{3} )$ };
+    \node[anchor=west] at (3.25 * \d, 1.5 * \d) { $\quad\quad \cdot\,  p( x_{3} \mid x_{2} )$ };
+    \node[anchor=west] at (3.25 * \d, 1.1 * \d) { $\quad\quad \cdot\,  p( x_{2} )$ };
+
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}  
