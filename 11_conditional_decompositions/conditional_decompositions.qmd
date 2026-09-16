@@ -56,7 +56,7 @@ marginal distribution into even simpler pieces.
 In this chapter, we'll explore these recursive decompositions and
 their organization into _conditional decompositions_.
 
-## Recursive Decomposition
+# Recursive Decomposition
 
 Recall that any subsequence of component indices,
 $$
