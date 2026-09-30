@@ -273,7 +273,7 @@ $$
 
 The first element of the partition defines a projection function
 $$
-\varpi_{ \mathsf{i}_{1} } :
+\varpi_{ \mathsf{j}_{2} } :
 X^{ \mathsf{j}_{1} } \rightarrow X^{ \mathsf{j}_{2} },
 $$
 which decomposes the full product space
@@ -283,7 +283,7 @@ $$
 into the thinned product space $X^{ \mathsf{j}_{2} }$ and the
 cross sections
 $$
-X^{ \mathsf{i}_{1} } \times \{ x_{ \mathsf{j}_{2} }   ).
+X^{ \mathsf{i}_{1} } \times \{ x_{ \mathsf{j}_{2} } \}.
 $$
 At the same time, the projection function disintegrations any
 joint distribution over the full product space into a marginal
@@ -293,13 +293,13 @@ $$
 $$
 and a conditional probability kernel over the cross sections,
 $$
-\pi( \mathsf{x}_{ \mathsf{i}_{1} } \mid \mathsf{j}_{2} ).
+\pi( \mathsf{x}_{ \mathsf{i}_{1} } \mid x_{ \mathsf{j}_{2} } ).
 $$
 
 From here, we iterate by following the partition of the
 component indices.  At the $k$th step, the projection function
 $$
-\varpi_{ \mathsf{i}_{k} } :
+\varpi_{ \mathsf{j}_{k + 1} } :
 X^{ \mathsf{j}_{k} } \rightarrow X^{ \mathsf{j}_{k + 1} },
 $$
 decomposes the initial product space $X^{ \mathsf{j}_{k} }$ into
@@ -492,7 +492,7 @@ $$
 $$
 over the cross sections
 $$
-X^{ \mathsf{i}_{k} } \times \{ x_{ \mathsf{j}_{k + 1} }   ).
+X^{ \mathsf{i}_{k} } \times \{ x_{ \mathsf{j}_{k + 1} } \}.
 $$
 The ultimate conditional probability kernel lifts
 $\pi( \mathsf{x}_{ \mathsf{j}_{K} } )$ into a joint distribution
@@ -518,8 +518,8 @@ and then proceeding to each
 $$
 \pi(
   \mathsf{x}_{ i_{k} } \mid
-  x_{ i_{k + 1} }, \ldots, x_{ i_{I} }.
-)
+  x_{ i_{k + 1} }, \ldots, x_{ i_{I} }
+).
 $$
 
 In other words, conditional decompositions define a kind of
@@ -538,7 +538,7 @@ meaningful structure of the corresponding joint distributions.
 To take advantage of this structure in practice, however, we will
 need to establish an appropriate vocabulary.
 
-# Conditional Dependencies
+## Conditional Dependencies
 
 At any step of a conditional decomposition, the behavior of the
 conditional probability distributions will, in general, depend on
@@ -613,17 +613,17 @@ To check for these indirect dependencies we have to push the
 joint probability distribution forward along the projection
 function
 $$
-\varpi_{ \mathsf{i}_{k} \, \vec{\subset} \, \mathsf{i}_{k'} } :
+\varpi_{ \mathsf{i}_{k} \, \vec{\cup} \, \mathsf{i}_{k'} } :
 X^{1:I}
 \rightarrow
-X^{ \mathsf{i}_{k} \, \vec{\subset} \, \mathsf{i}_{k'} },
+X^{ \mathsf{i}_{k} \, \vec{\cup} \, \mathsf{i}_{k'} },
 $$
 and then disintegrate that pushforward distribution with respect
 to the projection function
 $$
-\varpi^{ \mathsf{i}_{k} \, \vec{\subset} \,
+\varpi^{ \mathsf{i}_{k} \, \vec{\cup} \,
          \mathsf{i}_{k'} }_{ \mathsf{i}_{k'} } :
-X^{ \mathsf{i}_{k} \, \vec{\subset} \, \mathsf{i}_{k'} }
+X^{ \mathsf{i}_{k} \, \vec{\cup} \, \mathsf{i}_{k'} }
 \rightarrow
 X^{ \mathsf{i}_{k'} }.
 $$
@@ -690,10 +690,10 @@ subsequences by collecting them into subsets,
 $$
 \mathsf{d}_{k}
 =
-\{
+\{ \;
   \mathsf{i}_{k'} \mid
    k' \in \mathsf{k}_{k} \subset \{ k + 1, \ldots, K \}
-\}.
+\; \}.
 $$
 This allows us to write the conditional probability kernel more
 precisely as
@@ -707,12 +707,12 @@ For example, the last dependency subsequence is always empty
 because there are no component spaces left on which behavior can
 depend,
 $$
-\mathsf{d}_{K} = ().
+\mathsf{d}_{K} = \{ \}.
 $$
 The second-to-last dependency subsequence, however, could be one
 of two possibilities,
 $$
-\mathsf{d}_{K - 1} = ()
+\mathsf{d}_{K - 1} = \{ \}
 $$
 or
 $$
@@ -720,15 +720,15 @@ $$
 $$
 while the third-to-last could be one of four possibilities,
 \begin{align*}
-\mathsf{d}_{K - 2} &= ()
+\mathsf{d}_{K - 2} &= \{ \}
 \\
-\mathsf{d}_{K - 2} &= \mathsf{i}_{K - 1}
+\mathsf{d}_{K - 2} &= \{ \mathsf{i}_{K - 1} \}
 \\
 \mathsf{d}_{K - 2}
 &=
 \{ \mathsf{i}_{K - 1}, \mathsf{i}_{K} \}
 \\
-\mathsf{d}_{K - 2} &= \mathsf{i}_{K}.
+\mathsf{d}_{K - 2} &= \{ \mathsf{i}_{K} \}.
 \end{align*}
 
 Dependency subsequences allow us to incorporate even more
@@ -737,8 +737,10 @@ commit to particular conditional probability kernels and marginal
 distributions.  Specifically, we can generalize a conditional
 decomposition to be a sequence of pairs,
 $$
-( ( \mathsf{i}_{1}, \mathsf{d}_{1}), \ldots,
-  ( \mathsf{i}_{K}, \mathsf{d}_{K} ),
+( \,
+  ( \mathsf{i}_{1}, \mathsf{d}_{1}), \ldots,
+  ( \mathsf{i}_{K}, \mathsf{d}_{K} )
+\, )
 $$
 where the $\mathsf{i}_{k}$ partition the component indices and
 the $\mathsf{d}_{k}$ communicate the precise conditional
@@ -752,7 +754,7 @@ for all $k$, then every conditional probability distribution will
 be independent of the behavior in every subsequent component
 space,
 $$
-\pi( \mathsf{x}_{ i_{k} } \mid \mathsf{d}_{k} )
+\pi( \mathsf{x}_{ i_{k} } \mid x_{ \mathsf{d}_{k} } )
 =
 \pi( \mathsf{x}_{ i_{k} } ).
 $$
@@ -925,7 +927,7 @@ for the the conditional decomposition
 \\
  & &( \;  &(2),& &\{ (6, 8) &\} \; &), &
 \\
- & &( \;   &(6, 8),& &\{ &\}\; &), &\;\;)
+ & &( \;   &(6, 8),& &\{ &\}\; &) &\;\;)
 \end{alignat*}
 This corresponds to the joint probability density function
 decomposition
@@ -997,7 +999,7 @@ $x_{8}$, or both.
 
 ::: {#fig-dgm-refine layout="[ [-10, 40, 40, -10], [-10, 40, 40, -10] ]"}
 
-![](figures/dgms/6a/dg){#fig-dgm-refine-a}
+![](figures/dgms/6d/dg){#fig-dgm-refine-a}
 
 ![](figures/dgms/6e/dg){#fig-dgm-refine-b}
 
@@ -1033,7 +1035,7 @@ the atomic conditional decomposition
 \\
  & &( \;   &(6),& &\{ &\}\; &), &
 \\
- & &( \;   &(8),& &\{ &\}\; &) &\;\;)
+ & &( \;   &(8),& &\{ &\}\; &) &\;\;).
 \end{alignat*}
 This is compatible with our initial example of a conditional
 decomposition, but conveys much more detailed information about
@@ -1240,7 +1242,7 @@ conditional decomposition
 \\
  & &( \; &(4),& \; &\{ (5) &\} \; &), &
 \\
- & &( \; &(5),& \; &\{ (5) &\} \; &)  &\;\;)
+ & &( \; &(5),& \; &\{  &\} \; &)  &\;\;)
 \end{alignat*}
 or, equivalently, the sequence of probability density functions
 \begin{align*}
