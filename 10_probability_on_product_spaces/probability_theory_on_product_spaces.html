@@ -3209,7 +3209,7 @@ window.Quarto = {
 <div class="hidden">
 
 </div>
-<p>Too this point, our discussion of conditional probability theory has been a bit hampered by its abstraction. Fortunately, both the theory and application of conditional probability theory become much more straightforward when applied to the <a href="http://www.symplectomorphic.com/assets/chapters_html/product_spaces.html">product spaces</a> that dominate practice. In this chapter, we will work through the application of conditional probability theory to product spaces step by step, with a specific emphasis the probability density function representations and practical computation.</p>
+<p>To this point, our discussion of conditional probability theory has been a bit hampered by its abstraction. Fortunately, both the theory and application of conditional probability theory become much more straightforward when applied to the <a href="http://www.symplectomorphic.com/assets/chapters_html/product_spaces.html">product spaces</a> that dominate practice. In this chapter, we will work through the application of conditional probability theory to product spaces step by step, with a specific emphasis the probability density function representations and practical computation.</p>
 <section id="product-probability-spaces" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Product Probability Spaces</h1>
 <p>Before considering conditional probability theory, let’s begin by discussing the probabilistic objects that we can derive from the structure of an arbitrary product space.</p>
@@ -3232,7 +3232,7 @@ window.Quarto = {
 </span> for all but a finite number of <span class="math inline">i \in 1:I</span>, and then adding their unions, intersections, and complements. Unsurprisingly, this also known as a <strong>cylinder <span class="math inline">\sigma</span>-algebra</strong>.</p>
 <p>One useful feature of cylinder <span class="math inline">\sigma</span>-algebras is that they are always compatible with all of the projection functions that map into a finite thinned product space. More formally, given the component indices <span class="math display">
 \mathsf{i} \, \vec{\subset} \, 1:I,
-</span> the projection function <span class="math inline">\varpi_{ \mathsf{i} }</span> is always <span class="math inline">( \mathcal{X}^{1:I}, \mathcal{X}^{ \mathsf{i} } )</span>-measurable. Consequently, we never rarely have to worry about measurability on product spaces so long as the component spaces are well behaved.</p>
+</span> the projection function <span class="math inline">\varpi_{ \mathsf{i} }</span> is always <span class="math inline">( \mathcal{X}^{1:I}, \mathcal{X}^{ \mathsf{i} } )</span>-measurable. Consequently, we rarely have to worry about measurability on product spaces so long as the component spaces are well behaved.</p>
 </section>
 <section id="independent-product-measures-and-probability-distributions" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="independent-product-measures-and-probability-distributions"><span class="header-section-number">1.2</span> Independent Product Measures and Probability Distributions</h2>
@@ -3421,10 +3421,10 @@ X = \mathbb{R} \times \mathbb{Z}.
 <h2 data-number="1.4" class="anchored" data-anchor-id="general-product-measures-and-probability-distributions"><span class="header-section-number">1.4</span> General Product Measures and Probability Distributions</h2>
 <p>Once we have defined a cylinder <span class="math inline">\sigma</span>-algebra, we are not limited to only independent product measures. We can always define more general product measures axiomatically. Specifically, any countably-addictive function <span class="math display">
 \nu : \mathcal{X}^{1:I} \rightarrow [0, \infty]
-</span> defines a measure over the product space <span class="math inline">X^{1:I}</span>, while while any countably-additive function <span class="math display">
+</span> defines a measure over the product space <span class="math inline">X^{1:I}</span>, while any countably-additive function <span class="math display">
 \pi : \mathcal{X}^{1:I} \rightarrow [0, 1].
 </span> defines a probability distribution.</p>
-<p>Once we introduce general product measures, however, we have to be weary of the potential for terminological confusion. Here, I have used “product measure” to refer to any measure over a product space. In particular, “product” refers to the structure of the <em>space</em> and not the structure of the <em>measure</em>. If one were to assume the latter, however, then “product measure” would more naturally refer to the specific independent product measures that we derived in the previous section.</p>
+<p>Once we introduce general product measures, however, we have to be wary of the potential for terminological confusion. Here, I have used “product measure” to refer to any measure over a product space. In particular, “product” refers to the structure of the <em>space</em> and not the structure of the <em>measure</em>. If one were to assume the latter, however, then “product measure” would more naturally refer to the specific independent product measures that we derived in the previous section.</p>
 <p>One way to avoid this potential confusion is to be a bit more descriptive, referring to arbitrary product measures as <strong>joint product measures</strong>, or simply <strong>joint measures</strong>. The adjective “joint” here implies that the component spaces cannot necessarily be treated separately; it also nicely complements the use of “independent” for those exceptional measures that can be decomposed into separate component contributions.</p>
 <p>Equivalently, I will refer to arbitrary product probability distributions as <strong>joint product probability distributions</strong>, <strong>joint probability distributions</strong>, or even just <strong>joint distributions</strong> for short.</p>
 <p>Let’s pause briefly to review. Given a finite collection of measurable spaces, <span class="math display">
@@ -3550,7 +3550,7 @@ Figure 1: The composite structure of a product space allows us to not only (a) 
 </figcaption>
 </figure>
 </div>
-<p>In general, the behavior of these conditional probability distributions will be heterogeneous. Although each cross section <span class="math inline">X^{\mathsf{i}^{c}} \times \{ x_{\mathsf{i}} \}</span> can be identified with <span class="math inline">\mathcal{X}^{\mathsf{i}^{c}}</span>, the probabilistic behavior will can with <span class="math inline">x_{\mathsf{i}}</span>. Once we consider conditional probability theory, we have to be careful to distinguish between each cross section.</p>
+<p>In general, the behavior of these conditional probability distributions will be heterogeneous. Although each cross section <span class="math inline">X^{\mathsf{i}^{c}} \times \{ x_{\mathsf{i}} \}</span> can be identified with <span class="math inline">\mathcal{X}^{\mathsf{i}^{c}}</span>, the probabilistic behavior will generally vary with <span class="math inline">x_{\mathsf{i}}</span>. Once we consider conditional probability theory, we have to be careful to distinguish between each cross section.</p>
 <p>The formal notation that we have used to this point takes nothing for granted. It is also, however, sufficiently dense that it can be difficult to parse. If we’re conditioning with only projection functions, however, then some of this notation is redundant and amenable to streamlining.</p>
 <p>Specifically, the variable to the right of the conditioning bar completely determines both the relevant projection function and the corresponding cross section. In this case, we can safely overload our notation a bit, writing <span class="math display">
 ( \varpi_{ \mathsf{i} } )_{*} \pi ( \mathsf{x}_{\mathsf{i}} )

@@ -46,7 +46,7 @@ format-links: false
 \newcommand{\rnd}[2]{\frac{ \mathrm{d} #1}{ \mathrm{d} #2 }}
 :::
 
-Too this point, our discussion of conditional probability theory
+To this point, our discussion of conditional probability theory
 has been a bit hampered by its abstraction.  Fortunately, both
 the theory and application of conditional probability theory
 become much more straightforward when applied to the
@@ -124,9 +124,8 @@ $$
 $$
 the projection function $\varpi_{ \mathsf{i} }$ is always
 $( \mathcal{X}^{1:I}, \mathcal{X}^{ \mathsf{i} } )$-measurable.
-Consequently, we never rarely have to worry about measurability
-on product spaces so long as the component spaces are well
-behaved.
+Consequently, we rarely have to worry about measurability on
+product spaces so long as the component spaces are well behaved.
 
 ## Independent Product Measures and Probability Distributions
 
@@ -441,14 +440,14 @@ $$
 \nu : \mathcal{X}^{1:I} \rightarrow [0, \infty]
 $$
 defines a measure over the product space $X^{1:I}$,
-while while any countably-additive function
+while any countably-additive function
 $$
 \pi : \mathcal{X}^{1:I} \rightarrow [0, 1].
 $$
 defines a probability distribution.
 
 Once we introduce general product measures, however, we have to
-be weary of the potential for terminological confusion.  Here, I
+be wary of the potential for terminological confusion.  Here, I
 have used "product measure" to refer to any measure over a
 product space.  In particular, "product" refers to the structure
 of the _space_ and not the structure of the _measure_.  If one
@@ -690,8 +689,8 @@ In general, the behavior of these conditional probability
 distributions will be heterogeneous.  Although each cross section
 $X^{\mathsf{i}^{c}} \times \{ x_{\mathsf{i}} \}$ can be
 identified with $\mathcal{X}^{\mathsf{i}^{c}}$, the probabilistic
-behavior will can with $x_{\mathsf{i}}$.  Once we consider
-conditional probability theory, we have to be careful to
+behavior will generally vary with $x_{\mathsf{i}}$.  Once we
+consider conditional probability theory, we have to be careful to
 distinguish between each cross section.
 
 The formal notation that we have used to this point takes nothing
