@@ -119,11 +119,11 @@ ordered pair of component variables,
 $$
 x = (x_{1}, x_{2}),
 $$
-with $x_{1} \in X_{1}$ and $x_{2} \times X_{2}$.
+with $x_{1} \in X_{1}$ and $x_{2} \in X_{2}$.
 
 Again, order is important here. A variable $x$ taking values in
 the product set $X_{2} \times X_{1}$ is instead comprised of the
-the component variables
+component variables
 $$
 x = (x_{2}, x_{1}).
 $$
@@ -625,16 +625,20 @@ geometric exaggeration, using "rectangle" instead of "product
 subset" is quite useful for avoiding confusion between product
 subsets and more general subsets of a product set.
 
-::: {#fig-rectangle layout="[50, 50]"}
+::: {#fig-rectangle layout="[ [50, 50], [-25, 50, -25] ]"}
 ![](figures/product_subset/r2_rectangle2/r2_rectangle){#fig-rectangle1}
 
 ![](figures/product_subset/r2_rectangle1/r2_rectangle){#fig-rectangle2}
+
+![](figures/product_subset/r2_general/r2_general){#fig-general}
 
 \(a) On the product set $\mathbb{R} \times \mathbb{R}$, geometric
 rectangles are defined by the product two component interval
 subsets $\mathsf{I}_{1}$ and $\mathsf{I}_{2}$. (b) Different
 component interval subsets result in a diversity of rectangular
-shapes.
+shapes.  (c) Rectangles are exceptional; most subsets of
+$\mathbb{R} \times \mathbb{R}$ are not given by the product of
+two component interval subsets.
 :::
 
 ## Cylinders { #sec:cyl }
@@ -659,8 +663,8 @@ equals the full component set (@fig-cylinder2).
 
 \(a) On the product set $S \times \mathbb{R}$, geometric
 rectangles, such as $\mathsf{x}_{r}$, are defined by products of
-angular intervals $\mathsf{I}_{2} \subset S$ and linear intervals
-$\mathsf{I}_{1} \subset \mathbb{R}$.  (b)  Geometric cylinders,
+angular intervals $\mathsf{I}_{1} \subset S$ and linear intervals
+$\mathsf{I}_{2} \subset \mathbb{R}$.  (b)  Geometric cylinders,
 such as $\mathsf{x}_{c}$, are a special case where the angular
 interval covers all of $S$.  The term "cylinder subset" is used
 more generally for any product subset where all but a finite
@@ -937,7 +941,7 @@ $X_{1} \times X_{2}$.
 
 Decomposing $X_{1}$ into the union of its atomic subsets,
 $$
-X_{1} = \bigcup_{ x_{1} \in X_{1} } x_{i},
+X_{1} = \bigcup_{ x_{1} \in X_{1} } \{ x_{i} \},
 $$
 induces a similar decomposition of the product set into a union
 of cross sections,
@@ -1098,8 +1102,22 @@ figures/decomposition/3d/1/1){width=100% #fig-decomp-3d-1}
 ### Decomposition Into Component Sets
 
 We can also expanding binary products of component sets into
-atomic subsets.  This yields three more decompositions of the
-full product set (@fig-decomp-3d-2),
+atomic subsets,
+\begin{align*}
+X_{1} \times X_{2} &=
+\bigcup_{ (x_{1}, x_{2}) \in X_{1} \times X_{2} }
+\{ x_{1} \} \times \{ x_{2} \}
+\\
+X_{1} \times X_{3} &=
+\bigcup_{ (x_{1}, x_{3}) \in X_{1} \times X_{3} }
+\{ x_{1} \} \times \{ x_{3} \}
+\\
+X_{2} \times X_{3} &=
+\bigcup_{ (x_{2}, x_{3}) \in X_{2} \times X_{3} }
+\{ x_{2} \} \times \{ x_{3} \}.
+\end{align*}
+These yield three more decompositions of the full product set
+(@fig-decomp-3d-2),
 \begin{align*}
 X_{1} \times X_{2} \times X_{3}
 &=
@@ -1170,7 +1188,7 @@ $$
 ### Composition
 
 Each of these decompositions motivates a different way to
-sequential construct a product set.
+sequentially construct a product set.
 
 For example, we can lift $X_{1}$ to
 $X_{1} \times X_{2} \times X_{3}$ by introducing a copy of
@@ -1349,7 +1367,7 @@ x
 Decomposing $X^{1:I}$ into the cross sections
 $$
 \bigcup_{ x_{ \mathsf{i} } \in X^{ \mathsf{i} } }
-X_{ \mathsf{i}^{c} }\times \{ x_{ \mathsf{i} } \}
+X^{ \mathsf{i}^{c} }\times \{ x_{ \mathsf{i} } \}
 $$
 can be impractical if the thinned product space
 $X^{ \mathsf{i} }$ is still too overwhelming.  Fortunately,
@@ -1690,7 +1708,7 @@ is closed under intersections,
 $$
 \cap_{j = 1}^{J} \mathsf{x}_{j, i} \in \mathfrak{t}_{i}.
 $$
-Consequently, these potentially-open product subsets will also
+Consequently, these potentially-open product subsets will also be
 closed under finite intersections,
 \begin{align*}
 \cap_{j} \mathsf{x}_{j}
@@ -1711,8 +1729,9 @@ rectangle subsets, this topology is known as the
 
 When working with a finite number of component sets, the box
 topology inherits the nice features shared by all of the
-component topologies.  Moreover, every projection function is
-continuous with respect to this topology.
+component topologies.  Moreover, every projection function that
+maps into a finite thinned product set is continuous with respect
+to this topology.
 
 These useful properties of the box topology, however, do not
 generalize to an infinite number of component sets.
@@ -1872,7 +1891,7 @@ $$
 
 Providing only one component point leaves an empty slot in the
 input product space that we need to fill in order to complete the
-evaluation.  For example, $f(\tilde{x}_{1}, x_{2})$ is missing an
+evaluation.  For example, $f(\tilde{x}_{1}, x_{2})$ is missing
 a point in $X_{2}$ and $f(x_{1}, \tilde{x}_{2})$ is missing a
 point in $X_{1}$.  That empty slot, however, defines a
 relationship between the missing inputs and the output space.
@@ -2106,7 +2125,8 @@ can fall back on more flexible tools like multi-index notation.
 
 # Acknowledgements {-}
 
-I thank Alexander Noll, Pietro Monticone, and and Léo Burgund for helpful comments.
+I thank Alexander Noll, Pietro Monticone, Léo Burgund, and jd for
+helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam Fleischhacker,
 Adriano Yoshino, Alan Chang, Alessandro Varacca, Alexander Bartik,

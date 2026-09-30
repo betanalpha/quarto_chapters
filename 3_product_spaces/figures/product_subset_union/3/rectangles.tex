@@ -49,16 +49,16 @@
   
   \draw[|-|, darkteal, line width=1] (\xa, -1.5) -- (\Xb, -1.5);
   \draw[decorate,decoration={brace,amplitude=5pt}, darkteal, line width=1] (\Xb, -1.7) -- (\xa, -1.7);
-  \node[darkteal] at ( { 0.5 * ( \xa + \Xb) }, -2.15) { $\mathsf{I}_{11} \cup \mathsf{I}_{21}$ };
+  \node[darkteal] at ( { 0.5 * ( \xa + \Xb) }, -2.15) { $\mathsf{I}_{1,1} \cup \mathsf{I}_{2,1}$ };
   
   \draw[|-|, darkteal, line width=1] (-2.5, \ya) -- (-2.5, \Yb);
   \draw[decorate,decoration={brace,amplitude=5pt}, darkteal, line width=1] (-2.7, \ya) -- (-2.7, \Yb);
-  \node[darkteal, rotate=90] at ( -3.15, { 0.5 * ( \ya + \Yb) } ) { $\mathsf{I}_{12} \cup \mathsf{I}_{22}$ };
+  \node[darkteal, rotate=90] at ( -3.15, { 0.5 * ( \ya + \Yb) } ) { $\mathsf{I}_{1,2} \cup \mathsf{I}_{2,2}$ };
   
   \fill[darkteal] (\xa, \ya) rectangle (\Xb, \Yb); 
   
   \node[darkteal] at (0, 2.35) { 
-    $( \mathsf{I}_{11} \cup \mathsf{I}_{21} ) \times ( \mathsf{I}_{12} \cup \mathsf{I}_{22} )$ 
+    $( \mathsf{I}_{1,1} \cup \mathsf{I}_{2,1} ) \times ( \mathsf{I}_{1,2} \cup \mathsf{I}_{2,2} )$ 
   };
   
 \end{tikzpicture}

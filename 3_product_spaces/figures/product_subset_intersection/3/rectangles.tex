@@ -49,18 +49,19 @@
   
   \draw[|-|, darkteal, line width=1] (\xb, -1.5) -- (\Xa, -1.5);
   \draw[decorate,decoration={brace,amplitude=5pt}, darkteal, line width=1] (\xb, -1.8) -- (\Xa, -1.8);
-  \node[darkteal] at ( { 0.5 * ( \xb + \Xa) }, -2.25) { $\mathsf{I}_{11} \cap \mathsf{I}_{21}$ };
+  \node[darkteal] at ( { 0.5 * ( \xb + \Xa) }, -2.25) { $\mathsf{I}_{1,1} \cap \mathsf{I}_{2,1}$ };
   
 
   \draw[|-|, darkteal, line width=1] (-2.5, \yb) -- (-2.5, \Ya);
   \draw[decorate,decoration={brace,amplitude=5pt}, darkteal, line width=1] (-2.7, \Ya) -- (-2.7, \yb);
-  \node[darkteal, rotate=90] at ( -3.15, { 0.5 * ( \yb + \Ya) } ) { $\mathsf{I}_{12} \cap \mathsf{I}_{22}$ };
+  \node[darkteal, rotate=90] at ( -3.15, { 0.5 * ( \yb + \Ya) } ) 
+    { $\mathsf{I}_{1, 2} \cap \mathsf{I}_{2,2}$ };
   
   
   \fill[darkteal] (\xb, \yb) rectangle (\Xa, \Ya);
   
   \node[darkteal] at (0, 2.35) { 
-    $( \mathsf{I}_{11} \times \mathsf{I}_{12} ) \cap ( \mathsf{I}_{21} \times \mathsf{I}_{22} )$ 
+    $( \mathsf{I}_{1,1} \cap \mathsf{I}_{2,1} ) \times ( \mathsf{I}_{1,2} \cap \mathsf{I}_{2,2} )$ 
   };
   
   

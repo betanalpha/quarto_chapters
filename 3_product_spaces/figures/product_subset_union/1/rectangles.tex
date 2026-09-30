@@ -49,25 +49,25 @@
   
   \draw[|-|, midteal, line width=1] (\xa, -1.5) -- (\xb, -1.5);
   \draw[decorate,decoration={brace,amplitude=5pt}, midteal, line width=1] (\xb, -1.8) -- (\xa, -1.8);
-  \node[midteal] at ( { 0.5 * ( \xa + \xb) }, -2.25) { $\mathsf{I}_{11}$ };
+  \node[midteal] at ( { 0.5 * ( \xa + \xb) }, -2.25) { $\mathsf{I}_{1,1}$ };
  
   \draw[|-|, midteal, line width=1] (-2.5, \ya) -- (-2.5, \yb);
   \draw[decorate,decoration={brace,amplitude=5pt}, midteal, line width=1] (-2.8, \ya) -- (-2.8, \yb);
-  \node[midteal] at ( -3.25, { 0.5 * ( \ya + \yb) } ) { $\mathsf{I}_{12}$ };
+  \node[midteal] at ( -3.25, { 0.5 * ( \ya + \yb) } ) { $\mathsf{I}_{1,2}$ };
   
   \fill[midteal] (\xa, \ya) rectangle (\xb, \yb) 
-  node[white, midway] { $\mathsf{I}_{11} \times \mathsf{I}_{12}$ };
+  node[white, midway] { $\mathsf{I}_{1,1} \times \mathsf{I}_{1,2}$ };
 
   \draw[|-|, lightteal, line width=1] (\Xa, -1.5) -- (\Xb, -1.5);
   \draw[decorate,decoration={brace,amplitude=5pt}, lightteal, line width=1] (\Xb, -1.7) -- (\Xa, -1.7);
-  \node[lightteal] at ( { 0.5 * ( \Xa + \Xb) }, -2.15) { $\mathsf{I}_{21}$ };
+  \node[lightteal] at ( { 0.5 * ( \Xa + \Xb) }, -2.15) { $\mathsf{I}_{2,1}$ };
  
   \draw[|-|, lightteal, line width=1] (-2.5, \Ya) -- (-2.5, \Yb);
   \draw[decorate,decoration={brace,amplitude=5pt}, lightteal, line width=1] (-2.7, \Ya) -- (-2.7, \Yb);
-  \node[lightteal] at ( -3.15, { 0.5 * ( \Ya + \Yb) } ) { $\mathsf{I}_{22}$ };
+  \node[lightteal] at ( -3.15, { 0.5 * ( \Ya + \Yb) } ) { $\mathsf{I}_{2,2}$ };
   
   \fill[lightteal] (\Xa, \Ya) rectangle (\Xb, \Yb) 
-  node[white, midway] { $\mathsf{I}_{21} \times \mathsf{I}_{22}$ };
+  node[white, midway] { $\mathsf{I}_{2,1} \times \mathsf{I}_{2,2}$ };
   
 \end{tikzpicture}
 

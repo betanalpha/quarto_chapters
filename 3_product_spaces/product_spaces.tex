@@ -264,11 +264,11 @@ Consequently, every variable \(x\) taking values in the product set
 \(X_{1} \times X_{2}\) can be represented by an ordered pair of
 component variables, \[
 x = (x_{1}, x_{2}),
-\] with \(x_{1} \in X_{1}\) and \(x_{2} \times X_{2}\).
+\] with \(x_{1} \in X_{1}\) and \(x_{2} \in X_{2}\).
 
 Again, order is important here. A variable \(x\) taking values in the
-product set \(X_{2} \times X_{1}\) is instead comprised of the the
-component variables \[
+product set \(X_{2} \times X_{1}\) is instead comprised of the component
+variables \[
 x = (x_{2}, x_{1}).
 \]
 
@@ -681,12 +681,32 @@ subsets of a product set.
 \subcaption{\label{fig-rectangle2}}
 
 \end{minipage}%
+\newline
+\begin{minipage}{0.25\linewidth}
+~\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics{figures/product_subset/r2_general/r2_general.pdf}
+
+}
+
+\subcaption{\label{fig-general}}
+
+\end{minipage}%
+%
+\begin{minipage}{0.25\linewidth}
+~\end{minipage}%
 
 \caption{\label{fig-rectangle}(a) On the product set
 \(\mathbb{R} \times \mathbb{R}\), geometric rectangles are defined by
 the product two component interval subsets \(\mathsf{I}_{1}\) and
 \(\mathsf{I}_{2}\). (b) Different component interval subsets result in a
-diversity of rectangular shapes.}
+diversity of rectangular shapes. (c) Rectangles are exceptional; most
+subsets of \(\mathbb{R} \times \mathbb{R}\) are not given by the product
+of two component interval subsets.}
 
 \end{figure}%
 
@@ -739,8 +759,8 @@ full component set (Figure~\ref{fig-cylinder2}).
 \caption{\label{fig-cylinder}(a) On the product set
 \(S \times \mathbb{R}\), geometric rectangles, such as
 \(\mathsf{x}_{r}\), are defined by products of angular intervals
-\(\mathsf{I}_{2} \subset S\) and linear intervals
-\(\mathsf{I}_{1} \subset \mathbb{R}\). (b) Geometric cylinders, such as
+\(\mathsf{I}_{1} \subset S\) and linear intervals
+\(\mathsf{I}_{2} \subset \mathbb{R}\). (b) Geometric cylinders, such as
 \(\mathsf{x}_{c}\), are a special case where the angular interval covers
 all of \(S\). The term ``cylinder subset'' is used more generally for
 any product subset where all but a finite number of component subsets
@@ -1113,7 +1133,7 @@ Let's start as simply as possibly by considering the two component sets
 \subsubsection{Decomposition}\label{decomposition}
 
 Decomposing \(X_{1}\) into the union of its atomic subsets, \[
-X_{1} = \bigcup_{ x_{1} \in X_{1} } x_{i},
+X_{1} = \bigcup_{ x_{1} \in X_{1} } \{ x_{i} \},
 \] induces a similar decomposition of the product set into a union of
 cross sections, (Figure~\ref{fig-decomp-2d-1}), \begin{align*}
 X_{1} \times X_{2}
@@ -1318,8 +1338,20 @@ as a distinct copy of \(X_{2} \times X_{3}\).}
 Sets}\label{decomposition-into-component-sets}
 
 We can also expanding binary products of component sets into atomic
-subsets. This yields three more decompositions of the full product set
-(Figure~\ref{fig-decomp-3d-2}), \begin{align*}
+subsets, \begin{align*}
+X_{1} \times X_{2} &=
+\bigcup_{ (x_{1}, x_{2}) \in X_{1} \times X_{2} }
+\{ x_{1} \} \times \{ x_{2} \}
+\\
+X_{1} \times X_{3} &=
+\bigcup_{ (x_{1}, x_{3}) \in X_{1} \times X_{3} }
+\{ x_{1} \} \times \{ x_{3} \}
+\\
+X_{2} \times X_{3} &=
+\bigcup_{ (x_{2}, x_{3}) \in X_{2} \times X_{3} }
+\{ x_{2} \} \times \{ x_{3} \}.
+\end{align*} These yield three more decompositions of the full product
+set (Figure~\ref{fig-decomp-3d-2}), \begin{align*}
 X_{1} \times X_{2} \times X_{3}
 &=
 \bigcup_{ (x_{1}, x_{2}) \in X_{1} \times X_{2} }
@@ -1388,7 +1420,7 @@ X_{1} \times \{ x_{2} \},
 
 \subsubsection{Composition}\label{composition-1}
 
-Each of these decompositions motivates a different way to sequential
+Each of these decompositions motivates a different way to sequentially
 construct a product set.
 
 For example, we can lift \(X_{1}\) to
@@ -1544,7 +1576,7 @@ Composition}\label{recursive-decomposition-and-composition}
 
 Decomposing \(X^{1:I}\) into the cross sections \[
 \bigcup_{ x_{ \mathsf{i} } \in X^{ \mathsf{i} } }
-X_{ \mathsf{i}^{c} }\times \{ x_{ \mathsf{i} } \}
+X^{ \mathsf{i}^{c} }\times \{ x_{ \mathsf{i} } \}
 \] can be impractical if the thinned product space \(X^{ \mathsf{i} }\)
 is still too overwhelming. Fortunately, nothing is stopping us from
 decomposing this space int more manageable pieces.
@@ -1850,8 +1882,8 @@ By definition, any finite collection of open subsets in \(X_{i}\), \[
    \mathsf{x}_{J, i} \} \in \mathfrak{t}_{i},
 \] is closed under intersections, \[
 \cap_{j = 1}^{J} \mathsf{x}_{j, i} \in \mathfrak{t}_{i}.
-\] Consequently, these potentially-open product subsets will also closed
-under finite intersections, \begin{align*}
+\] Consequently, these potentially-open product subsets will also be
+closed under finite intersections, \begin{align*}
 \cap_{j} \mathsf{x}_{j}
 &=
 \cap_{j} \left( \times_{i = 1}^{I} \mathsf{x}_{j, i} \right)
@@ -1869,8 +1901,8 @@ is known as the \textbf{box topology}.
 
 When working with a finite number of component sets, the box topology
 inherits the nice features shared by all of the component topologies.
-Moreover, every projection function is continuous with respect to this
-topology.
+Moreover, every projection function that maps into a finite thinned
+product set is continuous with respect to this topology.
 
 These useful properties of the box topology, however, do not generalize
 to an infinite number of component sets. Conceptually, the box topology
@@ -2048,10 +2080,10 @@ f(\tilde{x}_{1}, \tilde{x}_{2}) = y \in Y.
 
 Providing only one component point leaves an empty slot in the input
 product space that we need to fill in order to complete the evaluation.
-For example, \(f(\tilde{x}_{1}, x_{2})\) is missing an a point in
-\(X_{2}\) and \(f(x_{1}, \tilde{x}_{2})\) is missing a point in
-\(X_{1}\). That empty slot, however, defines a relationship between the
-missing inputs and the output space.
+For example, \(f(\tilde{x}_{1}, x_{2})\) is missing a point in \(X_{2}\)
+and \(f(x_{1}, \tilde{x}_{2})\) is missing a point in \(X_{1}\). That
+empty slot, however, defines a relationship between the missing inputs
+and the output space.
 
 Specifically, \(f(\tilde{x}_{1}, x_{2})\) implicitly defines a function
 that maps input points in the cross section
@@ -2258,7 +2290,7 @@ flexible tools like multi-index notation.
 \section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I thank Alexander Noll, Pietro Monticone, and and Léo Burgund for
+I thank Alexander Noll, Pietro Monticone, Léo Burgund, and jd for
 helpful comments.
 
 A very special thanks to everyone supporting me on Patreon: Adam
