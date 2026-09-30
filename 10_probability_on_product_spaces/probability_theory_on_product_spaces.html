@@ -3125,7 +3125,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#product-sigma-algebras" id="toc-product-sigma-algebras" class="nav-link" data-scroll-target="#product-sigma-algebras"><span class="header-section-number">1.1</span> Product <span style="text-transform:none;"><span class="math inline">\sigma</span></span>-Algebras</a></li>
   <li><a href="#independent-product-measures-and-probability-distributions" id="toc-independent-product-measures-and-probability-distributions" class="nav-link" data-scroll-target="#independent-product-measures-and-probability-distributions"><span class="header-section-number">1.2</span> Independent Product Measures and Probability Distributions</a></li>
-  <li><a href="#the-fubini-tonelli-theorem" id="toc-the-fubini-tonelli-theorem" class="nav-link" data-scroll-target="#the-fubini-tonelli-theorem"><span class="header-section-number">1.3</span> The Fubini-Tonelli Theorem</a></li>
+  <li><a href="#sec:fubini" id="toc-sec:fubini" class="nav-link" data-scroll-target="#sec\:fubini"><span class="header-section-number">1.3</span> The Fubini-Tonelli Theorem</a></li>
   <li><a href="#general-product-measures-and-probability-distributions" id="toc-general-product-measures-and-probability-distributions" class="nav-link" data-scroll-target="#general-product-measures-and-probability-distributions"><span class="header-section-number">1.4</span> General Product Measures and Probability Distributions</a></li>
   <li><a href="#component-means" id="toc-component-means" class="nav-link" data-scroll-target="#component-means"><span class="header-section-number">1.5</span> Component Means</a></li>
   <li><a href="#expanding-product-sigma-algebras" id="toc-expanding-product-sigma-algebras" class="nav-link" data-scroll-target="#expanding-product-sigma-algebras"><span class="header-section-number">1.6</span> Expanding Product <span style="text-transform:none;"><span class="math inline">\sigma</span></span>-Algebras</a></li>
@@ -3230,7 +3230,7 @@ window.Quarto = {
 </span> and <span class="math display">
 \mathsf{x}_{i} = X_{i}
 </span> for all but a finite number of <span class="math inline">i \in 1:I</span>, and then adding their unions, intersections, and complements. Unsurprisingly, this also known as a <strong>cylinder <span class="math inline">\sigma</span>-algebra</strong>.</p>
-<p>One useful feature of cylinder <span class="math inline">\sigma</span>-algebras is that they are always compatible with all of the projection functions that we can define over a product space. More formally, given the component indices <span class="math display">
+<p>One useful feature of cylinder <span class="math inline">\sigma</span>-algebras is that they are always compatible with all of the projection functions that map into a finite thinned product space. More formally, given the component indices <span class="math display">
 \mathsf{i} \, \vec{\subset} \, 1:I,
 </span> the projection function <span class="math inline">\varpi_{ \mathsf{i} }</span> is always <span class="math inline">( \mathcal{X}^{1:I}, \mathcal{X}^{ \mathsf{i} } )</span>-measurable. Consequently, we never rarely have to worry about measurability on product spaces so long as the component spaces are well behaved.</p>
 </section>
@@ -3263,8 +3263,8 @@ window.Quarto = {
 </span></p>
 <p>We have already encountered an independent product measure in <a href="http://www.symplectomorphic.com/assets/chapters_html/probability_on_general_spaces.html#the-lebesgue-measure-on-multivariate-real-spaces">Chapter 4, Section 5.3</a>. Multivariate real spaces <span class="math inline">\mathbb{R}^{I}</span> are built up from <span class="math inline">I</span> component real lines. Fixing the component metric on each of these real lines defines <span class="math inline">\sigma</span>-finite component Lebesgue measures, and the independent product of these component Lebesgue measures formally defines the multivariate Lebesgue measure.</p>
 </section>
-<section id="the-fubini-tonelli-theorem" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="the-fubini-tonelli-theorem"><span class="header-section-number">1.3</span> The Fubini-Tonelli Theorem</h2>
+<section id="sec:fubini" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec:fubini"><span class="header-section-number">1.3</span> The Fubini-Tonelli Theorem</h2>
 <p>One of most useful properties of independent product measures is that their integrals can be computed entirely from component-wise integrals.</p>
 <p>Before going into more detail, however, let’s briefly discuss notation. The integral of a sufficiently well-behaved function <span class="math display">
 g : X^{1:I} \rightarrow \mathbb{R}.
@@ -3623,7 +3623,7 @@ X^{ \mathsf{i}^{c} } \times \{ x_{ \mathsf{i} } \}.
 <section id="product-reference-measures" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="product-reference-measures"><span class="header-section-number">3.1</span> Product Reference Measures</h2>
 <p>Theoretically, we can always define a reference measure directly over a given product space. As with most product structures, however, it will typically be more useful to build up a product reference measure from component pieces. If each component space <span class="math inline">X_{i}</span> is equipped with a <span class="math inline">\sigma</span>-finite reference measure <span class="math inline">\nu_{i}</span> that admits practical integration, then their independent product <span class="math inline">\nu^{1:I}</span> defines a natural reference measure over the corresponding product space.</p>
-<p>Provided that each of the component reference measures is <span class="math inline">\sigma</span>-finite, the Fubini-Tonelli theorem will allow us to evaluate integrals with respect to <span class="math inline">\nu^{1:I}</span> by iterating the integration operations defined by each <span class="math inline">\nu_{i}</span>. As we discussed in <strong>Section Blah</strong>, for instance, integrals with respect to a product counting measure can be evaluated by nesting discrete sums, while integrals with respect to a product of Lebesgue measures can often be evaluated by nesting one-dimensional Riemann integrals.</p>
+<p>Provided that each of the component reference measures is <span class="math inline">\sigma</span>-finite, the Fubini-Tonelli theorem will allow us to evaluate integrals with respect to <span class="math inline">\nu^{1:I}</span> by iterating the integration operations defined by each <span class="math inline">\nu_{i}</span>. As we discussed in <a href="#sec:fubini">Section 1.3</a>, for instance, integrals with respect to a product counting measure can be evaluated by nesting discrete sums, while integrals with respect to a product of Lebesgue measures can often be evaluated by nesting one-dimensional Riemann integrals.</p>
 <p>Another powerful feature of independent product reference measures is their disintegrations with respect to projection functions are particularly well-behaved. For example, the component indices, <span class="math display">
 \mathsf{i} \, \vec{\subset} \, 1:I,
 </span> allows us to construct not only the reference measure <span class="math inline">\nu^{1:I}</span> over <span class="math inline">X^{1:I}</span>, but also the reference measure <span class="math inline">\nu^{ \mathsf{i} }</span> over <span class="math inline">X^{ \mathsf{i} }</span>. Together, the thinned reference measure <span class="math inline">\nu^{ \mathsf{i} }</span> and the projection function <span class="math display">
@@ -3731,12 +3731,20 @@ p( x_{1}, x_{3} \mid x_{2}, x_{4} ).
 <p>In practice, we rarely if ever construct joint, marginal, and conditional density functions separately. Instead, it’s almost always more convenient <em>derive</em> them from each other.</p>
 <section id="decomposition" class="level3" data-number="3.3.1">
 <h3 data-number="3.3.1" class="anchored" data-anchor-id="decomposition"><span class="header-section-number">3.3.1</span> Decomposition</h3>
-<p>As we saw in <a href="http://www.symplectomorphic.com/assets/chapters_html/conditional_probability_density_functions.html">Chapter 9</a>, for example, a marginal density function can be derived from the a joint density function by integrating over the cross sections, <span class="math display">
+<p>As we saw in <a href="http://www.symplectomorphic.com/assets/chapters_html/conditional_probability_density_functions.html">Chapter 9</a>, for example, a marginal density function can be derived from the a joint density function by integrating over the cross sections, <span class="math display">\begin{align*}
 p( x_{ \mathsf{i} } )
-\overset{ \nu^{\mathsf{i}} }{=}
-\int \nu^{\varpi_{\mathsf{i}}} ( x_{\mathsf{i}^{c}} )
+&amp;\overset{ \nu^{\varpi_{\mathsf{i}}} }{=}
+\int
+\nu^{\varpi_{\mathsf{i}}}(
+  \mathsf{x}_{\mathsf{i}^{c}} \mid
+  \tilde{x}_{ \mathsf{i} }
+) \,
+p( x_{\mathsf{i}^{c}}, x_{ \mathsf{i} } )
+\\
+&amp;\overset{ \nu^{\mathsf{i}} }{=}
+\int \nu^{ \mathsf{i}^{c} } ( \mathsf{x}_{\mathsf{i}^{c}} ) \,
 p( x_{\mathsf{i}^{c}}, x_{ \mathsf{i} } ).
-</span> This is no longer an abstract result, however, as the conditional integrals can now be evaluated with the Fubini-Tonelli theorem.</p>
+\end{align*}</span> This is no longer an abstract result, however, as the conditional integrals can now be evaluated with the Fubini-Tonelli theorem.</p>
 <p>At the same time, the product rule that we derived in <a href="http://www.symplectomorphic.com/assets/chapters_html/conditional_probability_density_functions.html#the-product-rule">Chapter 9, Section 5.2</a> relates the joint, marginal, and conditional probability density functions together, <span class="math display">
 p( x_{\mathsf{i}^{c}}, x_{ \mathsf{i} } )
 \overset{ \nu^{1:I} }{=}
@@ -3791,6 +3799,7 @@ p ( x_{2} \mid x_{1} )
 &amp;=
 \frac{ p ( x_{1},  x_{2} ) }{ p ( x_{1} ) }
 \\
+&amp;=
 \text{normal} \left(
   x_{2} \biggm|
   \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1},
@@ -4161,6 +4170,7 @@ p( x_{1}, \tilde{x}_{2} ).
   p( \tilde{x}_{2} ).
 }
 \end{align*}</span> Here the ratio of the marginal density function evaluations is critical to an accurate comparison.</p>
+<p>To summarize: an unnormalized conditional probability density function is sufficient when considering only a single level set in isolation, where as normalized conditional probability density functions are necessary when making comparisons across multiple level sets.</p>
 </section>
 </section>
 <section id="bayes-theorem" class="level1" data-number="4">
@@ -4219,14 +4229,14 @@ p( x_{1}, \tilde{x}_{2} ).
 ( x_{ \mathsf{i} } \mid
   x_{ \mathsf{i}^{c} } ).
 </span></p>
-<p>Although not immediately obvious, the identification between these Radon-Nikodym derivatives results in a particularly interpretable consequence. Consider the conditional expectations <span class="math display">
+<p>Although not immediately obvious, the identification between these Radon-Nikodym derivatives results in a particularly interpretable consequence. Consider the conditional expectation <span class="math display">
 \int
 \pi^{ \varpi_{ \mathsf{i}^{c} } } (
   \mathrm{d} x_{ \mathsf{i} } \mid
   \tilde{x}_{ \mathsf{i}^{c} }
 ) \,
 g ( x_{ \mathsf{i} } ).
-</span> Using Radon-Nikodym derivatives, we can compute these conditional expectations as a complementary marginal expectation, <span class="math display">
+</span> Using Radon-Nikodym derivatives, we can compute this as a complementary marginal expectation, <span class="math display">
 \int
 \pi^{ \varpi_{ \mathsf{i}^{c} } } (
   \mathrm{d} x_{ \mathsf{i} } \mid
@@ -4267,15 +4277,36 @@ g ( x_{ \mathsf{i} } )
 ) \,
 g ( x_{ \mathsf{i} } ).
 </span></p>
-<p>In other words, binding <span class="math inline">x_{ \mathsf{i}^{c} }</span> to the particular value <span class="math inline">\tilde{x}_{ \mathsf{i}^{c} }</span> “updates” the marginal expectation <span class="math display">
+<p>In other words, binding <span class="math inline">x_{ \mathsf{i}^{c} }</span> to the particular value <span class="math inline">\tilde{x}_{ \mathsf{i}^{c} }</span> “updates” the <strong>prior</strong> marginal expectation <span class="math display">
 \int
 ( \varpi_{ \mathsf{i} } )_{*} \pi (
   \mathrm{d} x_{ \mathsf{i} } ) \,
 g ( x_{ \mathsf{i} } )
-</span> into the conditional expectation <span class="math display">
+</span> into a <strong>posterior</strong> marginal expectation <span class="math display">\begin{align*}
+\int
+&amp;\pi^{ \varpi_{ \mathsf{i}^{c} } } (
+  \mathrm{d} x_{ \mathsf{i} } \mid
+  \tilde{x}_{ \mathsf{i}^{c} }
+) \,
+g ( x_{ \mathsf{i} } )
+\\
+&amp;\overset{ \pi }{=}
 \int
 ( \varpi_{ \mathsf{i} } )_{*} \pi (
   \mathrm{d} x_{ \mathsf{i} } ) \,
+\left[
+  \frac{
+    \mathrm{d} \pi^{ \varpi_{\mathsf{i}} }
+  }{
+    \mathrm{d} ( \varpi_{ \mathsf{i}^{c} } )_{*} \pi
+  }
+  ( \tilde{x}_{ \mathsf{i}^{c} } \mid
+    x_{\mathsf{i}}
+  )
+\right]
+\,
+g ( x_{ \mathsf{i} } ).
+\end{align*}</span> Mechanically, this update is achieved by simply multiplying the initial expectand by the Radon-Nikodym derivative <span class="math display">
 \frac{
   \mathrm{d} \pi^{ \varpi_{\mathsf{i}} }
 }{
@@ -4283,18 +4314,8 @@ g ( x_{ \mathsf{i} } )
 }
 ( \tilde{x}_{ \mathsf{i}^{c} } \mid
   x_{\mathsf{i}}
-) \,
-g ( x_{ \mathsf{i} } )
-</span> with the insertion of <span class="math display">
-\frac{
-  \mathrm{d} \pi^{ \varpi_{\mathsf{i}} }
-}{
-  \mathrm{d} ( \varpi_{ \mathsf{i}^{c} } )_{*} \pi
-}
-( \tilde{x}_{ \mathsf{i}^{c} } \mid
-  x_{\mathsf{i}}.
-)
-</span> This conditional expectation is also known as a <strong>posterior expectation</strong>.</p>
+).
+</span></p>
 <p>Equivalently, we can write this integral relationship out in short hand, <span class="math display">
 \pi^{ \varpi_{ \mathsf{i}^{c} } } (
   \mathrm{d} x_{ \mathsf{i} } \mid
@@ -4328,7 +4349,7 @@ p( x_{\mathsf{i}}, x_{ \mathsf{i}^{c} } )
 p( x_{ \mathsf{i}^{c} } \mid x_{\mathsf{i}}) \,
 p( x_{ \mathsf{i} } ).
 </span></p>
-<p>Bayes’ Theorem relates all of these density functions together in a single equation for a posterior density function, <span class="math display">\begin{align*}
+<p>Bayes’ Theorem relates all of these density functions together in a single integral equation, <span class="math display">\begin{align*}
 \int
 \pi^{ \varpi_{ \mathsf{i}^{c} } } (
   \mathrm{d} x_{ \mathsf{i} } \mid
@@ -4381,7 +4402,30 @@ p ( x_{ \mathsf{i} } ) \,
   p ( \tilde{x}_{ \mathsf{i}^{c} } )
 }\,
 g ( x_{ \mathsf{i} } ),
-\end{align*}</span> or <span class="math display">
+\end{align*}</span> Again, the intuition is that binding <span class="math inline">x_{ \mathsf{i}^{c} }</span> to the particular value <span class="math inline">\tilde{x}_{ \mathsf{i}^{c} }</span> “updates” the prior marginal expectation, <span class="math display">
+\int
+\nu^{ \mathsf{i} } ( \mathrm{d} x_{ \mathsf{i} } ) \,
+p ( x_{ \mathsf{i} } ) \, g ( x_{ \mathsf{i} } ),
+</span> into a posterior marginal expectation, <span class="math display">\begin{align*}
+\int
+\nu^{ \mathsf{i} } ( \mathrm{d} x_{ \mathsf{i} } ) \,
+&amp;p ( x_{ \mathsf{i} } \mid \tilde{x}_{ \mathsf{i}^{c} } ) \,
+g ( x_{ \mathsf{i} } )
+\\
+&amp;\overset{ \pi }{=}
+\int
+\nu^{ \mathsf{i} } ( \mathrm{d} x_{ \mathsf{i} } ) \,
+p ( x_{ \mathsf{i} } ) \,
+\left[
+  \frac{
+    p ( \tilde{x}_{ \mathsf{i}^{c} } \mid x_{\mathsf{i}} )
+  }{
+    p ( \tilde{x}_{ \mathsf{i}^{c} } )
+  }
+\right] \,
+g ( x_{ \mathsf{i} } )
+\end{align*}</span></p>
+<p>In order for this integral relationship to be true for all expectands <span class="math inline">g</span>, the probability density functions on both sides must be almost always equal, <span class="math display">
 p ( x_{ \mathsf{i} } \mid \tilde{x}_{ \mathsf{i}^{c} } )
 \overset{ \nu^{1:I} }{=}
 p ( x_{ \mathsf{i} } ) \,
@@ -4390,7 +4434,7 @@ p ( x_{ \mathsf{i} } ) \,
 }{
   p ( \tilde{x}_{ \mathsf{i}^{c} } )
 }.
-</span></p>
+</span> This relationship between a conditional density function and a scaled marginal density function is often presented as Bayes’ Theorem itself. As we have seen here, however, it is actually derived from the more general theorem.</p>
 <p>Conveniently, we can immediately derive this form of Bayes’ Theorem directly from the consistency of the two conditional decompositions, <span class="math display">\begin{align*}
 p( x_{\mathsf{i}}, x_{ \mathsf{i}^{c} } )
 &amp;\overset{ \nu^{1:I} }{=}
@@ -4518,8 +4562,7 @@ p( x&#39; )
 <p>When we take the limit <span class="math inline">\tau \rightarrow 0</span>, the convolution becomes a pure translation of the location parameter, <span class="math display">
 p( x&#39; )
 =
-\text{normal} \left( x&#39; \mid \mu + \eta,
-                     \sqrt{ \sigma^{2} + \tau^{2} } \right).
+\text{normal} \left( x&#39; \mid \mu + \eta, \sigma \right).
 </span> Indeed, this is exactly the pushforward of a normal density function along the translation operation that we discussed in <a href="http://www.symplectomorphic.com/assets/chapters_html/transforming_probability_spaces.html#examples">Chapter 7, Section 4.3.2.1</a>.</p>
 <p>The convolution kernel in this limit acts like a singular delta function that shifts an input <span class="math inline">x</span> to an output <span class="math inline">x + \eta</span>. This limiting convolution is also known as a <strong>linear convolution</strong>.</p>
 </section>

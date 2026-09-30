@@ -117,8 +117,8 @@ this also known as a **cylinder $\sigma$-algebra**.
 
 One useful feature of cylinder $\sigma$-algebras is that they
 are always compatible with all of the projection functions that
-we can define over a product space.  More formally, given the
-component indices
+map into a finite thinned product space.  More formally, given
+the component indices
 $$
 \mathsf{i} \, \vec{\subset} \, 1:I,
 $$
@@ -204,7 +204,7 @@ $\sigma$-finite component Lebesgue measures, and the independent
 product of these component Lebesgue measures formally defines the
 multivariate Lebesgue measure.
 
-## The Fubini-Tonelli Theorem
+## The Fubini-Tonelli Theorem { #sec:fubini }
 
 One of most useful properties of independent product measures
 is that their integrals can be computed entirely from
@@ -836,10 +836,10 @@ Provided that each of the component reference measures is
 $\sigma$-finite, the Fubini-Tonelli theorem will allow us to
 evaluate integrals with respect to $\nu^{1:I}$ by iterating the
 integration operations defined by each $\nu_{i}$.  As we
-discussed in **Section Blah**, for instance, integrals with
-respect to a product counting measure can be evaluated by nesting
-discrete sums, while integrals with respect to a product of
-Lebesgue measures can often be evaluated by nesting
+discussed in [Section 1.3](#sec:fubini), for instance, integrals
+with respect to a product counting measure can be evaluated by
+nesting discrete sums, while integrals with respect to a product
+of Lebesgue measures can often be evaluated by nesting
 one-dimensional Riemann integrals.
 
 Another powerful feature of independent product reference
@@ -1031,12 +1031,20 @@ always more convenient _derive_ them from each other.
 As we saw in [Chapter 9](http://www.symplectomorphic.com/assets/chapters_html/conditional_probability_density_functions.html),
 for example, a marginal density function can be derived from the
 a joint density function by integrating over the cross sections,
-$$
+\begin{align*}
 p( x_{ \mathsf{i} } )
-\overset{ \nu^{\mathsf{i}} }{=}
-\int \nu^{\varpi_{\mathsf{i}}} ( x_{\mathsf{i}^{c}} )
+&\overset{ \nu^{\varpi_{\mathsf{i}}} }{=}
+\int
+\nu^{\varpi_{\mathsf{i}}}(
+  \mathsf{x}_{\mathsf{i}^{c}} \mid
+  \tilde{x}_{ \mathsf{i} }
+) \,
+p( x_{\mathsf{i}^{c}}, x_{ \mathsf{i} } )
+\\
+&\overset{ \nu^{\mathsf{i}} }{=}
+\int \nu^{ \mathsf{i}^{c} } ( \mathsf{x}_{\mathsf{i}^{c}} ) \,
 p( x_{\mathsf{i}^{c}}, x_{ \mathsf{i} } ).
-$$
+\end{align*}
 This is no longer an abstract result, however, as the conditional
 integrals can now be evaluated with the Fubini-Tonelli theorem.
 
@@ -1122,6 +1130,7 @@ p ( x_{2} \mid x_{1} )
 &=
 \frac{ p ( x_{1},  x_{2} ) }{ p ( x_{1} ) }
 \\
+&=
 \text{normal} \left(
   x_{2} \biggm|
   \rho \frac{ \sigma_{2} }{ \sigma_{1} } x_{1},
@@ -1417,6 +1426,12 @@ can write this ratio as
 Here the ratio of the marginal density function evaluations is
 critical to an accurate comparison.
 
+To summarize: an unnormalized conditional probability density
+function is sufficient when considering only a single level set
+in isolation, where as normalized conditional probability density
+functions are necessary when making comparisons across multiple
+level sets.
+
 # Bayes’ Theorem
 
 Given a subsequence of component indices, we can decompose a
@@ -1509,7 +1524,7 @@ $$
 
 Although not immediately obvious, the identification between
 these Radon-Nikodym derivatives results in a particularly
-interpretable consequence.  Consider the conditional expectations
+interpretable consequence.  Consider the conditional expectation
 $$
 \int
 \pi^{ \varpi_{ \mathsf{i}^{c} } } (
@@ -1518,8 +1533,8 @@ $$
 ) \,
 g ( x_{ \mathsf{i} } ).
 $$
-Using Radon-Nikodym derivatives, we can compute these conditional
-expectations as a complementary marginal expectation,
+Using Radon-Nikodym derivatives, we can compute this as a
+complementary marginal expectation,
 $$
 \int
 \pi^{ \varpi_{ \mathsf{i}^{c} } } (
@@ -1566,19 +1581,43 @@ g ( x_{ \mathsf{i} } ).
 $$
 
 In other words, binding $x_{ \mathsf{i}^{c} }$ to the particular
-value $\tilde{x}_{ \mathsf{i}^{c} }$ "updates" the marginal
-expectation
+value $\tilde{x}_{ \mathsf{i}^{c} }$ "updates" the **prior**
+marginal expectation
 $$
 \int
 ( \varpi_{ \mathsf{i} } )_{*} \pi (
   \mathrm{d} x_{ \mathsf{i} } ) \,
 g ( x_{ \mathsf{i} } )
 $$
-into the conditional expectation
-$$
+into a **posterior** marginal expectation
+\begin{align*}
+\int
+&\pi^{ \varpi_{ \mathsf{i}^{c} } } (
+  \mathrm{d} x_{ \mathsf{i} } \mid
+  \tilde{x}_{ \mathsf{i}^{c} }
+) \,
+g ( x_{ \mathsf{i} } )
+\\
+&\overset{ \pi }{=}
 \int
 ( \varpi_{ \mathsf{i} } )_{*} \pi (
   \mathrm{d} x_{ \mathsf{i} } ) \,
+\left[
+  \frac{
+    \mathrm{d} \pi^{ \varpi_{\mathsf{i}} }
+  }{
+    \mathrm{d} ( \varpi_{ \mathsf{i}^{c} } )_{*} \pi
+  }
+  ( \tilde{x}_{ \mathsf{i}^{c} } \mid
+    x_{\mathsf{i}}
+  )
+\right]
+\,
+g ( x_{ \mathsf{i} } ).
+\end{align*}
+Mechanically, this update is achieved by simply multiplying the
+initial expectand by the Radon-Nikodym derivative
+$$
 \frac{
   \mathrm{d} \pi^{ \varpi_{\mathsf{i}} }
 }{
@@ -1586,22 +1625,9 @@ $$
 }
 ( \tilde{x}_{ \mathsf{i}^{c} } \mid
   x_{\mathsf{i}}
-) \,
-g ( x_{ \mathsf{i} } )
+).
 $$
-with the insertion of
-$$
-\frac{
-  \mathrm{d} \pi^{ \varpi_{\mathsf{i}} }
-}{
-  \mathrm{d} ( \varpi_{ \mathsf{i}^{c} } )_{*} \pi
-}
-( \tilde{x}_{ \mathsf{i}^{c} } \mid
-  x_{\mathsf{i}}.
-)
-$$
-This conditional expectation is also known as a **posterior
-expectation**.
+
 
 Equivalently, we can write this integral relationship out in
 short hand,
@@ -1653,7 +1679,7 @@ p( x_{ \mathsf{i} } ).
 $$
 
 Bayes' Theorem relates all of these density functions together
-in a single equation for a posterior density function,
+in a single integral equation,
 \begin{align*}
 \int
 \pi^{ \varpi_{ \mathsf{i}^{c} } } (
@@ -1708,7 +1734,38 @@ p ( x_{ \mathsf{i} } ) \,
 }\,
 g ( x_{ \mathsf{i} } ),
 \end{align*}
-or
+Again, the intuition is that binding $x_{ \mathsf{i}^{c} }$ to
+the particular value $\tilde{x}_{ \mathsf{i}^{c} }$ "updates" the
+prior marginal expectation,
+$$
+\int
+\nu^{ \mathsf{i} } ( \mathrm{d} x_{ \mathsf{i} } ) \,
+p ( x_{ \mathsf{i} } ) \, g ( x_{ \mathsf{i} } ),
+$$
+into a posterior marginal expectation,
+\begin{align*}
+\int
+\nu^{ \mathsf{i} } ( \mathrm{d} x_{ \mathsf{i} } ) \,
+&p ( x_{ \mathsf{i} } \mid \tilde{x}_{ \mathsf{i}^{c} } ) \,
+g ( x_{ \mathsf{i} } )
+\\
+&\overset{ \pi }{=}
+\int
+\nu^{ \mathsf{i} } ( \mathrm{d} x_{ \mathsf{i} } ) \,
+p ( x_{ \mathsf{i} } ) \,
+\left[
+  \frac{
+    p ( \tilde{x}_{ \mathsf{i}^{c} } \mid x_{\mathsf{i}} )
+  }{
+    p ( \tilde{x}_{ \mathsf{i}^{c} } )
+  }
+\right] \,
+g ( x_{ \mathsf{i} } )
+\end{align*}
+
+In order for this integral relationship to be true for all
+expectands $g$, the probability density functions on both sides
+must be almost always equal,
 $$
 p ( x_{ \mathsf{i} } \mid \tilde{x}_{ \mathsf{i}^{c} } )
 \overset{ \nu^{1:I} }{=}
@@ -1719,6 +1776,10 @@ p ( x_{ \mathsf{i} } ) \,
   p ( \tilde{x}_{ \mathsf{i}^{c} } )
 }.
 $$
+This relationship between a conditional density function and
+a scaled marginal density function is often presented as Bayes'
+Theorem itself.  As we have seen here, however, it is actually
+derived from the more general theorem.
 
 Conveniently, we can immediately derive this form of Bayes'
 Theorem directly from the consistency of the two conditional
@@ -1921,8 +1982,7 @@ becomes a pure translation of the location parameter,
 $$
 p( x' )
 =
-\text{normal} \left( x' \mid \mu + \eta,
-                     \sqrt{ \sigma^{2} + \tau^{2} } \right).
+\text{normal} \left( x' \mid \mu + \eta, \sigma \right).
 $$
 Indeed, this is exactly the pushforward of a normal density
 function along the translation operation that we discussed in
